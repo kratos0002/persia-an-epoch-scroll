@@ -21,8 +21,8 @@ export const TranslationSection = () => (
       )}
       steps={[
         <div key={0}>
-          <p className="text-xs tracking-[0.3em] uppercase text-[hsl(170,40%,45%,0.6)] mb-4 font-body">830 CE</p>
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-6 text-[hsl(170,45%,50%)]">
+          <p className="text-xs tracking-[0.3em] uppercase mb-4 font-body" style={{ color: `hsl(${WISDOM_TEAL} / 0.6)` }}>830 CE</p>
+          <h2 className="font-display text-3xl md:text-4xl font-bold mb-6" style={{ color: `hsl(170, 45%, 50%)` }}>
             The Translation Movement
           </h2>
           <p className="text-foreground/80 text-lg leading-relaxed font-body mb-4">
@@ -33,7 +33,7 @@ export const TranslationSection = () => (
           </p>
         </div>,
         <div key={1}>
-          <h3 className="font-display text-xl font-bold mb-4 text-[hsl(170,45%,50%,0.85)]">
+          <h3 className="font-display text-xl font-bold mb-4" style={{ color: `hsl(170, 45%, 50% / 0.85)` }}>
             Hunayn ibn Ishaq
           </h3>
           <p className="text-foreground/80 leading-relaxed font-body mb-4">
@@ -44,7 +44,7 @@ export const TranslationSection = () => (
           </p>
         </div>,
         <div key={2}>
-          <h3 className="font-display text-xl font-bold mb-4 text-[hsl(170,45%,50%,0.85)]">
+          <h3 className="font-display text-xl font-bold mb-4" style={{ color: `hsl(170, 45%, 50% / 0.85)` }}>
             Beyond Translation
           </h3>
           <p className="text-foreground/80 leading-relaxed font-body mb-4">
@@ -55,14 +55,14 @@ export const TranslationSection = () => (
           </p>
         </div>,
         <div key={3}>
-          <h3 className="font-display text-xl font-bold mb-4 text-[hsl(170,45%,50%,0.85)]">
+          <h3 className="font-display text-xl font-bold mb-4" style={{ color: `hsl(170, 45%, 50% / 0.85)` }}>
             The Network Grows
           </h3>
           <p className="text-foreground/80 leading-relaxed font-body mb-4">
             From Baghdad, knowledge radiated outward — to Córdoba, to Palermo, to Constantinople.
           </p>
           <p className="text-foreground/60 leading-relaxed font-body">
-            Each translated text spawned new discoveries. Each scholar trained the next generation. The graph of human knowledge was expanding exponentially.
+            Each translated text spawned new discoveries. The graph of human knowledge was expanding exponentially.
           </p>
         </div>,
       ]}
