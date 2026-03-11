@@ -44,13 +44,13 @@ export const AftermathSection = () => {
             <div className="grid grid-cols-2 gap-8 py-12">
               <div className="text-center">
                 <div className="font-display text-5xl md:text-6xl font-black" style={{ color: SCARLET }}>
-                  <AnimatedCounter target={800000} duration={3} suffix="" />
+                  <AnimatedCounter end={800000} duration={3000} suffix="" />
                 </div>
                 <p className="text-sm mt-2" style={{ color: ASH }}>Estimated dead</p>
               </div>
               <div className="text-center">
                 <div className="font-display text-5xl md:text-6xl font-black" style={{ color: GOLD }}>
-                  <AnimatedCounter target={258} duration={2.5} suffix="" />
+                  <AnimatedCounter end={258} duration={2500} suffix="" />
                 </div>
                 <p className="text-sm mt-2" style={{ color: ASH }}>Years of Company rule ended</p>
               </div>
