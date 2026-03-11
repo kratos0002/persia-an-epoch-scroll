@@ -8,6 +8,7 @@ import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
 import storyBuddhism from '@/assets/story-buddhism.jpg';
 import storySamurai from '@/assets/story-samurai.jpg';
+import story1857 from '@/assets/story-1857.jpg';
 
 interface StoryCard {
   id: string;
