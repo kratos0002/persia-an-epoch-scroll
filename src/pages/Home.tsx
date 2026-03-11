@@ -6,7 +6,7 @@ import { SiteFooter } from '@/components/site/SiteFooter';
 import storyPersia from '@/assets/story-persia.jpg';
 import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
-import storyByzantium from '@/assets/story-byzantium.jpg';
+import storyBuddhism from '@/assets/story-buddhism.jpg';
 
 interface StoryCard {
   id: string;
