@@ -8,6 +8,7 @@ import About from "./pages/About.tsx";
 import Index from "./pages/Index.tsx";
 import HouseOfWisdom from "./pages/HouseOfWisdom.tsx";
 import Buddhism from "./pages/Buddhism.tsx";
+import Samurai from "./pages/Samurai.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
