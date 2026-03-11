@@ -8,6 +8,7 @@ import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
 import storyBuddhism from '@/assets/story-buddhism.jpg';
 import storySamurai from '@/assets/story-samurai.jpg';
+import story1857 from '@/assets/story-1857.jpg';
 
 interface StoryCard {
   id: string;
@@ -72,8 +73,20 @@ const STORIES: StoryCard[] = [
     color: 'hsl(5, 75%, 50%)',
   },
   {
-    id: 'mongol',
+    id: '1857',
     number: 5,
+    title: 'The Signal and the Fire',
+    subtitle: 'The 1857 Rebellion',
+    hook: 'Two signals raced across North India. The telegraph carried British orders at the speed of electricity. The rebellion spread at the speed of a horse.',
+    image: story1857,
+    tags: ['Dual Wavefront', 'Map Visual', '1857–1858'],
+    status: 'live',
+    href: '/1857',
+    color: 'hsl(30, 85%, 50%)',
+  },
+  {
+    id: 'mongol',
+    number: 6,
     title: 'The World Conqueror',
     subtitle: 'The Mongol Storm',
     hook: 'He asked for trade. They sent back heads. What followed reshaped every civilization from China to Hungary.',
