@@ -9,6 +9,7 @@ import Index from "./pages/Index.tsx";
 import HouseOfWisdom from "./pages/HouseOfWisdom.tsx";
 import Buddhism from "./pages/Buddhism.tsx";
 import Samurai from "./pages/Samurai.tsx";
+import Rebellion1857 from "./pages/Rebellion1857.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
