@@ -3,94 +3,80 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
-import { SectionDivider } from '@/components/visuals/PersianPattern';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-
-const populationData = [
-  { city: 'Merv', before: 200000, after: 0 },
-  { city: 'Nishapur', before: 400000, after: 0 },
-  { city: 'Herat', before: 300000, after: 10000 },
-  { city: 'Baghdad', before: 1000000, after: 50000 },
-  { city: 'Samarkand', before: 500000, after: 25000 },
-];
+import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
 
 export const MongolSection = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const redOverlay = useTransform(scrollYProgress, [0.2, 0.5], [0, 0.15]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 0.15, 0.15, 0]);
 
   return (
-    <section id="mongol" ref={ref} className="relative py-20 md:py-32">
+    <section id="mongol" ref={ref} style={{ '--era-primary': ERA_COLORS.mongol } as React.CSSProperties}>
+      {/* Dramatic red overlay that fades in */}
       <motion.div
-        className="absolute inset-0 bg-persian-terracotta pointer-events-none"
-        style={{ opacity: redOverlay }}
+        className="fixed inset-0 pointer-events-none z-[1]"
+        style={{
+          opacity: overlayOpacity,
+          background: 'radial-gradient(ellipse at center, hsl(25 70% 50% / 0.3) 0%, transparent 70%)',
+        }}
       />
 
-      <div className="max-w-5xl mx-auto px-4 md:px-8 relative z-10">
-        <RevealOnScroll className="text-center mb-16">
-          <p className="text-xs tracking-[0.3em] uppercase text-persian-terracotta/70 mb-4">1219–1258 CE · Catastrophe</p>
-          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-persian-terracotta">The Mongol Invasion</span>
+      {/* Opening shock statement */}
+      <div className="relative min-h-[70vh] flex items-center justify-center">
+        <RevealOnScroll className="text-center max-w-3xl mx-auto px-6">
+          <p className="text-xs tracking-[0.3em] uppercase text-[hsl(25,70%,50%,0.6)] mb-4">1219 CE</p>
+          <h2 className="font-display text-5xl md:text-7xl font-black mb-8">
+            <span className="text-[hsl(25,70%,55%)]">Destruction</span>
           </h2>
-          <p className="max-w-2xl mx-auto text-lg text-muted-foreground font-body leading-relaxed">
-            Genghis Khan demanded tribute from the Khwarezmian Empire.
-            When Shah Muhammad executed the Mongol envoys, he unleashed
-            the most devastating military campaign in human history.
+          <p className="text-foreground/80 text-xl font-body leading-relaxed mb-4">
+            Genghis Khan requested trade. The governor of Otrar beheaded his envoys.
+          </p>
+          <p className="text-foreground/50 text-lg font-body">
+            What followed was the worst catastrophe in Persian history.
           </p>
         </RevealOnScroll>
+      </div>
 
-        {/* Interactive map */}
-        <RevealOnScroll className="mb-16">
-          <div className="h-[400px] md:h-[500px] rounded-xl overflow-hidden border border-persian-terracotta/20">
+      <div className="max-w-5xl mx-auto px-6 py-16 space-y-20">
+        <RevealOnScroll>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
             <InteractiveMap
               empire="mongol"
               showCities
-              highlightCities={['Merv', 'Samarkand', 'Baghdad', 'Isfahan', 'Tabriz']}
-              zoom={4}
+              highlightCities={['Merv', 'Samarkand', 'Baghdad', 'Isfahan']}
+              className="aspect-[4/3] rounded-lg"
             />
-          </div>
-          <p className="text-center text-xs text-muted-foreground/50 mt-3 font-body">
-            The Ilkhanate — the Mongol domain over Persia, c. 1300
-          </p>
-        </RevealOnScroll>
-
-        {/* Population devastation chart */}
-        <RevealOnScroll className="mb-16">
-          <div className="bg-card/50 border border-persian-terracotta/20 rounded-xl p-6 md:p-8">
-            <h3 className="font-display text-xl mb-2 text-persian-cream/80">City Populations: Before & After</h3>
-            <p className="text-sm text-muted-foreground mb-6 font-body">The Mongol conquest erased cities that had thrived for millennia</p>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={populationData} barGap={2}>
-                  <XAxis dataKey="city" tick={{ fill: 'hsl(40 25% 70%)', fontSize: 12, fontFamily: 'Cormorant Garamond' }} axisLine={{ stroke: 'hsl(220 15% 20%)' }} tickLine={false} />
-                  <YAxis tick={{ fill: 'hsl(220 10% 50%)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v / 1000}k`} />
-                  <Bar dataKey="before" name="Before" fill="hsl(43 70% 45%)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="after" name="After" fill="hsl(15 65% 35%)" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="flex justify-center gap-8 mt-4 text-sm font-body">
-              <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm" style={{ background: 'hsl(43 70% 45%)' }} /> Before invasion</span>
-              <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm" style={{ background: 'hsl(15 65% 35%)' }} /> After invasion</span>
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <AnimatedCounter end={90} suffix="%" label="Population lost in some cities" />
+                <AnimatedCounter end={1.3} suffix="M" label="Killed in Merv alone" />
+              </div>
+              <p className="text-foreground/50 text-sm font-body italic">
+                "They came, they sapped, they burnt, they slew, they plundered, and they departed."
+              </p>
+              <p className="text-foreground/30 text-xs font-body">— Ata-Malik Juvayni</p>
             </div>
           </div>
         </RevealOnScroll>
 
-        <RevealOnScroll>
-          <div className="text-center">
-            <div className="flex flex-wrap justify-center gap-12 mb-12">
-              <AnimatedCounter end={40} suffix="M" label="People killed" />
-              <AnimatedCounter end={90} suffix="%" label="of Iranian plateau depopulated" />
-              <AnimatedCounter end={800} suffix="" label="Years to recover pre-Mongol population" />
-            </div>
-            <blockquote className="font-display text-xl md:text-2xl italic text-persian-cream/60 max-w-2xl mx-auto">
-              "They came, they mined, they burnt, they slew, they plundered, and they departed."
-            </blockquote>
-            <p className="text-muted-foreground mt-3 font-body">— Ata-Malik Juvayni, Persian historian, 1260</p>
+        <RevealOnScroll delay={0.1}>
+          <div className="text-center max-w-2xl mx-auto">
+            <h3 className="font-display text-2xl font-bold text-[hsl(25,70%,50%,0.85)] mb-4">
+              The irrigation systems took 800 years to rebuild.
+            </h3>
+            <p className="text-foreground/50 text-lg font-body leading-relaxed">
+              Some regions of Iran never recovered their pre-Mongol population levels until the 20th century.
+            </p>
           </div>
         </RevealOnScroll>
       </div>
-      <SectionDivider className="mt-16" />
+
+      <EraTransition
+        fromColor={ERA_COLORS.mongol}
+        toColor={ERA_COLORS.safavid}
+        year="1501 CE"
+        label="Rebirth"
+      />
     </section>
   );
 };

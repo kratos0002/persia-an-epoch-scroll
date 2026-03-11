@@ -8,104 +8,88 @@ export const HeroSection = () => {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.8], [1, 0.92]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
+
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.92]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -80]);
+  const textReveal1 = useTransform(scrollYProgress, [0, 0.08], [0, 1]);
+  const textReveal2 = useTransform(scrollYProgress, [0.06, 0.16], [0, 1]);
+  const textReveal3 = useTransform(scrollYProgress, [0.12, 0.24], [0, 1]);
+  const textReveal4 = useTransform(scrollYProgress, [0.2, 0.32], [0, 1]);
 
   return (
-    <section id="hero" ref={ref} className="relative h-[200vh]">
+    <section id="hero" ref={ref} className="relative h-[250vh]">
       <motion.div
-        className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden"
+        className="sticky top-0 h-screen flex items-center justify-center overflow-hidden"
         style={{ opacity, scale }}
       >
-        {/* Animated geometric background */}
-        <PersianPattern variant="hexagonal" opacity={0.06} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
+        {/* Background pattern */}
+        <PersianPattern variant="hexagonal" opacity={0.04} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background" />
 
         {/* Spinning ornament */}
-        <motion.div className="absolute animate-spin-slow opacity-[0.04]" style={{ y }}>
-          <svg width="600" height="600" viewBox="0 0 600 600">
-            <g transform="translate(300,300)">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <path
-                  key={i}
-                  d="M0,-250 C30,-200 30,-150 0,-100 C-30,-150 -30,-200 0,-250"
-                  fill="none"
-                  stroke="hsl(43 85% 55%)"
-                  strokeWidth="1"
-                  transform={`rotate(${i * 30})`}
-                />
-              ))}
-              {Array.from({ length: 8 }).map((_, i) => (
-                <rect
-                  key={`r${i}`}
-                  x="-2" y="-180" width="4" height="60"
-                  fill="hsl(43 85% 55%)"
-                  opacity="0.3"
-                  transform={`rotate(${i * 45})`}
-                />
-              ))}
-            </g>
-          </svg>
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          style={{ y }}
+        >
+          <motion.svg
+            width="500"
+            height="500"
+            viewBox="0 0 500 500"
+            className="opacity-[0.04] w-[600px] h-[600px]"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          >
+            {[0, 45, 90, 135].map(angle => (
+              <g key={angle} transform={`rotate(${angle} 250 250)`}>
+                <path d="M250 50 L270 230 L250 250 L230 230 Z" fill="hsl(43,85%,55%)" />
+                <rect x="245" y="40" width="10" height="30" fill="hsl(43,85%,55%)" rx="2" />
+              </g>
+            ))}
+          </motion.svg>
         </motion.div>
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          {/* Epoch Lives branding */}
+        {/* Content — scroll-revealed line by line */}
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
           <motion.p
-            className="text-xs md:text-sm tracking-[0.4em] uppercase text-persian-gold/60 mb-8 font-body"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
+            className="text-xs tracking-[0.4em] uppercase text-[hsl(43,85%,55%,0.5)] mb-6 font-body"
+            style={{ opacity: textReveal1 }}
           >
             Epoch Lives Presents
           </motion.p>
 
-          {/* Main title */}
           <motion.h1
-            className="text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-[0.9] mb-6"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 text-gradient-gold leading-[1.1]"
+            style={{ opacity: textReveal2 }}
           >
-            <span className="text-gradient-gold">The History</span>
-            <br />
-            <span className="text-foreground/90">of Persia</span>
+            The Immortal Empire
           </motion.h1>
 
-          {/* Subtitle */}
           <motion.p
-            className="text-xl md:text-2xl lg:text-3xl font-body text-persian-sand/70 font-light mb-12"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.9 }}
+            className="text-foreground/60 text-xl md:text-2xl font-body max-w-2xl mx-auto mb-8 leading-relaxed"
+            style={{ opacity: textReveal3 }}
           >
-            2,500 Years of Civilization
+            2,500 years of Persia — from Cyrus the Great to the modern Islamic Republic.
+            One civilization's unbroken thread through human history.
           </motion.p>
 
-          {/* Timeline span */}
-          <motion.div
-            className="flex items-center justify-center gap-6 text-muted-foreground/50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.3 }}
+          <motion.p
+            className="text-foreground/30 text-sm font-body tracking-widest uppercase"
+            style={{ opacity: textReveal4 }}
           >
-            <span className="font-display text-lg">550 BCE</span>
-            <div className="w-24 md:w-40 h-px bg-gradient-to-r from-persian-gold/40 via-persian-gold/20 to-persian-gold/40" />
-            <span className="font-display text-lg">2020s CE</span>
-          </motion.div>
+            550 BCE — Present
+          </motion.p>
 
           {/* Scroll indicator */}
           <motion.div
             className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 2 }}
+            style={{ opacity: textReveal4 }}
           >
-            <span className="text-xs tracking-widest uppercase text-muted-foreground/40 font-body">Scroll to begin</span>
+            <span className="text-foreground/20 text-xs font-body tracking-widest uppercase">Scroll to begin</span>
             <motion.div
-              className="w-px h-8 bg-gradient-to-b from-persian-gold/40 to-transparent"
+              className="w-px h-8 bg-gradient-to-b from-[hsl(43,85%,55%,0.3)] to-transparent"
               animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
           </motion.div>
         </div>
