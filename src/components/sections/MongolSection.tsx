@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
-import { HistoricalMap } from '@/components/visuals/HistoricalImage';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
@@ -39,14 +39,19 @@ export const MongolSection = () => {
           </p>
         </RevealOnScroll>
 
-        {/* Historical map */}
+        {/* Interactive map */}
         <RevealOnScroll className="mb-16">
-          <HistoricalMap
-            src="/images/maps/mongol-empire.png"
-            alt="Map of the Mongol Empire at its greatest extent, c. 1300"
-            caption="The Mongol Empire and its divisions, c. 1300 — the largest contiguous land empire in history"
-            className="max-w-3xl mx-auto"
-          />
+          <div className="h-[400px] md:h-[500px] rounded-xl overflow-hidden border border-persian-terracotta/20">
+            <InteractiveMap
+              empire="mongol"
+              showCities
+              highlightCities={['Merv', 'Samarkand', 'Baghdad', 'Isfahan', 'Tabriz']}
+              zoom={4}
+            />
+          </div>
+          <p className="text-center text-xs text-muted-foreground/50 mt-3 font-body">
+            The Ilkhanate — the Mongol domain over Persia, c. 1300
+          </p>
         </RevealOnScroll>
 
         {/* Population devastation chart */}

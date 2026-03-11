@@ -1,9 +1,8 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
 import { HistoricalImage } from '@/components/visuals/HistoricalImage';
-import { PersiaMap } from '@/components/visuals/PersiaMap';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip, AreaChart, Area } from 'recharts';
 
@@ -52,6 +51,20 @@ export const ModernSection = () => {
           <h2 className="font-display text-4xl md:text-6xl font-bold mb-6 text-foreground/90">
             Revolution & Rebirth
           </h2>
+        </RevealOnScroll>
+
+        {/* Modern Iran map */}
+        <RevealOnScroll className="mb-16">
+          <div className="h-[350px] md:h-[450px] rounded-xl overflow-hidden border border-border/30">
+            <InteractiveMap
+              empire="modern"
+              showCities
+              highlightCities={['Isfahan', 'Tabriz', 'Persepolis']}
+            />
+          </div>
+          <p className="text-center text-xs text-muted-foreground/50 mt-3 font-body">
+            Modern Iran — heir to 2,500 years of civilization
+          </p>
         </RevealOnScroll>
 
         {/* Constitutional Revolution */}

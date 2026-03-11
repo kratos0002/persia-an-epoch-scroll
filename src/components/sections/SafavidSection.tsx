@@ -1,28 +1,35 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
-import { HistoricalImage, HistoricalMap } from '@/components/visuals/HistoricalImage';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { SectionDivider, PersianPattern } from '@/components/visuals/PersianPattern';
 
 export const SafavidSection = () => (
   <section id="safavid" className="relative">
     <StickyScroll
       graphic={(activeStep) => (
-        <div className="w-full h-full flex items-center justify-center p-4 md:p-8 relative">
+        <div className="w-full h-full relative">
           <PersianPattern variant="hexagonal" opacity={0.03} color="hsl(215,65%,35%)" />
           {activeStep <= 1 ? (
-            <img
-              src="/images/maps/safavid-empire.png"
-              alt="Safavid Empire territory"
-              className="max-w-full max-h-full object-contain rounded-lg opacity-90"
+            <InteractiveMap
+              empire="safavid"
+              showCities
+              highlightCities={
+                activeStep === 0
+                  ? ['Tabriz', 'Isfahan', 'Persepolis']
+                  : ['Isfahan', 'Tabriz']
+              }
             />
           ) : (
-            <img
-              src="/images/isfahan-aerial.jpg"
-              alt="Naqsh-e Jahan Square, Isfahan"
-              className="max-w-full max-h-[80vh] object-contain rounded-lg"
-            />
+            <div className="w-full h-full flex items-center justify-center p-4 md:p-8">
+              <img
+                src="/images/isfahan-aerial.jpg"
+                alt="Naqsh-e Jahan Square, Isfahan"
+                className="max-w-full max-h-[80vh] object-contain rounded-lg"
+              />
+            </div>
           )}
         </div>
       )}

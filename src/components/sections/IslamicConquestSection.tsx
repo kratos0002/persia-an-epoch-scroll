@@ -1,26 +1,23 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
-import { PersiaMap } from '@/components/visuals/PersiaMap';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
 
 export const IslamicConquestSection = () => (
   <section id="islamic-conquest">
     <StickyScroll
       graphic={(activeStep) => (
-        <div className="w-full h-full flex items-center justify-center p-4 md:p-12">
-          <PersiaMap
-            empire={activeStep < 2 ? 'sassanid' : 'islamic'}
-            showCities
-            highlightCities={
-              activeStep === 0
-                ? ['Susa', 'Persepolis']
-                : activeStep === 1
-                ? ['Susa', 'Babylon', 'Ecbatana']
-                : ['Isfahan', 'Susa', 'Babylon', 'Samarkand']
-            }
-            showLabels
-          />
-        </div>
+        <InteractiveMap
+          empire={activeStep < 2 ? 'sassanid' : 'islamic'}
+          showCities
+          highlightCities={
+            activeStep === 0
+              ? ['Susa', 'Persepolis', 'Ctesiphon']
+              : activeStep === 1
+              ? ['Ctesiphon', 'Susa', 'Ecbatana']
+              : ['Isfahan', 'Baghdad', 'Samarkand', 'Merv']
+          }
+        />
       )}
       steps={[
         <div key={0}>

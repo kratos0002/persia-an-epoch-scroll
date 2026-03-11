@@ -1,47 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
-import { PersiaMap, type EmpireId } from '@/components/visuals/PersiaMap';
-import { HistoricalImage } from '@/components/visuals/HistoricalImage';
-import { HistoricalMap } from '@/components/visuals/HistoricalImage';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
 
 export const CyrusSection = () => {
-  const mapImages = [
-    null,
-    null,
-    '/images/maps/achaemenid-empire.png',
-    '/images/maps/achaemenid-empire.png',
-    null,
+  const empireStages: Array<{
+    empire: 'none' | 'achaemenid';
+    cities: string[];
+    center?: [number, number];
+    zoom?: number;
+  }> = [
+    { empire: 'none', cities: ['Pasargadae'], center: [30, 53], zoom: 6 },
+    { empire: 'none', cities: ['Pasargadae', 'Ecbatana', 'Sardis'], center: [33, 46], zoom: 5 },
+    { empire: 'achaemenid', cities: ['Pasargadae', 'Babylon', 'Susa'], center: [32, 48], zoom: 4.5 },
+    { empire: 'achaemenid', cities: ['Persepolis', 'Susa', 'Babylon', 'Memphis', 'Samarkand'], center: [32, 48], zoom: 4 },
+    { empire: 'achaemenid', cities: ['Babylon'] },
   ];
 
   return (
     <section id="cyrus">
       <StickyScroll
-        graphic={(activeStep) => (
-          <div className="w-full h-full flex items-center justify-center p-4 md:p-8">
-            {mapImages[activeStep] ? (
-              <img
-                src={mapImages[activeStep]!}
-                alt="Achaemenid Empire territory"
-                className="max-w-full max-h-full object-contain rounded-lg opacity-90"
-              />
-            ) : activeStep === 4 ? (
-              <img
-                src="/images/cyrus-cylinder.jpg"
-                alt="The Cyrus Cylinder"
-                className="max-w-full max-h-[80vh] object-contain rounded-lg"
-              />
-            ) : (
-              <PersiaMap
-                empire={activeStep >= 2 ? 'achaemenid' : 'none'}
-                showCities
-                highlightCities={activeStep === 0 ? ['Pasargadae'] : ['Pasargadae', 'Ecbatana']}
-                showLabels={activeStep >= 1}
-              />
-            )}
-          </div>
-        )}
+        graphic={(activeStep) => {
+          const stage = empireStages[activeStep] || empireStages[0];
+          if (activeStep === 4) {
+            return (
+              <div className="w-full h-full flex items-center justify-center p-4 md:p-8">
+                <img
+                  src="/images/cyrus-cylinder.jpg"
+                  alt="The Cyrus Cylinder"
+                  className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                />
+              </div>
+            );
+          }
+          return (
+            <InteractiveMap
+              empire={stage.empire}
+              showCities
+              highlightCities={stage.cities}
+              center={stage.center}
+              zoom={stage.zoom}
+            />
+          );
+        }}
         steps={[
           <div key={0}>
             <p className="text-xs tracking-[0.3em] uppercase text-persian-gold/60 mb-3">550 BCE · The Rise</p>

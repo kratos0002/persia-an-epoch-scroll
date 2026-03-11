@@ -1,7 +1,8 @@
 import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
-import { HistoricalImage, HistoricalMap } from '@/components/visuals/HistoricalImage';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 const battles = [
@@ -41,14 +42,20 @@ export const PersianWarsSection = () => (
         </p>
       </RevealOnScroll>
 
-      {/* Historical map */}
+      {/* Interactive map */}
       <RevealOnScroll className="mb-12">
-        <HistoricalMap
-          src="/images/maps/persian-wars-map.png"
-          alt="Map of the Persian Empire during the Greco-Persian Wars, 490 BCE"
-          caption="The Persian Empire at the time of the Greco-Persian Wars, c. 490 BCE"
-          className="max-w-3xl mx-auto"
-        />
+        <div className="h-[400px] md:h-[500px] rounded-xl overflow-hidden border border-persian-gold/15">
+          <InteractiveMap
+            empire="achaemenid"
+            showCities
+            highlightCities={['Athens', 'Sardis', 'Persepolis', 'Susa', 'Babylon']}
+            center={[36, 36]}
+            zoom={4.5}
+          />
+        </div>
+        <p className="text-center text-xs text-muted-foreground/50 mt-3 font-body">
+          The Persian Empire at the time of the Greco-Persian Wars, c. 490 BCE
+        </p>
       </RevealOnScroll>
 
       {/* Thermopylae painting */}
