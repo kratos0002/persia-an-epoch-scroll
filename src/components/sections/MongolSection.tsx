@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
-import { PersiaMap } from '@/components/visuals/PersiaMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
+import { HistoricalMap } from '@/components/visuals/HistoricalImage';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 const populationData = [
   { city: 'Merv', before: 200000, after: 0 },
@@ -21,7 +21,6 @@ export const MongolSection = () => {
 
   return (
     <section id="mongol" ref={ref} className="relative py-20 md:py-32">
-      {/* Red tint overlay for dramatic effect */}
       <motion.div
         className="absolute inset-0 bg-persian-terracotta pointer-events-none"
         style={{ opacity: redOverlay }}
@@ -40,17 +39,14 @@ export const MongolSection = () => {
           </p>
         </RevealOnScroll>
 
-        {/* Map */}
+        {/* Historical map */}
         <RevealOnScroll className="mb-16">
-          <div className="max-w-3xl mx-auto">
-            <PersiaMap
-              empire="mongol"
-              showCities
-              highlightCities={['Samarkand', 'Ecbatana', 'Isfahan', 'Babylon']}
-              showLabels
-              routePath="M 700,100 C 650,120 600,140 550,160 C 500,180 450,200 400,190 C 350,180 310,200 280,220"
-            />
-          </div>
+          <HistoricalMap
+            src="/images/maps/mongol-empire.png"
+            alt="Map of the Mongol Empire at its greatest extent, c. 1300"
+            caption="The Mongol Empire and its divisions, c. 1300 — the largest contiguous land empire in history"
+            className="max-w-3xl mx-auto"
+          />
         </RevealOnScroll>
 
         {/* Population devastation chart */}
@@ -61,18 +57,8 @@ export const MongolSection = () => {
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={populationData} barGap={2}>
-                  <XAxis
-                    dataKey="city"
-                    tick={{ fill: 'hsl(40 25% 70%)', fontSize: 12, fontFamily: 'Cormorant Garamond' }}
-                    axisLine={{ stroke: 'hsl(220 15% 20%)' }}
-                    tickLine={false}
-                  />
-                  <YAxis
-                    tick={{ fill: 'hsl(220 10% 50%)', fontSize: 11 }}
-                    axisLine={false}
-                    tickLine={false}
-                    tickFormatter={(v) => `${v / 1000}k`}
-                  />
+                  <XAxis dataKey="city" tick={{ fill: 'hsl(40 25% 70%)', fontSize: 12, fontFamily: 'Cormorant Garamond' }} axisLine={{ stroke: 'hsl(220 15% 20%)' }} tickLine={false} />
+                  <YAxis tick={{ fill: 'hsl(220 10% 50%)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v / 1000}k`} />
                   <Bar dataKey="before" name="Before" fill="hsl(43 70% 45%)" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="after" name="After" fill="hsl(15 65% 35%)" radius={[4, 4, 0, 0]} />
                 </BarChart>
@@ -85,7 +71,6 @@ export const MongolSection = () => {
           </div>
         </RevealOnScroll>
 
-        {/* Devastating stats */}
         <RevealOnScroll>
           <div className="text-center">
             <div className="flex flex-wrap justify-center gap-12 mb-12">

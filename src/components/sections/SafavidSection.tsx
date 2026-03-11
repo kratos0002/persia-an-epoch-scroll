@@ -1,27 +1,29 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
-import { PersiaMap } from '@/components/visuals/PersiaMap';
-import { AnimatedCounter, ImagePlaceholder } from '@/components/visuals/AnimatedCounter';
+import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
+import { HistoricalImage, HistoricalMap } from '@/components/visuals/HistoricalImage';
 import { SectionDivider, PersianPattern } from '@/components/visuals/PersianPattern';
 
 export const SafavidSection = () => (
   <section id="safavid" className="relative">
-    {/* Sticky map section */}
     <StickyScroll
       graphic={(activeStep) => (
-        <div className="w-full h-full flex items-center justify-center p-4 md:p-12 relative">
+        <div className="w-full h-full flex items-center justify-center p-4 md:p-8 relative">
           <PersianPattern variant="hexagonal" opacity={0.03} color="hsl(215,65%,35%)" />
-          <PersiaMap
-            empire="safavid"
-            showCities
-            highlightCities={
-              activeStep <= 1
-                ? ['Isfahan', 'Ecbatana']
-                : ['Isfahan', 'Ecbatana', 'Susa', 'Persepolis']
-            }
-            showLabels
-          />
+          {activeStep <= 1 ? (
+            <img
+              src="/images/maps/safavid-empire.png"
+              alt="Safavid Empire territory"
+              className="max-w-full max-h-full object-contain rounded-lg opacity-90"
+            />
+          ) : (
+            <img
+              src="/images/isfahan-aerial.jpg"
+              alt="Naqsh-e Jahan Square, Isfahan"
+              className="max-w-full max-h-[80vh] object-contain rounded-lg"
+            />
+          )}
         </div>
       )}
       steps={[
@@ -53,8 +55,6 @@ export const SafavidSection = () => (
             The Safavids presided over a cultural renaissance: Persian miniature
             painting reached its zenith, carpet weaving became a royal art,
             and Isfahan's bazaars traded with Venice, London, and the Mughal court.
-            The empire's population reached 10 million — a recovery from the
-            Mongol devastation.
           </p>
           <div className="grid grid-cols-2 gap-3">
             <AnimatedCounter end={10} suffix="M" label="Population" className="text-left" />
@@ -64,21 +64,39 @@ export const SafavidSection = () => (
       ]}
     />
 
-    {/* Gallery of cultural achievements */}
+    {/* Gallery */}
     <div className="max-w-6xl mx-auto px-4 md:px-8 py-20">
       <RevealOnScroll className="text-center mb-12">
         <h3 className="font-display text-2xl md:text-3xl font-bold text-persian-blue/80">Safavid Masterworks</h3>
       </RevealOnScroll>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[
-          { label: 'Persian miniature painting — Shah Tahmasp\'s Shahnameh', era: 'early-modern' as const },
-          { label: 'Isfahan\'s Shah Mosque — Islamic architecture at its zenith', era: 'early-modern' as const },
-          { label: 'Safavid carpet — Royal court weaving, silk and gold thread', era: 'early-modern' as const },
-        ].map((item, i) => (
-          <RevealOnScroll key={i} delay={0.1 * i}>
-            <ImagePlaceholder label={item.label} era={item.era} aspectRatio="3/4" />
-          </RevealOnScroll>
-        ))}
+        <RevealOnScroll>
+          <HistoricalImage
+            src="/images/isfahan-square.jpg"
+            alt="Naqsh-e Jahan Square, Isfahan"
+            caption="Naqsh-e Jahan Square"
+            credit="Wikimedia Commons"
+            aspectRatio="3/4"
+          />
+        </RevealOnScroll>
+        <RevealOnScroll delay={0.1}>
+          <HistoricalImage
+            src="/images/isfahan-aerial.jpg"
+            alt="Aerial view of Naqsh-e Jahan Square"
+            caption="Isfahan from above"
+            credit="Wikimedia Commons"
+            aspectRatio="3/4"
+          />
+        </RevealOnScroll>
+        <RevealOnScroll delay={0.2}>
+          <HistoricalImage
+            src="/images/shahnameh.jpg"
+            alt="Shahnameh illuminated manuscript from the Safavid period"
+            caption="Safavid-era Shahnameh"
+            credit="Wikimedia Commons"
+            aspectRatio="3/4"
+          />
+        </RevealOnScroll>
       </div>
 
       {/* Qajar transition */}

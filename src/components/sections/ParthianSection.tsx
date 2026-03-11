@@ -1,27 +1,16 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
-import { PersiaMap } from '@/components/visuals/PersiaMap';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
-
-const SILK_ROAD_PATH = "M 135,118 C 200,150 280,200 350,200 C 420,200 480,180 540,160 C 600,140 650,130 700,155";
 
 export const ParthianSection = () => (
   <section id="parthian">
     <StickyScroll
       graphic={(activeStep) => (
-        <div className="w-full h-full flex items-center justify-center p-4 md:p-12">
-          <PersiaMap
-            empire="parthian"
-            showCities
-            highlightCities={
-              activeStep === 0
-                ? ['Ecbatana', 'Susa']
-                : activeStep === 1
-                ? ['Ecbatana', 'Susa', 'Babylon']
-                : ['Ecbatana', 'Susa', 'Babylon', 'Samarkand', 'Athens']
-            }
-            showLabels
-            routePath={activeStep >= 2 ? SILK_ROAD_PATH : undefined}
+        <div className="w-full h-full flex items-center justify-center p-4 md:p-8">
+          <img
+            src="/images/maps/parthian-empire.png"
+            alt="Parthian Empire territory"
+            className="max-w-full max-h-full object-contain rounded-lg opacity-90"
           />
         </div>
       )}
