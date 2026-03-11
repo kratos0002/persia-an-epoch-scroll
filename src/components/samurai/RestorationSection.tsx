@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ClassPyramid } from '@/components/visuals/ClassPyramid';
 
@@ -14,8 +14,12 @@ export const RestorationSection = () => {
     offset: ['start end', 'end start'],
   });
 
-  // Destabilize the pyramid as user scrolls through this section
   const destabilize = useTransform(scrollYProgress, [0.2, 0.7], [0, 0.85]);
+  const [val, setVal] = useState(0);
+
+  useEffect(() => {
+    return destabilize.on('change', setVal);
+  }, [destabilize]);
 
   return (
     <section id="restoration" ref={ref} className="relative py-32 px-6" style={{ background: PAPER_ALT }}>
@@ -65,13 +69,7 @@ export const RestorationSection = () => {
           the feudal hierarchy had to be dismantled — and they knew it.
         </motion.p>
 
-        {/* Destabilizing pyramid */}
-        <motion.div>
-          <ClassPyramid destabilize={destabilize.get()} />
-        </motion.div>
-
-        {/* Use a motion value subscriber to update */}
-        <DestabilizingPyramidWrapper scrollYProgress={scrollYProgress} />
+        <ClassPyramid destabilize={val} />
 
         <motion.p
           className="font-body text-sm text-center mt-10 tracking-[0.15em] uppercase"
@@ -85,21 +83,5 @@ export const RestorationSection = () => {
         </motion.p>
       </div>
     </section>
-  );
-};
-
-/** Wrapper that subscribes to scroll progress for the pyramid */
-const DestabilizingPyramidWrapper = ({ scrollYProgress }: { scrollYProgress: any }) => {
-  const destabilize = useTransform(scrollYProgress, [0.2, 0.7], [0, 0.85]);
-  const [val, setVal] = React.useState(0);
-
-  React.useEffect(() => {
-    return destabilize.on('change', setVal);
-  }, [destabilize]);
-
-  return (
-    <div className="mt-[-200px]">
-      <ClassPyramid destabilize={val} />
-    </div>
   );
 };
