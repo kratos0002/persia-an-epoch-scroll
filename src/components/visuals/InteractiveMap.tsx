@@ -1,7 +1,14 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { cn } from '@/lib/utils';
+import {
+  CITIES,
+  EMPIRE_TERRITORIES,
+  EMPIRE_STYLES,
+  EMPIRE_CENTERS,
+  type CityMarker,
+} from './mapData';
 
 export type EmpireId =
   | 'none'
@@ -14,12 +21,6 @@ export type EmpireId =
   | 'safavid'
   | 'modern';
 
-interface CityMarker {
-  name: string;
-  lat: number;
-  lng: number;
-}
-
 interface InteractiveMapProps {
   empire: EmpireId;
   className?: string;
@@ -30,83 +31,146 @@ interface InteractiveMapProps {
   animate?: boolean;
 }
 
-function makeRing(coords: [number, number][]): [number, number][] {
-  const ring = coords.map(([lat, lng]) => [lng, lat] as [number, number]);
-  ring.push(ring[0]);
-  return ring;
+/* ── Popup HTML builder ────────────────────────────────────── */
+
+function buildPopupHtml(city: CityMarker, empire: EmpireId, color: string): string {
+  const desc = city.description[empire] || city.description.default || '';
+  return `
+    <div style="
+      font-family: 'Playfair Display', Georgia, serif;
+      min-width: 200px;
+      max-width: 260px;
+    ">
+      <div style="
+        font-size: 15px;
+        font-weight: 700;
+        color: ${color};
+        margin-bottom: 6px;
+        letter-spacing: 0.02em;
+      ">${city.name}</div>
+      <div style="
+        font-family: 'Source Sans 3', 'Source Sans Pro', system-ui, sans-serif;
+        font-size: 12.5px;
+        line-height: 1.55;
+        color: rgba(255,255,255,0.75);
+      ">${desc}</div>
+      <div style="
+        margin-top: 8px;
+        font-size: 10px;
+        color: rgba(255,255,255,0.35);
+        font-family: system-ui, sans-serif;
+        letter-spacing: 0.06em;
+      ">${city.lat.toFixed(2)}°N, ${city.lng.toFixed(2)}°E</div>
+    </div>
+  `;
 }
 
-const EMPIRE_TERRITORIES: Record<EmpireId, [number, number][][]> = {
-  none: [],
-  achaemenid: [
-    [[26,26],[30,26],[32,30],[35,32],[38,34],[41,36],[42,40],[40,42],[37,44],[33,42],[30,41],[27,40],[25,37],[23,35],[22,32],[24,29]],
-    [[30,42],[33,42],[37,44],[40,50],[38,55],[36,60],[34,66],[32,70],[30,70],[28,66],[27,60],[26,55],[27,50],[28,46]],
-    [[22,32],[24,29],[26,26],[30,26],[32,30],[31,32],[30,33],[28,34],[25,34]],
-  ],
-  alexander: [
-    [[22,26],[30,20],[35,22],[38,26],[41,30],[42,36],[40,42],[38,50],[36,58],[34,66],[32,72],[30,72],[28,68],[26,60],[25,50],[24,42],[23,36],[22,30]],
-  ],
-  parthian: [
-    [[27,44],[30,42],[33,44],[36,48],[38,52],[37,58],[35,60],[32,60],[29,58],[27,54],[26,50],[26,46]],
-    [[30,42],[33,42],[35,40],[37,38],[38,40],[37,44],[33,44]],
-  ],
-  sassanid: [
-    [[25,44],[28,40],[32,38],[36,36],[38,38],[40,42],[39,48],[38,54],[36,58],[33,60],[30,58],[27,54],[25,50]],
-  ],
-  islamic: [
-    [[22,26],[30,20],[35,26],[38,32],[42,36],[40,44],[38,54],[36,64],[32,70],[28,64],[25,54],[24,44],[22,36]],
-  ],
-  mongol: [
-    [[28,38],[32,36],[36,36],[40,40],[42,46],[40,54],[38,60],[34,62],[30,58],[27,52],[26,46],[27,42]],
-  ],
-  safavid: [
-    [[25,44],[28,42],[32,40],[36,38],[39,40],[40,44],[40,50],[38,56],[35,60],[32,60],[29,58],[27,54],[25,50]],
-  ],
-  modern: [
-    [[25,53],[25.5,57],[26,59],[27,60.5],[28,60],[29,61],[31,61.5],[33,59],[35,59],[37,56],[38,54],[39.5,48],[39.5,45],[38,44],[37,44.5],[35,46],[33,48],[30,48],[27,50],[25.5,51]],
-  ],
-};
+/* ── Marker icon builder with pulse ───────────────────────── */
 
-const EMPIRE_STYLES: Record<EmpireId, { color: string; fillColor: string; fillOpacity: number }> = {
-  none: { color: 'transparent', fillColor: 'transparent', fillOpacity: 0 },
-  achaemenid: { color: '#D4A843', fillColor: '#D4A843', fillOpacity: 0.25 },
-  alexander: { color: '#8B5CF6', fillColor: '#7C3AED', fillOpacity: 0.25 },
-  parthian: { color: '#DC2626', fillColor: '#B91C1C', fillOpacity: 0.25 },
-  sassanid: { color: '#C53030', fillColor: '#9B2C2C', fillOpacity: 0.25 },
-  islamic: { color: '#059669', fillColor: '#047857', fillOpacity: 0.25 },
-  mongol: { color: '#EA580C', fillColor: '#C2410C', fillOpacity: 0.25 },
-  safavid: { color: '#2563EB', fillColor: '#1D4ED8', fillOpacity: 0.25 },
-  modern: { color: '#6366F1', fillColor: '#4F46E5', fillOpacity: 0.2 },
-};
+function buildMarkerIcon(color: string, glowColor: string, isHighlighted: boolean): L.DivIcon {
+  const size = isHighlighted ? 12 : 8;
+  const pulseSize = size + 16;
+  return L.divIcon({
+    className: '',
+    html: `
+      <div style="position:relative;width:${pulseSize}px;height:${pulseSize}px;display:flex;align-items:center;justify-content:center;">
+        ${isHighlighted ? `
+          <div style="
+            position:absolute;
+            width:${pulseSize}px;height:${pulseSize}px;
+            border-radius:50%;
+            background:${glowColor};
+            animation: mapPulse 2.5s ease-out infinite;
+            opacity:0.4;
+          "></div>
+        ` : ''}
+        <div style="
+          position:relative;
+          width:${size}px;height:${size}px;
+          border-radius:50%;
+          background:${color};
+          border:2px solid rgba(255,255,255,0.85);
+          box-shadow: 0 0 8px ${glowColor}, 0 0 16px ${glowColor};
+          cursor:pointer;
+          transition: transform 0.25s ease, box-shadow 0.25s ease;
+        " onmouseenter="this.style.transform='scale(1.5)';this.style.boxShadow='0 0 14px ${glowColor}, 0 0 28px ${glowColor}'"
+           onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='0 0 8px ${glowColor}, 0 0 16px ${glowColor}'"
+        ></div>
+      </div>
+    `,
+    iconSize: [pulseSize, pulseSize],
+    iconAnchor: [pulseSize / 2, pulseSize / 2],
+    popupAnchor: [0, -(pulseSize / 2 + 4)],
+  });
+}
 
-const CITIES: CityMarker[] = [
-  { name: 'Persepolis', lat: 29.93, lng: 52.89 },
-  { name: 'Susa', lat: 32.19, lng: 48.26 },
-  { name: 'Babylon', lat: 32.54, lng: 44.42 },
-  { name: 'Ecbatana', lat: 34.80, lng: 48.52 },
-  { name: 'Pasargadae', lat: 30.20, lng: 53.17 },
-  { name: 'Athens', lat: 37.97, lng: 23.72 },
-  { name: 'Samarkand', lat: 39.65, lng: 66.96 },
-  { name: 'Isfahan', lat: 32.65, lng: 51.68 },
-  { name: 'Tabriz', lat: 38.08, lng: 46.29 },
-  { name: 'Baghdad', lat: 33.31, lng: 44.37 },
-  { name: 'Merv', lat: 37.66, lng: 62.19 },
-  { name: 'Ctesiphon', lat: 33.09, lng: 44.58 },
-  { name: 'Sardis', lat: 38.48, lng: 28.04 },
-  { name: 'Memphis', lat: 29.85, lng: 31.25 },
-];
+/* ── Inject pulse keyframes + tooltip styles ─────────────── */
 
-const EMPIRE_CENTERS: Record<EmpireId, { center: [number, number]; zoom: number }> = {
-  none: { center: [32, 52], zoom: 5 },
-  achaemenid: { center: [32, 48], zoom: 4 },
-  alexander: { center: [33, 48], zoom: 4 },
-  parthian: { center: [33, 50], zoom: 5 },
-  sassanid: { center: [33, 50], zoom: 5 },
-  islamic: { center: [32, 46], zoom: 4 },
-  mongol: { center: [34, 50], zoom: 4 },
-  safavid: { center: [33, 50], zoom: 5 },
-  modern: { center: [32, 53], zoom: 5 },
-};
+const STYLE_ID = 'leaflet-custom-styles';
+function ensureStyles() {
+  if (document.getElementById(STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = STYLE_ID;
+  style.textContent = `
+    @keyframes mapPulse {
+      0%   { transform: scale(0.5); opacity: 0.5; }
+      70%  { transform: scale(1.8); opacity: 0; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+    .leaflet-popup-content-wrapper {
+      background: rgba(15, 18, 25, 0.95) !important;
+      backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      border-radius: 10px !important;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5) !important;
+      color: #fff !important;
+      padding: 0 !important;
+    }
+    .leaflet-popup-content {
+      margin: 14px 16px !important;
+      color: #fff !important;
+    }
+    .leaflet-popup-tip {
+      background: rgba(15, 18, 25, 0.95) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      box-shadow: none !important;
+    }
+    .leaflet-popup-close-button {
+      color: rgba(255,255,255,0.4) !important;
+      font-size: 18px !important;
+      top: 6px !important;
+      right: 8px !important;
+    }
+    .leaflet-popup-close-button:hover {
+      color: rgba(255,255,255,0.8) !important;
+    }
+    .leaflet-city-tooltip {
+      background: rgba(15, 18, 25, 0.9) !important;
+      backdrop-filter: blur(8px) !important;
+      border: 1px solid rgba(255,255,255,0.15) !important;
+      border-radius: 6px !important;
+      color: rgba(255,255,255,0.85) !important;
+      font-family: 'Source Sans 3', 'Source Sans Pro', system-ui, sans-serif !important;
+      font-size: 11.5px !important;
+      font-weight: 600 !important;
+      padding: 4px 10px !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+      letter-spacing: 0.03em !important;
+    }
+    .leaflet-city-tooltip::before {
+      border-top-color: rgba(15, 18, 25, 0.9) !important;
+    }
+    .leaflet-container {
+      background: hsl(220, 18%, 10%) !important;
+    }
+    .leaflet-tile-pane {
+      transition: opacity 0.6s ease !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+/* ── Component ──────────────────────────────────────────────── */
 
 export const InteractiveMap = ({
   empire,
@@ -120,6 +184,7 @@ export const InteractiveMap = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const layerRef = useRef<L.LayerGroup | null>(null);
+  const prevEmpireRef = useRef<EmpireId>('none');
 
   const defaults = EMPIRE_CENTERS[empire] || EMPIRE_CENTERS.none;
   const mapCenter = center || defaults.center;
@@ -135,6 +200,7 @@ export const InteractiveMap = ({
 
   // Initialize map once
   useEffect(() => {
+    ensureStyles();
     if (!containerRef.current || mapRef.current) return;
 
     const map = L.map(containerRef.current, {
@@ -145,10 +211,13 @@ export const InteractiveMap = ({
       scrollWheelZoom: false,
       doubleClickZoom: false,
       dragging: true,
+      keyboard: false,
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap',
+      maxZoom: 10,
+      minZoom: 3,
     }).addTo(map);
 
     layerRef.current = L.layerGroup().addTo(map);
@@ -169,44 +238,85 @@ export const InteractiveMap = ({
 
     layer.clearLayers();
 
-    // Fly to new center
+    // Smooth pan/zoom
     if (animate) {
-      map.flyTo(mapCenter, mapZoom, { duration: 1.5 });
+      map.flyTo(mapCenter, mapZoom, { duration: 1.8, easeLinearity: 0.25 });
     } else {
       map.setView(mapCenter, mapZoom);
     }
 
-    // Draw territories
-    if (empire !== 'none') {
+    // Draw territories with smooth curves
+    if (empire !== 'none' && territories.length > 0) {
       territories.forEach(coords => {
-        const latLngs = coords.map(([lat, lng]) => [lat, lng] as [number, number]);
+        const latLngs = coords.map(([lat, lng]) => L.latLng(lat, lng));
+
+        // Outer glow polygon
+        L.polygon(latLngs, {
+          color: 'transparent',
+          weight: 0,
+          fillColor: style.fillColor,
+          fillOpacity: style.fillOpacity * 0.4,
+          smoothFactor: 2.5,
+          className: 'territory-glow',
+        }).addTo(layer);
+
+        // Main territory polygon
         L.polygon(latLngs, {
           color: style.color,
-          weight: 2,
+          weight: 1.5,
           fillColor: style.fillColor,
           fillOpacity: style.fillOpacity,
-          dashArray: '6 3',
+          dashArray: '8 4',
+          smoothFactor: 2.0,
+          lineCap: 'round',
+          lineJoin: 'round',
+          className: 'territory-main',
+        }).addTo(layer);
+
+        // Bright border highlight
+        L.polygon(latLngs, {
+          color: style.color,
+          weight: 0.5,
+          fill: false,
+          opacity: 0.6,
+          smoothFactor: 2.0,
+          lineCap: 'round',
+          lineJoin: 'round',
         }).addTo(layer);
       });
     }
 
-    // Draw city markers
+    // Draw city markers with interactivity
     visibleCities.forEach(city => {
-      const icon = L.divIcon({
-        className: '',
-        html: `<div style="width:8px;height:8px;border-radius:50%;background:${style.color || '#D4A843'};border:2px solid rgba(255,255,255,0.8);box-shadow:0 0 6px ${style.color || '#D4A843'}"></div>`,
-        iconSize: [8, 8],
-        iconAnchor: [4, 4],
-      });
-      L.marker([city.lat, city.lng], { icon })
+      const isHighlighted = highlightCities?.includes(city.name) ?? false;
+      const icon = buildMarkerIcon(
+        style.color || '#D4A843',
+        style.glowColor || 'rgba(212,168,67,0.5)',
+        isHighlighted,
+      );
+
+      const marker = L.marker([city.lat, city.lng], { icon })
         .bindTooltip(city.name, {
           permanent: false,
           direction: 'top',
+          offset: [0, -12],
           className: 'leaflet-city-tooltip',
         })
+        .bindPopup(buildPopupHtml(city, empire, style.color || '#D4A843'), {
+          closeButton: true,
+          maxWidth: 280,
+          minWidth: 200,
+          className: '',
+        })
         .addTo(layer);
+
+      // Show tooltip on hover, popup on click
+      marker.on('mouseover', function () { this.openTooltip(); });
+      marker.on('mouseout', function () { this.closeTooltip(); });
     });
-  }, [empire, mapCenter, mapZoom, animate, territories, style, visibleCities]);
+
+    prevEmpireRef.current = empire;
+  }, [empire, mapCenter, mapZoom, animate, territories, style, visibleCities, highlightCities]);
 
   return (
     <div
