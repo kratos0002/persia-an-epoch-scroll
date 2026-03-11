@@ -10,6 +10,7 @@ import HouseOfWisdom from "./pages/HouseOfWisdom.tsx";
 import Buddhism from "./pages/Buddhism.tsx";
 import Samurai from "./pages/Samurai.tsx";
 import Rebellion1857 from "./pages/Rebellion1857.tsx";
+import Napoleon from "./pages/Napoleon.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/buddhism" element={<Buddhism />} />
           <Route path="/samurai" element={<Samurai />} />
           <Route path="/1857" element={<Rebellion1857 />} />
+          <Route path="/napoleon" element={<Napoleon />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

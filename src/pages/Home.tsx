@@ -9,6 +9,7 @@ import storyMongol from '@/assets/story-mongol.jpg';
 import storyBuddhism from '@/assets/story-buddhism.jpg';
 import storySamurai from '@/assets/story-samurai.jpg';
 import story1857 from '@/assets/story-1857.jpg';
+import storyNapoleon from '@/assets/story-napoleon.jpg';
 
 interface StoryCard {
   id: string;
@@ -85,8 +86,20 @@ const STORIES: StoryCard[] = [
     color: 'hsl(30, 85%, 50%)',
   },
   {
-    id: 'mongol',
+    id: 'napoleon',
     number: 6,
+    title: 'The Rise and Fall of Napoleon',
+    subtitle: 'Revolution to Legacy',
+    hook: 'One man reorganized Europe. Then Europe closed in. From revolutionary chaos to imperial zenith to final exile — and the ideas that outlasted the emperor.',
+    image: storyNapoleon,
+    tags: ['Coalition Board', 'Tricolor', '1789–1821'],
+    status: 'live',
+    href: '/napoleon',
+    color: 'hsl(220, 65%, 45%)',
+  },
+  {
+    id: 'mongol',
+    number: 7,
     title: 'The World Conqueror',
     subtitle: 'The Mongol Storm',
     hook: 'He asked for trade. They sent back heads. What followed reshaped every civilization from China to Hungary.',
