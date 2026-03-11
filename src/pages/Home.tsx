@@ -7,6 +7,7 @@ import storyPersia from '@/assets/story-persia.jpg';
 import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
 import storyBuddhism from '@/assets/story-buddhism.jpg';
+import storySamurai from '@/assets/story-samurai.jpg';
 
 interface StoryCard {
   id: string;
@@ -59,8 +60,20 @@ const STORIES: StoryCard[] = [
     color: 'hsl(30, 65%, 45%)',
   },
   {
-    id: 'mongol',
+    id: 'samurai',
     number: 4,
+    title: 'Stipends, Bonds & the Death of a Class',
+    subtitle: 'The End of the Samurai',
+    hook: 'The samurai class was not destroyed by war but by accounting: stipends converted to bonds, domains merged into prefectures, privilege replaced by institutions.',
+    image: storySamurai,
+    tags: ['Ledger Visual', 'Ink & Paper', '1603–1877'],
+    status: 'live',
+    href: '/samurai',
+    color: 'hsl(5, 75%, 50%)',
+  },
+  {
+    id: 'mongol',
+    number: 5,
     title: 'The World Conqueror',
     subtitle: 'The Mongol Storm',
     hook: 'He asked for trade. They sent back heads. What followed reshaped every civilization from China to Hungary.',
