@@ -144,6 +144,75 @@ export const CITIES: CityMarker[] = [
       default: 'Ancient Egyptian capital. Near the pyramids of Giza.',
     },
   },
+  // Buddhism cities
+  {
+    name: 'Lumbini', lat: 27.47, lng: 83.28,
+    description: { default: 'Birthplace of Siddhartha Gautama, ~563 BCE.' },
+  },
+  {
+    name: 'Bodh Gaya', lat: 24.70, lng: 84.99,
+    description: { default: 'Site of the Bodhi tree where Siddhartha attained enlightenment.' },
+  },
+  {
+    name: 'Sarnath', lat: 25.38, lng: 83.02,
+    description: { default: 'Where the Buddha delivered his first sermon — the Deer Park.' },
+  },
+  {
+    name: 'Pataliputra', lat: 25.61, lng: 85.14,
+    description: { default: 'Capital of the Maurya Empire under Ashoka; center of Buddhist missions.' },
+  },
+  {
+    name: 'Nalanda', lat: 25.14, lng: 85.44,
+    description: { default: 'The greatest Buddhist university, active for 700 years.' },
+  },
+  {
+    name: 'Anuradhapura', lat: 8.35, lng: 80.39,
+    description: { default: 'Ancient capital of Sri Lanka; Theravada Buddhism arrived here ~250 BCE.' },
+  },
+  {
+    name: 'Bagan', lat: 21.17, lng: 94.86,
+    description: { default: "Myanmar's city of 10,000 temples, heart of Theravada Buddhism." },
+  },
+  {
+    name: 'Ayutthaya', lat: 14.35, lng: 100.57,
+    description: { default: 'Former capital of Thailand, a major Theravada center.' },
+  },
+  {
+    name: 'Angkor', lat: 13.41, lng: 103.87,
+    description: { default: 'Khmer capital that transitioned from Hinduism to Theravada Buddhism.' },
+  },
+  {
+    name: 'Gandhara', lat: 34.15, lng: 71.75,
+    description: { default: 'Crossroads of Greek and Buddhist art; birthplace of the Buddha image.' },
+  },
+  {
+    name: 'Dunhuang', lat: 40.14, lng: 94.66,
+    description: { default: 'Gateway to China on the Silk Road; home of the Mogao Caves.' },
+  },
+  {
+    name: "Chang'an", lat: 34.26, lng: 108.94,
+    description: { default: 'Tang Dynasty capital; major center of Chinese Buddhism.' },
+  },
+  {
+    name: 'Nara', lat: 34.69, lng: 135.80,
+    description: { default: "Japan's first permanent capital; home of the Great Buddha at Tōdai-ji." },
+  },
+  {
+    name: 'Kyoto', lat: 35.01, lng: 135.77,
+    description: { default: 'Heart of Japanese Zen Buddhism; thousands of temples and gardens.' },
+  },
+  {
+    name: 'Lhasa', lat: 29.65, lng: 91.10,
+    description: { default: 'Seat of the Dalai Lama and center of Vajrayana Buddhism.' },
+  },
+  {
+    name: 'Kandy', lat: 7.29, lng: 80.64,
+    description: { default: "Home of the Temple of the Tooth, Sri Lanka's most sacred Buddhist relic." },
+  },
+  {
+    name: 'Luang Prabang', lat: 19.89, lng: 102.13,
+    description: { default: 'Ancient royal capital of Laos; a living Theravada monastery city.' },
+  },
 ];
 
 /* ──────────────────────── Territory coordinates ──────────────────── */

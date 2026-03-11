@@ -1,0 +1,37 @@
+import React from 'react';
+import { BuddhismHero } from '@/components/buddhism/BuddhismHero';
+import { AwakeningSection } from '@/components/buddhism/AwakeningSection';
+import { AshokaSection } from '@/components/buddhism/AshokaSection';
+import { FirstSplitSection } from '@/components/buddhism/FirstSplitSection';
+import { TheravadaSection } from '@/components/buddhism/TheravadaSection';
+import { MahayanaSection } from '@/components/buddhism/MahayanaSection';
+import { VajrayanaSection } from '@/components/buddhism/VajrayanaSection';
+import { BranchesSection } from '@/components/buddhism/BranchesSection';
+import { ModernBuddhismSection } from '@/components/buddhism/ModernBuddhismSection';
+import { BuddhismEpilogue } from '@/components/buddhism/BuddhismEpilogue';
+import { BuddhismSectionNav } from '@/components/buddhism/BuddhismSectionNav';
+import { BuddhismProgressTimeline } from '@/components/buddhism/BuddhismProgressTimeline';
+import { useBuddhismScrollSpy } from '@/hooks/useBuddhismScrollSpy';
+
+const Buddhism = () => {
+  const { activeSection, globalProgress } = useBuddhismScrollSpy();
+
+  return (
+    <div className="bg-background text-foreground min-h-screen">
+      <BuddhismSectionNav activeSection={activeSection} />
+      <BuddhismProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
+      <BuddhismHero />
+      <AwakeningSection />
+      <AshokaSection />
+      <FirstSplitSection />
+      <TheravadaSection />
+      <MahayanaSection />
+      <VajrayanaSection />
+      <BranchesSection />
+      <ModernBuddhismSection />
+      <BuddhismEpilogue />
+    </div>
+  );
+};
+
+export default Buddhism;

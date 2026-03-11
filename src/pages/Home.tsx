@@ -6,7 +6,7 @@ import { SiteFooter } from '@/components/site/SiteFooter';
 import storyPersia from '@/assets/story-persia.jpg';
 import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
-import storyByzantium from '@/assets/story-byzantium.jpg';
+import storyBuddhism from '@/assets/story-buddhism.jpg';
 
 interface StoryCard {
   id: string;
@@ -47,8 +47,20 @@ const STORIES: StoryCard[] = [
     color: 'hsl(170, 40%, 38%)',
   },
   {
-    id: 'mongol',
+    id: 'buddhism',
     number: 3,
+    title: 'The Path That Split',
+    subtitle: 'The Spread of Buddhism',
+    hook: 'One man sat under a tree and asked why we suffer. His answer split into a thousand traditions that reached every corner of Asia.',
+    image: storyBuddhism,
+    tags: ['Visual Essay', 'Branching Tree', '528 BCE–Today'],
+    status: 'live',
+    href: '/buddhism',
+    color: 'hsl(30, 65%, 45%)',
+  },
+  {
+    id: 'mongol',
+    number: 4,
     title: 'The World Conqueror',
     subtitle: 'The Mongol Storm',
     hook: 'He asked for trade. They sent back heads. What followed reshaped every civilization from China to Hungary.',
@@ -57,18 +69,6 @@ const STORIES: StoryCard[] = [
     status: 'coming-soon',
     href: '#',
     color: 'hsl(25, 70%, 50%)',
-  },
-  {
-    id: 'byzantium',
-    number: 4,
-    title: 'The Last Days of the City',
-    subtitle: 'The Fall of Constantinople',
-    hook: 'They came on the Monday after Easter. The greatest city in the world had 57 days left.',
-    image: storyByzantium,
-    tags: ['Siege Front', 'Diary Format', '1453'],
-    status: 'coming-soon',
-    href: '#',
-    color: 'hsl(15, 55%, 50%)',
   },
 ];
 
