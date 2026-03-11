@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import storyPersia from '@/assets/story-persia.jpg';
-import storyRome from '@/assets/story-rome.jpg';
+import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
 import storyByzantium from '@/assets/story-byzantium.jpg';
 
