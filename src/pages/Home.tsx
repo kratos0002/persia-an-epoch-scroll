@@ -59,16 +59,16 @@ const STORIES: StoryCard[] = [
     color: 'hsl(25, 70%, 50%)',
   },
   {
-    id: 'rome',
+    id: 'byzantium',
     number: 4,
-    title: 'The Buried City',
-    subtitle: 'Pompeii, 79 CE',
-    hook: 'Tuesday was a normal day. By Wednesday the sky was stone.',
-    image: storyRome,
-    tags: ['City System', 'Eruption', '24 hours'],
+    title: 'The Last Days of the City',
+    subtitle: 'The Fall of Constantinople',
+    hook: 'They came on the Monday after Easter. The greatest city in the world had 57 days left.',
+    image: storyByzantium,
+    tags: ['Siege Front', 'Diary Format', '1453'],
     status: 'coming-soon',
     href: '#',
-    color: 'hsl(15, 50%, 45%)',
+    color: 'hsl(15, 55%, 50%)',
   },
 ];
 
