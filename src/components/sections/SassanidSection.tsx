@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
-import { HistoricalImage, HistoricalMap } from '@/components/visuals/HistoricalImage';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { SectionDivider, PersianPattern } from '@/components/visuals/PersianPattern';
 
 export const SassanidSection = () => {
@@ -28,14 +28,18 @@ export const SassanidSection = () => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-20">
-        {/* Historical map */}
+        {/* Interactive map */}
         <RevealOnScroll className="mb-16">
-          <HistoricalMap
-            src="/images/maps/sassanid-empire.jpg"
-            alt="Map of the Sassanid Empire at its greatest extent, c. 620 CE"
-            caption="The Sassanid Empire at its greatest extent under Khosrow II, c. 620 CE"
-            className="max-w-3xl mx-auto"
-          />
+          <div className="h-[400px] md:h-[500px] rounded-xl overflow-hidden border border-persian-crimson/15">
+            <InteractiveMap
+              empire="sassanid"
+              showCities
+              highlightCities={['Ctesiphon', 'Persepolis', 'Isfahan', 'Merv']}
+            />
+          </div>
+          <p className="text-center text-xs text-muted-foreground/50 mt-3 font-body">
+            The Sassanid Empire at its greatest extent under Khosrow II, c. 620 CE
+          </p>
         </RevealOnScroll>
 
         {/* Shapur triumph image */}

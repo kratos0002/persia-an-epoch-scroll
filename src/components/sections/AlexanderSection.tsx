@@ -1,27 +1,31 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
 
 export const AlexanderSection = () => {
-  const graphics = [
-    '/images/maps/achaemenid-empire.png',
-    '/images/maps/alexander-empire.png',
-    '/images/maps/alexander-empire.png',
-    '/images/maps/alexander-empire.png',
+  const stages = [
+    { empire: 'achaemenid' as const, cities: ['Persepolis', 'Susa', 'Babylon'], center: [32, 48] as [number, number], zoom: 4 },
+    { empire: 'alexander' as const, cities: ['Athens', 'Sardis', 'Babylon'], center: [35, 38] as [number, number], zoom: 4 },
+    { empire: 'alexander' as const, cities: ['Persepolis', 'Susa', 'Babylon'], center: [32, 48] as [number, number], zoom: 4.5 },
+    { empire: 'alexander' as const, cities: ['Samarkand', 'Babylon', 'Memphis'], center: [33, 48] as [number, number], zoom: 3.5 },
   ];
 
   return (
     <section id="alexander">
       <StickyScroll
-        graphic={(activeStep) => (
-          <div className="w-full h-full flex items-center justify-center p-4 md:p-8">
-            <img
-              src={graphics[activeStep] || graphics[0]}
-              alt={activeStep === 0 ? "Achaemenid Empire before Alexander" : "Alexander's Empire"}
-              className="max-w-full max-h-full object-contain rounded-lg opacity-90"
+        graphic={(activeStep) => {
+          const stage = stages[activeStep] || stages[0];
+          return (
+            <InteractiveMap
+              empire={stage.empire}
+              showCities
+              highlightCities={stage.cities}
+              center={stage.center}
+              zoom={stage.zoom}
             />
-          </div>
-        )}
+          );
+        }}
         steps={[
           <div key={0}>
             <p className="text-xs tracking-[0.3em] uppercase text-persian-purple/80 mb-3">334 BCE · The Fall</p>

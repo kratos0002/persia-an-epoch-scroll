@@ -1,18 +1,25 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
 
 export const ParthianSection = () => (
   <section id="parthian">
     <StickyScroll
       graphic={(activeStep) => (
-        <div className="w-full h-full flex items-center justify-center p-4 md:p-8">
-          <img
-            src="/images/maps/parthian-empire.png"
-            alt="Parthian Empire territory"
-            className="max-w-full max-h-full object-contain rounded-lg opacity-90"
-          />
-        </div>
+        <InteractiveMap
+          empire="parthian"
+          showCities
+          highlightCities={
+            activeStep === 0
+              ? ['Ecbatana', 'Merv']
+              : activeStep === 1
+              ? ['Ctesiphon', 'Babylon', 'Ecbatana']
+              : ['Ctesiphon', 'Merv', 'Samarkand', 'Babylon']
+          }
+          center={activeStep === 2 ? [34, 52] as [number, number] : undefined}
+          zoom={activeStep === 2 ? 4 : undefined}
+        />
       )}
       steps={[
         <div key={0}>

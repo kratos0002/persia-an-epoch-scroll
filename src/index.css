@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Leaflet overrides for dark theme */
+.leaflet-container {
+  background: hsl(220, 18%, 10%) !important;
+  font-family: 'Cormorant Garamond', serif;
+}
+.leaflet-popup-content-wrapper {
+  background: hsl(220, 18%, 12%) !important;
+  color: hsl(40, 25%, 85%) !important;
+  border: 1px solid hsl(43, 50%, 30%) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+.leaflet-popup-tip {
+  background: hsl(220, 18%, 12%) !important;
+}
+.leaflet-popup-close-button {
+  color: hsl(40, 25%, 60%) !important;
+}
+
 @layer base {
   :root {
     --background: 220 20% 7%;
