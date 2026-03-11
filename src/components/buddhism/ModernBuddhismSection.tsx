@@ -25,7 +25,7 @@ export const ModernBuddhismSection = () => (
           {activeStep >= 2 && (
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm rounded-lg px-6 py-4 border border-border/30">
               <p className="text-xs tracking-[0.2em] uppercase font-body mb-1" style={{ color: `hsl(${SAFFRON} / 0.6)` }}>Practitioners worldwide</p>
-              <AnimatedCounter end={500000000} suffix="+" className="font-display text-3xl font-bold" style={{ color: `hsl(${SAFFRON})` }} />
+              <AnimatedCounter end={500000000} suffix="+" className="font-display text-3xl font-bold" />
             </div>
           )}
         </div>
