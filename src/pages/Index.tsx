@@ -1,6 +1,7 @@
 import React from 'react';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
 import { ProgressTimeline } from '@/components/scroll/ProgressTimeline';
+import { SectionNav } from '@/components/scroll/SectionNav';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { CyrusSection } from '@/components/sections/CyrusSection';
 import { DariusSection } from '@/components/sections/DariusSection';
@@ -20,6 +21,7 @@ const Index = () => {
 
   return (
     <div className="bg-background min-h-screen">
+      <SectionNav activeSection={activeSection} />
       <ProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <HeroSection />
       <CyrusSection />

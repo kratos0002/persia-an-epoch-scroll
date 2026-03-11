@@ -1,6 +1,7 @@
 import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
+import { HistoricalImage, HistoricalMap } from '@/components/visuals/HistoricalImage';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 const battles = [
@@ -40,6 +41,28 @@ export const PersianWarsSection = () => (
         </p>
       </RevealOnScroll>
 
+      {/* Historical map */}
+      <RevealOnScroll className="mb-12">
+        <HistoricalMap
+          src="/images/maps/persian-wars-map.png"
+          alt="Map of the Persian Empire during the Greco-Persian Wars, 490 BCE"
+          caption="The Persian Empire at the time of the Greco-Persian Wars, c. 490 BCE"
+          className="max-w-3xl mx-auto"
+        />
+      </RevealOnScroll>
+
+      {/* Thermopylae painting */}
+      <RevealOnScroll className="mb-16">
+        <HistoricalImage
+          src="/images/thermopylae.jpg"
+          alt="Leonidas at Thermopylae by Jacques-Louis David"
+          caption="Leonidas at Thermopylae"
+          credit="Jacques-Louis David, 1814"
+          aspectRatio="4/3"
+          className="max-w-3xl mx-auto"
+        />
+      </RevealOnScroll>
+
       {/* Battle comparison chart */}
       <RevealOnScroll className="mb-16">
         <div className="bg-card/50 border border-border/50 rounded-xl p-6 md:p-8">
@@ -47,17 +70,8 @@ export const PersianWarsSection = () => (
           <div className="h-[300px] md:h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={battles} barGap={4}>
-                <XAxis
-                  dataKey="name"
-                  tick={{ fill: 'hsl(40 25% 70%)', fontSize: 11, fontFamily: 'Cormorant Garamond' }}
-                  axisLine={{ stroke: 'hsl(220 15% 20%)' }}
-                  tickLine={false}
-                />
-                <YAxis
-                  tick={{ fill: 'hsl(220 10% 50%)', fontSize: 11 }}
-                  axisLine={false}
-                  tickLine={false}
-                />
+                <XAxis dataKey="name" tick={{ fill: 'hsl(40 25% 70%)', fontSize: 11, fontFamily: 'Cormorant Garamond' }} axisLine={{ stroke: 'hsl(220 15% 20%)' }} tickLine={false} />
+                <YAxis tick={{ fill: 'hsl(220 10% 50%)', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(220 15% 15%)' }} />
                 <Bar dataKey="persian" name="Persian Forces" radius={[4, 4, 0, 0]}>
                   {battles.map((entry, i) => (
@@ -73,12 +87,8 @@ export const PersianWarsSection = () => (
             </ResponsiveContainer>
           </div>
           <div className="flex justify-center gap-8 mt-4 text-sm font-body">
-            <span className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-sm bg-persian-gold" /> Persian
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-sm bg-persian-blue" /> Greek
-            </span>
+            <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-persian-gold" /> Persian</span>
+            <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-persian-blue" /> Greek</span>
           </div>
         </div>
       </RevealOnScroll>

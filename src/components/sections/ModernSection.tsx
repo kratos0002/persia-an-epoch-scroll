@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
-import { AnimatedCounter, ImagePlaceholder } from '@/components/visuals/AnimatedCounter';
+import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { PersiaMap } from '@/components/visuals/PersiaMap';
-import { SectionDivider, PersianPattern } from '@/components/visuals/PersianPattern';
+import { SectionDivider } from '@/components/visuals/PersianPattern';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip, AreaChart, Area } from 'recharts';
 
 const modernizationData = [
@@ -43,17 +44,8 @@ const revolutionEvents = [
 ];
 
 export const ModernSection = () => {
-  const revRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: revProgress } = useScroll({ target: revRef, offset: ["start end", "end start"] });
-  const bgShift = useTransform(revProgress, [0, 0.5, 1], [
-    'hsl(220, 20%, 7%)',
-    'hsl(350, 30%, 10%)',
-    'hsl(220, 20%, 7%)',
-  ]);
-
   return (
     <section id="modern" className="relative">
-      {/* Constitutional Revolution */}
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-20 md:py-32">
         <RevealOnScroll className="text-center mb-16">
           <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground/60 mb-4">1905–1979 · The Modern Era</p>
@@ -62,7 +54,7 @@ export const ModernSection = () => {
           </h2>
         </RevealOnScroll>
 
-        {/* Constitutional Revolution - newspaper style */}
+        {/* Constitutional Revolution */}
         <RevealOnScroll className="mb-20">
           <div className="border border-border/50 bg-card/30 rounded-lg p-8 md:p-12 max-w-3xl mx-auto">
             <div className="text-center border-b border-border/30 pb-6 mb-6">
@@ -78,13 +70,12 @@ export const ModernSection = () => {
               In 1905, Persian merchants, clerics, and intellectuals united against
               the Qajar shah's incompetence and foreign concessions. They demanded
               — and won — a constitution and parliament. Iran became the first
-              constitutional monarchy in the Middle East, decades before most
-              of its neighbors gained independence.
+              constitutional monarchy in the Middle East.
             </p>
           </div>
         </RevealOnScroll>
 
-        {/* Pahlavi era with charts */}
+        {/* Pahlavi charts */}
         <RevealOnScroll className="mb-16">
           <div className="text-center mb-8">
             <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground/80">The Pahlavi Dynasty</h3>
@@ -93,7 +84,6 @@ export const ModernSection = () => {
         </RevealOnScroll>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-          {/* Literacy & urbanization chart */}
           <RevealOnScroll>
             <div className="bg-card/50 border border-border/50 rounded-xl p-6">
               <h4 className="font-display text-lg mb-4 text-persian-cream/80">Literacy & Urbanization (%)</h4>
@@ -111,7 +101,6 @@ export const ModernSection = () => {
             </div>
           </RevealOnScroll>
 
-          {/* Oil revenue chart */}
           <RevealOnScroll delay={0.1}>
             <div className="bg-card/50 border border-border/50 rounded-xl p-6">
               <h4 className="font-display text-lg mb-4 text-persian-cream/80">Oil Revenue ($B adjusted)</h4>
@@ -135,22 +124,31 @@ export const ModernSection = () => {
           </RevealOnScroll>
         </div>
 
-        {/* 1979 Revolution - dramatic section */}
-        <div ref={revRef} className="relative py-16 md:py-24">
+        {/* 1979 Revolution */}
+        <div className="relative py-16 md:py-24">
           <div className="text-center max-w-3xl mx-auto">
             <RevealOnScroll>
               <p className="text-xs tracking-[0.3em] uppercase text-persian-crimson/70 mb-4">1979 · The World Turns</p>
               <h3 className="font-display text-4xl md:text-5xl font-bold mb-8 text-persian-crimson/90">
                 The Islamic Revolution
               </h3>
+
+              <HistoricalImage
+                src="/images/shah-leaving-1979.jpg"
+                alt="Shah Mohammad Reza Pahlavi and Shahbanu Farah leaving Iran, January 16, 1979"
+                caption="The Shah and Shahbanu leave Iran for the last time"
+                credit="January 16, 1979 · Wikimedia Commons"
+                aspectRatio="4/5"
+                className="max-w-sm mx-auto mb-8"
+              />
+
               <p className="text-lg text-foreground/70 font-body leading-relaxed mb-12">
                 In a revolution that stunned the world, millions of Iranians
                 overthrew the Pahlavi dynasty. The 2,500-year-old monarchy — traced
-                from Cyrus the Great — ended. In its place rose the Islamic Republic.
+                from Cyrus the Great — ended.
               </p>
             </RevealOnScroll>
 
-            {/* Timeline of revolution events */}
             <div className="text-left max-w-lg mx-auto space-y-6">
               {revolutionEvents.map((item, i) => (
                 <RevealOnScroll key={i} delay={0.08 * i}>
@@ -181,11 +179,6 @@ export const ModernSection = () => {
             <AnimatedCounter end={70} suffix="%" label="Under 40 years old" />
             <AnimatedCounter end={4} suffix="th" label="Largest oil reserves" />
           </div>
-        </RevealOnScroll>
-
-        {/* Map of modern Iran */}
-        <RevealOnScroll className="mt-16 max-w-2xl mx-auto">
-          <PersiaMap empire="modern" showCities highlightCities={['Isfahan', 'Persepolis', 'Ecbatana']} showLabels />
         </RevealOnScroll>
       </div>
       <SectionDivider />

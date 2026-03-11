@@ -1,35 +1,27 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
-import { PersiaMap, type EmpireId } from '@/components/visuals/PersiaMap';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
 
-const ALEXANDER_ROUTE = "M 135,118 C 180,140 240,170 305,228 C 340,250 395,248 430,240 C 470,230 510,215 550,180 C 590,150 640,160 695,205";
-
 export const AlexanderSection = () => {
-  const stages: { empire: EmpireId; cities: string[]; route: boolean }[] = [
-    { empire: 'achaemenid', cities: ['Athens', 'Persepolis'], route: false },
-    { empire: 'achaemenid', cities: ['Athens', 'Babylon'], route: true },
-    { empire: 'alexander', cities: ['Persepolis', 'Susa', 'Babylon', 'Ecbatana'], route: true },
-    { empire: 'alexander', cities: ['Persepolis', 'Samarkand', 'Babylon'], route: true },
+  const graphics = [
+    '/images/maps/achaemenid-empire.png',
+    '/images/maps/alexander-empire.png',
+    '/images/maps/alexander-empire.png',
+    '/images/maps/alexander-empire.png',
   ];
 
   return (
     <section id="alexander">
       <StickyScroll
-        graphic={(activeStep) => {
-          const stage = stages[activeStep] || stages[0];
-          return (
-            <div className="w-full h-full flex items-center justify-center p-4 md:p-12">
-              <PersiaMap
-                empire={stage.empire}
-                showCities
-                highlightCities={stage.cities}
-                showLabels
-                routePath={stage.route ? ALEXANDER_ROUTE : undefined}
-              />
-            </div>
-          );
-        }}
+        graphic={(activeStep) => (
+          <div className="w-full h-full flex items-center justify-center p-4 md:p-8">
+            <img
+              src={graphics[activeStep] || graphics[0]}
+              alt={activeStep === 0 ? "Achaemenid Empire before Alexander" : "Alexander's Empire"}
+              className="max-w-full max-h-full object-contain rounded-lg opacity-90"
+            />
+          </div>
+        )}
         steps={[
           <div key={0}>
             <p className="text-xs tracking-[0.3em] uppercase text-persian-purple/80 mb-3">334 BCE · The Fall</p>

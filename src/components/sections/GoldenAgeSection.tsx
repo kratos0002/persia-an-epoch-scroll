@@ -1,6 +1,7 @@
 import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
-import { AnimatedCounter, ImagePlaceholder } from '@/components/visuals/AnimatedCounter';
+import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
+import { HistoricalImage, HistoricalMap } from '@/components/visuals/HistoricalImage';
 import { SectionDivider, PersianPattern } from '@/components/visuals/PersianPattern';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -58,30 +59,10 @@ export const GoldenAgeSection = () => (
                     <stop offset="95%" stopColor="hsl(160 45% 35%)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis
-                  dataKey="year"
-                  tick={{ fill: 'hsl(40 25% 70%)', fontSize: 11, fontFamily: 'Cormorant Garamond' }}
-                  axisLine={{ stroke: 'hsl(220 15% 20%)' }}
-                  tickLine={false}
-                  tickFormatter={(v) => `${v} CE`}
-                />
+                <XAxis dataKey="year" tick={{ fill: 'hsl(40 25% 70%)', fontSize: 11, fontFamily: 'Cormorant Garamond' }} axisLine={{ stroke: 'hsl(220 15% 20%)' }} tickLine={false} tickFormatter={(v) => `${v} CE`} />
                 <YAxis tick={{ fill: 'hsl(220 10% 50%)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip
-                  contentStyle={{
-                    background: 'hsl(220 18% 12%)',
-                    border: '1px solid hsl(160 45% 35% / 0.3)',
-                    borderRadius: '8px',
-                    fontFamily: 'Cormorant Garamond',
-                  }}
-                  labelFormatter={(v) => `${v} CE`}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="scholars"
-                  stroke="hsl(160 45% 35%)"
-                  strokeWidth={2}
-                  fill="url(#scholarGrad)"
-                />
+                <Tooltip contentStyle={{ background: 'hsl(220 18% 12%)', border: '1px solid hsl(160 45% 35% / 0.3)', borderRadius: '8px', fontFamily: 'Cormorant Garamond' }} labelFormatter={(v) => `${v} CE`} />
+                <Area type="monotone" dataKey="scholars" stroke="hsl(160 45% 35%)" strokeWidth={2} fill="url(#scholarGrad)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -103,10 +84,17 @@ export const GoldenAgeSection = () => (
         ))}
       </div>
 
-      {/* Shahnameh callout */}
+      {/* Shahnameh image */}
       <RevealOnScroll className="mt-20">
         <div className="text-center max-w-2xl mx-auto">
-          <ImagePlaceholder label="Shahnameh illuminated manuscript — Ferdowsi's Book of Kings" era="medieval" aspectRatio="3/2" className="mb-8" />
+          <HistoricalImage
+            src="/images/shahnameh.jpg"
+            alt="Folio from the Shahnameh of Shah Tahmasp — illuminated manuscript"
+            caption="Illuminated folio from the Shahnameh of Shah Tahmasp"
+            credit="Tehran Museum of Contemporary Art · Wikimedia Commons"
+            aspectRatio="3/4"
+            className="max-w-md mx-auto mb-8"
+          />
           <blockquote className="font-display text-2xl md:text-3xl italic text-persian-cream/70 leading-relaxed">
             "I suffered during these thirty years,<br />
             but I have revived the Persians with my verse."

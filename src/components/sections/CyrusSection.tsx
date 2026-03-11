@@ -1,30 +1,45 @@
 import React, { useState } from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { PersiaMap, type EmpireId } from '@/components/visuals/PersiaMap';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
+import { HistoricalMap } from '@/components/visuals/HistoricalImage';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
 import { SectionDivider } from '@/components/visuals/PersianPattern';
 
 export const CyrusSection = () => {
-  const empireStages: EmpireId[] = ['none', 'none', 'achaemenid', 'achaemenid', 'achaemenid'];
-  const highlightStages = [
-    ['Pasargadae'],
-    ['Pasargadae', 'Ecbatana'],
-    ['Persepolis', 'Susa', 'Babylon', 'Ecbatana', 'Pasargadae'],
-    ['Persepolis', 'Susa', 'Babylon', 'Ecbatana', 'Memphis', 'Samarkand'],
-    ['Persepolis', 'Susa', 'Babylon'],
+  const mapImages = [
+    null,
+    null,
+    '/images/maps/achaemenid-empire.png',
+    '/images/maps/achaemenid-empire.png',
+    null,
   ];
 
   return (
     <section id="cyrus">
       <StickyScroll
         graphic={(activeStep) => (
-          <div className="w-full h-full flex items-center justify-center p-4 md:p-12">
-            <PersiaMap
-              empire={empireStages[activeStep] || 'none'}
-              showCities
-              highlightCities={highlightStages[activeStep]}
-              showLabels={activeStep >= 2}
-            />
+          <div className="w-full h-full flex items-center justify-center p-4 md:p-8">
+            {mapImages[activeStep] ? (
+              <img
+                src={mapImages[activeStep]!}
+                alt="Achaemenid Empire territory"
+                className="max-w-full max-h-full object-contain rounded-lg opacity-90"
+              />
+            ) : activeStep === 4 ? (
+              <img
+                src="/images/cyrus-cylinder.jpg"
+                alt="The Cyrus Cylinder"
+                className="max-w-full max-h-[80vh] object-contain rounded-lg"
+              />
+            ) : (
+              <PersiaMap
+                empire={activeStep >= 2 ? 'achaemenid' : 'none'}
+                showCities
+                highlightCities={activeStep === 0 ? ['Pasargadae'] : ['Pasargadae', 'Ecbatana']}
+                showLabels={activeStep >= 1}
+              />
+            )}
           </div>
         )}
         steps={[
@@ -75,6 +90,7 @@ export const CyrusSection = () => {
               It is often called <em className="text-persian-gold/70">the first declaration of human rights</em> —
               2,300 years before the Universal Declaration.
             </p>
+            <p className="text-xs text-muted-foreground/40 mt-3 font-body">Image: Wikimedia Commons (Public Domain)</p>
           </div>,
         ]}
       />

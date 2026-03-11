@@ -1,17 +1,13 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
-import { PersiaMap } from '@/components/visuals/PersiaMap';
-import { AnimatedCounter, ImagePlaceholder } from '@/components/visuals/AnimatedCounter';
+import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
+import { HistoricalImage, HistoricalMap } from '@/components/visuals/HistoricalImage';
 import { SectionDivider, PersianPattern } from '@/components/visuals/PersianPattern';
 
 export const SassanidSection = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const bgHue = useTransform(scrollYProgress, [0, 1], [220, 350]);
-
   return (
-    <section id="sassanid" ref={ref} className="relative">
+    <section id="sassanid" className="relative">
       {/* Immersive full-screen intro */}
       <div className="relative h-screen flex items-center justify-center overflow-hidden">
         <PersianPattern variant="star" opacity={0.05} />
@@ -31,13 +27,27 @@ export const SassanidSection = () => {
         </div>
       </div>
 
-      {/* Content */}
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-20">
-        {/* Map */}
-        <RevealOnScroll className="mb-20">
-          <div className="max-w-3xl mx-auto">
-            <PersiaMap empire="sassanid" showCities showLabels highlightCities={['Persepolis', 'Susa', 'Isfahan', 'Ecbatana']} />
-          </div>
+        {/* Historical map */}
+        <RevealOnScroll className="mb-16">
+          <HistoricalMap
+            src="/images/maps/sassanid-empire.jpg"
+            alt="Map of the Sassanid Empire at its greatest extent, c. 620 CE"
+            caption="The Sassanid Empire at its greatest extent under Khosrow II, c. 620 CE"
+            className="max-w-3xl mx-auto"
+          />
+        </RevealOnScroll>
+
+        {/* Shapur triumph image */}
+        <RevealOnScroll className="mb-16">
+          <HistoricalImage
+            src="/images/shapur-triumph.jpg"
+            alt="Rock relief at Naqsh-e Rostam showing Shapur I's triumph over Roman Emperor Valerian"
+            caption="Shapur I's triumph over Roman Emperor Valerian"
+            credit="Rock relief at Naqsh-e Rostam · Wikimedia Commons"
+            aspectRatio="4/3"
+            className="max-w-3xl mx-auto"
+          />
         </RevealOnScroll>
 
         {/* Achievements grid */}
@@ -57,7 +67,6 @@ export const SassanidSection = () => {
           ))}
         </div>
 
-        {/* Stats */}
         <RevealOnScroll>
           <div className="flex flex-wrap justify-center gap-12">
             <AnimatedCounter end={427} label="Years of dynasty" suffix="" />
