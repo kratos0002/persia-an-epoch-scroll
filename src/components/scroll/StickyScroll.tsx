@@ -64,7 +64,7 @@ export const StickyScroll = ({ graphic, steps, className, graphicClassName }: St
       </div>
 
       {/* Steps overlay the graphic via negative margin */}
-      <div className="relative z-10 -mt-[100vh]">
+      <div className="relative z-10 -mt-[100vh] pointer-events-none">
         {steps.map((step, i) => (
           <StepWrapper key={i} index={i} onActive={() => setActiveStep(i)}>
             {step}
