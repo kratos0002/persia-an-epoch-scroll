@@ -66,7 +66,7 @@ export const WisdomEpilogue = () => {
           </p>
         </RevealOnScroll>
 
-        <RevealOnScroll delay={0.2} className="text-center pt-12 border-t" style={{ borderColor: `hsl(${WISDOM_TEAL} / 0.1)` }}>
+        <RevealOnScroll delay={0.2} className="text-center pt-12 border-t border-[hsl(170,40%,30%,0.1)]">
           <p className="text-xs tracking-[0.2em] uppercase text-foreground/30 font-body mb-2">An Epoch Lives Visual Essay</p>
           <p className="text-xs text-foreground/20 font-body">
             Sources: Al-Khalili, <em>The House of Wisdom</em> (2011); Lyons, <em>The House of Wisdom</em> (2009); Freely, <em>Light from the East</em> (2011)
