@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import storyPersia from '@/assets/story-persia.jpg';
@@ -10,6 +10,8 @@ import storyBuddhism from '@/assets/story-buddhism.jpg';
 import storySamurai from '@/assets/story-samurai.jpg';
 import story1857 from '@/assets/story-1857.jpg';
 import storyNapoleon from '@/assets/story-napoleon.jpg';
+
+/* ── Types ───────────────────────────────────── */
 
 interface StoryCard {
   id: string;
@@ -22,123 +24,436 @@ interface StoryCard {
   status: 'live' | 'coming-soon';
   href: string;
   color: string;
+  era: string;
 }
 
 const STORIES: StoryCard[] = [
   {
-    id: 'persia',
-    number: 1,
-    title: 'The Immortal Empire',
-    subtitle: 'The History of Persia',
+    id: 'persia', number: 1, title: 'The Immortal Empire', subtitle: 'The History of Persia',
     hook: 'What if one civilization shaped more of the modern world than Rome, Greece, and Egypt combined?',
-    image: storyPersia,
-    tags: ['Visual Essay', 'Scrollytelling', '2,500 years'],
-    status: 'live',
-    href: '/persia',
-    color: 'hsl(43, 85%, 55%)',
+    image: storyPersia, tags: ['Visual Essay', 'Scrollytelling', '2,500 years'],
+    status: 'live', href: '/persia', color: 'hsl(43, 85%, 55%)', era: '550 BCE',
   },
   {
-    id: 'wisdom',
-    number: 2,
-    title: 'The Library That Lit the World',
-    subtitle: 'The House of Wisdom',
+    id: 'wisdom', number: 2, title: 'The Library That Lit the World', subtitle: 'The House of Wisdom',
     hook: 'For 400 years, one building in Baghdad held more knowledge than all of Europe combined.',
-    image: storyWisdom,
-    tags: ['Visual Essay', 'Knowledge Graph', '762–1258 CE'],
-    status: 'live',
-    href: '/wisdom',
-    color: 'hsl(170, 40%, 38%)',
+    image: storyWisdom, tags: ['Visual Essay', 'Knowledge Graph', '762–1258 CE'],
+    status: 'live', href: '/wisdom', color: 'hsl(170, 40%, 38%)', era: '762 CE',
   },
   {
-    id: 'buddhism',
-    number: 3,
-    title: 'The Path That Split',
-    subtitle: 'The Spread of Buddhism',
+    id: 'buddhism', number: 3, title: 'The Path That Split', subtitle: 'The Spread of Buddhism',
     hook: 'One man sat under a tree and asked why we suffer. His answer split into a thousand traditions that reached every corner of Asia.',
-    image: storyBuddhism,
-    tags: ['Visual Essay', 'Branching Tree', '528 BCE–Today'],
-    status: 'live',
-    href: '/buddhism',
-    color: 'hsl(30, 65%, 45%)',
+    image: storyBuddhism, tags: ['Visual Essay', 'Branching Tree', '528 BCE–Today'],
+    status: 'live', href: '/buddhism', color: 'hsl(30, 65%, 45%)', era: '528 BCE',
   },
   {
-    id: 'samurai',
-    number: 4,
-    title: 'Stipends, Bonds & the Death of a Class',
-    subtitle: 'The End of the Samurai',
+    id: 'samurai', number: 4, title: 'Stipends, Bonds & the Death of a Class', subtitle: 'The End of the Samurai',
     hook: 'The samurai class was not destroyed by war but by accounting: stipends converted to bonds, domains merged into prefectures, privilege replaced by institutions.',
-    image: storySamurai,
-    tags: ['Ledger Visual', 'Ink & Paper', '1603–1877'],
-    status: 'live',
-    href: '/samurai',
-    color: 'hsl(5, 75%, 50%)',
+    image: storySamurai, tags: ['Ledger Visual', 'Ink & Paper', '1603–1877'],
+    status: 'live', href: '/samurai', color: 'hsl(5, 75%, 50%)', era: '1603',
   },
   {
-    id: '1857',
-    number: 5,
-    title: 'The Signal and the Fire',
-    subtitle: 'The 1857 Rebellion',
+    id: '1857', number: 5, title: 'The Signal and the Fire', subtitle: 'The 1857 Rebellion',
     hook: 'Two signals raced across North India. The telegraph carried British orders at the speed of electricity. The rebellion spread at the speed of a horse.',
-    image: story1857,
-    tags: ['Dual Wavefront', 'Map Visual', '1857–1858'],
-    status: 'live',
-    href: '/1857',
-    color: 'hsl(30, 85%, 50%)',
+    image: story1857, tags: ['Dual Wavefront', 'Map Visual', '1857–1858'],
+    status: 'live', href: '/1857', color: 'hsl(30, 85%, 50%)', era: '1857',
   },
   {
-    id: 'napoleon',
-    number: 6,
-    title: 'The Rise and Fall of Napoleon',
-    subtitle: 'Revolution to Legacy',
+    id: 'napoleon', number: 6, title: 'The Rise and Fall of Napoleon', subtitle: 'Revolution to Legacy',
     hook: 'One man reorganized Europe. Then Europe closed in. From revolutionary chaos to imperial zenith to final exile — and the ideas that outlasted the emperor.',
-    image: storyNapoleon,
-    tags: ['Coalition Board', 'Tricolor', '1789–1821'],
-    status: 'live',
-    href: '/napoleon',
-    color: 'hsl(220, 65%, 45%)',
+    image: storyNapoleon, tags: ['Coalition Board', 'Tricolor', '1789–1821'],
+    status: 'live', href: '/napoleon', color: 'hsl(220, 65%, 45%)', era: '1789',
   },
   {
-    id: 'mongol',
-    number: 7,
-    title: 'The World Conqueror',
-    subtitle: 'The Mongol Storm',
+    id: 'mongol', number: 7, title: 'The World Conqueror', subtitle: 'The Mongol Storm',
     hook: 'He asked for trade. They sent back heads. What followed reshaped every civilization from China to Hungary.',
-    image: storyMongol,
-    tags: ['Empire System', 'Multi-front', '1206–1294'],
-    status: 'coming-soon',
-    href: '#',
-    color: 'hsl(25, 70%, 50%)',
+    image: storyMongol, tags: ['Empire System', 'Multi-front', '1206–1294'],
+    status: 'coming-soon', href: '#', color: 'hsl(25, 70%, 50%)', era: '1206',
   },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
-  }),
+/* ── Floating Historical Symbols ─────────────── */
+
+const SYMBOLS = [
+  // Compass rose
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8"><path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z"/></svg>,
+  // Quill
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8"><path d="M20 2c-2 2-6 6-8 10l-2 6 6-2c4-2 8-6 10-8"/><path d="M4 22l4-4"/></svg>,
+  // Crescent
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>,
+  // Diamond
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8"><path d="M12 2l10 10-10 10L2 12z"/></svg>,
+  // Circle with dot (astrolabe)
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></svg>,
+  // Torii gate
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8"><path d="M4 6h16M6 6v14M18 6v14M3 4c0 0 4-2 9-2s9 2 9 2"/><path d="M6 10h12"/></svg>,
+  // Scroll
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8"><path d="M8 2c-2 0-4 2-4 4v12c0 2 2 4 4 4"/><path d="M16 2c2 0 4 2 4 4v12c0 2-2 4-4 4"/><path d="M8 2h8M8 22h8"/></svg>,
+  // Cross/plus
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8"><path d="M12 5v14M5 12h14"/></svg>,
+];
+
+const SYMBOL_CONFIGS = [
+  { x: '8%', y: '15%', size: 28, duration: 25, delay: 0 },
+  { x: '85%', y: '20%', size: 22, duration: 30, delay: 2 },
+  { x: '20%', y: '70%', size: 20, duration: 28, delay: 4 },
+  { x: '75%', y: '65%', size: 26, duration: 22, delay: 1 },
+  { x: '45%', y: '85%', size: 24, duration: 35, delay: 3 },
+  { x: '92%', y: '50%', size: 18, duration: 27, delay: 5 },
+  { x: '12%', y: '45%', size: 20, duration: 32, delay: 2.5 },
+  { x: '60%', y: '12%', size: 22, duration: 26, delay: 1.5 },
+];
+
+const FloatingSymbols = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    {SYMBOL_CONFIGS.map((cfg, i) => (
+      <motion.div
+        key={i}
+        className="absolute text-[hsl(35,30%,55%)]"
+        style={{ left: cfg.x, top: cfg.y, width: cfg.size, height: cfg.size }}
+        initial={{ opacity: 0, y: 0, rotate: 0 }}
+        animate={{
+          opacity: [0, 0.12, 0.06, 0.14, 0],
+          y: [0, -30, -15, -40, -60],
+          rotate: [0, 5, -3, 8, 0],
+        }}
+        transition={{
+          duration: cfg.duration,
+          delay: cfg.delay,
+          repeat: Infinity,
+          ease: 'linear',
+        }}
+      >
+        {SYMBOLS[i % SYMBOLS.length]}
+      </motion.div>
+    ))}
+  </div>
+);
+
+/* ── Ornamental Divider ──────────────────────── */
+
+const OrnamentalDivider = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
+
+  return (
+    <div ref={ref} className="flex items-center justify-center py-12 px-6">
+      <motion.svg
+        viewBox="0 0 600 24"
+        className="w-full max-w-xl h-6"
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{ duration: 1 }}
+      >
+        {/* Center diamond */}
+        <motion.path
+          d="M300 4l8 8-8 8-8-8z"
+          fill="none"
+          stroke="hsl(35,30%,55%)"
+          strokeWidth="1"
+          initial={{ pathLength: 0 }}
+          animate={inView ? { pathLength: 1 } : {}}
+          transition={{ duration: 1.2, delay: 0.3 }}
+        />
+        {/* Left line */}
+        <motion.line
+          x1="40" y1="12" x2="288" y2="12"
+          stroke="hsl(35,30%,55%)"
+          strokeWidth="0.5"
+          initial={{ pathLength: 0 }}
+          animate={inView ? { pathLength: 1 } : {}}
+          transition={{ duration: 1, delay: 0.5 }}
+        />
+        {/* Right line */}
+        <motion.line
+          x1="312" y1="12" x2="560" y2="12"
+          stroke="hsl(35,30%,55%)"
+          strokeWidth="0.5"
+          initial={{ pathLength: 0 }}
+          animate={inView ? { pathLength: 1 } : {}}
+          transition={{ duration: 1, delay: 0.5 }}
+        />
+        {/* Small diamonds */}
+        {[120, 200, 400, 480].map((cx, i) => (
+          <motion.path
+            key={i}
+            d={`M${cx} 9l3 3-3 3-3-3z`}
+            fill="hsl(35,30%,55%)"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={inView ? { opacity: 0.5, scale: 1 } : {}}
+            transition={{ duration: 0.4, delay: 0.8 + i * 0.1 }}
+          />
+        ))}
+      </motion.svg>
+    </div>
+  );
 };
 
-const Home = () => {
+/* ── Word-by-word headline reveal ────────────── */
+
+const WordReveal = ({ text, className, italic }: { text: string; className?: string; italic?: string }) => {
+  const words = text.split(' ');
   return (
-    <div className="bg-[hsl(38,30%,94%)] min-h-screen text-[hsl(25,20%,20%)]">
+    <span className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          className="inline-block mr-[0.3em]"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {italic && word.toLowerCase().replace(/[^a-z]/g, '') === italic.toLowerCase().replace(/[^a-z]/g, '') ? (
+            <em className="italic text-[hsl(25,40%,35%)]">{word}</em>
+          ) : word}
+        </motion.span>
+      ))}
+    </span>
+  );
+};
+
+/* ── Timeline Spine ──────────────────────────── */
+
+const TimelineSpine = ({ stories }: { stories: StoryCard[] }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
+  const fillHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  return (
+    <div ref={ref} className="absolute left-6 md:left-12 top-0 bottom-0 hidden lg:block pointer-events-none z-10">
+      {/* Background line */}
+      <div className="absolute left-3 top-0 bottom-0 w-px bg-[hsl(35,20%,80%)]" />
+      {/* Gold fill */}
+      <motion.div
+        className="absolute left-3 top-0 w-px bg-[hsl(43,85%,55%)]"
+        style={{ height: fillHeight }}
+      />
+      {/* Era dots */}
+      {stories.map((story, i) => {
+        const topPct = `${(i / (stories.length - 1)) * 100}%`;
+        return (
+          <div key={story.id} className="absolute left-0" style={{ top: topPct }}>
+            <div className="w-7 h-7 rounded-full border border-[hsl(35,20%,75%)] bg-[hsl(38,30%,94%)] flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full" style={{ background: story.color }} />
+            </div>
+            <span className="absolute left-10 top-1/2 -translate-y-1/2 text-[10px] tracking-[0.15em] uppercase font-body font-semibold text-[hsl(25,15%,55%)] whitespace-nowrap">
+              {story.era}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+/* ── Featured Story Card (first card) ────────── */
+
+const FeaturedCard = ({ story }: { story: StoryCard }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
+  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
+
+  return (
+    <Link to={story.href}>
+      <motion.div
+        ref={ref}
+        className="group relative w-full h-[60vh] md:h-[70vh] rounded-2xl overflow-hidden cursor-pointer"
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {/* Parallax image */}
+        <motion.img
+          src={story.image}
+          alt={story.title}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ scale: imgScale, y: imgY }}
+        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+        {/* Watermark number */}
+        <div className="absolute top-6 right-8 font-display text-[12rem] md:text-[16rem] font-black leading-none text-white/[0.04] select-none">
+          {String(story.number).padStart(2, '0')}
+        </div>
+
+        {/* Content */}
+        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+          <div className="max-w-xl">
+            <div className="flex items-center gap-2 mb-4">
+              {story.tags.map(tag => (
+                <span key={tag} className="text-[10px] tracking-[0.15em] uppercase font-body font-semibold text-white/60 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <h3 className="font-display text-3xl md:text-5xl font-bold text-white mb-2">{story.title}</h3>
+            <p className="font-body text-lg text-white/60 mb-3">{story.subtitle}</p>
+            <p className="font-body text-base md:text-lg text-white/80 leading-relaxed mb-6 max-w-lg">{story.hook}</p>
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs tracking-[0.15em] uppercase font-body font-semibold text-emerald-300">Live</span>
+              <motion.span
+                className="ml-auto text-xs tracking-[0.12em] uppercase font-body font-semibold text-white/50 group-hover:text-white transition-colors flex items-center gap-2"
+              >
+                Begin reading
+                <motion.span
+                  className="inline-block"
+                  initial={{ x: 0 }}
+                  whileHover={{ x: 4 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                >→</motion.span>
+              </motion.span>
+            </div>
+          </div>
+        </div>
+
+        {/* Accent line on hover */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-1 origin-left"
+          style={{ background: story.color }}
+          initial={{ scaleX: 0 }}
+          whileHover={{ scaleX: 1 }}
+          transition={{ duration: 0.4 }}
+        />
+      </motion.div>
+    </Link>
+  );
+};
+
+/* ── Alternating Story Card ──────────────────── */
+
+const AlternatingCard = ({ story, index }: { story: StoryCard; index: number }) => {
+  const isEven = index % 2 === 0;
+  const isLive = story.status === 'live';
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '6%']);
+
+  const inner = (
+    <motion.div
+      ref={ref}
+      className={`group relative flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-0 md:gap-8 items-stretch overflow-hidden rounded-2xl ${
+        isLive ? 'cursor-pointer' : 'opacity-70'
+      }`}
+      initial={{ opacity: 0, x: isEven ? -60 : 60 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {/* Image side */}
+      <div className="relative w-full md:w-1/2 h-72 md:h-[450px] overflow-hidden rounded-2xl flex-shrink-0">
+        <motion.img
+          src={story.image}
+          alt={story.title}
+          className={`w-full h-full object-cover transition-transform duration-700 ${
+            isLive ? 'group-hover:scale-[1.03]' : 'grayscale-[30%]'
+          }`}
+          style={{ y: imgY }}
+          loading="lazy"
+        />
+        {/* Watermark number */}
+        <div className={`absolute top-4 ${isEven ? 'right-6' : 'left-6'} font-display text-[8rem] md:text-[10rem] font-black leading-none text-white/[0.06] select-none`}>
+          {String(story.number).padStart(2, '0')}
+        </div>
+        {/* Coming soon badge */}
+        {!isLive && (
+          <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-[hsl(25,15%,30%)]/80 text-[hsl(38,30%,92%)] text-[10px] tracking-[0.15em] uppercase font-semibold backdrop-blur-sm">
+            Coming Soon
+          </div>
+        )}
+        {/* Accent line */}
+        {isLive && (
+          <motion.div
+            className={`absolute ${isEven ? 'right-0' : 'left-0'} top-0 bottom-0 w-1 origin-top`}
+            style={{ background: story.color }}
+            initial={{ scaleY: 0 }}
+            whileHover={{ scaleY: 1 }}
+            transition={{ duration: 0.4 }}
+          />
+        )}
+      </div>
+
+      {/* Content side */}
+      <div className="flex-1 flex flex-col justify-center py-6 md:py-8 px-2 md:px-4">
+        <div className="flex items-center gap-2 mb-4">
+          {story.tags.map(tag => (
+            <span key={tag} className="text-[10px] tracking-[0.12em] uppercase font-body font-semibold text-[hsl(25,15%,55%)] bg-[hsl(35,20%,88%)] px-2.5 py-1 rounded-full">
+              {tag}
+            </span>
+          ))}
+        </div>
+        <h3 className="font-display text-2xl md:text-4xl font-bold text-[hsl(25,25%,18%)] mb-2 leading-tight">
+          {story.title}
+        </h3>
+        <p className="font-body text-sm text-[hsl(25,15%,50%)] mb-3">{story.subtitle}</p>
+        <p className="font-body text-base md:text-lg text-[hsl(25,15%,35%)] leading-relaxed mb-6 max-w-lg">
+          {story.hook}
+        </p>
+        {isLive && (
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs tracking-[0.12em] uppercase font-body font-semibold text-emerald-700">Live</span>
+            <span className="ml-auto text-xs tracking-[0.1em] uppercase font-body font-semibold text-[hsl(25,15%,45%)] group-hover:text-[hsl(25,30%,25%)] transition-colors">
+              Begin reading <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
+            </span>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+
+  if (isLive) return <Link to={story.href}>{inner}</Link>;
+  return inner;
+};
+
+/* ── Grain texture overlay ───────────────────── */
+
+const GrainOverlay = () => (
+  <div
+    className="fixed inset-0 pointer-events-none z-50 opacity-[0.03]"
+    style={{
+      backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+      backgroundRepeat: 'repeat',
+      backgroundSize: '128px 128px',
+    }}
+  />
+);
+
+/* ── Main Page ───────────────────────────────── */
+
+const Home = () => {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '30%']);
+  const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
+  const storiesRef = useRef<HTMLDivElement>(null);
+
+  const featuredStory = STORIES[0];
+  const remainingStories = STORIES.slice(1);
+
+  return (
+    <div className="bg-[hsl(38,30%,94%)] min-h-screen text-[hsl(25,20%,20%)] relative">
+      <GrainOverlay />
       <SiteHeader />
 
       {/* ── Hero ─────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        {/* Subtle map background */}
-        <div className="absolute inset-0 opacity-[0.06]">
-          <svg viewBox="0 0 1440 900" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
-            {/* Simplified world continents as subtle background shapes */}
-            <path d="M200,300 Q250,250 300,280 Q350,310 400,290 Q450,270 500,300 Q520,340 480,380 Q440,400 400,390 Q350,370 300,380 Q250,360 220,340 Z" fill="hsl(30,25%,50%)" />
-            <path d="M550,250 Q600,220 650,240 Q700,260 750,250 Q800,240 850,260 Q900,290 880,330 Q860,370 820,390 Q780,400 740,380 Q700,360 660,370 Q620,380 580,350 Q560,310 550,280 Z" fill="hsl(30,25%,50%)" />
-            <path d="M900,230 Q950,200 1000,220 Q1050,240 1100,230 Q1150,220 1200,250 Q1230,280 1220,320 Q1200,360 1160,380 Q1120,390 1080,370 Q1040,350 1000,360 Q960,370 930,340 Q910,300 900,260 Z" fill="hsl(30,25%,50%)" />
-            <path d="M350,420 Q380,400 420,410 Q460,420 490,450 Q510,490 490,530 Q460,560 420,550 Q380,530 360,500 Q340,470 350,440 Z" fill="hsl(30,25%,50%)" />
-          </svg>
-        </div>
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        <FloatingSymbols />
 
-        <div className="relative z-10 text-center max-w-3xl mx-auto px-6">
+        {/* Subtle ruled lines */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          style={{
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 59px, hsl(25,15%,50%) 59px, hsl(25,15%,50%) 60px)',
+          }}
+        />
+
+        <motion.div
+          className="relative z-10 text-center max-w-3xl mx-auto px-6"
+          style={{ y: heroTextY, opacity: heroOpacity }}
+        >
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -148,19 +463,16 @@ const Home = () => {
             Visual essays on the turning points of civilizations
           </motion.p>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-5xl md:text-7xl lg:text-8xl font-black leading-[0.9] mb-8 text-[hsl(25,30%,18%)]"
-          >
-            Turning points in history, <em className="italic text-[hsl(25,40%,35%)]">felt</em> — not summarized.
-          </motion.h1>
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black leading-[0.9] mb-8 text-[hsl(25,30%,18%)]">
+            <WordReveal text="Turning points in history," />
+            <br />
+            <WordReveal text="felt — not summarized." italic="felt" />
+          </h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
+            transition={{ duration: 1, delay: 1.6 }}
             className="font-body text-lg md:text-xl text-[hsl(25,15%,45%)] max-w-lg mx-auto leading-relaxed"
           >
             Immersive scrollytelling with maps, data, and primary sources. Each essay is a different visual experience.
@@ -169,7 +481,7 @@ const Home = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
+            transition={{ duration: 1, delay: 2 }}
             className="mt-10"
           >
             <a
@@ -177,16 +489,32 @@ const Home = () => {
               className="inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase font-body font-semibold text-[hsl(25,20%,40%)] hover:text-[hsl(25,30%,25%)] transition-colors"
             >
               Explore stories
-              <span className="text-lg">↓</span>
+              <motion.span
+                className="text-lg"
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              >↓</motion.span>
             </a>
           </motion.div>
-        </div>
+        </motion.div>
       </section>
 
-      {/* ── Stories Grid ─────────────────────────── */}
-      <section id="stories" className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-16">
+      {/* ── Ornamental Divider ───────────────────── */}
+      <OrnamentalDivider />
+
+      {/* ── Stories ──────────────────────────────── */}
+      <section id="stories" ref={storiesRef} className="relative py-16 md:py-24 px-6">
+        <TimelineSpine stories={STORIES} />
+
+        <div className="max-w-5xl mx-auto lg:ml-32 xl:ml-auto xl:max-w-5xl">
+          {/* Section heading */}
+          <motion.div
+            className="mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
             <p className="text-[10px] tracking-[0.35em] uppercase text-[hsl(25,15%,55%)] mb-3 font-body font-semibold">
               All Stories
             </p>
@@ -196,38 +524,40 @@ const Home = () => {
             <p className="font-body text-lg text-[hsl(25,15%,45%)] mt-3 max-w-xl">
               Not a textbook. Not a summary. A designed experience that makes a historical moment visceral.
             </p>
+          </motion.div>
+
+          {/* Featured card */}
+          <div className="mb-16">
+            <FeaturedCard story={featuredStory} />
           </div>
 
-          <div className="grid gap-8">
-            {STORIES.map((story, i) => (
-              <motion.div
-                key={story.id}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
-                variants={fadeUp}
-              >
-                <StoryCardComponent story={story} />
-              </motion.div>
+          {/* Remaining cards */}
+          <div className="flex flex-col gap-16 md:gap-20">
+            {remainingStories.map((story, i) => (
+              <AlternatingCard key={story.id} story={story} index={i} />
             ))}
           </div>
         </div>
       </section>
 
       {/* ── Newsletter ───────────────────────────── */}
-      <section className="py-24 px-6 bg-[hsl(35,25%,90%)]">
-        <div className="max-w-xl mx-auto text-center">
+      <section className="relative py-24 px-6 bg-[hsl(35,25%,90%)] overflow-hidden">
+        {/* Subtle pattern */}
+        <div className="absolute inset-0 pattern-persian opacity-30" />
+        <motion.div
+          className="relative max-w-xl mx-auto text-center"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
           <h2 className="font-display text-3xl font-bold text-[hsl(25,25%,20%)] mb-4">
             Get new stories when they ship.
           </h2>
           <p className="font-body text-[hsl(25,15%,45%)] mb-8">
             We publish slowly and intentionally. One email per new essay — no weekly spam.
           </p>
-          <form
-            onSubmit={e => e.preventDefault()}
-            className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-          >
+          <form onSubmit={e => e.preventDefault()} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
               type="email"
               placeholder="your@email.com"
@@ -240,92 +570,12 @@ const Home = () => {
               Notify me
             </button>
           </form>
-        </div>
+        </motion.div>
       </section>
 
       <SiteFooter variant="light" />
     </div>
   );
-};
-
-/* ── Story Card ──────────────────────────────── */
-
-const StoryCardComponent = ({ story }: { story: StoryCard }) => {
-  const isLive = story.status === 'live';
-
-  const inner = (
-    <div className={`group relative flex flex-col md:flex-row gap-0 overflow-hidden rounded-xl transition-all duration-500 ${
-      isLive
-        ? 'bg-white/60 hover:bg-white/80 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] cursor-pointer'
-        : 'bg-white/30 opacity-75'
-    }`}>
-      {/* Image */}
-      <div className="relative w-full md:w-80 h-56 md:h-auto flex-shrink-0 overflow-hidden">
-        <img
-          src={story.image}
-          alt={story.title}
-          className={`w-full h-full object-cover transition-transform duration-700 ${
-            isLive ? 'group-hover:scale-105' : 'grayscale-[30%]'
-          }`}
-          loading="lazy"
-        />
-        {/* Number badge */}
-        <div
-          className="absolute top-4 left-4 w-8 h-8 rounded-full flex items-center justify-center text-xs font-display font-bold text-white/90"
-          style={{ background: story.color }}
-        >
-          {story.number}
-        </div>
-        {/* Status badge */}
-        {!isLive && (
-          <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-[hsl(25,15%,30%)]/80 text-[hsl(38,30%,92%)] text-[10px] tracking-[0.15em] uppercase font-semibold backdrop-blur-sm">
-            Coming Soon
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
-        <div className="flex items-center gap-2 mb-3">
-          {story.tags.map(tag => (
-            <span
-              key={tag}
-              className="text-[10px] tracking-[0.12em] uppercase font-body font-semibold text-[hsl(25,15%,55%)] bg-[hsl(35,20%,88%)] px-2.5 py-1 rounded-full"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <h3 className="font-display text-2xl md:text-3xl font-bold text-[hsl(25,25%,18%)] mb-1">
-          {story.title}
-        </h3>
-        <p className="font-body text-sm text-[hsl(25,15%,50%)] mb-3">
-          {story.subtitle}
-        </p>
-        <p className="font-body text-base text-[hsl(25,15%,35%)] leading-relaxed mb-4 max-w-lg">
-          {story.hook}
-        </p>
-
-        {isLive && (
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs tracking-[0.12em] uppercase font-body font-semibold text-emerald-700">
-              Live
-            </span>
-            <span className="ml-auto text-xs tracking-[0.1em] uppercase font-body font-semibold text-[hsl(25,15%,45%)] group-hover:text-[hsl(25,30%,25%)] transition-colors">
-              Begin reading →
-            </span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  if (isLive) {
-    return <Link to={story.href}>{inner}</Link>;
-  }
-  return inner;
 };
 
 export default Home;
