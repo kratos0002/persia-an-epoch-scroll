@@ -41,7 +41,7 @@ export const PatelSection: React.FC = () => {
               animate={inView ? { opacity: 1 } : {}}
               transition={{ delay: 0.5 }}
             >
-              <IndiaMap era="patel" highlightIds={['hyderabad', 'kashmir', 'junagadh']} />
+              <IndiaMap era="patel" highlightIds={['jk', 'la']} />
               <div className="flex justify-center gap-6 mt-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-sm" style={{ background: 'hsl(210, 45%, 50%)' }} />
