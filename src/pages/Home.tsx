@@ -73,7 +73,13 @@ const STORIES: StoryCard[] = [
     status: 'live', href: '/constantinople', color: 'hsl(270, 45%, 30%)', era: '657 BCE',
   },
   {
-    id: 'mongol', number: 8, title: 'The World Conqueror', subtitle: 'The Mongol Storm',
+    id: 'india-states', number: 8, title: 'The Mosaic Republic', subtitle: 'How 565 Became 28',
+    hook: 'On the eve of independence, India was 565 princely states and 17 British provinces. What followed was the largest peaceful political integration in history — and a map that is still being redrawn.',
+    image: storyIndia, tags: ['Living Map', 'SVG Morphing', '1947–2024'],
+    status: 'live', href: '/india-states', color: 'hsl(40, 60%, 55%)', era: '1947',
+  },
+  {
+    id: 'mongol', number: 9, title: 'The World Conqueror', subtitle: 'The Mongol Storm',
     hook: 'He asked for trade. They sent back heads. What followed reshaped every civilization from China to Hungary.',
     image: storyMongol, tags: ['Empire System', 'Multi-front', '1206–1294'],
     status: 'coming-soon', href: '#', color: 'hsl(25, 70%, 50%)', era: '1206',
