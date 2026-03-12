@@ -10,6 +10,7 @@ import storyBuddhism from '@/assets/story-buddhism.jpg';
 import storySamurai from '@/assets/story-samurai.jpg';
 import story1857 from '@/assets/story-1857.jpg';
 import storyNapoleon from '@/assets/story-napoleon.jpg';
+import storyConstantinople from '@/assets/story-constantinople.jpg';
 
 /* ── Types ───────────────────────────────────── */
 
@@ -65,7 +66,13 @@ const STORIES: StoryCard[] = [
     status: 'live', href: '/napoleon', color: 'hsl(220, 65%, 45%)', era: '1789',
   },
   {
-    id: 'mongol', number: 7, title: 'The World Conqueror', subtitle: 'The Mongol Storm',
+    id: 'constantinople', number: 7, title: 'The City of Layers', subtitle: 'Constantinople',
+    hook: '2,700 years of civilization stacked in 25 meters of earth. Greek, Roman, Byzantine, Crusader, Ottoman — each built on the bones of the last. Scroll down to dig.',
+    image: storyConstantinople, tags: ['Archaeological Dig', 'Excavation', '657 BCE–2024'],
+    status: 'live', href: '/constantinople', color: 'hsl(270, 45%, 30%)', era: '657 BCE',
+  },
+  {
+    id: 'mongol', number: 8, title: 'The World Conqueror', subtitle: 'The Mongol Storm',
     hook: 'He asked for trade. They sent back heads. What followed reshaped every civilization from China to Hungary.',
     image: storyMongol, tags: ['Empire System', 'Multi-front', '1206–1294'],
     status: 'coming-soon', href: '#', color: 'hsl(25, 70%, 50%)', era: '1206',
