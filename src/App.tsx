@@ -12,6 +12,7 @@ import Samurai from "./pages/Samurai.tsx";
 import Rebellion1857 from "./pages/Rebellion1857.tsx";
 import Napoleon from "./pages/Napoleon.tsx";
 import Constantinople from "./pages/Constantinople.tsx";
+import IndiaStates from "./pages/IndiaStates.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/1857" element={<Rebellion1857 />} />
           <Route path="/napoleon" element={<Napoleon />} />
           <Route path="/constantinople" element={<Constantinople />} />
+          <Route path="/india-states" element={<IndiaStates />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
