@@ -32,8 +32,8 @@ export const WisdomHero = () => {
     return useTransform(scrollYProgress, [start, Math.min(end, 0.4)], [0, 1]);
   });
 
-  const titleOpacity = useTransform(scrollYProgress, [0.12, 0.22], [0, 1]);
-  const subtitleOpacity = useTransform(scrollYProgress, [0.18, 0.28], [0, 1]);
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.08], [0.85, 1]);
+  const subtitleOpacity = useTransform(scrollYProgress, [0, 0.1], [0.7, 1]);
 
   return (
     <section id="wisdom-hero" ref={ref} className="relative h-[300vh]">
@@ -85,12 +85,12 @@ export const WisdomHero = () => {
             className="font-display text-4xl md:text-6xl lg:text-7xl font-black leading-[0.95] mb-6"
             style={{ opacity: titleOpacity }}
           >
-            <span style={{ color: `hsl(170, 45%, 50%)` }}>The Library</span>{' '}
-            <span className="text-foreground/90">That Lit the World</span>
+            <span style={{ color: `hsl(170, 55%, 55%)` }}>The Library</span>{' '}
+            <span className="text-foreground">That Lit the World</span>
           </motion.h1>
 
           <motion.p
-            className="text-foreground/60 text-lg md:text-xl font-body max-w-xl mx-auto leading-relaxed"
+            className="text-foreground/90 text-lg md:text-xl font-body max-w-xl mx-auto leading-relaxed"
             style={{ opacity: subtitleOpacity }}
           >
             For 400 years, one building in Baghdad held more knowledge than all of Europe combined.

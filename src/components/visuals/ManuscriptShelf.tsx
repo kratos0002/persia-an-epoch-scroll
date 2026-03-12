@@ -44,6 +44,12 @@ const SHELF_Y = [100, 200, 300, 410];
 const BOOK_HEIGHT = 65;
 const BOOK_WIDTH = 14;
 
+// Pre-compute random values so they don't change on re-render
+const SCROLL_RANDOMS = SCROLLS.map((s, i) => ({
+  bookH: s.row === 3 ? 12 : BOOK_HEIGHT - ((i * 7 + 3) % 10),
+  rotation: s.row === 3 ? -8 + ((i * 13 + 5) % 16) : 0,
+}));
+
 interface ManuscriptShelfProps {
   activeStep: number;
   className?: string;
@@ -94,12 +100,12 @@ export const ManuscriptShelf = ({ activeStep, className }: ManuscriptShelfProps)
         <rect x="370" y="90" width="5" height="300" rx="1" fill="url(#shelf-wood)" opacity="0.8" />
 
         {/* Books / Scrolls */}
-        <AnimatePresence>
-          {visibleScrolls.map((scroll, i) => {
+        <AnimatePresence initial={false}>
+          {visibleScrolls.map((scroll) => {
+            const scrollIndex = SCROLLS.indexOf(scroll);
             const y = SHELF_Y[scroll.row];
             const isOverflow = scroll.row === 3;
-            const bookH = isOverflow ? 12 : BOOK_HEIGHT - Math.random() * 10;
-            const rotation = isOverflow ? -8 + Math.random() * 16 : 0;
+            const { bookH, rotation } = SCROLL_RANDOMS[scrollIndex];
 
             return (
               <motion.g
@@ -109,7 +115,7 @@ export const ManuscriptShelf = ({ activeStep, className }: ManuscriptShelfProps)
                 exit={{ opacity: 0 }}
                 transition={{
                   duration: 0.5,
-                  delay: (i % 6) * 0.08,
+                  delay: (scrollIndex % 6) * 0.08,
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
@@ -143,9 +149,10 @@ export const ManuscriptShelf = ({ activeStep, className }: ManuscriptShelfProps)
                     y={y + BOOK_HEIGHT + 20}
                     textAnchor="middle"
                     fill={scroll.color}
-                    fontSize="7"
+                    fontSize="10"
                     fontFamily="'Cormorant Garamond', serif"
-                    opacity="0.6"
+                    fontWeight="600"
+                    opacity="0.9"
                   >
                     {scroll.label}
                   </text>

@@ -144,13 +144,14 @@ export const KnowledgeFlow = ({ activeStep, className }: KnowledgeFlowProps) => 
             key={p.label}
             x={p.x} y={40}
             textAnchor="middle"
-            fill="hsl(170, 40%, 40%)"
-            fontSize="9"
+            fill="hsl(170, 45%, 55%)"
+            fontSize="12"
             fontFamily="'Cormorant Garamond', serif"
+            fontWeight="600"
             letterSpacing="0.2em"
-            opacity="0.35"
+            opacity="0.85"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.35 }}
+            animate={{ opacity: 0.85 }}
             transition={{ duration: 0.8 }}
           >
             {p.label}

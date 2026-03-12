@@ -24,7 +24,7 @@ export const EraTransition = ({ fromColor, toColor, label, year, className }: Er
       <div
         className="absolute inset-0"
         style={{
-          background: `linear-gradient(180deg, hsl(${fromColor} / 0.08) 0%, hsl(${toColor} / 0.15) 50%, hsl(${toColor} / 0.05) 100%)`,
+          background: `linear-gradient(180deg, hsl(${fromColor} / 0.12) 0%, hsl(${toColor} / 0.25) 50%, hsl(${toColor} / 0.08) 100%)`,
         }}
       />
 
@@ -33,7 +33,7 @@ export const EraTransition = ({ fromColor, toColor, label, year, className }: Er
         className="absolute left-0 right-0 top-1/2 h-px"
         style={{
           opacity,
-          background: `linear-gradient(90deg, transparent 0%, hsl(${toColor} / 0.4) 50%, transparent 100%)`,
+          background: `linear-gradient(90deg, transparent 0%, hsl(${toColor} / 0.7) 50%, transparent 100%)`,
         }}
       />
 
@@ -43,7 +43,7 @@ export const EraTransition = ({ fromColor, toColor, label, year, className }: Er
           {year && (
             <p
               className="text-xs tracking-[0.4em] uppercase mb-2 font-body"
-              style={{ color: `hsl(${toColor} / 0.6)` }}
+              style={{ color: `hsl(${toColor} / 0.9)` }}
             >
               {year}
             </p>
@@ -51,7 +51,7 @@ export const EraTransition = ({ fromColor, toColor, label, year, className }: Er
           {label && (
             <p
               className="font-display text-lg md:text-xl font-semibold"
-              style={{ color: `hsl(${toColor} / 0.7)` }}
+              style={{ color: `hsl(${toColor})` }}
             >
               {label}
             </p>

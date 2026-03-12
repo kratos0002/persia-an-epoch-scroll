@@ -38,7 +38,7 @@ export const WisdomProgressTimeline = ({ activeSection, globalProgress }: Wisdom
                 isActive
                   ? "w-3 h-3 bg-[hsl(170,45%,50%)] shadow-[0_0_12px_hsl(170,45%,50%,0.5)]"
                   : isPast
-                  ? "w-2 h-2 bg-[hsl(170,45%,50%,0.5)]"
+                  ? "w-2.5 h-2.5 bg-[hsl(170,45%,50%)] shadow-[0_0_6px_hsl(170,45%,50%,0.3)]"
                   : "w-1.5 h-1.5 bg-muted-foreground/30"
               )} />
               <span className="absolute right-6 opacity-0 group-hover:opacity-100 transition-opacity text-xs whitespace-nowrap font-body" style={{ color: 'hsl(170, 45%, 50%, 0.7)' }}>
@@ -52,7 +52,7 @@ export const WisdomProgressTimeline = ({ activeSection, globalProgress }: Wisdom
       <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-muted/20 -z-10">
         <motion.div
           className="w-full origin-top"
-          style={{ height: `${globalProgress * 100}%`, background: 'hsl(170, 45%, 50%, 0.3)' }}
+          style={{ height: `${Math.min(globalProgress * 100, 100)}%`, background: 'hsl(170, 45%, 50%, 0.3)' }}
         />
       </div>
     </div>
