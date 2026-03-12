@@ -21,6 +21,10 @@ const achievements = [
     stat: 8.4,
     suffix: 'g',
     label: 'Gold weight',
+    image: '/images/daric-coin.jpg',
+    imageAlt: 'Achaemenid gold daric coin',
+    imageCaption: 'Gold daric of the Achaemenid Empire',
+    imageAspectRatio: '1 / 1',
   },
   {
     title: 'The Postal System',
@@ -28,6 +32,10 @@ const achievements = [
     stat: 111,
     suffix: '',
     label: 'Relay stations',
+    image: '/images/maps/achaemenid-empire.png',
+    imageAlt: 'Map of the Achaemenid Empire',
+    imageCaption: 'The empire-wide network that made royal dispatch possible',
+    imageAspectRatio: '4 / 3',
   },
   {
     title: 'Persepolis',
@@ -72,6 +80,7 @@ export const DariusSection = () => (
                     src={item.image}
                     alt={item.imageAlt || ''}
                     caption={item.imageCaption}
+                    aspectRatio={item.imageAspectRatio}
                   />
                 ) : (
                   <div className="aspect-[4/3] rounded-lg bg-gradient-to-br from-[hsl(43,85%,55%,0.08)] to-[hsl(43,50%,30%,0.12)] border border-[hsl(43,85%,55%,0.1)] flex items-center justify-center">

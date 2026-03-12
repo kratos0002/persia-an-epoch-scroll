@@ -1,30 +1,12 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
-import { InteractiveMap } from '@/components/visuals/InteractiveMap';
+import { AlexanderCampaignGraphic } from '@/components/visuals/AlexanderCampaignGraphic';
 import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
-
-const stages = [
-  { empire: 'achaemenid' as const, cities: ['Persepolis', 'Susa', 'Babylon'], center: [32, 48] as [number, number], zoom: 4 },
-  { empire: 'alexander' as const, cities: ['Athens', 'Sardis', 'Babylon'], center: [35, 38] as [number, number], zoom: 4 },
-  { empire: 'alexander' as const, cities: ['Persepolis', 'Susa', 'Babylon'], center: [32, 48] as [number, number], zoom: 4.5 },
-  { empire: 'alexander' as const, cities: ['Samarkand', 'Babylon', 'Memphis'], center: [33, 48] as [number, number], zoom: 3.5 },
-];
 
 export const AlexanderSection = () => (
   <section id="alexander" style={{ '--era-primary': ERA_COLORS.alexander } as React.CSSProperties}>
     <StickyScroll
-      graphic={(activeStep, progress) => {
-        const stage = stages[Math.min(activeStep, stages.length - 1)];
-        return (
-          <InteractiveMap
-            empire={stage.empire}
-            showCities
-            highlightCities={stage.cities}
-            center={stage.center}
-            zoom={stage.zoom + progress * 0.2}
-          />
-        );
-      }}
+      graphic={(activeStep) => <AlexanderCampaignGraphic activeStep={activeStep} />}
       steps={[
         <div key={0}>
           <p className="text-xs tracking-[0.3em] uppercase text-[hsl(270,40%,50%,0.7)] mb-4">334 BCE</p>
@@ -50,10 +32,10 @@ export const AlexanderSection = () => (
         <div key={2}>
           <h3 className="font-display text-xl font-bold mb-4 text-[hsl(270,40%,50%,0.8)]">Persepolis Burns</h3>
           <p className="text-foreground/80 leading-relaxed font-body mb-4">
-            Drunken celebration — or calculated revenge for Athens.
+            Not the empire's office, but its stage. The ceremonial capital of Darius and Xerxes.
           </p>
           <p className="text-foreground/60 leading-relaxed font-body">
-            The greatest palace on Earth reduced to ruins. He reportedly wept the next morning.
+            When Alexander burned it in 330 BCE, he was not just destroying buildings. He was announcing that the Achaemenid dynasty itself was over.
           </p>
         </div>,
         <div key={3}>

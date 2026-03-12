@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { cn } from '@/lib/utils';
@@ -25,10 +25,28 @@ interface InteractiveMapProps {
   empire: EmpireId;
   className?: string;
   showCities?: boolean;
+  visibleCities?: string[];
   highlightCities?: string[];
+  annotatedCities?: Array<{
+    name: string;
+    label: string;
+    direction?: 'top' | 'right' | 'bottom' | 'left' | 'center';
+    offset?: [number, number];
+  }>;
+  routeCities?: string[];
   center?: [number, number];
   zoom?: number;
   animate?: boolean;
+  showTerritories?: boolean;
+  spotlightCity?: {
+    name: string;
+    eyebrow?: string;
+    label: string;
+    detail?: string;
+    imageSrc?: string;
+    imageAlt?: string;
+    imagePosition?: string;
+  };
 }
 
 /* ── Popup HTML builder ────────────────────────────────────── */
@@ -67,7 +85,146 @@ function buildPopupHtml(city: CityMarker, empire: EmpireId, color: string): stri
 
 /* ── Marker icon builder with pulse ───────────────────────── */
 
-function buildMarkerIcon(color: string, glowColor: string, isHighlighted: boolean): L.DivIcon {
+function buildMarkerIcon(
+  color: string,
+  glowColor: string,
+  isHighlighted: boolean,
+  spotlight?: {
+    eyebrow?: string;
+    label: string;
+    detail?: string;
+    imageSrc?: string;
+    imageAlt?: string;
+    imagePosition?: string;
+  },
+): L.DivIcon {
+  if (spotlight) {
+    const width = spotlight.imageSrc ? 196 : 220;
+    const height = spotlight.imageSrc ? 228 : 120;
+    const dotSize = 16;
+    const haloSize = 44;
+
+    return L.divIcon({
+      className: '',
+      html: `
+        <div style="position:relative;width:${width}px;height:${height}px;display:flex;align-items:flex-end;justify-content:center;">
+          <div style="position:absolute;left:50%;bottom:${dotSize + 12}px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;">
+            <div style="
+              padding:10px 14px 11px;
+              border-radius:16px;
+              background:linear-gradient(180deg, rgba(8,12,22,0.96), rgba(10,16,28,0.9));
+              border:1px solid rgba(212,168,67,0.45);
+              box-shadow:0 14px 40px rgba(0,0,0,0.45), 0 0 28px rgba(212,168,67,0.16);
+              backdrop-filter:blur(12px);
+              min-width:168px;
+              white-space:normal;
+              animation: mapCalloutFloat 3.6s ease-in-out infinite;
+            ">
+              ${spotlight.imageSrc ? `
+                <div style="
+                  position:relative;
+                  width:100%;
+                  height:132px;
+                  overflow:hidden;
+                  border-radius:12px;
+                  margin-bottom:10px;
+                  border:1px solid rgba(212,168,67,0.18);
+                  box-shadow:0 10px 24px rgba(0,0,0,0.3);
+                ">
+                  <img
+                    src="${spotlight.imageSrc}"
+                    alt="${spotlight.imageAlt || spotlight.label}"
+                    style="
+                      display:block;
+                      width:100%;
+                      height:100%;
+                      object-fit:cover;
+                      object-position:${spotlight.imagePosition || 'center 22%'};
+                      filter:saturate(0.88) contrast(1.04);
+                    "
+                  />
+                  <div style="
+                    position:absolute;
+                    inset:0;
+                    background:linear-gradient(180deg, rgba(6,10,18,0.08), rgba(6,10,18,0.5));
+                  "></div>
+                </div>
+              ` : ''}
+              <div style="
+                font-family:'Source Sans 3', 'Source Sans Pro', system-ui, sans-serif;
+                font-size:10px;
+                text-transform:uppercase;
+                letter-spacing:0.22em;
+                color:rgba(212,168,67,0.72);
+                margin-bottom:5px;
+              ">${spotlight.eyebrow || 'Origin'}</div>
+              <div style="
+                font-family:'Playfair Display', Georgia, serif;
+                font-size:21px;
+                font-weight:700;
+                line-height:1.05;
+                color:${color};
+                text-shadow:0 0 18px rgba(212,168,67,0.12);
+              ">${spotlight.label}</div>
+              ${spotlight.detail ? `
+                <div style="
+                  margin-top:5px;
+                  font-family:'Source Sans 3', 'Source Sans Pro', system-ui, sans-serif;
+                  font-size:11px;
+                  line-height:1.35;
+                  letter-spacing:0.04em;
+                  color:rgba(255,255,255,0.6);
+                ">${spotlight.detail}</div>
+              ` : ''}
+            </div>
+            <div style="
+              width:1px;
+              height:18px;
+              background:linear-gradient(180deg, rgba(212,168,67,0.8), rgba(212,168,67,0));
+              box-shadow:0 0 10px rgba(212,168,67,0.35);
+            "></div>
+          </div>
+          <div style="
+            position:absolute;
+            left:50%;
+            bottom:${(dotSize - haloSize) / 2}px;
+            width:${haloSize}px;
+            height:${haloSize}px;
+            transform:translateX(-50%);
+            border-radius:50%;
+            background:${glowColor};
+            opacity:0.3;
+            animation: mapBeaconPulse 2.8s ease-out infinite;
+          "></div>
+          <div style="
+            position:absolute;
+            left:50%;
+            bottom:${(dotSize - haloSize) / 2}px;
+            width:${haloSize}px;
+            height:${haloSize}px;
+            transform:translateX(-50%);
+            border-radius:50%;
+            border:1px solid rgba(212,168,67,0.45);
+            animation: mapBeaconRing 2.8s ease-out infinite;
+          "></div>
+          <div style="
+            position:relative;
+            width:${dotSize}px;
+            height:${dotSize}px;
+            margin-bottom:0;
+            border-radius:50%;
+            background:${color};
+            border:3px solid rgba(255,255,255,0.94);
+            box-shadow:0 0 12px ${glowColor}, 0 0 28px ${glowColor};
+          "></div>
+        </div>
+      `,
+      iconSize: [width, height],
+      iconAnchor: [width / 2, height - dotSize / 2],
+      popupAnchor: [0, -(height - 12)],
+    });
+  }
+
   const size = isHighlighted ? 12 : 8;
   const pulseSize = size + 16;
   return L.divIcon({
@@ -117,6 +274,19 @@ function ensureStyles() {
       70%  { transform: scale(1.8); opacity: 0; }
       100% { transform: scale(1.8); opacity: 0; }
     }
+    @keyframes mapBeaconPulse {
+      0%   { transform: translateX(-50%) scale(0.45); opacity: 0.42; }
+      70%  { transform: translateX(-50%) scale(1.65); opacity: 0; }
+      100% { transform: translateX(-50%) scale(1.65); opacity: 0; }
+    }
+    @keyframes mapBeaconRing {
+      0%   { transform: translateX(-50%) scale(0.7); opacity: 0.55; }
+      100% { transform: translateX(-50%) scale(1.4); opacity: 0; }
+    }
+    @keyframes mapCalloutFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
     .leaflet-popup-content-wrapper {
       background: rgba(15, 18, 25, 0.95) !important;
       backdrop-filter: blur(12px) !important;
@@ -160,6 +330,26 @@ function ensureStyles() {
     .leaflet-city-tooltip::before {
       border-top-color: rgba(15, 18, 25, 0.9) !important;
     }
+    .leaflet-campaign-tooltip {
+      background: rgba(10, 15, 24, 0.94) !important;
+      backdrop-filter: blur(10px) !important;
+      border: 1px solid rgba(212,168,67,0.35) !important;
+      border-radius: 999px !important;
+      color: rgba(250, 236, 206, 0.96) !important;
+      font-family: 'Source Sans 3', 'Source Sans Pro', system-ui, sans-serif !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      padding: 6px 10px !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase !important;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.4) !important;
+    }
+    .leaflet-campaign-tooltip::before {
+      display: none !important;
+    }
+    .campaign-route {
+      filter: drop-shadow(0 0 6px rgba(212,168,67,0.25));
+    }
     .leaflet-container {
       background: hsl(220, 18%, 10%) !important;
     }
@@ -176,10 +366,15 @@ export const InteractiveMap = ({
   empire,
   className,
   showCities = true,
+  visibleCities: visibleCityNames,
   highlightCities,
+  annotatedCities,
+  routeCities,
   center,
   zoom,
   animate = true,
+  showTerritories = true,
+  spotlightCity,
 }: InteractiveMapProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -191,12 +386,16 @@ export const InteractiveMap = ({
   const mapZoom = zoom || defaults.zoom;
   const style = EMPIRE_STYLES[empire];
   const territories = EMPIRE_TERRITORIES[empire];
+  const annotationsByCity = useMemo(() => {
+    return new Map((annotatedCities || []).map(annotation => [annotation.name, annotation]));
+  }, [annotatedCities]);
 
   const visibleCities = useMemo(() => {
     if (!showCities) return [];
+    if (visibleCityNames?.length) return CITIES.filter(c => visibleCityNames.includes(c.name));
     if (highlightCities) return CITIES.filter(c => highlightCities.includes(c.name));
     return CITIES;
-  }, [showCities, highlightCities]);
+  }, [showCities, visibleCityNames, highlightCities]);
 
   // Initialize map once
   useEffect(() => {
@@ -246,7 +445,7 @@ export const InteractiveMap = ({
     }
 
     // Draw territories with smooth curves
-    if (empire !== 'none' && territories.length > 0) {
+    if (showTerritories && empire !== 'none' && territories.length > 0) {
       territories.forEach(coords => {
         const latLngs = coords.map(([lat, lng]) => L.latLng(lat, lng));
 
@@ -286,22 +485,57 @@ export const InteractiveMap = ({
       });
     }
 
+    if (routeCities && routeCities.length > 1) {
+      const routeLatLngs = routeCities
+        .map(cityName => CITIES.find(city => city.name === cityName))
+        .filter((city): city is CityMarker => Boolean(city))
+        .map(city => L.latLng(city.lat, city.lng));
+
+      if (routeLatLngs.length > 1) {
+        L.polyline(routeLatLngs, {
+          color: style.glowColor || 'rgba(212,168,67,0.28)',
+          weight: 8,
+          opacity: 0.18,
+          smoothFactor: 1.5,
+          lineCap: 'round',
+          lineJoin: 'round',
+        }).addTo(layer);
+
+        L.polyline(routeLatLngs, {
+          color: style.color || '#D4A843',
+          weight: 2.4,
+          opacity: 0.95,
+          dashArray: '10 8',
+          smoothFactor: 1.2,
+          lineCap: 'round',
+          lineJoin: 'round',
+          className: 'campaign-route',
+        }).addTo(layer);
+      }
+    }
+
     // Draw city markers with interactivity
     visibleCities.forEach(city => {
-      const isHighlighted = highlightCities?.includes(city.name) ?? false;
+      const spotlight = spotlightCity?.name === city.name
+        ? {
+            eyebrow: spotlightCity.eyebrow,
+            label: spotlightCity.label,
+            detail: spotlightCity.detail,
+            imageSrc: spotlightCity.imageSrc,
+            imageAlt: spotlightCity.imageAlt,
+            imagePosition: spotlightCity.imagePosition,
+          }
+        : undefined;
+      const annotation = annotationsByCity.get(city.name);
+      const isHighlighted = spotlight ? true : highlightCities?.includes(city.name) ?? false;
       const icon = buildMarkerIcon(
         style.color || '#D4A843',
         style.glowColor || 'rgba(212,168,67,0.5)',
         isHighlighted,
+        spotlight,
       );
 
       const marker = L.marker([city.lat, city.lng], { icon })
-        .bindTooltip(city.name, {
-          permanent: false,
-          direction: 'top',
-          offset: [0, -12],
-          className: 'leaflet-city-tooltip',
-        })
         .bindPopup(buildPopupHtml(city, empire, style.color || '#D4A843'), {
           closeButton: true,
           maxWidth: 280,
@@ -310,13 +544,31 @@ export const InteractiveMap = ({
         })
         .addTo(layer);
 
-      // Show tooltip on hover, popup on click
-      marker.on('mouseover', function () { this.openTooltip(); });
-      marker.on('mouseout', function () { this.closeTooltip(); });
+      if (spotlight) {
+        // Spotlight cards already carry their own label and context.
+      } else if (annotation) {
+        marker.bindTooltip(annotation.label, {
+          permanent: true,
+          direction: annotation.direction || 'top',
+          offset: annotation.offset || [0, -18],
+          className: 'leaflet-campaign-tooltip',
+        });
+      } else if (!spotlight) {
+        marker.bindTooltip(city.name, {
+          permanent: false,
+          direction: 'top',
+          offset: [0, -12],
+          className: 'leaflet-city-tooltip',
+        });
+
+        // Show tooltip on hover, popup on click
+        marker.on('mouseover', function () { this.openTooltip(); });
+        marker.on('mouseout', function () { this.closeTooltip(); });
+      }
     });
 
     prevEmpireRef.current = empire;
-  }, [empire, mapCenter, mapZoom, animate, territories, style, visibleCities, highlightCities]);
+  }, [empire, mapCenter, mapZoom, animate, territories, style, visibleCities, highlightCities, spotlightCity, annotationsByCity, routeCities, showTerritories]);
 
   return (
     <div

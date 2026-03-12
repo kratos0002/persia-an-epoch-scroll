@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { EraTransition } from '@/components/visuals/EraTransition';
@@ -12,26 +12,71 @@ const arabicWords = [
   { english: 'Zero', arabic: 'ṣifr' },
 ];
 
-const STEP_CITIES: Record<number, string[]> = {
-  0: ['Baghdad'],
-  1: ['Baghdad', 'Toledo'],
-  2: ['Baghdad', 'Toledo', 'Palermo'],
-  3: ['Baghdad', 'Toledo', 'Palermo', 'Constantinople', 'Cordoba'],
+// Pre-defined static configs so references don't change
+const STEP_CITIES = [
+  ['Baghdad'],
+  ['Baghdad', 'Toledo'],
+  ['Baghdad', 'Toledo', 'Palermo', 'Cordoba'],
+  ['Baghdad', 'Toledo', 'Palermo', 'Constantinople', 'Cordoba'],
+] as const;
+
+const STEP_ROUTES = [
+  undefined,
+  ['Baghdad', 'Toledo'],
+  ['Baghdad', 'Palermo'],
+  ['Baghdad', 'Constantinople', 'Toledo', 'Cordoba'],
+] as const;
+
+const STEP_ANNOTATIONS = [
+  [{ name: 'Baghdad', label: 'Center of Knowledge', direction: 'top' as const }],
+  [
+    { name: 'Baghdad', label: 'Origin', direction: 'right' as const },
+    { name: 'Toledo', label: '87 texts → Latin', direction: 'top' as const },
+  ],
+  [
+    { name: 'Palermo', label: "Frederick II's court", direction: 'top' as const },
+    { name: 'Cordoba', label: '400,000 volumes', direction: 'bottom' as const },
+    { name: 'Toledo', label: 'Translation hub', direction: 'top' as const },
+  ],
+  [
+    { name: 'Baghdad', label: 'Origin', direction: 'right' as const },
+    { name: 'Constantinople', label: 'Bridge to Europe', direction: 'top' as const },
+    { name: 'Toledo', label: 'Latin translation', direction: 'top' as const },
+    { name: 'Cordoba', label: 'Library capital', direction: 'bottom' as const },
+    { name: 'Palermo', label: 'Scholarly court', direction: 'right' as const },
+  ],
+];
+
+const STEP_CENTERS: [number, number][] = [
+  [33, 44],
+  [37, 20],
+  [36, 15],
+  [35, 20],
+];
+
+const STEP_ZOOMS = [5, 4, 4, 4];
+
+const RippleMap = ({ activeStep }: { activeStep: number }) => {
+  const step = Math.min(activeStep, 3);
+  return (
+    <InteractiveMap
+      empire="islamic"
+      showCities={true}
+      highlightCities={STEP_CITIES[step] as unknown as string[]}
+      annotatedCities={STEP_ANNOTATIONS[step]}
+      routeCities={STEP_ROUTES[step] as unknown as string[] | undefined}
+      center={STEP_CENTERS[step]}
+      zoom={STEP_ZOOMS[step]}
+      animate={true}
+      showTerritories={false}
+    />
+  );
 };
 
 export const RippleSection = () => (
   <section id="ripple" style={{ '--era-primary': '215 55% 45%' } as React.CSSProperties}>
     <StickyScroll
-      graphic={(activeStep) => (
-        <InteractiveMap
-          empire="islamic"
-          showCities={true}
-          highlightCities={STEP_CITIES[Math.min(activeStep, 3)]}
-          center={[35, 20]}
-          zoom={4}
-          animate={true}
-        />
-      )}
+      graphic={(activeStep) => <RippleMap activeStep={activeStep} />}
       steps={[
         <div key={0}>
           <p className="text-xs tracking-[0.3em] uppercase mb-4 font-body text-[hsl(215,55%,50%,0.6)]">

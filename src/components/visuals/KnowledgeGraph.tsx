@@ -121,12 +121,13 @@ export const KnowledgeGraph = ({
             key={p.label}
             x={p.x} y="60" textAnchor="middle"
             fill={p.color}
-            opacity={Math.max(0.05, 0.4 * (1 - dp))}
-            fontSize="11"
+            opacity={Math.max(0.05, 0.85 * (1 - dp))}
+            fontSize="13"
+            fontWeight="600"
             fontFamily="'Cormorant Garamond', serif"
             letterSpacing="0.15em"
             initial={{ opacity: 0 }}
-            animate={{ opacity: Math.max(0.05, 0.4 * (1 - dp)) }}
+            animate={{ opacity: Math.max(0.05, 0.85 * (1 - dp)) }}
             transition={{ duration: 0.8 }}
           >
             {p.label}
@@ -159,8 +160,8 @@ export const KnowledgeGraph = ({
                 key={`${edge.from}-${edge.to}`}
                 x1={x1} y1={y1} x2={x2} y2={y2}
                 stroke={dp > 0.5 ? 'hsl(0, 60%, 50%)' : color}
-                strokeWidth={Math.max(0.3, 1.2 * (1 - dp))}
-                strokeOpacity={Math.max(0.02, 0.3 * (1 - dp))}
+                strokeWidth={Math.max(0.3, 1.5 * (1 - dp))}
+                strokeOpacity={Math.max(0.02, 0.5 * (1 - dp))}
                 strokeDasharray={len}
                 initial={{ strokeDashoffset: len }}
                 animate={{ strokeDashoffset: 0 }}
@@ -203,13 +204,13 @@ export const KnowledgeGraph = ({
                   } : {}}
                   transition={dp === 0 ? { duration: 3, repeat: Infinity, ease: 'easeInOut' } : {}}
                 />
-                <circle cx={node.x} cy={node.y} r={6} fill={colors.fill} opacity={Math.max(0.1, 0.9 * (1 - dp * 0.7))} />
-                <circle cx={node.x} cy={node.y} r={6} fill="none" stroke={colors.fill} strokeWidth={1} opacity={Math.max(0.05, 0.4 * (1 - dp))} />
+                <circle cx={node.x} cy={node.y} r={8} fill={colors.fill} opacity={Math.max(0.1, 1 * (1 - dp * 0.7))} />
+                <circle cx={node.x} cy={node.y} r={8} fill="none" stroke={colors.fill} strokeWidth={1.5} opacity={Math.max(0.05, 0.6 * (1 - dp))} />
                 <text
-                  x={node.x} y={node.y + 20}
+                  x={node.x} y={node.y + 24}
                   textAnchor="middle" fill={colors.fill}
-                  fontSize="10" fontFamily="'Cormorant Garamond', serif"
-                  opacity={Math.max(0.05, 0.8 * (1 - dp))}
+                  fontSize="12" fontWeight="600" fontFamily="'Cormorant Garamond', serif"
+                  opacity={Math.max(0.05, 1 * (1 - dp))}
                 >
                   {node.label}
                 </text>

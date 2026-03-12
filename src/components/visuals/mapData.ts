@@ -144,6 +144,39 @@ export const CITIES: CityMarker[] = [
       default: 'Ancient Egyptian capital. Near the pyramids of Giza.',
     },
   },
+  // Wisdom Ripple cities
+  {
+    name: 'Toledo',
+    lat: 39.86, lng: -4.02,
+    description: {
+      islamic: 'Gerard of Cremona translated 87 Arabic texts to Latin here — the largest translation effort of the Middle Ages.',
+      default: 'Medieval translation capital bridging Arabic and Latin scholarship.',
+    },
+  },
+  {
+    name: 'Palermo',
+    lat: 38.12, lng: 13.36,
+    description: {
+      islamic: "Frederick II's multilingual court mixed Arab, Greek, and Latin scholars.",
+      default: 'Crossroads of Mediterranean cultures under Norman rule.',
+    },
+  },
+  {
+    name: 'Cordoba',
+    lat: 37.88, lng: -4.78,
+    description: {
+      islamic: 'Its library held 400,000 volumes when the largest in Christian Europe held 400.',
+      default: 'Capital of Al-Andalus and center of learning in Islamic Spain.',
+    },
+  },
+  {
+    name: 'Constantinople',
+    lat: 41.01, lng: 28.98,
+    description: {
+      islamic: 'Bridge between the Islamic world and Christian Europe. Greek manuscripts flowed through here.',
+      default: 'Capital of the Byzantine Empire. Modern-day Istanbul.',
+    },
+  },
   // Buddhism cities
   {
     name: 'Lumbini', lat: 27.47, lng: 83.28,
