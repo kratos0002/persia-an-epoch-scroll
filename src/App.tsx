@@ -11,6 +11,7 @@ import Buddhism from "./pages/Buddhism.tsx";
 import Samurai from "./pages/Samurai.tsx";
 import Rebellion1857 from "./pages/Rebellion1857.tsx";
 import Napoleon from "./pages/Napoleon.tsx";
+import Constantinople from "./pages/Constantinople.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
