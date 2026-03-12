@@ -1,21 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { IndiaMap } from '@/components/visuals/IndiaMap';
 
 export const IndiaHero: React.FC = () => (
-  <section id="patchwork" className="relative min-h-[120vh] flex items-center justify-center overflow-hidden" style={{ background: INDIA_COLORS.background }}>
+  <section id="patchwork" className="relative min-h-[120vh] flex items-center justify-center overflow-hidden">
     {/* Grain overlay */}
     <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{
       backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
       backgroundRepeat: 'repeat', backgroundSize: '128px',
     }} />
-
-    {/* Map in background */}
-    <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
-      <div className="w-[80%] max-w-lg">
-        <IndiaMap era="patchwork" />
-      </div>
-    </div>
 
     <div className="relative z-10 text-center max-w-3xl mx-auto px-6">
       <motion.p
@@ -95,5 +87,3 @@ export const IndiaHero: React.FC = () => (
     </div>
   </section>
 );
-
-const INDIA_COLORS = { background: 'hsl(220, 20%, 10%)' };
