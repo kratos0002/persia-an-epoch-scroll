@@ -1,127 +1,63 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { StickyScroll } from '@/components/scroll/StickyScroll';
+import { SpyNetwork } from '@/components/visuals/SpyNetwork';
 
-const BUNKER = 'hsl(200, 25%, 6%)';
-const GEIGER = 'hsl(140, 70%, 45%)';
-const RED = 'hsl(0, 65%, 50%)';
+const RED = 'hsl(0, 70%, 50%)';
 const STEEL = 'hsl(200, 10%, 50%)';
 const LIGHT = 'hsl(0, 0%, 88%)';
+const BUNKER = 'hsl(200, 25%, 6%)';
+
+const steps = [
+  <div key="fuchs">
+    <p className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-4" style={{ color: RED }}>
+      Nation Two · August 29, 1949
+    </p>
+    <h2 className="font-display text-3xl md:text-4xl font-black mb-4" style={{ color: LIGHT }}>
+      <span style={{ color: RED }}>Espionage</span>
+    </h2>
+    <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
+      Klaus Fuchs was a German-born physicist who had fled to Britain, been interned as an enemy alien, then recruited to work on the British bomb project. When the British team joined the Manhattan Project, Fuchs went with them — and began passing every detail of the implosion design to his Soviet handler.
+    </p>
+  </div>,
+
+  <div key="hall">
+    <p className="font-body text-base leading-relaxed mb-4" style={{ color: STEEL }}>
+      Ted Hall was even more remarkable: the youngest scientist at Los Alamos, just nineteen when he arrived. Hall independently decided that an American nuclear monopoly was too dangerous and volunteered his services to Soviet intelligence. He was never caught.
+    </p>
+    <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
+      The Rosenbergs were the couriers, the human links in a chain that stretched from the desert of New Mexico to the laboratories of the Soviet Union.
+    </p>
+  </div>,
+
+  <div key="rds-1">
+    <p className="font-body text-base leading-relaxed mb-4" style={{ color: STEEL }}>
+      Igor Kurchatov, the director of the Soviet bomb program, later admitted that the espionage saved them at least two years. The first Soviet device — "RDS-1," detonated on August 29, 1949 — was a near-exact copy of the American "Fat Man" design. The Americans had expected a Soviet bomb by 1953 or 1954. They got it in 1949.
+    </p>
+    <p className="font-body text-base leading-relaxed italic" style={{ color: LIGHT }}>
+      "The secret of the atomic bomb is how easy it is to make one once you know it can be done."
+    </p>
+    <p className="font-body text-xs mt-1" style={{ color: STEEL }}>— Leo Szilard</p>
+  </div>,
+
+  <div key="compression">
+    <p className="font-body text-base leading-relaxed mb-4" style={{ color: STEEL }}>
+      The American monopoly lasted exactly four years, three years less than anyone in Washington had predicted. The chain reaction had begun — and it would never stop. Every subsequent proliferator would learn from the ones before, each shortening the timeline further.
+    </p>
+    <div className="mt-6 pt-4" style={{ borderTop: `1px solid hsl(0, 20%, 20%)` }}>
+      <p className="text-[9px] tracking-[0.3em] uppercase font-body mb-2" style={{ color: STEEL }}>RDS-1 — Yield</p>
+      <p className="font-display text-4xl font-black" style={{ color: RED }}>22 kilotons</p>
+    </div>
+  </div>,
+];
 
 export const EspionageSection = () => {
   return (
-    <section id="espionage" className="relative min-h-[120vh] py-32 px-6" style={{ background: 'hsl(200, 22%, 7%)' }}>
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-20">
-          <motion.p
-            className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-6"
-            style={{ color: RED }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            Nation Two · August 29, 1949
-          </motion.p>
-
-          <motion.h2
-            className="font-display text-5xl md:text-7xl font-black mb-4"
-            style={{ color: LIGHT }}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span style={{ color: RED }}>Espionage</span>
-          </motion.h2>
-
-          <motion.p
-            className="font-display text-2xl md:text-3xl font-bold"
-            style={{ color: STEEL }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-          >
-            The Soviet Union
-          </motion.p>
-        </div>
-
-        <div className="max-w-xl mx-auto space-y-6">
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              American intelligence estimated the Soviets were a decade away from the bomb. They were wrong by six years. The reason was not Soviet physics — though it was excellent — but Soviet intelligence.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              Klaus Fuchs, a German-born British physicist, had worked at Los Alamos on the implosion design for Fat Man. He was also a Soviet spy. From 1944 to 1949, Fuchs passed detailed blueprints of the plutonium bomb to his Soviet handlers. The information was so precise that when the Soviets tested their first device — codenamed "Joe-1" by the Americans — it was virtually a copy of Fat Man.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              But Fuchs wasn't alone. Theodore Hall, just 19 years old and one of the youngest scientists at Los Alamos, independently volunteered secrets to the Soviets. The Rosenbergs, Julius and Ethel, ran a separate espionage ring funneling classified materials. The Manhattan Project, the most secret program in American history, was thoroughly penetrated.
-            </p>
-          </RevealOnScroll>
-
-          {/* Timeline compression */}
-          <RevealOnScroll>
-            <div className="my-16 px-6 py-8 rounded-lg" style={{ background: 'hsl(0, 30%, 10%)', border: '1px solid hsl(0, 30%, 18%)' }}>
-              <p className="text-[9px] tracking-[0.3em] uppercase font-body mb-6 text-center" style={{ color: RED }}>
-                How espionage compressed the timeline
-              </p>
-              <div className="flex items-center justify-between max-w-md mx-auto">
-                <div className="text-center">
-                  <p className="font-display text-3xl font-black" style={{ color: LIGHT }}>10</p>
-                  <p className="text-xs font-body" style={{ color: STEEL }}>years estimated</p>
-                </div>
-                <motion.div
-                  className="flex-1 mx-6 h-px relative"
-                  style={{ background: 'hsl(0, 30%, 25%)' }}
-                >
-                  <motion.div
-                    className="absolute inset-y-0 left-0 h-full"
-                    style={{ background: RED }}
-                    initial={{ width: 0 }}
-                    whileInView={{ width: '100%' }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.5 }}
-                  />
-                </motion.div>
-                <div className="text-center">
-                  <p className="font-display text-3xl font-black" style={{ color: RED }}>4</p>
-                  <p className="text-xs font-body" style={{ color: STEEL }}>years actual</p>
-                </div>
-              </div>
-            </div>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              Igor Kurchatov, the Soviet program's scientific director, later admitted the espionage saved them years of trial and error. But he also noted that Soviet physicists had independently solved many of the same problems — the stolen designs served as confirmation, accelerating what would have happened regardless.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              On August 29, 1949, the Soviets detonated "RDS-1" at the Semipalatinsk test site in Kazakhstan. When American B-29s detected radioactive debris in the atmosphere days later, the monopoly was over. The nuclear age had its second player, and the arms race had begun.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <motion.blockquote
-              className="font-display text-xl md:text-2xl italic text-center my-10 leading-relaxed"
-              style={{ color: LIGHT }}
-            >
-              "The balance of power has been destroyed."
-            </motion.blockquote>
-            <p className="text-center text-xs font-body mb-6" style={{ color: STEEL }}>
-              — Senator Arthur Vandenberg, upon learning of the Soviet test
-            </p>
-          </RevealOnScroll>
-        </div>
-      </div>
+    <section id="espionage" style={{ background: BUNKER }}>
+      <StickyScroll
+        graphic={(activeStep) => <SpyNetwork activeStep={activeStep} />}
+        steps={steps}
+        className="min-h-[300vh]"
+      />
     </section>
   );
 };

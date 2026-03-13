@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { EmpireFade } from '@/components/visuals/EmpireFade';
 
 const BUNKER = 'hsl(200, 25%, 6%)';
-const GEIGER = 'hsl(140, 70%, 45%)';
 const NAVY = 'hsl(210, 50%, 40%)';
 const STEEL = 'hsl(200, 10%, 50%)';
 const LIGHT = 'hsl(0, 0%, 88%)';
@@ -45,6 +45,9 @@ export const BritainSection = () => {
             The United Kingdom
           </motion.p>
         </div>
+
+        {/* Empire Fade Visual */}
+        <EmpireFade />
 
         <div className="max-w-xl mx-auto space-y-6">
           <RevealOnScroll>

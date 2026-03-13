@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { YieldTowers } from '@/components/visuals/YieldTowers';
 
-const BUNKER = 'hsl(200, 25%, 6%)';
 const TRICOLOR = 'hsl(220, 60%, 50%)';
 const STEEL = 'hsl(200, 10%, 50%)';
 const LIGHT = 'hsl(0, 0%, 88%)';
@@ -30,7 +30,7 @@ export const FranceSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <em className="italic" style={{ color: TRICOLOR }}>Force de Frappe</em>
+            <span style={{ color: TRICOLOR }}>Force de Frappe</span>
           </motion.h2>
 
           <motion.p
@@ -45,60 +45,25 @@ export const FranceSection = () => {
           </motion.p>
         </div>
 
+        {/* Yield Towers Visual */}
+        <YieldTowers />
+
         <div className="max-w-xl mx-auto space-y-6">
           <RevealOnScroll>
             <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              Charles de Gaulle did not trust alliances. He had watched France be invaded twice in his lifetime, and he had learned a hard lesson from the Americans and British during World War II: allies help you when it's convenient for them. True sovereignty, he concluded, required the ability to destroy any attacker — independently, without asking Washington's permission.
+              Charles de Gaulle's logic was simple and brutal: France could not depend on America to risk New York for Paris. The American nuclear umbrella might protect Western Europe in theory, but no French president could stake the nation's survival on the assumption that an American president would trade Washington for a European war.
             </p>
           </RevealOnScroll>
 
           <RevealOnScroll>
             <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              France's nuclear program had begun quietly under the Fourth Republic, but de Gaulle turned it into a national obsession after returning to power in 1958. His argument was philosophical as much as strategic: <em className="italic" style={{ color: LIGHT }}>"No country without an atom bomb could properly consider itself independent."</em>
+              France had actually started nuclear research during the war and had strong scientific foundations — Frédéric Joliot-Curie, the son-in-law of Marie Curie, had led early nuclear work. But the political will came from de Gaulle, who saw nuclear weapons as the ultimate guarantor of French sovereignty and greatness.
             </p>
           </RevealOnScroll>
 
           <RevealOnScroll>
             <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              On February 13, 1960, France detonated "Gerboise Bleue" — a 70-kiloton plutonium device — in the Sahara Desert of French Algeria. It was more than three times the yield of Hiroshima, and it was France's first test. The blue jerboa, a desert mouse native to the Sahara, gave the test its name.
-            </p>
-          </RevealOnScroll>
-
-          {/* Yield comparison */}
-          <RevealOnScroll>
-            <div className="my-16 px-6 py-8 rounded-lg" style={{ background: 'hsl(220, 25%, 10%)', border: '1px solid hsl(220, 25%, 18%)' }}>
-              <p className="text-[9px] tracking-[0.3em] uppercase font-body mb-6 text-center" style={{ color: TRICOLOR }}>
-                First test yields compared
-              </p>
-              <div className="space-y-3">
-                {[
-                  { nation: 'USA (Trinity)', yield: 21, pct: 30 },
-                  { nation: 'USSR (RDS-1)', yield: 22, pct: 31 },
-                  { nation: 'UK (Hurricane)', yield: 25, pct: 36 },
-                  { nation: 'France (Gerboise Bleue)', yield: 70, pct: 100 },
-                ].map((item, i) => (
-                  <div key={item.nation} className="flex items-center gap-3">
-                    <span className="text-xs font-body w-44 text-right shrink-0" style={{ color: STEEL }}>{item.nation}</span>
-                    <div className="flex-1 h-2 rounded-full" style={{ background: 'hsl(220, 20%, 15%)' }}>
-                      <motion.div
-                        className="h-full rounded-full"
-                        style={{ background: TRICOLOR }}
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${item.pct}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.2 + i * 0.15 }}
-                      />
-                    </div>
-                    <span className="text-xs font-body w-12 shrink-0" style={{ color: LIGHT }}>{item.yield} kt</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              De Gaulle withdrew France from NATO's integrated military command in 1966, insisting that France's nuclear deterrent was France's alone — not a card to be played by American generals. The <em className="italic">Force de Frappe</em> remains the cornerstone of French defense to this day: submarines carrying ballistic missiles that can reach any capital on earth.
+              On February 13, 1960, France detonated "Gerboise Bleue" — a 70-kiloton plutonium device — in the Sahara Desert at Reggane, Algeria. It was more than three times the yield of Trinity. France had made its point: it would defend itself, by itself.
             </p>
           </RevealOnScroll>
 
@@ -107,10 +72,16 @@ export const FranceSection = () => {
               className="font-display text-xl md:text-2xl italic text-center my-10 leading-relaxed"
               style={{ color: LIGHT }}
             >
-              "The deterrent is not to prevent war. It is to prevent the other side from believing they can wage one."
+              "Within ten years, we shall have the means to kill 80 million Russians. I truly believe that one does not light-heartedly attack people who are able to kill 80 million Russians."
             </motion.blockquote>
-            <p className="text-center text-xs font-body mb-6" style={{ color: STEEL }}>
-              — Charles de Gaulle
+            <p className="text-center text-xs font-body" style={{ color: STEEL }}>
+              — Charles de Gaulle, 1964
+            </p>
+          </RevealOnScroll>
+
+          <RevealOnScroll>
+            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
+              De Gaulle then withdrew France from NATO's integrated military command — not from the alliance itself, but from the structure that would have placed French forces under American control. France would be an ally, not a subordinate. The <em className="italic" style={{ color: TRICOLOR }}>force de frappe</em> — the strike force — was the instrument of that independence.
             </p>
           </RevealOnScroll>
         </div>

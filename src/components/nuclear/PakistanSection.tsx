@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { ResponseClock } from '@/components/visuals/ResponseClock';
 
 const BUNKER = 'hsl(200, 25%, 6%)';
 const PAKISTAN_GREEN = 'hsl(150, 60%, 35%)';
@@ -81,19 +82,12 @@ export const PakistanSection = () => {
               When India tested five devices in May 1998, Pakistan responded in seventeen days. On May 28, 1998, Pakistan detonated five devices inside a granite mountain at Chagai, Balochistan. Two days later, it tested one more. The mountain turned white. Pakistan was nuclear.
             </p>
           </RevealOnScroll>
+        </div>
 
-          {/* Response time */}
-          <RevealOnScroll>
-            <div className="text-center my-16 py-10" style={{ borderTop: `1px solid hsl(150, 20%, 15%)`, borderBottom: `1px solid hsl(150, 20%, 15%)` }}>
-              <p className="text-[9px] tracking-[0.3em] uppercase font-body mb-4" style={{ color: STEEL }}>
-                Time between India's tests and Pakistan's response
-              </p>
-              <p className="font-display text-5xl md:text-7xl font-black" style={{ color: PAKISTAN_GREEN }}>
-                17 days
-              </p>
-            </div>
-          </RevealOnScroll>
+        {/* Response Clock + Proliferation Network */}
+        <ResponseClock />
 
+        <div className="max-w-xl mx-auto">
           <RevealOnScroll>
             <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
               A.Q. Khan would later be revealed as the most dangerous nuclear proliferator in history — selling centrifuge designs, uranium enrichment technology, and even bomb blueprints to Libya, Iran, and North Korea through a vast black-market network. Pakistan's bomb had been built through theft; now that theft was being franchised.
