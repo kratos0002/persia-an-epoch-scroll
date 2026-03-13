@@ -28,6 +28,7 @@ interface StoryCard {
   href: string;
   color: string;
   era: string;
+  sortYear: number;
 }
 
 const STORIES: StoryCard[] = [
@@ -35,57 +36,85 @@ const STORIES: StoryCard[] = [
     id: 'persia', number: 1, title: 'The Immortal Empire', subtitle: 'The History of Persia',
     hook: 'What if one civilization shaped more of the modern world than Rome, Greece, and Egypt combined?',
     image: storyPersia, tags: ['Visual Essay', 'Scrollytelling', '2,500 years'],
-    status: 'live', href: '/persia', color: 'hsl(43, 85%, 55%)', era: '550 BCE',
+    status: 'live', href: '/persia', color: 'hsl(43, 85%, 55%)', era: '550 BCE', sortYear: -550,
   },
   {
     id: 'wisdom', number: 2, title: 'The Library That Lit the World', subtitle: 'The House of Wisdom',
     hook: 'For 400 years, one building in Baghdad held more knowledge than all of Europe combined.',
     image: storyWisdom, tags: ['Visual Essay', 'Knowledge Graph', '762–1258 CE'],
-    status: 'live', href: '/wisdom', color: 'hsl(170, 40%, 38%)', era: '762 CE',
+    status: 'live', href: '/wisdom', color: 'hsl(170, 40%, 38%)', era: '762 CE', sortYear: 762,
   },
   {
     id: 'buddhism', number: 3, title: 'The Path That Split', subtitle: 'The Spread of Buddhism',
     hook: 'One man sat under a tree and asked why we suffer. His answer split into a thousand traditions that reached every corner of Asia.',
     image: storyBuddhism, tags: ['Visual Essay', 'Branching Tree', '528 BCE–Today'],
-    status: 'live', href: '/buddhism', color: 'hsl(30, 65%, 45%)', era: '528 BCE',
+    status: 'live', href: '/buddhism', color: 'hsl(30, 65%, 45%)', era: '528 BCE', sortYear: -528,
   },
   {
     id: 'samurai', number: 4, title: 'Stipends, Bonds & the Death of a Class', subtitle: 'The End of the Samurai',
     hook: 'The samurai class was not destroyed by war but by accounting: stipends converted to bonds, domains merged into prefectures, privilege replaced by institutions.',
     image: storySamurai, tags: ['Ledger Visual', 'Ink & Paper', '1603–1877'],
-    status: 'live', href: '/samurai', color: 'hsl(5, 75%, 50%)', era: '1603',
+    status: 'live', href: '/samurai', color: 'hsl(5, 75%, 50%)', era: '1603', sortYear: 1603,
   },
   {
     id: '1857', number: 5, title: 'The Signal and the Fire', subtitle: 'The 1857 Rebellion',
     hook: 'Two signals raced across North India. The telegraph carried British orders at the speed of electricity. The rebellion spread at the speed of a horse.',
     image: story1857, tags: ['Dual Wavefront', 'Map Visual', '1857–1858'],
-    status: 'live', href: '/1857', color: 'hsl(30, 85%, 50%)', era: '1857',
+    status: 'live', href: '/1857', color: 'hsl(30, 85%, 50%)', era: '1857', sortYear: 1857,
   },
   {
     id: 'napoleon', number: 6, title: 'The Rise and Fall of Napoleon', subtitle: 'Revolution to Legacy',
     hook: 'One man reorganized Europe. Then Europe closed in. From revolutionary chaos to imperial zenith to final exile — and the ideas that outlasted the emperor.',
     image: storyNapoleon, tags: ['Coalition Board', 'Tricolor', '1789–1821'],
-    status: 'live', href: '/napoleon', color: 'hsl(220, 65%, 45%)', era: '1789',
+    status: 'live', href: '/napoleon', color: 'hsl(220, 65%, 45%)', era: '1789', sortYear: 1789,
   },
   {
     id: 'constantinople', number: 7, title: 'The City of Layers', subtitle: 'Constantinople',
     hook: '2,700 years of civilization stacked in 25 meters of earth. Greek, Roman, Byzantine, Crusader, Ottoman — each built on the bones of the last. Scroll down to dig.',
     image: storyConstantinople, tags: ['Archaeological Dig', 'Excavation', '657 BCE–2024'],
-    status: 'live', href: '/constantinople', color: 'hsl(270, 45%, 30%)', era: '657 BCE',
+    status: 'live', href: '/constantinople', color: 'hsl(270, 45%, 30%)', era: '657 BCE', sortYear: -657,
   },
   {
     id: 'india-states', number: 8, title: 'The Mosaic Republic', subtitle: 'How 565 Became 28',
     hook: 'On the eve of independence, India was 565 princely states and 17 British provinces. What followed was the largest peaceful political integration in history — and a map that is still being redrawn.',
     image: storyIndia, tags: ['Living Map', 'SVG Morphing', '1947–2024'],
-    status: 'live', href: '/india-states', color: 'hsl(40, 60%, 55%)', era: '1947',
+    status: 'live', href: '/india-states', color: 'hsl(40, 60%, 55%)', era: '1947', sortYear: 1947,
   },
   {
+<<<<<<< HEAD
     id: 'mongol-india', number: 9, title: 'The Wall That Held', subtitle: 'Mongol Invasions of India',
     hook: 'They conquered Persia, Baghdad, China, Russia. Nothing stopped them. Then they turned toward India — and something held.',
     image: storyMongol, tags: ['Horizontal Scroll', 'Pan Map', '1221–1327'],
     status: 'live', href: '/mongol-india', color: 'hsl(15, 75%, 50%)', era: '1221',
+=======
+    id: 'mongol', number: 9, title: 'The World Conqueror', subtitle: 'The Mongol Storm',
+    hook: 'He asked for trade. They sent back heads. What followed reshaped every civilization from China to Hungary.',
+    image: storyMongol, tags: ['Empire System', 'Multi-front', '1206–1294'],
+    status: 'coming-soon', href: '#', color: 'hsl(25, 70%, 50%)', era: '1206', sortYear: 1206,
+>>>>>>> 9f72ebe (Redesign home page as Timeline River + standardize SiteFooter across all essays)
   },
 ];
+
+/* ── Era Groupings ─────────────────────────────── */
+
+interface EraGroup {
+  label: string;
+  range: string;
+  stories: StoryCard[];
+}
+
+const groupStoriesByEra = (stories: StoryCard[]): EraGroup[] => {
+  const sorted = [...stories].sort((a, b) => a.sortYear - b.sortYear);
+  const eras: { label: string; range: string; test: (y: number) => boolean }[] = [
+    { label: 'The Ancient World', range: '657 BCE – 528 BCE', test: y => y < 0 },
+    { label: 'The Medieval World', range: '762 – 1294 CE', test: y => y >= 0 && y < 1500 },
+    { label: 'Early Modern', range: '1603 – 1821', test: y => y >= 1500 && y < 1850 },
+    { label: 'The Modern Age', range: '1857 – Present', test: y => y >= 1850 },
+  ];
+  return eras
+    .map(era => ({ label: era.label, range: era.range, stories: sorted.filter(s => era.test(s.sortYear)) }))
+    .filter(g => g.stories.length > 0);
+};
 
 /* ── Floating Historical Symbols ─────────────── */
 
@@ -227,201 +256,257 @@ const WordReveal = ({ text, className, italic }: { text: string; className?: str
   );
 };
 
-/* ── Timeline Spine ──────────────────────────── */
+/* ── Era Header ──────────────────────────────── */
 
-const TimelineSpine = ({ stories }: { stories: StoryCard[] }) => {
+const EraHeader = ({ label, range }: { label: string; range: string }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
-  const fillHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
-    <div ref={ref} className="absolute left-6 md:left-12 top-0 bottom-0 hidden lg:block pointer-events-none z-10">
-      {/* Background line */}
-      <div className="absolute left-3 top-0 bottom-0 w-px bg-[hsl(35,20%,80%)]" />
-      {/* Gold fill */}
+    <motion.div
+      ref={ref}
+      className="col-span-1 md:col-span-3 flex items-center gap-4 py-8 md:py-12"
+      initial={{ opacity: 0 }}
+      animate={inView ? { opacity: 1 } : {}}
+      transition={{ duration: 0.8 }}
+    >
+      {/* Left ornament line */}
       <motion.div
-        className="absolute left-3 top-0 w-px bg-[hsl(43,85%,55%)]"
-        style={{ height: fillHeight }}
+        className="hidden md:block flex-1 h-px"
+        style={{ background: 'linear-gradient(90deg, transparent, hsl(35,25%,75%))' }}
+        initial={{ scaleX: 0, transformOrigin: 'right' }}
+        animate={inView ? { scaleX: 1 } : {}}
+        transition={{ duration: 1, delay: 0.2 }}
       />
-      {/* Era dots */}
-      {stories.map((story, i) => {
-        const topPct = `${(i / (stories.length - 1)) * 100}%`;
-        return (
-          <div key={story.id} className="absolute left-0" style={{ top: topPct }}>
-            <div className="w-7 h-7 rounded-full border border-[hsl(35,20%,75%)] bg-[hsl(38,30%,94%)] flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full" style={{ background: story.color }} />
-            </div>
-            <span className="absolute left-10 top-1/2 -translate-y-1/2 text-[10px] tracking-[0.15em] uppercase font-body font-semibold text-[hsl(25,15%,55%)] whitespace-nowrap">
-              {story.era}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
-/* ── Featured Story Card (first card) ────────── */
-
-const FeaturedCard = ({ story }: { story: StoryCard }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const imgScale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
-  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
-
-  return (
-    <Link to={story.href}>
+      <div className="text-center flex-shrink-0">
+        <p className="text-[9px] tracking-[0.4em] uppercase font-body font-semibold text-[hsl(25,20%,55%)] mb-1">
+          {range}
+        </p>
+        <h3 className="font-display text-xl md:text-2xl font-bold text-[hsl(25,30%,22%)]">
+          {label}
+        </h3>
+      </div>
+      {/* Right ornament line */}
       <motion.div
-        ref={ref}
-        className="group relative w-full h-[60vh] md:h-[70vh] rounded-2xl overflow-hidden cursor-pointer"
-        initial={{ opacity: 0, y: 60 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {/* Parallax image */}
-        <motion.img
-          src={story.image}
-          alt={story.title}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ scale: imgScale, y: imgY }}
-        />
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-        {/* Watermark number */}
-        <div className="absolute top-6 right-8 font-display text-[12rem] md:text-[16rem] font-black leading-none text-white/[0.04] select-none">
-          {String(story.number).padStart(2, '0')}
-        </div>
-
-        {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-          <div className="max-w-xl">
-            <div className="flex items-center gap-2 mb-4">
-              {story.tags.map(tag => (
-                <span key={tag} className="text-[10px] tracking-[0.15em] uppercase font-body font-semibold text-white/60 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <h3 className="font-display text-3xl md:text-5xl font-bold text-white mb-2">{story.title}</h3>
-            <p className="font-body text-lg text-white/60 mb-3">{story.subtitle}</p>
-            <p className="font-body text-base md:text-lg text-white/80 leading-relaxed mb-6 max-w-lg">{story.hook}</p>
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs tracking-[0.15em] uppercase font-body font-semibold text-emerald-300">Live</span>
-              <motion.span
-                className="ml-auto text-xs tracking-[0.12em] uppercase font-body font-semibold text-white/50 group-hover:text-white transition-colors flex items-center gap-2"
-              >
-                Begin reading
-                <motion.span
-                  className="inline-block"
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 4 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >→</motion.span>
-              </motion.span>
-            </div>
-          </div>
-        </div>
-
-        {/* Accent line on hover */}
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-1 origin-left"
-          style={{ background: story.color }}
-          initial={{ scaleX: 0 }}
-          whileHover={{ scaleX: 1 }}
-          transition={{ duration: 0.4 }}
-        />
-      </motion.div>
-    </Link>
+        className="hidden md:block flex-1 h-px"
+        style={{ background: 'linear-gradient(90deg, hsl(35,25%,75%), transparent)' }}
+        initial={{ scaleX: 0, transformOrigin: 'left' }}
+        animate={inView ? { scaleX: 1 } : {}}
+        transition={{ duration: 1, delay: 0.2 }}
+      />
+    </motion.div>
   );
 };
 
-/* ── Alternating Story Card ──────────────────── */
+/* ── River Node (dot on the river line) ──────── */
 
-const AlternatingCard = ({ story, index }: { story: StoryCard; index: number }) => {
-  const isEven = index % 2 === 0;
+const RiverNode = ({ color, era }: { color: string; era: string }) => (
+  <div className="hidden md:flex flex-col items-center justify-start pt-8 relative">
+    {/* Era year label */}
+    <span className="absolute -top-1 text-[9px] tracking-[0.15em] uppercase font-body font-semibold text-[hsl(25,15%,55%)] whitespace-nowrap">
+      {era}
+    </span>
+    {/* Node circle */}
+    <div className="w-5 h-5 rounded-full border-2 border-[hsl(35,20%,78%)] bg-[hsl(38,30%,94%)] flex items-center justify-center z-10 mt-1">
+      <div className="w-2 h-2 rounded-full" style={{ background: color }} />
+    </div>
+    {/* Connection line extending down */}
+    <div className="w-px flex-1 bg-[hsl(35,20%,82%)]" />
+  </div>
+);
+
+/* ── Timeline Card ───────────────────────────── */
+
+const TimelineCard = ({ story, side }: { story: StoryCard; side: 'left' | 'right' }) => {
   const isLive = story.status === 'live';
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '6%']);
+  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '5%']);
 
   const inner = (
     <motion.div
       ref={ref}
-      className={`group relative flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-0 md:gap-8 items-stretch overflow-hidden rounded-2xl ${
-        isLive ? 'cursor-pointer' : 'opacity-70'
-      }`}
-      initial={{ opacity: 0, x: isEven ? -60 : 60 }}
+      className={`group relative overflow-hidden rounded-xl ${isLive ? 'cursor-pointer' : 'opacity-70'}`}
+      style={{
+        background: 'hsl(38, 28%, 92%)',
+        border: '1px solid hsl(35, 20%, 85%)',
+        boxShadow: '0 2px 16px hsla(25, 20%, 20%, 0.06)',
+      }}
+      initial={{ opacity: 0, x: side === 'left' ? -40 : 40 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={isLive ? { y: -3, boxShadow: '0 8px 30px hsla(25, 20%, 20%, 0.1)' } : {}}
     >
-      {/* Image side */}
-      <div className="relative w-full md:w-1/2 h-72 md:h-[450px] overflow-hidden rounded-2xl flex-shrink-0">
+      {/* Image */}
+      <div className="relative w-full h-48 md:h-56 overflow-hidden">
         <motion.img
           src={story.image}
           alt={story.title}
-          className={`w-full h-full object-cover transition-transform duration-700 ${
-            isLive ? 'group-hover:scale-[1.03]' : 'grayscale-[30%]'
-          }`}
+          className={`w-full h-full object-cover ${isLive ? 'group-hover:scale-[1.03] transition-transform duration-700' : 'grayscale-[30%]'}`}
           style={{ y: imgY }}
           loading="lazy"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         {/* Watermark number */}
-        <div className={`absolute top-4 ${isEven ? 'right-6' : 'left-6'} font-display text-[8rem] md:text-[10rem] font-black leading-none text-white/[0.06] select-none`}>
+        <div className="absolute top-3 right-4 font-display text-6xl font-black leading-none text-white/[0.06] select-none">
           {String(story.number).padStart(2, '0')}
         </div>
         {/* Coming soon badge */}
         {!isLive && (
-          <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-[hsl(25,15%,30%)]/80 text-[hsl(38,30%,92%)] text-[10px] tracking-[0.15em] uppercase font-semibold backdrop-blur-sm">
+          <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-[hsl(25,15%,30%)]/80 text-[hsl(38,30%,92%)] text-[9px] tracking-[0.15em] uppercase font-semibold backdrop-blur-sm">
             Coming Soon
           </div>
         )}
-        {/* Accent line */}
-        {isLive && (
-          <motion.div
-            className={`absolute ${isEven ? 'right-0' : 'left-0'} top-0 bottom-0 w-1 origin-top`}
-            style={{ background: story.color }}
-            initial={{ scaleY: 0 }}
-            whileHover={{ scaleY: 1 }}
-            transition={{ duration: 0.4 }}
-          />
-        )}
-      </div>
-
-      {/* Content side */}
-      <div className="flex-1 flex flex-col justify-center py-6 md:py-8 px-2 md:px-4">
-        <div className="flex items-center gap-2 mb-4">
-          {story.tags.map(tag => (
-            <span key={tag} className="text-[10px] tracking-[0.12em] uppercase font-body font-semibold text-[hsl(25,15%,55%)] bg-[hsl(35,20%,88%)] px-2.5 py-1 rounded-full">
+        {/* Tags over image */}
+        <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
+          {story.tags.slice(0, 2).map(tag => (
+            <span key={tag} className="text-[9px] tracking-[0.1em] uppercase font-body font-semibold text-white/80 bg-black/20 backdrop-blur-sm px-2 py-0.5 rounded-full">
               {tag}
             </span>
           ))}
         </div>
-        <h3 className="font-display text-2xl md:text-4xl font-bold text-[hsl(25,25%,18%)] mb-2 leading-tight">
+      </div>
+
+      {/* Content */}
+      <div className="p-5 md:p-6">
+        <h3 className="font-display text-xl md:text-2xl font-bold text-[hsl(25,25%,18%)] mb-1 leading-tight">
           {story.title}
         </h3>
-        <p className="font-body text-sm text-[hsl(25,15%,50%)] mb-3">{story.subtitle}</p>
-        <p className="font-body text-base md:text-lg text-[hsl(25,15%,35%)] leading-relaxed mb-6 max-w-lg">
+        <p className="font-body text-xs text-[hsl(25,15%,50%)] mb-3">{story.subtitle}</p>
+        <p className="font-body text-sm text-[hsl(25,15%,35%)] leading-relaxed mb-4 line-clamp-3">
           {story.hook}
         </p>
-        {isLive && (
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs tracking-[0.12em] uppercase font-body font-semibold text-emerald-700">Live</span>
-            <span className="ml-auto text-xs tracking-[0.1em] uppercase font-body font-semibold text-[hsl(25,15%,45%)] group-hover:text-[hsl(25,30%,25%)] transition-colors">
-              Begin reading <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
+        {isLive ? (
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[10px] tracking-[0.12em] uppercase font-body font-semibold text-emerald-700">Live</span>
+            <span className="ml-auto text-[10px] tracking-[0.1em] uppercase font-body font-semibold text-[hsl(25,15%,45%)] group-hover:text-[hsl(25,30%,25%)] transition-colors">
+              Read <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
+            </span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] tracking-[0.12em] uppercase font-body font-semibold text-[hsl(25,15%,55%)]">
+              {story.tags[2] || ''}
             </span>
           </div>
         )}
       </div>
+
+      {/* Accent bottom line */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-0.5 origin-left"
+        style={{ background: story.color }}
+        initial={{ scaleX: 0 }}
+        whileHover={{ scaleX: 1 }}
+        transition={{ duration: 0.4 }}
+      />
     </motion.div>
   );
 
   if (isLive) return <Link to={story.href}>{inner}</Link>;
   return inner;
+};
+
+/* ── Timeline River ──────────────────────────── */
+
+const TimelineRiver = () => {
+  const riverRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: riverRef, offset: ['start end', 'end start'] });
+  const fillHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  const eraGroups = groupStoriesByEra(STORIES);
+
+  return (
+    <div ref={riverRef} className="relative max-w-5xl mx-auto">
+      {/* ── The River Line (desktop) ── */}
+      <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-[hsl(35,22%,82%)] z-0" />
+      <motion.div
+        className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 w-px z-0"
+        style={{
+          height: fillHeight,
+          background: 'linear-gradient(180deg, hsl(43,85%,55%), hsl(35,50%,45%))',
+        }}
+      />
+
+      {/* ── Mobile river line (left edge) ── */}
+      <div className="md:hidden absolute left-4 top-0 bottom-0 w-px bg-[hsl(35,22%,82%)]" />
+      <motion.div
+        className="md:hidden absolute left-4 top-0 w-px"
+        style={{
+          height: fillHeight,
+          background: 'linear-gradient(180deg, hsl(43,85%,55%), hsl(35,50%,45%))',
+        }}
+      />
+
+      {/* ── Era groups ── */}
+      {eraGroups.map((group) => (
+        <div key={group.label}>
+          {/* Era header */}
+          <div className="px-4 md:px-0">
+            <EraHeader label={group.label} range={group.range} />
+          </div>
+
+          {/* Stories in this era */}
+          {group.stories.map((story, i) => {
+            const side: 'left' | 'right' = i % 2 === 0 ? 'left' : 'right';
+
+            return (
+              <div key={story.id} className="relative">
+                {/* ── Desktop: 3-column grid ── */}
+                <div className="hidden md:grid grid-cols-[1fr_48px_1fr] gap-4 mb-10 items-start">
+                  {side === 'left' ? (
+                    <>
+                      <div className="pr-4">
+                        <TimelineCard story={story} side="left" />
+                      </div>
+                      <RiverNode color={story.color} era={story.era} />
+                      <div /> {/* empty right column */}
+                    </>
+                  ) : (
+                    <>
+                      <div /> {/* empty left column */}
+                      <RiverNode color={story.color} era={story.era} />
+                      <div className="pl-4">
+                        <TimelineCard story={story} side="right" />
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* ── Mobile: single column with left river ── */}
+                <div className="md:hidden flex gap-4 mb-8 pl-4">
+                  {/* Mobile node */}
+                  <div className="flex flex-col items-center pt-6 flex-shrink-0">
+                    <div className="w-4 h-4 rounded-full border-2 border-[hsl(35,20%,78%)] bg-[hsl(38,30%,94%)] flex items-center justify-center z-10">
+                      <div className="w-1.5 h-1.5 rounded-full" style={{ background: story.color }} />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0 pr-2">
+                    <p className="text-[9px] tracking-[0.15em] uppercase font-body font-semibold text-[hsl(25,15%,55%)] mb-2">
+                      {story.era}
+                    </p>
+                    <TimelineCard story={story} side="left" />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+
+      {/* ── River terminus ornament ── */}
+      <div className="hidden md:flex justify-center py-8">
+        <motion.div
+          className="w-3 h-3 rotate-45 border border-[hsl(35,25%,70%)]"
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{ opacity: 0.6, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        />
+      </div>
+    </div>
+  );
 };
 
 /* ── Grain texture overlay ───────────────────── */
@@ -445,10 +530,6 @@ const Home = () => {
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '30%']);
   const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
-  const storiesRef = useRef<HTMLDivElement>(null);
-
-  const featuredStory = STORIES[0];
-  const remainingStories = STORIES.slice(1);
 
   return (
     <div className="bg-[hsl(38,30%,94%)] min-h-screen text-[hsl(25,20%,20%)] relative">
@@ -518,42 +599,28 @@ const Home = () => {
       {/* ── Ornamental Divider ───────────────────── */}
       <OrnamentalDivider />
 
-      {/* ── Stories ──────────────────────────────── */}
-      <section id="stories" ref={storiesRef} className="relative py-16 md:py-24 px-6">
-        <TimelineSpine stories={STORIES} />
+      {/* ── Stories — Timeline River ─────────────── */}
+      <section id="stories" className="relative py-16 md:py-24 px-4 md:px-6">
+        {/* Section heading */}
+        <motion.div
+          className="max-w-2xl mx-auto text-center mb-8 md:mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <p className="text-[10px] tracking-[0.35em] uppercase text-[hsl(25,15%,55%)] mb-3 font-body font-semibold">
+            {STORIES.filter(s => s.status === 'live').length} Stories · Chronological
+          </p>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-[hsl(25,25%,20%)]">
+            Each essay has one visual mechanic.
+          </h2>
+          <p className="font-body text-lg text-[hsl(25,15%,45%)] mt-3">
+            Not a textbook. Not a summary. A designed experience that makes a historical moment visceral.
+          </p>
+        </motion.div>
 
-        <div className="max-w-5xl mx-auto lg:ml-32 xl:ml-auto xl:max-w-5xl">
-          {/* Section heading */}
-          <motion.div
-            className="mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <p className="text-[10px] tracking-[0.35em] uppercase text-[hsl(25,15%,55%)] mb-3 font-body font-semibold">
-              All Stories
-            </p>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-[hsl(25,25%,20%)]">
-              Each essay has one visual mechanic.
-            </h2>
-            <p className="font-body text-lg text-[hsl(25,15%,45%)] mt-3 max-w-xl">
-              Not a textbook. Not a summary. A designed experience that makes a historical moment visceral.
-            </p>
-          </motion.div>
-
-          {/* Featured card */}
-          <div className="mb-16">
-            <FeaturedCard story={featuredStory} />
-          </div>
-
-          {/* Remaining cards */}
-          <div className="flex flex-col gap-16 md:gap-20">
-            {remainingStories.map((story, i) => (
-              <AlternatingCard key={story.id} story={story} index={i} />
-            ))}
-          </div>
-        </div>
+        <TimelineRiver />
       </section>
 
       {/* ── Newsletter ───────────────────────────── */}

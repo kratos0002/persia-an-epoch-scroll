@@ -1,7 +1,7 @@
 import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { BranchingTree } from '@/components/visuals/BranchingTree';
-import { SiteFooter } from '@/components/site/SiteFooter';
+
 import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 const SAFFRON = '30 65% 45%';
@@ -40,6 +40,5 @@ export const BuddhismEpilogue = () => (
       </div>
     </div>
 
-    <SiteFooter />
   </section>
 );

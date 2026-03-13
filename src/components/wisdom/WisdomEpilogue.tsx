@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useScroll } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { KnowledgeGraph } from '@/components/visuals/KnowledgeGraph';
-import { SiteFooter } from '@/components/site/SiteFooter';
+
 import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 const WISDOM_TEAL = '170 40% 30%';
@@ -75,7 +75,6 @@ export const WisdomEpilogue = () => {
         </RevealOnScroll>
       </div>
 
-      <SiteFooter />
     </section>
   );
 };
