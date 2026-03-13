@@ -3,6 +3,7 @@ import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
+import { MobileNotice } from '@/components/site/MobileNotice';
 import { MongolIndiaProgressTimeline } from '@/components/mongol-india/MongolIndiaProgressTimeline';
 import { MongolIndiaSectionNav } from '@/components/mongol-india/MongolIndiaSectionNav';
 import { useMongolIndiaScrollSpy } from '@/hooks/useMongolIndiaScrollSpy';
@@ -24,6 +25,7 @@ const MongolIndia = () => {
 
   return (
     <div className="min-h-screen" style={{ background: 'hsl(220, 25%, 8%)' }}>
+      <MobileNotice />
       <SiteHeader />
       <MongolIndiaSectionNav activeSection={activeSection} />
       <MongolIndiaProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
