@@ -16,7 +16,7 @@ import IndiaStates from "./pages/IndiaStates.tsx";
 import MongolIndia from "./pages/MongolIndia.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
-// ResetPassword removed — using OTP-only auth
+import ShareRedirect from "./pages/ShareRedirect.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
