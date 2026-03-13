@@ -634,39 +634,6 @@ const Home = () => {
         <TimelineRiver stories={mergedStories} />
       </section>
 
-      {/* ── Newsletter ───────────────────────────── */}
-      <section className="relative py-24 px-6 bg-[hsl(35,25%,90%)] overflow-hidden">
-        {/* Subtle pattern */}
-        <div className="absolute inset-0 pattern-persian opacity-30" />
-        <motion.div
-          className="relative max-w-xl mx-auto text-center"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="font-display text-3xl font-bold text-[hsl(25,25%,20%)] mb-4">
-            Get new stories when they ship.
-          </h2>
-          <p className="font-body text-[hsl(25,15%,45%)] mb-8">
-            We publish slowly and intentionally. One email per new essay — no weekly spam.
-          </p>
-          <form onSubmit={e => e.preventDefault()} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="flex-1 px-4 py-3 rounded-lg border border-[hsl(25,15%,75%)] bg-white/60 font-body text-sm text-[hsl(25,20%,20%)] placeholder:text-[hsl(25,10%,60%)] focus:outline-none focus:ring-2 focus:ring-[hsl(25,30%,45%)]/30 focus:border-[hsl(25,30%,45%)]"
-            />
-            <button
-              type="submit"
-              className="px-6 py-3 bg-[hsl(25,30%,22%)] text-[hsl(38,30%,92%)] rounded-lg font-body text-sm font-semibold tracking-[0.1em] uppercase hover:bg-[hsl(25,30%,15%)] transition-colors"
-            >
-              Notify me
-            </button>
-          </form>
-        </motion.div>
-      </section>
-
       <SiteFooter variant="light" />
     </div>
   );
