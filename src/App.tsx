@@ -14,7 +14,7 @@ import Napoleon from "./pages/Napoleon.tsx";
 import Constantinople from "./pages/Constantinople.tsx";
 import IndiaStates from "./pages/IndiaStates.tsx";
 import Auth from "./pages/Auth.tsx";
-import ResetPassword from "./pages/ResetPassword.tsx";
+// ResetPassword removed — using OTP-only auth
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
