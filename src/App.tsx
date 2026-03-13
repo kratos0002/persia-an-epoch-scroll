@@ -40,7 +40,7 @@ const App = () => (
           <Route path="/mongol-india" element={<MongolIndia />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
-          {/* reset-password route removed — OTP auth only */}
+          <Route path="/share/:storyId" element={<ShareRedirect />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

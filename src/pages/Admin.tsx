@@ -188,14 +188,11 @@ const Admin = () => {
                 </motion.div>
               );
             })}
-          </div>
+              </div>
+            </>
+          )}
 
-          <div className="mt-8 p-4 rounded-lg bg-muted/50 border border-border">
-            <p className="text-xs font-body text-muted-foreground">
-              <strong className="text-foreground">How it works:</strong> Each essay has a default status set in the config file.
-              Changes here create database overrides that take priority. Resetting to the default status removes the override.
-            </p>
-          </div>
+          {tab === 'social' && <OgManager />}
         </motion.div>
       </div>
     </div>
