@@ -405,11 +405,11 @@ const TimelineCard = ({ story, side }: { story: StoryCard; side: 'left' | 'right
 
 /* ── Timeline River ──────────────────────────── */
 
-const TimelineRiver = () => {
+const TimelineRiver = ({ stories }: { stories: StoryCard[] }) => {
   const riverRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: riverRef, offset: ['start end', 'end start'] });
   const fillHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-  const eraGroups = groupStoriesByEra(STORIES);
+  const eraGroups = groupStoriesByEra(stories);
 
   return (
     <div ref={riverRef} className="relative max-w-5xl mx-auto">
