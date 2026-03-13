@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { usePageAnalytics } from '@/hooks/usePageAnalytics';
 import storyPersia from '@/assets/story-persia.jpg';
 import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
@@ -439,6 +440,7 @@ const GrainOverlay = () => (
 /* ── Main Page ───────────────────────────────── */
 
 const Home = () => {
+  usePageAnalytics('home');
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '30%']);

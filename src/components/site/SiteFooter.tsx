@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { SubscribeForm } from './SubscribeForm';
 
 export const SiteFooter = ({ variant = 'light' }: { variant?: 'light' | 'dark' }) => {
   const isLight = variant === 'light';
@@ -24,6 +25,13 @@ export const SiteFooter = ({ variant = 'light' }: { variant?: 'light' | 'dark' }
             </p>
           </div>
 
+          {/* Subscribe */}
+          <div className="space-y-3">
+            <p className="text-[10px] tracking-[0.25em] uppercase font-semibold opacity-50">Get notified</p>
+            <p className="font-body text-sm opacity-60 max-w-xs">New essay? We'll write. No spam, no schedule — just history.</p>
+            <SubscribeForm variant={isLight ? 'light' : 'dark'} />
+          </div>
+
           {/* Links */}
           <div className="flex gap-12">
             <div className="space-y-3">
@@ -38,6 +46,7 @@ export const SiteFooter = ({ variant = 'light' }: { variant?: 'light' | 'dark' }
               <p className="text-[10px] tracking-[0.25em] uppercase font-semibold opacity-50">Connect</p>
               <div className="space-y-2 font-body text-sm">
                 <a href="https://twitter.com/EpochLives" target="_blank" rel="noopener" className="block hover:opacity-70 transition-opacity">Twitter / X</a>
+                <Link to="/auth" className="block hover:opacity-70 transition-opacity">Sign in</Link>
               </div>
             </div>
           </div>
