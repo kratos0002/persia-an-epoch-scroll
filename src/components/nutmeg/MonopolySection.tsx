@@ -57,7 +57,7 @@ export const MonopolySection = () => {
               <div>
                 <p className="text-[9px] tracking-[0.2em] uppercase font-body mb-2" style={{ color: SMOKE }}>Before</p>
                 <p className="font-display text-5xl font-black" style={{ color: PARCHMENT }}>
-                  <AnimatedCounter target={15000} duration={2} />
+                  <AnimatedCounter end={15000} duration={2000} />
                 </p>
               </div>
               <motion.div

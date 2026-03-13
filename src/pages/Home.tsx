@@ -96,6 +96,12 @@ const STORIES: StoryCard[] = [
     image: storyNuclear, tags: ['Countdown Clock', 'Warhead Counter', '1945–2017'],
     status: 'live', href: '/nuclear', color: 'hsl(140, 70%, 45%)', era: '1945', sortYear: 1945,
   },
+  {
+    id: 'nutmeg', number: 11, title: 'The Spice That Built Empires', subtitle: 'The Nutmeg Wars',
+    hook: 'One seed drove centuries of colonial warfare — and ended with the Dutch trading Manhattan for a tiny volcanic island most people have never heard of.',
+    image: storyNutmeg, tags: ['Zoom Map', 'Spice Trade', '1512–1667'],
+    status: 'live', href: '/nutmeg', color: 'hsl(25, 75%, 45%)', era: '1512', sortYear: 1512,
+  },
 ];
 
 
