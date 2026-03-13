@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { SiteHeader } from '@/components/site/SiteHeader';
+import { OgManager } from '@/components/admin/OgManager';
 import { toast } from 'sonner';
 
 type StoryStatus = 'live' | 'coming-soon' | 'draft';
