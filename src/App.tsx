@@ -13,6 +13,8 @@ import Rebellion1857 from "./pages/Rebellion1857.tsx";
 import Napoleon from "./pages/Napoleon.tsx";
 import Constantinople from "./pages/Constantinople.tsx";
 import IndiaStates from "./pages/IndiaStates.tsx";
+import Auth from "./pages/Auth.tsx";
+import ResetPassword from "./pages/ResetPassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,8 @@ const App = () => (
           <Route path="/napoleon" element={<Napoleon />} />
           <Route path="/constantinople" element={<Constantinople />} />
           <Route path="/india-states" element={<IndiaStates />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

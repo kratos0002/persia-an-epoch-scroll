@@ -1,6 +1,7 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
 
 const NAV_LINKS = [
   { label: 'Stories', href: '/#stories' },
@@ -9,8 +10,25 @@ const NAV_LINKS = [
 
 export const SiteHeader = () => {
   const location = useLocation();
-  const isEssay = location.pathname !== '/' && location.pathname !== '/about';
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const isEssay = location.pathname !== '/' && location.pathname !== '/about' && location.pathname !== '/auth' && location.pathname !== '/reset-password';
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState<{ email?: string } | null>(null);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
 
   return (
     <header
@@ -43,6 +61,25 @@ export const SiteHeader = () => {
               {link.label}
             </Link>
           ))}
+          {user ? (
+            <button
+              onClick={handleSignOut}
+              className={`text-xs tracking-[0.2em] uppercase font-body font-semibold transition-colors hover:opacity-70 ${
+                isEssay ? 'text-foreground/60' : 'text-[hsl(25,15%,40%)]'
+              }`}
+            >
+              Sign out
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              className={`text-xs tracking-[0.2em] uppercase font-body font-semibold transition-colors hover:opacity-70 ${
+                isEssay ? 'text-foreground/60' : 'text-[hsl(25,15%,40%)]'
+              }`}
+            >
+              Sign in
+            </Link>
+          )}
         </nav>
 
         {/* Mobile hamburger */}
@@ -92,6 +129,26 @@ export const SiteHeader = () => {
                   {link.label}
                 </Link>
               ))}
+              {user ? (
+                <button
+                  onClick={() => { handleSignOut(); setMenuOpen(false); }}
+                  className={`block text-sm tracking-[0.15em] uppercase font-body font-semibold ${
+                    isEssay ? 'text-foreground/60' : 'text-[hsl(25,15%,40%)]'
+                  }`}
+                >
+                  Sign out
+                </button>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setMenuOpen(false)}
+                  className={`block text-sm tracking-[0.15em] uppercase font-body font-semibold ${
+                    isEssay ? 'text-foreground/60' : 'text-[hsl(25,15%,40%)]'
+                  }`}
+                >
+                  Sign in
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
