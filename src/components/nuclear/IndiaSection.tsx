@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { SeismicPulse } from '@/components/visuals/SeismicPulse';
 
-const BUNKER = 'hsl(200, 25%, 6%)';
 const SAFFRON = 'hsl(25, 80%, 50%)';
 const STEEL = 'hsl(200, 10%, 50%)';
 const LIGHT = 'hsl(0, 0%, 88%)';
@@ -45,6 +45,9 @@ export const IndiaSection = () => {
           </motion.p>
         </div>
 
+        {/* Seismic Pulse Visual */}
+        <SeismicPulse />
+
         <div className="max-w-xl mx-auto space-y-6">
           <RevealOnScroll>
             <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
@@ -60,7 +63,7 @@ export const IndiaSection = () => {
 
           <RevealOnScroll>
             <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              On May 18, 1974, India detonated a 12-kiloton plutonium device in the Thar Desert at Pokhran, Rajasthan. The official codename was "Smiling Buddha." The official designation was "peaceful nuclear explosion" — a euphemism so transparent that it fooled nobody. India used a Canadian-supplied research reactor and American heavy water, both provided under agreements for peaceful use only. The nonproliferation regime was exposed as a gentleman's agreement with no enforcement.
+              On May 18, 1974, India detonated a 12-kiloton plutonium device in the Thar Desert at Pokhran, Rajasthan. The official codename was "Smiling Buddha." The official designation was "peaceful nuclear explosion" — a euphemism so transparent that it fooled nobody.
             </p>
           </RevealOnScroll>
 
