@@ -1,5 +1,6 @@
 import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { SurveillanceGraphic } from '@/components/visuals/SurveillanceGraphic';
 
 const BURNT = 'hsl(15, 75%, 50%)';
 
@@ -25,7 +26,12 @@ export const PriceSection = () => (
         </p>
       </RevealOnScroll>
 
+      {/* Surveillance graphic */}
       <RevealOnScroll delay={0.2}>
+        <SurveillanceGraphic />
+      </RevealOnScroll>
+
+      <RevealOnScroll delay={0.3}>
         <div className="bg-card/60 backdrop-blur-lg rounded-lg border border-[hsl(15,75%,50%,0.1)] p-6 md:p-8 mb-8">
           <div className="space-y-4">
             {[
@@ -46,7 +52,7 @@ export const PriceSection = () => (
         </div>
       </RevealOnScroll>
 
-      <RevealOnScroll delay={0.35}>
+      <RevealOnScroll delay={0.4}>
         <p className="font-body text-lg md:text-xl leading-relaxed" style={{ color: 'hsl(40, 25%, 75%)' }}>
           Khalji died in 1316, likely poisoned by his own general, Malik Kafur.
           Within four years, his dynasty was overthrown. The totalitarian machine
