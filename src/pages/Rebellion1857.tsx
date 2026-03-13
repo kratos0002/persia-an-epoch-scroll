@@ -3,6 +3,7 @@ import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
+import { MobileNotice } from '@/components/site/MobileNotice';
 import { RebellionProgressTimeline } from '@/components/rebellion/RebellionProgressTimeline';
 import { RebellionSectionNav } from '@/components/rebellion/RebellionSectionNav';
 import { useRebellionScrollSpy } from '@/hooks/useRebellionScrollSpy';
@@ -25,6 +26,7 @@ const Rebellion1857 = () => {
 
   return (
     <div className="min-h-screen" style={{ background: 'hsl(220, 25%, 8%)' }}>
+      <MobileNotice />
       <SiteHeader />
       <RebellionSectionNav activeSection={activeSection} />
       <RebellionProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
