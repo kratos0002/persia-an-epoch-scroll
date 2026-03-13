@@ -14,6 +14,7 @@ import story1857 from '@/assets/story-1857.jpg';
 import storyNapoleon from '@/assets/story-napoleon.jpg';
 import storyConstantinople from '@/assets/story-constantinople.jpg';
 import storyIndia from '@/assets/story-india.jpg';
+import storyNuclear from '@/assets/story-nuclear.jpg';
 
 /* ── Types ───────────────────────────────────── */
 
@@ -86,6 +87,12 @@ const STORIES: StoryCard[] = [
     hook: 'They conquered Persia, Baghdad, China, Russia. Nothing stopped them. Then they turned toward India — and something held.',
     image: storyMongol, tags: ['Horizontal Scroll', 'Pan Map', '1221–1327'],
     status: 'live', href: '/mongol-india', color: 'hsl(15, 75%, 50%)', era: '1221', sortYear: 1221,
+  },
+  {
+    id: 'nuclear', number: 10, title: 'The Chain Reaction', subtitle: 'How Nine Countries Built the Bomb',
+    hook: 'The secret of the atom was unlocked once. Then it spread — through espionage, ambition, desperation, and pride — until nine nations held the power to end civilization.',
+    image: storyNuclear, tags: ['Countdown Clock', 'Warhead Counter', '1945–2017'],
+    status: 'live', href: '/nuclear', color: 'hsl(140, 70%, 45%)', era: '1945', sortYear: 1945,
   },
 ];
 
