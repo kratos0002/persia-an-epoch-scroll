@@ -440,6 +440,7 @@ const GrainOverlay = () => (
 /* ── Main Page ───────────────────────────────── */
 
 const Home = () => {
+  usePageAnalytics('home');
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '30%']);
