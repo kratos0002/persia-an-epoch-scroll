@@ -98,6 +98,14 @@ export const CITIES: CityMarker[] = [
     },
   },
   {
+    name: 'Qazvin',
+    lat: 36.27, lng: 50.00,
+    description: {
+      safavid: 'Second Safavid capital (1555–1598). Shah Tahmasp moved the court here from Tabriz, away from Ottoman raids.',
+      default: 'Historic city south of the Caspian Sea. Gateway between the Iranian plateau and the Alborz mountains.',
+    },
+  },
+  {
     name: 'Baghdad',
     lat: 33.31, lng: 44.37,
     description: {
@@ -142,6 +150,38 @@ export const CITIES: CityMarker[] = [
       achaemenid: 'Capital of the Egyptian satrapy after Cambyses\' conquest in 525 BCE.',
       alexander: 'Alexander was crowned Pharaoh here in 332 BCE.',
       default: 'Ancient Egyptian capital. Near the pyramids of Giza.',
+    },
+  },
+  {
+    name: 'Nishapur',
+    lat: 36.21, lng: 58.80,
+    description: {
+      islamic: 'Center of learning under the Seljuks. Omar Khayyam\'s observatory reformed the calendar here.',
+      default: 'Historic city of Khorasan — once rivaled Baghdad in scholarship.',
+    },
+  },
+  {
+    name: 'Tus',
+    lat: 36.60, lng: 59.18,
+    description: {
+      islamic: 'Ferdowsi spent 30 years here composing the Shahnameh\'s 50,000 couplets.',
+      default: 'Birthplace of Ferdowsi and al-Ghazali — twin giants of Persian civilization.',
+    },
+  },
+  {
+    name: 'Konya',
+    lat: 37.87, lng: 32.49,
+    description: {
+      islamic: 'Capital of the Seljuk Sultanate of Rum. Rumi settled here and founded the Mevlevi Order.',
+      default: 'City of the Whirling Dervishes — Rumi\'s home for over 40 years.',
+    },
+  },
+  {
+    name: 'Otrar',
+    lat: 42.85, lng: 68.30,
+    description: {
+      mongol: 'Governor Inalchuq beheaded Mongol envoys in 1219, triggering Genghis Khan\'s invasion of Persia.',
+      default: 'Silk Road trading city in modern-day Kazakhstan. The spark that ignited the Mongol conquest.',
     },
   },
   // Wisdom Ripple cities
@@ -392,6 +432,32 @@ export const EMPIRE_TERRITORIES: Record<EmpireId, [number, number][][]> = {
       [38, 44.5], [38.5, 44.5], [39, 44.5], [39.5, 44.8],
     ],
   ],
+
+  buddhism: [
+    [
+      [35, 70],    // Northwest (Hindu Kush)
+      [34, 72],    // Gandhara region
+      [32, 74],    // Northwest frontier
+      [30, 73],    // Indus valley
+      [27, 69],    // Sindh coast
+      [24, 67],    // Gujarat coast
+      [21, 72],    // Western coast
+      [18, 73],    // Maharashtra
+      [15, 74],    // Karnataka (southern extent)
+      [13, 78],    // Southern boundary
+      [15, 80],    // Eastern Deccan
+      [18, 83],    // Odisha (Kalinga)
+      [21, 86],    // Bengal
+      [24, 88],    // Northeast
+      [27, 90],    // Assam foothills
+      [28, 88],    // North Bengal
+      [29, 85],    // Nepal foothills
+      [30, 82],    // Gangetic plain north
+      [31, 78],    // Upper Ganges
+      [33, 75],    // Punjab
+      [35, 72],    // Back to northwest
+    ],
+  ],
 };
 
 /* ─────────────────────── Visual styles per era ─────────────────── */
@@ -406,6 +472,7 @@ export const EMPIRE_STYLES: Record<EmpireId, { color: string; fillColor: string;
   mongol:     { color: '#EA580C', fillColor: '#C2410C', fillOpacity: 0.22, glowColor: 'rgba(234,88,12,0.5)' },
   safavid:    { color: '#2563EB', fillColor: '#1D4ED8', fillOpacity: 0.22, glowColor: 'rgba(37,99,235,0.5)' },
   modern:     { color: '#6366F1', fillColor: '#4F46E5', fillOpacity: 0.18, glowColor: 'rgba(99,102,241,0.5)' },
+  buddhism:   { color: '#C47F17', fillColor: '#C47F17', fillOpacity: 0.18, glowColor: 'rgba(196,127,23,0.5)' },
 };
 
 /* ─────────────────────── Default centers ─────────────────────── */
@@ -420,4 +487,5 @@ export const EMPIRE_CENTERS: Record<EmpireId, { center: [number, number]; zoom: 
   mongol:     { center: [34, 50], zoom: 4.2 },
   safavid:    { center: [33, 50], zoom: 4.5 },
   modern:     { center: [32, 53], zoom: 5.2 },
+  buddhism:   { center: [25.5, 84], zoom: 7 },
 };
