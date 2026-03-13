@@ -16,12 +16,14 @@ import { STRATA } from '@/components/visuals/constantinopleData';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
+import { MobileNotice } from '@/components/site/MobileNotice';
 
 const Constantinople = () => {
   const { activeSection, globalProgress } = useConstantinopleScrollSpy();
 
   return (
     <div className="relative" style={{ background: 'hsl(25, 15%, 10%)' }}>
+      <MobileNotice />
       <ConstantinopleSectionNav activeSection={activeSection} />
       <DepthGauge activeSection={activeSection} globalProgress={globalProgress} />
       <SurfaceSection />

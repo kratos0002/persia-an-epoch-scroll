@@ -23,6 +23,7 @@ const Nuclear = () => {
 
   return (
     <div className="relative" style={{ background: 'hsl(200, 25%, 6%)' }}>
+      <MobileNotice />
       <NuclearSectionNav activeSection={activeSection} />
       <NuclearProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <NuclearHero />
