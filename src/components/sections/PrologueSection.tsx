@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import { ERAS } from '@/data/eras';
 
 const EraMarker = ({
@@ -10,7 +10,7 @@ const EraMarker = ({
 }: {
   era: (typeof ERAS)[number];
   index: number;
-  progress: ReturnType<typeof useTransform>;
+  progress: MotionValue<number>;
   total: number;
 }) => {
   const threshold = index / total;
