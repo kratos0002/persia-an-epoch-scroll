@@ -324,7 +324,7 @@ export const ParthianCampaignGraphic = ({ activeStep }: { activeStep: number }) 
       dragging: false,
       keyboard: false,
       boxZoom: false,
-      tap: false,
+      
     });
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
