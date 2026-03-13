@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { usePageAnalytics } from '@/hooks/usePageAnalytics';
+import { useStoryOverrides } from '@/hooks/useStoryOverrides';
 import storyPersia from '@/assets/story-persia.jpg';
 import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
@@ -24,7 +25,7 @@ interface StoryCard {
   hook: string;
   image: string;
   tags: string[];
-  status: 'live' | 'coming-soon';
+  status: 'live' | 'coming-soon' | 'draft';
   href: string;
   color: string;
   era: string;
@@ -404,11 +405,11 @@ const TimelineCard = ({ story, side }: { story: StoryCard; side: 'left' | 'right
 
 /* ── Timeline River ──────────────────────────── */
 
-const TimelineRiver = () => {
+const TimelineRiver = ({ stories }: { stories: StoryCard[] }) => {
   const riverRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: riverRef, offset: ['start end', 'end start'] });
   const fillHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-  const eraGroups = groupStoriesByEra(STORIES);
+  const eraGroups = groupStoriesByEra(stories);
 
   return (
     <div ref={riverRef} className="relative max-w-5xl mx-auto">
@@ -519,10 +520,20 @@ const GrainOverlay = () => (
 
 const Home = () => {
   usePageAnalytics('home');
+  const { overrides, loading: overridesLoading } = useStoryOverrides();
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '30%']);
   const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
+
+  // Merge DB overrides with config defaults, filter out drafts
+  const mergedStories = STORIES.map(s => ({
+    ...s,
+    status: (overrides[s.id] || s.status) as StoryCard['status'],
+    href: (overrides[s.id] === 'coming-soon' || (!overrides[s.id] && s.status === 'coming-soon')) ? '#' : s.href,
+  })).filter(s => s.status !== 'draft');
+
+  const liveCount = mergedStories.filter(s => s.status === 'live').length;
 
   return (
     <div className="bg-[hsl(38,30%,94%)] min-h-screen text-[hsl(25,20%,20%)] relative">
@@ -603,7 +614,7 @@ const Home = () => {
           transition={{ duration: 0.7 }}
         >
           <p className="text-[10px] tracking-[0.35em] uppercase text-[hsl(25,15%,55%)] mb-3 font-body font-semibold">
-            {STORIES.filter(s => s.status === 'live').length} Stories · Chronological
+            {liveCount} Stories · Chronological
           </p>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-[hsl(25,25%,20%)]">
             Each essay has one visual mechanic.
@@ -613,7 +624,7 @@ const Home = () => {
           </p>
         </motion.div>
 
-        <TimelineRiver />
+        <TimelineRiver stories={mergedStories} />
       </section>
 
       {/* ── Newsletter ───────────────────────────── */}
