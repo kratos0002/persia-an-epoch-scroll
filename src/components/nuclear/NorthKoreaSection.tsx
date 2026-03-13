@@ -87,7 +87,7 @@ export const NorthKoreaSection = () => {
                         className="h-full rounded-full"
                         style={{ background: `linear-gradient(90deg, ${HERMIT}, ${URANIUM})` }}
                         initial={{ width: 0 }}
-                        whileInView={{ width: `${Math.max(item => item.pct, 2)}%` }}
+                        whileInView={{ width: `${Math.max(test.pct, 2)}%` }}
                         viewport={{ once: true }}
                         transition={{ duration: 1, delay: 0.15 * i }}
                       />
