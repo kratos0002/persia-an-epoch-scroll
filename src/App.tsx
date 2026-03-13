@@ -14,7 +14,7 @@ import Napoleon from "./pages/Napoleon.tsx";
 import Constantinople from "./pages/Constantinople.tsx";
 import IndiaStates from "./pages/IndiaStates.tsx";
 import Auth from "./pages/Auth.tsx";
-import ResetPassword from "./pages/ResetPassword.tsx";
+// ResetPassword removed — using OTP-only auth
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -36,7 +36,7 @@ const App = () => (
           <Route path="/constantinople" element={<Constantinople />} />
           <Route path="/india-states" element={<IndiaStates />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          {/* reset-password route removed — OTP auth only */}
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
