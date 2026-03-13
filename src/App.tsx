@@ -39,6 +39,7 @@ const App = () => (
           <Route path="/india-states" element={<IndiaStates />} />
           <Route path="/mongol-india" element={<MongolIndia />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/admin" element={<Admin />} />
           {/* reset-password route removed — OTP auth only */}
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
