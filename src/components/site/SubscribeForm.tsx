@@ -12,7 +12,8 @@ export const SubscribeForm = ({ variant = 'dark' }: { variant?: 'dark' | 'light'
     if (!email.trim()) return;
 
     setStatus('loading');
-    const { error } = await supabase.from('subscribers').insert({ email: email.trim().toLowerCase() });
+    const trimmedEmail = email.trim().toLowerCase();
+    const { error } = await supabase.from('subscribers').insert({ email: trimmedEmail });
 
     if (error) {
       if (error.code === '23505') {
@@ -23,6 +24,10 @@ export const SubscribeForm = ({ variant = 'dark' }: { variant?: 'dark' | 'light'
       }
     } else {
       setStatus('success');
+      // Fire-and-forget welcome email
+      supabase.functions.invoke('send-transactional-email', {
+        body: { template: 'subscriber-welcome', data: { email: trimmedEmail } },
+      }).catch(() => {});
     }
   };
 
