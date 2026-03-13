@@ -8,6 +8,7 @@ import {
   Container,
   Head,
   Heading,
+  Hr,
   Html,
   Link,
   Preview,
@@ -29,30 +30,23 @@ export const EmailChangeEmail = ({
 }: EmailChangeEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Confirm your email change for {siteName}</Preview>
+    <Preview>Confirm your email change for Epoch Lives</Preview>
     <Body style={main}>
       <Container style={container}>
+        <Text style={brandMark}>EPOCH LIVES</Text>
+        <Hr style={divider} />
         <Heading style={h1}>Confirm your email change</Heading>
         <Text style={text}>
-          You requested to change your email address for {siteName} from{' '}
-          <Link href={`mailto:${email}`} style={link}>
-            {email}
-          </Link>{' '}
-          to{' '}
-          <Link href={`mailto:${newEmail}`} style={link}>
-            {newEmail}
-          </Link>
-          .
-        </Text>
-        <Text style={text}>
-          Click the button below to confirm this change:
+          You requested to change your email address from{' '}
+          <Link href={`mailto:${email}`} style={link}>{email}</Link>
+          {' '}to{' '}
+          <Link href={`mailto:${newEmail}`} style={link}>{newEmail}</Link>.
         </Text>
         <Button style={button} href={confirmationUrl}>
           Confirm Email Change
         </Button>
         <Text style={footer}>
-          If you didn't request this change, please secure your account
-          immediately.
+          If you didn't request this change, please secure your account immediately.
         </Text>
       </Container>
     </Body>
@@ -61,27 +55,12 @@ export const EmailChangeEmail = ({
 
 export default EmailChangeEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
-}
-const link = { color: 'inherit', textDecoration: 'underline' }
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+const main = { backgroundColor: '#ffffff', fontFamily: "'Georgia', 'Cambria', 'Times New Roman', serif" }
+const container = { padding: '40px 32px', maxWidth: '480px', margin: '0 auto' }
+const brandMark = { fontSize: '11px', fontWeight: 700 as const, letterSpacing: '0.2em', color: '#D4A933', margin: '0 0 16px' }
+const divider = { borderColor: '#E8E0D0', margin: '0 0 32px' }
+const h1 = { fontSize: '24px', fontWeight: 'bold' as const, color: '#1A1D24', margin: '0 0 20px', fontFamily: "'Georgia', 'Cambria', serif" }
+const text = { fontSize: '15px', color: '#4A4E57', lineHeight: '1.6', margin: '0 0 20px' }
+const link = { color: '#D4A933', textDecoration: 'underline' }
+const button = { backgroundColor: '#D4A933', color: '#0F1219', fontSize: '14px', fontWeight: 600 as const, borderRadius: '8px', padding: '14px 28px', textDecoration: 'none', letterSpacing: '0.04em' }
+const footer = { fontSize: '12px', color: '#9CA3AF', margin: '32px 0 0', lineHeight: '1.5' }
