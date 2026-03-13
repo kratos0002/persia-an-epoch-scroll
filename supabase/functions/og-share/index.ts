@@ -14,7 +14,7 @@ const SITE_TITLE = "Epoch Lives — Turning points in history, felt";
 const SITE_DESC =
   "Visual essays on the turning points of civilizations. Immersive scrollytelling with maps, data, and primary sources.";
 const SITE_IMAGE =
-  "https://pastlives.site/images/alexander-entry-babylon-lebrun.png";
+  "https://pastlives.site/images/liberty-delacroix.jpg";
 
 const STORY_DEFAULTS: Record<string, { title: string; desc: string }> = {
   persia: { title: "The Immortal Empire — 2,500 Years of Persia", desc: "From Cyrus the Great to the Islamic Revolution. The empire that was conquered, fractured, and reborn — again and again." },
