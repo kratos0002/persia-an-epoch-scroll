@@ -11,6 +11,7 @@ import {
   Hr,
   Html,
   Preview,
+  Section,
   Text,
 } from 'npm:@react-email/components@0.0.22'
 
@@ -24,22 +25,36 @@ export const MagicLinkEmail = ({
   confirmationUrl,
 }: MagicLinkEmailProps) => (
   <Html lang="en" dir="ltr">
-    <Head />
+    <Head>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap');
+      `}</style>
+    </Head>
     <Preview>Your sign-in link for Epoch Lives</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Text style={brandMark}>EPOCH LIVES</Text>
-        <Hr style={divider} />
-        <Heading style={h1}>Your sign-in link</Heading>
-        <Text style={text}>
-          Click the button below to sign in to Epoch Lives. This link will expire shortly.
-        </Text>
-        <Button style={button} href={confirmationUrl}>
-          Sign In
-        </Button>
-        <Text style={footer}>
-          If you didn't request this link, you can safely ignore this email.
-        </Text>
+    <Body style={body}>
+      <Container style={outerContainer}>
+        <Section style={goldBar} />
+        <Container style={innerContainer}>
+          <Text style={brandMark}>✦ &nbsp; EPOCH LIVES &nbsp; ✦</Text>
+          <Hr style={goldDivider} />
+
+          <Heading style={h1}>Your sign-in link</Heading>
+          <Text style={textStyle}>
+            Click below to sign in to Epoch Lives. This link will expire shortly — like empires do.
+          </Text>
+
+          <Section style={ctaSection}>
+            <Button style={ctaButton} href={confirmationUrl}>
+              Sign In
+            </Button>
+          </Section>
+
+          <Hr style={subtleDivider} />
+          <Text style={footerText}>
+            If you didn't request this link, you can safely ignore this email.
+          </Text>
+        </Container>
+        <Section style={goldBar} />
       </Container>
     </Body>
   </Html>
@@ -47,11 +62,15 @@ export const MagicLinkEmail = ({
 
 export default MagicLinkEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: "'Georgia', 'Cambria', 'Times New Roman', serif" }
-const container = { padding: '40px 32px', maxWidth: '480px', margin: '0 auto' }
-const brandMark = { fontSize: '11px', fontWeight: 700 as const, letterSpacing: '0.2em', color: '#D4A933', margin: '0 0 16px' }
-const divider = { borderColor: '#E8E0D0', margin: '0 0 32px' }
-const h1 = { fontSize: '24px', fontWeight: 'bold' as const, color: '#1A1D24', margin: '0 0 20px', fontFamily: "'Georgia', 'Cambria', serif" }
-const text = { fontSize: '15px', color: '#4A4E57', lineHeight: '1.6', margin: '0 0 20px' }
-const button = { backgroundColor: '#D4A933', color: '#0F1219', fontSize: '14px', fontWeight: 600 as const, borderRadius: '8px', padding: '14px 28px', textDecoration: 'none', letterSpacing: '0.04em' }
-const footer = { fontSize: '12px', color: '#9CA3AF', margin: '32px 0 0', lineHeight: '1.5' }
+const body = { backgroundColor: '#F5F0E8', fontFamily: "'Cormorant Garamond', Georgia, 'Times New Roman', serif", margin: '0', padding: '40px 0' }
+const outerContainer = { maxWidth: '520px', margin: '0 auto', backgroundColor: '#ffffff', borderRadius: '2px', overflow: 'hidden' as const, border: '1px solid #E8DFD0' }
+const goldBar = { backgroundColor: '#D4A933', height: '4px', width: '100%' }
+const innerContainer = { padding: '48px 40px 40px' }
+const brandMark = { fontSize: '13px', fontWeight: 700 as const, letterSpacing: '0.25em', color: '#D4A933', textAlign: 'center' as const, margin: '0 0 20px' }
+const goldDivider = { borderColor: '#D4A933', borderWidth: '1px', margin: '0 0 32px', opacity: 0.3 }
+const h1 = { fontSize: '28px', fontWeight: 600 as const, color: '#1A1510', margin: '0 0 24px', fontFamily: "'Cormorant Garamond', Georgia, serif", lineHeight: '1.2' }
+const textStyle = { fontSize: '16px', color: '#4A4035', lineHeight: '1.7', margin: '0 0 16px' }
+const ctaSection = { textAlign: 'center' as const, margin: '32px 0' }
+const ctaButton = { backgroundColor: '#1A1510', color: '#D4A933', fontSize: '13px', fontWeight: 600 as const, borderRadius: '4px', padding: '16px 40px', textDecoration: 'none', letterSpacing: '0.12em', textTransform: 'uppercase' as const }
+const subtleDivider = { borderColor: '#E8DFD0', margin: '32px 0 24px' }
+const footerText = { fontSize: '13px', color: '#9A8E7A', lineHeight: '1.5', margin: '0' }
