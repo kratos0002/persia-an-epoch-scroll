@@ -520,10 +520,20 @@ const GrainOverlay = () => (
 
 const Home = () => {
   usePageAnalytics('home');
+  const { overrides, loading: overridesLoading } = useStoryOverrides();
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroTextY = useTransform(heroScroll, [0, 1], ['0%', '30%']);
   const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
+
+  // Merge DB overrides with config defaults, filter out drafts
+  const mergedStories = STORIES.map(s => ({
+    ...s,
+    status: (overrides[s.id] || s.status) as StoryCard['status'],
+    href: (overrides[s.id] === 'coming-soon' || (!overrides[s.id] && s.status === 'coming-soon')) ? '#' : s.href,
+  })).filter(s => s.status !== 'draft');
+
+  const liveCount = mergedStories.filter(s => s.status === 'live').length;
 
   return (
     <div className="bg-[hsl(38,30%,94%)] min-h-screen text-[hsl(25,20%,20%)] relative">
@@ -604,7 +614,7 @@ const Home = () => {
           transition={{ duration: 0.7 }}
         >
           <p className="text-[10px] tracking-[0.35em] uppercase text-[hsl(25,15%,55%)] mb-3 font-body font-semibold">
-            {STORIES.filter(s => s.status === 'live').length} Stories · Chronological
+            {liveCount} Stories · Chronological
           </p>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-[hsl(25,25%,20%)]">
             Each essay has one visual mechanic.
@@ -614,7 +624,7 @@ const Home = () => {
           </p>
         </motion.div>
 
-        <TimelineRiver />
+        <TimelineRiver stories={mergedStories} />
       </section>
 
       {/* ── Newsletter ───────────────────────────── */}
