@@ -16,7 +16,6 @@ const SITE_DESC =
 const SITE_IMAGE =
   "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a1d18bd5-5022-4f58-bfaa-ddf86f5cf162/id-preview-d28c64ec--379849b8-e25a-40db-9b86-56b603dda73d.lovable.app-1773255702732.png";
 
-// Built-in defaults per essay — used when DB has no entry
 const STORY_DEFAULTS: Record<string, { title: string; desc: string }> = {
   persia: { title: "The Immortal Empire — 2,500 Years of Persia", desc: "From Cyrus the Great to the Islamic Revolution. The empire that was conquered, fractured, and reborn — again and again." },
   wisdom: { title: "The Library That Lit the World", desc: "Baghdad's House of Wisdom sparked a golden age that shaped modern science, mathematics, and medicine. Then the Mongols came." },
@@ -42,7 +41,15 @@ Deno.serve(async (req: Request) => {
   const targetPath = storyId ? `/${storyId}` : "/";
   const targetUrl = `${SITE_URL}${targetPath}`;
 
-  // Start with site defaults
+  // For humans: just 302 redirect (bypasses CSP sandbox)
+  if (!isCrawler) {
+    return new Response(null, {
+      status: 302,
+      headers: { ...corsHeaders, Location: targetUrl },
+    });
+  }
+
+  // For crawlers: serve OG meta tags
   let ogTitle = SITE_TITLE;
   let ogDesc = SITE_DESC;
   let ogImage = SITE_IMAGE;
@@ -50,15 +57,12 @@ Deno.serve(async (req: Request) => {
 
   if (storyId) {
     ogUrl = `${SITE_URL}/${storyId}`;
-
-    // Apply built-in defaults first
     const defaults = STORY_DEFAULTS[storyId];
     if (defaults) {
       ogTitle = defaults.title;
       ogDesc = defaults.desc;
     }
 
-    // Then try DB override
     try {
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL")!,
@@ -83,24 +87,24 @@ Deno.serve(async (req: Request) => {
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>${escapeHtml(ogTitle)}</title>
-  <meta name="description" content="${escapeHtml(ogDesc)}" />
+  <title>${esc(ogTitle)}</title>
+  <meta name="description" content="${esc(ogDesc)}" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${escapeHtml(ogUrl)}" />
-  <meta property="og:title" content="${escapeHtml(ogTitle)}" />
-  <meta property="og:description" content="${escapeHtml(ogDesc)}" />
-  <meta property="og:image" content="${escapeHtml(ogImage)}" />
+  <meta property="og:url" content="${esc(ogUrl)}" />
+  <meta property="og:title" content="${esc(ogTitle)}" />
+  <meta property="og:description" content="${esc(ogDesc)}" />
+  <meta property="og:image" content="${esc(ogImage)}" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@EpochLives" />
-  <meta name="twitter:title" content="${escapeHtml(ogTitle)}" />
-  <meta name="twitter:description" content="${escapeHtml(ogDesc)}" />
-  <meta name="twitter:image" content="${escapeHtml(ogImage)}" />
-  ${!isCrawler ? `<meta http-equiv="refresh" content="0;url=${escapeHtml(targetUrl)}" />` : ""}
+  <meta name="twitter:title" content="${esc(ogTitle)}" />
+  <meta name="twitter:description" content="${esc(ogDesc)}" />
+  <meta name="twitter:image" content="${esc(ogImage)}" />
 </head>
 <body>
-  ${!isCrawler ? `<p>Redirecting to <a href="${escapeHtml(targetUrl)}">${escapeHtml(ogTitle)}</a>…</p>` : `<h1>${escapeHtml(ogTitle)}</h1><p>${escapeHtml(ogDesc)}</p>`}
+  <h1>${esc(ogTitle)}</h1>
+  <p>${esc(ogDesc)}</p>
 </body>
 </html>`;
 
@@ -114,11 +118,6 @@ Deno.serve(async (req: Request) => {
   });
 });
 
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+function esc(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
