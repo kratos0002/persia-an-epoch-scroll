@@ -14,6 +14,7 @@ import story1857 from '@/assets/story-1857.jpg';
 import storyNapoleon from '@/assets/story-napoleon.jpg';
 import storyConstantinople from '@/assets/story-constantinople.jpg';
 import storyIndia from '@/assets/story-india.jpg';
+import storyNuclear from '@/assets/story-nuclear.jpg';
 
 /* ── Types ───────────────────────────────────── */
 
