@@ -45,7 +45,7 @@ export const SiteFooter = ({ variant = 'light' }: { variant?: 'light' | 'dark' }
             <div className="space-y-3">
               <p className="text-[10px] tracking-[0.25em] uppercase font-semibold opacity-50">Connect</p>
               <div className="space-y-2 font-body text-sm">
-                <a href="https://twitter.com/EpochLives" target="_blank" rel="noopener" className="block hover:opacity-70 transition-opacity">Twitter / X</a>
+                <a href="https://x.com/watimreading" target="_blank" rel="noopener" className="block hover:opacity-70 transition-opacity">@watimreading</a>
                 <Link to="/auth" className="block hover:opacity-70 transition-opacity">Sign in</Link>
               </div>
             </div>
