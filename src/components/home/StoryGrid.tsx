@@ -159,7 +159,7 @@ const GridCard = ({ story, index }: { story: StoryCard; index: number }) => {
       whileHover={isLive ? { y: -4, boxShadow: '0 12px 40px hsla(25, 20%, 20%, 0.1)' } : {}}
     >
       {/* Image */}
-      <div className="relative w-full h-44 md:h-52 overflow-hidden">
+      <div className="relative w-full h-56 md:h-64 overflow-hidden">
         <motion.img
           src={story.image}
           alt={story.title}
