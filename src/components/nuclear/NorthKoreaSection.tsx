@@ -1,117 +1,61 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { StickyScroll } from '@/components/scroll/StickyScroll';
+import { SeismographChart } from '@/components/visuals/SeismographChart';
 
-const BUNKER = 'hsl(200, 25%, 6%)';
-const HERMIT = 'hsl(0, 0%, 60%)';
-const URANIUM = 'hsl(45, 80%, 55%)';
+const HERMIT = 'hsl(45, 70%, 50%)';
 const STEEL = 'hsl(200, 10%, 50%)';
 const LIGHT = 'hsl(0, 0%, 88%)';
+const BUNKER = 'hsl(200, 25%, 6%)';
+
+const steps = [
+  <div key="dynasty">
+    <p className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-4" style={{ color: HERMIT }}>
+      Nation Eight · October 9, 2006
+    </p>
+    <h2 className="font-display text-3xl md:text-4xl font-black mb-4" style={{ color: LIGHT }}>
+      The Hermit's <span style={{ color: HERMIT }}>Bomb</span>
+    </h2>
+    <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
+      North Korea's nuclear program is not about ideology. It is about dynasty survival. The Kim family — Kim Il-sung, Kim Jong-il, Kim Jong-un — watched what happened to leaders who gave up their weapons programs. Gaddafi surrendered his nuclear ambitions in 2003 and was killed by his own people in 2011. Saddam had no weapons of mass destruction and was hanged. The lesson was clear: nuclear weapons are life insurance for dictators.
+    </p>
+  </div>,
+
+  <div key="withdrawal">
+    <p className="font-body text-base leading-relaxed mb-4" style={{ color: STEEL }}>
+      North Korea joined the Nuclear Non-Proliferation Treaty in 1985, then violated it systematically for over a decade. In 2003, it became the only state ever to withdraw from the NPT. The international framework for preventing proliferation had a hole in it large enough to drive a nuclear warhead through.
+    </p>
+    <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
+      The first test, in October 2006, was almost a failure — a yield of less than one kiloton, when the design had aimed for several. Seismographs around the world barely registered it. But it was enough.
+    </p>
+  </div>,
+
+  <div key="escalation">
+    <p className="font-body text-base leading-relaxed mb-4" style={{ color: STEEL }}>
+      The tests escalated: 2009, 2013, twice in 2016. Each was larger, more confident. The yield climbed from sub-kiloton to an estimated 20 kilotons. North Korea was learning — and each test taught it more.
+    </p>
+    <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
+      A.Q. Khan's network had provided the starting technology — centrifuge designs purchased from Pakistan's proliferation bazaar. But the weapons engineering was increasingly homegrown.
+    </p>
+  </div>,
+
+  <div key="thermonuclear">
+    <p className="font-body text-base leading-relaxed mb-4" style={{ color: STEEL }}>
+      Then came September 3, 2017. The sixth test registered a magnitude 6.3 on seismographs worldwide — an estimated yield of 200-250 kilotons. It was almost certainly a thermonuclear device. North Korea had the hydrogen bomb.
+    </p>
+    <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
+      The seismic spike was so large that it triggered a secondary earthquake as the mountain above the test chamber partially collapsed. The world's poorest nuclear state had built its most powerful weapon.
+    </p>
+  </div>,
+];
 
 export const NorthKoreaSection = () => {
   return (
-    <section id="north-korea" className="relative min-h-[120vh] py-32 px-6" style={{ background: 'hsl(200, 22%, 7%)' }}>
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-20">
-          <motion.p
-            className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-6"
-            style={{ color: HERMIT }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            Nation Eight · October 9, 2006
-          </motion.p>
-
-          <motion.h2
-            className="font-display text-5xl md:text-7xl font-black mb-4"
-            style={{ color: LIGHT }}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            The Hermit's <span style={{ color: URANIUM }}>Bomb</span>
-          </motion.h2>
-
-          <motion.p
-            className="font-display text-2xl md:text-3xl font-bold"
-            style={{ color: STEEL }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-          >
-            North Korea
-          </motion.p>
-        </div>
-
-        <div className="max-w-xl mx-auto space-y-6">
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              North Korea's nuclear program is the story of a dynasty's survival. Kim Il-sung started it in the 1960s with Soviet help. Kim Jong-il accelerated it in the 1990s as the country's economy collapsed. Kim Jong-un completed it, turning an impoverished state of 26 million into a nuclear power that can threaten the continental United States.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              The path ran through plutonium first. North Korea built a graphite-moderated reactor at Yongbyon — a design chosen specifically because it doesn't require enriched uranium fuel but produces plutonium as a byproduct. A 1994 framework agreement with the United States temporarily froze the program. North Korea cheated. It also pursued uranium enrichment secretly, using centrifuge technology acquired through A.Q. Khan's network.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              In 2003, North Korea withdrew from the Nuclear Non-Proliferation Treaty — the first nation ever to do so. Three years later, on October 9, 2006, it conducted its first nuclear test. The yield was less than a kiloton — a partial fizzle by weapons standards. The world condemned it. North Korea tested again. And again.
-            </p>
-          </RevealOnScroll>
-
-          {/* Test progression */}
-          <RevealOnScroll>
-            <div className="my-16 px-6 py-8 rounded-lg" style={{ background: 'hsl(200, 15%, 10%)', border: '1px solid hsl(200, 15%, 18%)' }}>
-              <p className="text-[9px] tracking-[0.3em] uppercase font-body mb-6 text-center" style={{ color: HERMIT }}>
-                North Korean nuclear tests — escalating yields
-              </p>
-              <div className="space-y-4">
-                {[
-                  { year: '2006', yield: '~1 kt', pct: 1 },
-                  { year: '2009', yield: '~5 kt', pct: 3 },
-                  { year: '2013', yield: '~10 kt', pct: 5 },
-                  { year: '2016 (Jan)', yield: '~10 kt', pct: 5 },
-                  { year: '2016 (Sep)', yield: '~25 kt', pct: 12 },
-                  { year: '2017', yield: '~250 kt', pct: 100 },
-                ].map((test, i) => (
-                  <div key={test.year} className="flex items-center gap-3">
-                    <span className="text-xs font-body w-24 text-right shrink-0" style={{ color: STEEL }}>{test.year}</span>
-                    <div className="flex-1 h-2 rounded-full" style={{ background: 'hsl(200, 10%, 15%)' }}>
-                      <motion.div
-                        className="h-full rounded-full"
-                        style={{ background: `linear-gradient(90deg, ${HERMIT}, ${URANIUM})` }}
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${Math.max(test.pct, 2)}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.15 * i }}
-                      />
-                    </div>
-                    <span className="text-xs font-body w-16 shrink-0" style={{ color: LIGHT }}>{test.yield}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              The sixth and final test in September 2017 registered a magnitude-6.3 earthquake. Intelligence agencies estimated the yield at 250 kilotons — a thermonuclear weapon, roughly seventeen times Hiroshima. North Korea claimed it was a hydrogen bomb small enough to fit on a missile. No one could confirm the claim, but no one could dismiss it either.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll>
-            <p className="font-body text-lg leading-relaxed" style={{ color: STEEL }}>
-              The Kim dynasty's logic was always clear: Saddam Hussein didn't have nuclear weapons and was overthrown. Muammar Gaddafi gave up his nuclear program and was overthrown. The Kim family saw what happened to leaders who disarmed — and chose not to.
-            </p>
-          </RevealOnScroll>
-        </div>
-      </div>
+    <section id="north-korea" style={{ background: BUNKER }}>
+      <StickyScroll
+        graphic={(activeStep) => <SeismographChart activeStep={activeStep} />}
+        steps={steps}
+        className="min-h-[300vh]"
+      />
     </section>
   );
 };
