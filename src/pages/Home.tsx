@@ -25,7 +25,7 @@ interface StoryCard {
   hook: string;
   image: string;
   tags: string[];
-  status: 'live' | 'coming-soon';
+  status: 'live' | 'coming-soon' | 'draft';
   href: string;
   color: string;
   era: string;
