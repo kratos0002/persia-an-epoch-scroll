@@ -14,6 +14,7 @@ import { NapoleonSectionNav } from '@/components/napoleon/NapoleonSectionNav';
 import { useNapoleonScrollSpy } from '@/hooks/useNapoleonScrollSpy';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { EditionBadge } from '@/components/scroll/EditionBadge';
 
 const Napoleon = () => {
   const { activeSection, globalProgress } = useNapoleonScrollSpy();
@@ -23,6 +24,7 @@ const Napoleon = () => {
       <NapoleonSectionNav activeSection={activeSection} />
       <NapoleonProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <NapoleonHero />
+      <EditionBadge essayId="napoleon" />
       <RevolutionSection />
       <ToulonSection />
       <ItalyEgyptSection />

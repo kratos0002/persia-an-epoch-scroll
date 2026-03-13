@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { CommentsSection } from '@/components/site/CommentsSection';
+import { EditionBadge } from '@/components/scroll/EditionBadge';
 import { SamuraiProgressTimeline } from '@/components/samurai/SamuraiProgressTimeline';
 import { SamuraiSectionNav } from '@/components/samurai/SamuraiSectionNav';
 import { useSamuraiScrollSpy } from '@/hooks/useSamuraiScrollSpy';
@@ -29,6 +30,7 @@ const Samurai = () => {
       <SamuraiProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
 
       <SamuraiHero />
+      <EditionBadge essayId="samurai" variant="light" />
       <FrozenSocietySection />
       <StipendEconomySection />
       <BlackShipsSection />

@@ -17,6 +17,7 @@ import { ModernSection } from '@/components/sections/ModernSection';
 import { EpilogueSection } from '@/components/sections/EpilogueSection';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { EditionBadge } from '@/components/scroll/EditionBadge';
 
 const Index = () => {
   const { activeSection, globalProgress } = useScrollSpy();
@@ -26,6 +27,7 @@ const Index = () => {
       <SectionNav activeSection={activeSection} />
       <ProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <HeroSection />
+      <EditionBadge essayId="persia" />
       <CyrusSection />
       <DariusSection />
       <PersianWarsSection />

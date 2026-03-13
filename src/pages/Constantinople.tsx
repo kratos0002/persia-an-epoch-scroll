@@ -15,6 +15,7 @@ import { useConstantinopleScrollSpy } from '@/hooks/useConstantinopleScrollSpy';
 import { STRATA } from '@/components/visuals/constantinopleData';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { EditionBadge } from '@/components/scroll/EditionBadge';
 
 const Constantinople = () => {
   const { activeSection, globalProgress } = useConstantinopleScrollSpy();
@@ -24,6 +25,7 @@ const Constantinople = () => {
       <ConstantinopleSectionNav activeSection={activeSection} />
       <DepthGauge activeSection={activeSection} globalProgress={globalProgress} />
       <SurfaceSection />
+      <EditionBadge essayId="constantinople" />
       <StratumTransition fromColor={STRATA[0].earthColor} toColor={STRATA[1].earthColor} />
       <OttomanSection />
       <StratumTransition fromColor={STRATA[1].earthColor} toColor={STRATA[2].earthColor} />

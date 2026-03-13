@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { CommentsSection } from '@/components/site/CommentsSection';
+import { EditionBadge } from '@/components/scroll/EditionBadge';
 import { RebellionProgressTimeline } from '@/components/rebellion/RebellionProgressTimeline';
 import { RebellionSectionNav } from '@/components/rebellion/RebellionSectionNav';
 import { useRebellionScrollSpy } from '@/hooks/useRebellionScrollSpy';
@@ -29,6 +30,7 @@ const Rebellion1857 = () => {
       <RebellionProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
 
       <RebellionHero />
+      <EditionBadge essayId="rebellion" />
       <CartridgeSection />
       <TwoNetworksSection />
       <MeerutSection />

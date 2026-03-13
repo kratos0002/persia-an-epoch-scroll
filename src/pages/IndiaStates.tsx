@@ -16,6 +16,7 @@ import { TimelineRibbon } from '@/components/visuals/TimelineRibbon';
 import { IndiaMap } from '@/components/visuals/IndiaMap';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { EditionBadge } from '@/components/scroll/EditionBadge';
 import { useIndiaScrollSpy } from '@/hooks/useIndiaScrollSpy';
 import type { EraId } from '@/components/visuals/indiaStatesData';
 
@@ -90,6 +91,7 @@ const IndiaStates = () => {
       {/* Scrolling narrative content */}
       <div className="relative z-10">
         <IndiaHero />
+        <EditionBadge essayId="india-states" />
         <MidnightSection />
         <PatelSection />
         <HoldoutsSection />

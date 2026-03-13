@@ -13,6 +13,7 @@ import { DestructionSection } from '@/components/wisdom/DestructionSection';
 import { WisdomEpilogue } from '@/components/wisdom/WisdomEpilogue';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { EditionBadge } from '@/components/scroll/EditionBadge';
 
 const HouseOfWisdom = () => {
   const { activeSection, globalProgress } = useWisdomScrollSpy();
@@ -22,6 +23,7 @@ const HouseOfWisdom = () => {
       <WisdomSectionNav activeSection={activeSection} />
       <WisdomProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <WisdomHero />
+      <EditionBadge essayId="wisdom" />
       <RoundCitySection />
       <HarunSection />
       <TranslationSection />

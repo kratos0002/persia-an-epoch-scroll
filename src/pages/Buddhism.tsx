@@ -14,6 +14,7 @@ import { BuddhismProgressTimeline } from '@/components/buddhism/BuddhismProgress
 import { useBuddhismScrollSpy } from '@/hooks/useBuddhismScrollSpy';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { EditionBadge } from '@/components/scroll/EditionBadge';
 
 const Buddhism = () => {
   const { activeSection, globalProgress } = useBuddhismScrollSpy();
@@ -23,6 +24,7 @@ const Buddhism = () => {
       <BuddhismSectionNav activeSection={activeSection} />
       <BuddhismProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <BuddhismHero />
+      <EditionBadge essayId="buddhism" />
       <AwakeningSection />
       <AshokaSection />
       <FirstSplitSection />
