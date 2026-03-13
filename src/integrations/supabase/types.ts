@@ -188,6 +188,33 @@ export type Database = {
         }
         Relationships: []
       }
+      story_og: {
+        Row: {
+          og_description: string | null
+          og_image_url: string | null
+          og_title: string | null
+          story_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          og_description?: string | null
+          og_image_url?: string | null
+          og_title?: string | null
+          story_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          og_description?: string | null
+          og_image_url?: string | null
+          og_title?: string | null
+          story_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       story_overrides: {
         Row: {
           id: string
