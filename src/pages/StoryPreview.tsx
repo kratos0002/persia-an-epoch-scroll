@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useAdminCheck } from '@/hooks/useAdminCheck';
 import storyPersia from '@/assets/story-persia.jpg';
 import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyBuddhism from '@/assets/story-buddhism.jpg';
@@ -279,6 +280,8 @@ function drawFrame(
 
 const StoryPreview = () => {
   const { storyId } = useParams<{ storyId: string }>();
+  const { isAdmin, loading: authLoading } = useAdminCheck();
+  const navigate = useNavigate();
   const story = storyId ? PREVIEWS[storyId] : undefined;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -287,6 +290,11 @@ const StoryPreview = () => {
   const [recording, setRecording] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
+
+  // Redirect non-admins
+  useEffect(() => {
+    if (!authLoading && !isAdmin) navigate('/');
+  }, [authLoading, isAdmin, navigate]);
 
   // Load image
   useEffect(() => {
@@ -366,6 +374,16 @@ const StoryPreview = () => {
 
     recorder.stop();
   }, [story]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <p className="text-white/30 font-body text-sm">Checking access…</p>
+      </div>
+    );
+  }
+
+  if (!isAdmin) return null;
 
   if (!story) {
     return (
