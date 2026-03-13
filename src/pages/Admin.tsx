@@ -20,6 +20,7 @@ const STORY_IDS = [
   { id: 'india-states', title: 'The Mosaic Republic', defaultStatus: 'live' as StoryStatus },
   { id: 'mongol-india', title: 'The Wall That Held', defaultStatus: 'live' as StoryStatus },
   { id: 'nuclear', title: 'The Chain Reaction', defaultStatus: 'live' as StoryStatus },
+  { id: 'nutmeg', title: 'The Spice That Built Empires', defaultStatus: 'coming-soon' as StoryStatus },
 ];
 
 const STATUS_OPTIONS: { value: StoryStatus; label: string; color: string }[] = [
