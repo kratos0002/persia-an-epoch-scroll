@@ -33,7 +33,7 @@ const BRANCHES: Branch[] = [
   { id: 'zen', label: 'Zen / Chán', path: 'M 380 100 Q 400 75 420 55', color: ZEN, phase: 3, labelPos: { x: 425, y: 45 } },
   { id: 'pureland', label: 'Pure Land', path: 'M 380 100 Q 395 85 415 80', color: PURE_LAND, phase: 3, labelPos: { x: 420, y: 72 } },
   { id: 'nichiren', label: 'Nichiren', path: 'M 380 100 Q 410 95 435 105', color: NICHIREN, phase: 3, labelPos: { x: 440, y: 100 } },
-  { id: 'tibetan-schools', label: 'Tibetan Schools', path: 'M 345 35 Q 330 15 310 10', color: TIBETAN, phase: 3, labelPos: { x: 265, y: 5 } },
+  { id: 'tibetan-schools', label: 'Tibetan Schools', path: 'M 345 35 Q 330 25 315 20', color: TIBETAN, phase: 3, labelPos: { x: 270, y: 18 } },
 ];
 
 // Root node

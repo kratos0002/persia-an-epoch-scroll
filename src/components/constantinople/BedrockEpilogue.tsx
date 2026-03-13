@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { STRATA } from '@/components/visuals/constantinopleData';
+import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 export const BedrockEpilogue: React.FC = () => (
   <section id="bedrock" className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: 'hsl(25, 10%, 8%)' }}>
@@ -88,6 +89,10 @@ export const BedrockEpilogue: React.FC = () => (
           ← Return to surface
         </a>
       </motion.div>
+
+      <div className="max-w-md mx-auto w-full px-6 mt-12">
+        <EditionColophon essayId="constantinople" variant="dark" />
+      </div>
     </div>
   </section>
 );

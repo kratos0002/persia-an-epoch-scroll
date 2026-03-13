@@ -45,7 +45,7 @@ export const ItalyEgyptSection = () => {
   return (
     <section id="italy-egypt" style={{ background: MIDNIGHT }}>
       <StickyScroll
-        graphic={() => <CoalitionBoard phase={3} />}
+        graphic={(step) => <CoalitionBoard phase={step === 0 ? 2 : 3} />}
         steps={steps}
       />
     </section>

@@ -3,6 +3,7 @@ import { useScroll } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { KnowledgeGraph } from '@/components/visuals/KnowledgeGraph';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 const WISDOM_TEAL = '170 40% 30%';
 
@@ -66,9 +67,9 @@ export const WisdomEpilogue = () => {
           </p>
         </RevealOnScroll>
 
-        <RevealOnScroll delay={0.2} className="text-center pt-12 border-t border-[hsl(170,40%,30%,0.1)]">
-          <p className="text-xs tracking-[0.2em] uppercase text-foreground/30 font-body mb-2">An Epoch Lives Visual Essay</p>
-          <p className="text-xs text-foreground/20 font-body">
+        <RevealOnScroll delay={0.2}>
+          <EditionColophon essayId="wisdom" variant="dark" />
+          <p className="text-xs text-foreground/20 font-body text-center mt-4">
             Sources: Al-Khalili, <em>The House of Wisdom</em> (2011); Lyons, <em>The House of Wisdom</em> (2009); Freely, <em>Light from the East</em> (2011)
           </p>
         </RevealOnScroll>

@@ -2,6 +2,7 @@ import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { BranchingTree } from '@/components/visuals/BranchingTree';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 const SAFFRON = '30 65% 45%';
 const GOLD = '43 70% 55%';
@@ -34,6 +35,9 @@ export const BuddhismEpilogue = () => (
           — Traditional Zen saying
         </p>
       </RevealOnScroll>
+      <div className="max-w-md mx-auto w-full px-6">
+        <EditionColophon essayId="buddhism" variant="dark" />
+      </div>
     </div>
 
     <SiteFooter />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { StipendLedger, LedgerRow } from '@/components/visuals/StipendLedger';
+import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 const INK = 'hsl(25, 20%, 12%)';
 const FADED = 'hsl(30, 10%, 60%)';
@@ -84,6 +85,8 @@ export const SamuraiEpilogue = () => {
             style={{ background: 'hsl(5, 75%, 50%)' }}
           />
         </motion.div>
+
+        <EditionColophon essayId="samurai" variant="light" />
       </div>
     </section>
   );

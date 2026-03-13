@@ -48,7 +48,7 @@ interface StageConfig {
   overlay: OverlayConfig;
 }
 
-interface PersepolisPopoutState {
+interface PopoutState {
   cardX: number;
   cardY: number;
   cardWidth: number;
@@ -155,6 +155,14 @@ const stageConfigs: Record<StageId, StageConfig> = {
       eyebrow: '323 BCE',
       title: 'He became what he conquered',
       detail: 'From Babylon he rules as more than a Macedonian king, adopting Persian court ritual, Persian marriage politics, and Persian imperial scale.',
+      imageSrc: '/images/alexander-entry-babylon-lebrun.png',
+      imageAlt: 'Alexander the Great entering Babylon, painting by Charles Le Brun',
+      credit: 'Entry of Alexander into Babylon, Charles Le Brun, 1665 / Louvre, Paris.',
+      bullets: [
+        'Died in the palace of Nebuchadnezzar',
+        'No named successor',
+        'Empire split among his generals',
+      ],
       tags: ['Persian dress', 'Roxana', 'Babylon at 32', 'Empire fractures on death'],
     },
   },
@@ -200,8 +208,11 @@ function ensureStyles() {
   document.head.appendChild(style);
 }
 
+const deathColor = '#7858B4';
+
 function buildMarkerIcon(kind: PointKind, highlighted: boolean, stageId: StageId, pointId: PointId) {
   const isPersepolisFire = stageId === 2 && pointId === 'persepolis';
+  const isBabylonDeath = stageId === 3 && pointId === 'babylon';
   const baseSize = highlighted ? 14 : 10;
   const halo = highlighted ? 34 : 22;
   const fill =
@@ -219,6 +230,32 @@ function buildMarkerIcon(kind: PointKind, highlighted: boolean, stageId: StageId
         ? 'rgba(212,168,67,0.22)'
         : 'rgba(255,255,255,0.12)';
 
+  const specialBg = isPersepolisFire
+    ? 'rgba(241,130,71,0.2)'
+    : isBabylonDeath
+      ? 'rgba(120,88,180,0.2)'
+      : outer;
+  const specialBorder = isPersepolisFire
+    ? 'rgba(241,130,71,0.4)'
+    : isBabylonDeath
+      ? 'rgba(120,88,180,0.4)'
+      : outer;
+  const specialGlow = isPersepolisFire
+    ? 'rgba(241,130,71,0.35)'
+    : isBabylonDeath
+      ? 'rgba(120,88,180,0.35)'
+      : outer;
+  const specialFill = isPersepolisFire
+    ? emberColor
+    : isBabylonDeath
+      ? deathColor
+      : fill;
+  const specialRing = isPersepolisFire
+    ? 'rgba(241,130,71,0.12)'
+    : isBabylonDeath
+      ? 'rgba(120,88,180,0.12)'
+      : outer;
+
   return L.divIcon({
     className: '',
     html: `
@@ -228,18 +265,18 @@ function buildMarkerIcon(kind: PointKind, highlighted: boolean, stageId: StageId
           width:${halo}px;
           height:${halo}px;
           border-radius:9999px;
-          background:${isPersepolisFire ? 'rgba(241,130,71,0.2)' : outer};
-          border:1px solid ${isPersepolisFire ? 'rgba(241,130,71,0.4)' : outer};
-          box-shadow:${highlighted ? `0 0 36px ${isPersepolisFire ? 'rgba(241,130,71,0.35)' : outer}` : 'none'};
+          background:${specialBg};
+          border:1px solid ${specialBorder};
+          box-shadow:${highlighted ? `0 0 36px ${specialGlow}` : 'none'};
         "></div>
         <div style="
           position:relative;
           width:${baseSize}px;
           height:${baseSize}px;
           border-radius:9999px;
-          background:${isPersepolisFire ? emberColor : fill};
+          background:${specialFill};
           border:2px solid rgba(255,255,255,0.95);
-          box-shadow:${highlighted ? `0 0 0 5px ${isPersepolisFire ? 'rgba(241,130,71,0.12)' : outer}` : '0 6px 16px rgba(0,0,0,0.2)'};
+          box-shadow:${highlighted ? `0 0 0 5px ${specialRing}` : '0 6px 16px rgba(0,0,0,0.2)'};
         "></div>
       </div>
     `,
@@ -277,7 +314,8 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const layerRef = useRef<L.LayerGroup | null>(null);
-  const [persepolisPopout, setPersepolisPopout] = useState<PersepolisPopoutState | null>(null);
+  const [persepolisPopout, setPersepolisPopout] = useState<PopoutState | null>(null);
+  const [babylonPopout, setBabylonPopout] = useState<PopoutState | null>(null);
 
   const visiblePoints = useMemo(() => stage.visiblePoints.map((id) => points[id]), [stage]);
 
@@ -320,9 +358,8 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
     if (!map || !layer) return;
 
     layer.clearLayers();
-    if (stageId !== 2) {
-      setPersepolisPopout(null);
-    }
+    if (stageId !== 2) setPersepolisPopout(null);
+    if (stageId !== 3) setBabylonPopout(null);
     map.flyTo(stage.center, stage.zoom, { duration: 1.4, easeLinearity: 0.2 });
 
     if (stage.showEmpire) {
@@ -411,6 +448,39 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
       map.once('moveend', () => requestAnimationFrame(syncPopout));
       requestAnimationFrame(syncPopout);
     }
+
+    if (stageId === 3 && containerRef.current) {
+      const syncBabylonPopout = () => {
+        if (!containerRef.current) return;
+
+        const point = map.latLngToContainerPoint(toLatLng('babylon'));
+        const width = containerRef.current.clientWidth;
+        const height = containerRef.current.clientHeight;
+        const cardWidth = Math.min(344, Math.max(304, Math.round(width * 0.22)));
+        const cardHeight = 532;
+        const rightGutter = width >= 1600 ? 136 : width >= 1280 ? 124 : 104;
+        const cardX = Math.min(
+          width - cardWidth - rightGutter,
+          Math.max(point.x + 54, width * 0.58),
+        );
+        const cardY = Math.min(
+          Math.max(point.y - cardHeight * 0.46, 28),
+          height - cardHeight - 32,
+        );
+
+        setBabylonPopout({
+          cardX,
+          cardY,
+          cardWidth,
+          cardHeight,
+          pointX: point.x,
+          pointY: point.y,
+        });
+      };
+
+      map.once('moveend', () => requestAnimationFrame(syncBabylonPopout));
+      requestAnimationFrame(syncBabylonPopout);
+    }
   }, [stage, stageId, visiblePoints]);
 
   return (
@@ -478,6 +548,93 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
                     Ceremonial capital
                   </p>
                   <h4 className="mt-2 font-display text-[30px] leading-none text-[rgba(255,208,186,0.96)]">
+                    {stage.overlay.title}
+                  </h4>
+                  <p className="mt-3 text-sm leading-relaxed text-foreground/68">
+                    {stage.overlay.detail}
+                  </p>
+                </div>
+
+                {stage.overlay.bullets ? (
+                  <div className="grid gap-2">
+                    {stage.overlay.bullets.map((bullet) => (
+                      <div
+                        key={bullet}
+                        className="rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2 text-xs leading-relaxed text-foreground/66"
+                      >
+                        {bullet}
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
+                {stage.overlay.credit ? (
+                  <p className="text-[11px] leading-relaxed text-foreground/38">
+                    {stage.overlay.credit}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      ) : stageId === 3 && babylonPopout ? (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key="babylon-popout"
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.98 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-none absolute z-[900] hidden md:block"
+            style={{
+              left: babylonPopout.cardX,
+              top: babylonPopout.cardY,
+              width: babylonPopout.cardWidth,
+            }}
+          >
+            <svg
+              className="absolute inset-0 overflow-visible"
+              style={{ width: '100%', height: `${babylonPopout.cardHeight + 80}px` }}
+              aria-hidden="true"
+            >
+              <line
+                x1={8}
+                y1={Math.min(
+                  babylonPopout.cardHeight - 84,
+                  Math.max(98, babylonPopout.pointY - babylonPopout.cardY),
+                )}
+                x2={babylonPopout.pointX - babylonPopout.cardX}
+                y2={babylonPopout.pointY - babylonPopout.cardY}
+                stroke="rgba(120,90,180,0.78)"
+                strokeWidth="1.6"
+                strokeDasharray="6 6"
+              />
+            </svg>
+
+            <div
+              className="relative overflow-hidden rounded-[26px] border border-[rgba(120,90,180,0.28)] bg-[linear-gradient(180deg,rgba(9,13,21,0.97),rgba(12,17,27,0.92))] shadow-[0_28px_70px_rgba(0,0,0,0.42)]"
+              style={{ minHeight: babylonPopout.cardHeight }}
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(120,90,180,0.16),transparent_28%)]" />
+              <div className="relative h-[280px] overflow-hidden border-b border-white/10 bg-[rgba(5,8,14,0.96)]">
+                <img
+                  src={stage.overlay.imageSrc}
+                  alt={stage.overlay.imageAlt || stage.overlay.title}
+                  className="h-full w-full object-cover object-center"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,7,12,0.08),rgba(4,7,12,0.46))]" />
+                <div className="absolute left-4 top-4 rounded-full border border-[rgba(120,90,180,0.38)] bg-[rgba(8,12,20,0.86)] px-3 py-1.5 text-[10px] uppercase tracking-[0.28em] text-[rgba(190,170,220,0.88)]">
+                  {stage.overlay.eyebrow}
+                </div>
+              </div>
+
+              <div className="relative space-y-4 p-5">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-[rgba(120,90,180,0.72)]">
+                    Where the conqueror fell
+                  </p>
+                  <h4 className="mt-2 font-display text-[30px] leading-none text-[rgba(210,195,240,0.96)]">
                     {stage.overlay.title}
                   </h4>
                   <p className="mt-3 text-sm leading-relaxed text-foreground/68">

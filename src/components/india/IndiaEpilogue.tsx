@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 export const IndiaEpilogue: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -38,6 +39,8 @@ export const IndiaEpilogue: React.FC = () => {
               </a>
             </div>
           </motion.div>
+
+          <EditionColophon essayId="india-states" variant="dark" />
         </div>
       </div>
     </section>

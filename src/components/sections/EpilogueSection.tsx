@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { PersianPattern } from '@/components/visuals/PersianPattern';
 import { ERA_COLORS } from '@/components/visuals/EraTransition';
+import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 const timelineEras = [
   { year: '550 BCE', label: 'Achaemenid', color: `hsl(${ERA_COLORS.achaemenid})`, width: '18%' },
@@ -85,10 +86,10 @@ export const EpilogueSection = () => {
             <p className="text-foreground/30 text-sm font-body tracking-wider uppercase">— Rumi, 13th century</p>
           </RevealOnScroll>
 
-          {/* Footer credits */}
-          <RevealOnScroll delay={0.4} className="mt-24 pt-8 border-t border-border/10">
-            <div className="text-center space-y-3">
-              <p className="text-xs text-foreground/25 font-body">An Epoch Lives Visual Essay</p>
+          {/* Edition colophon */}
+          <RevealOnScroll delay={0.4}>
+            <EditionColophon essayId="persia" variant="dark" />
+            <div className="text-center space-y-2 mt-4">
               <p className="text-xs text-foreground/15 font-body">
                 Images: Wikimedia Commons (Public Domain) · Maps: Leaflet + CartoDB · Data: Historical consensus
               </p>

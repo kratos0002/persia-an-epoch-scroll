@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const NEW_STATES = [
@@ -9,7 +9,22 @@ const NEW_STATES = [
   { name: 'J&K → 2 UTs', year: 2019, from: 'Jammu & Kashmir', detail: 'Article 370 abrogated. Reorganized into two Union Territories: J&K and Ladakh. The most charged reorganization since 1947.', color: 'hsl(210, 50%, 50%)' },
 ];
 
-export const NewStatesSection: React.FC = () => {
+interface NewStatesSectionProps {
+  onActiveCard?: (index: number) => void;
+}
+
+const CardTracker = ({ index, onActive, children }: { index: number; onActive: (i: number) => void; children: React.ReactNode }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { margin: '-30% 0px -30% 0px' });
+
+  useEffect(() => {
+    if (inView) onActive(index);
+  }, [inView, index, onActive]);
+
+  return <div ref={ref}>{children}</div>;
+};
+
+export const NewStatesSection: React.FC<NewStatesSectionProps> = ({ onActiveCard }) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
@@ -36,27 +51,28 @@ export const NewStatesSection: React.FC = () => {
 
             <div className="space-y-4">
               {NEW_STATES.map((state, i) => (
-                <motion.div
-                  key={state.name}
-                  className="rounded-lg p-4 border border-border/20"
-                  style={{ background: 'hsla(220, 18%, 12%, 0.5)' }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.2 + i * 0.12 }}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="shrink-0">
-                      <div className="font-display text-2xl font-black" style={{ color: state.color }}>{state.year}</div>
-                      <div className="text-[9px] tracking-[0.12em] uppercase font-body mt-0.5" style={{ color: 'hsl(40, 20%, 50%)' }}>
-                        from {state.from}
+                <CardTracker key={state.name} index={i} onActive={(idx) => onActiveCard?.(idx)}>
+                  <motion.div
+                    className="rounded-lg p-4 border border-border/20"
+                    style={{ background: 'hsla(220, 18%, 12%, 0.5)' }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 0.2 + i * 0.12 }}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="shrink-0">
+                        <div className="font-display text-2xl font-black" style={{ color: state.color }}>{state.year}</div>
+                        <div className="text-[9px] tracking-[0.12em] uppercase font-body mt-0.5" style={{ color: 'hsl(40, 20%, 50%)' }}>
+                          from {state.from}
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-display text-lg font-bold mb-1" style={{ color: 'hsl(40, 30%, 88%)' }}>{state.name}</h3>
+                        <p className="font-body text-sm leading-relaxed" style={{ color: 'hsl(40, 20%, 65%)' }}>{state.detail}</p>
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-display text-lg font-bold mb-1" style={{ color: 'hsl(40, 30%, 88%)' }}>{state.name}</h3>
-                      <p className="font-body text-sm leading-relaxed" style={{ color: 'hsl(40, 20%, 65%)' }}>{state.detail}</p>
-                    </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </CardTracker>
               ))}
             </div>
           </motion.div>

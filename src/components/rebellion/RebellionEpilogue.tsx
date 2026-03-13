@@ -1,6 +1,7 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { DualWavefrontMap } from '@/components/visuals/DualWavefrontMap';
+import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 const AMBER = 'hsl(30, 85%, 50%)';
 const PAPER = 'hsl(45, 30%, 88%)';
@@ -66,6 +67,9 @@ export const RebellionEpilogue = () => {
         )}
         steps={steps}
       />
+      <div className="max-w-md mx-auto px-6 pb-16">
+        <EditionColophon essayId="rebellion" variant="dark" />
+      </div>
     </section>
   );
 };

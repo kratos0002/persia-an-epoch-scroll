@@ -19,7 +19,8 @@ export type EmpireId =
   | 'islamic'
   | 'mongol'
   | 'safavid'
-  | 'modern';
+  | 'modern'
+  | 'buddhism';
 
 interface InteractiveMapProps {
   empire: EmpireId;

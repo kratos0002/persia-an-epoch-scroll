@@ -1,19 +1,64 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
-import { DharmaWheel } from '@/components/visuals/DharmaWheel';
+import { BodhiTree } from '@/components/visuals/BodhiTree';
+import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { EraTransition } from '@/components/visuals/EraTransition';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const SAFFRON = '30 65% 45%';
+
+// Route order: birth → enlightenment → first sermon → capital → university
+const SANGHA_ROUTE = ['Lumbini', 'Bodh Gaya', 'Sarnath', 'Pataliputra', 'Nalanda'];
+
+const SANGHA_ANNOTATIONS = [
+  { name: 'Lumbini', label: 'Lumbini — Birthplace', direction: 'top' as const },
+  { name: 'Bodh Gaya', label: 'Bodh Gaya — Enlightenment', direction: 'bottom' as const },
+  { name: 'Sarnath', label: 'Sarnath — First Sermon', direction: 'left' as const },
+  { name: 'Pataliputra', label: 'Pataliputra — Capital', direction: 'top' as const },
+  { name: 'Nalanda', label: 'Nalanda — Great University', direction: 'right' as const },
+];
 
 export const AwakeningSection = () => (
   <section id="awakening" style={{ '--era-primary': SAFFRON } as React.CSSProperties}>
     <StickyScroll
       graphic={(activeStep) => (
-        <div className="relative w-full h-full flex items-center justify-center">
-          <div className="absolute inset-0" style={{
-            background: `radial-gradient(ellipse at center, hsl(${SAFFRON} / 0.05) 0%, transparent 70%)`
-          }} />
-          <DharmaWheel activeStep={activeStep + 1} />
+        <div className="relative w-full h-full">
+          <AnimatePresence mode="wait">
+            {activeStep < 3 ? (
+              <motion.div
+                key="bodhi-tree"
+                className="absolute inset-0 flex items-center justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <div className="absolute inset-0" style={{
+                  background: `radial-gradient(ellipse at center, hsl(${SAFFRON} / 0.05) 0%, transparent 70%)`
+                }} />
+                <BodhiTree activeStep={activeStep} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="sangha-map"
+                className="absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <InteractiveMap
+                  empire="buddhism"
+                  center={[25.5, 84]}
+                  zoom={7}
+                  highlightCities={SANGHA_ROUTE}
+                  routeCities={SANGHA_ROUTE}
+                  annotatedCities={SANGHA_ANNOTATIONS}
+                  showCities
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
       steps={[

@@ -1,7 +1,30 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-export const LinguisticSection: React.FC = () => {
+const LINGUISTIC_BULLETS = [
+  { text: 'Andhra Pradesh carved from Madras (Telugu speakers)', color: 'hsl(150, 40%, 40%)' },
+  { text: 'Kerala created from Travancore-Cochin + Malabar (Malayalam)', color: 'hsl(150, 40%, 40%)' },
+  { text: 'Karnataka from Mysore + parts of Bombay/Hyderabad (Kannada)', color: 'hsl(150, 40%, 40%)' },
+  { text: 'Multiple Part B & C states merged into larger linguistic units', color: 'hsl(25, 55%, 50%)' },
+  { text: 'Rajasthan consolidated from 19+ princely states', color: 'hsl(25, 55%, 50%)' },
+];
+
+interface LinguisticSectionProps {
+  onActiveBullet?: (index: number) => void;
+}
+
+const BulletTracker = ({ index, onActive, children }: { index: number; onActive: (i: number) => void; children: React.ReactNode }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { margin: '-35% 0px -35% 0px' });
+
+  useEffect(() => {
+    if (inView) onActive(index);
+  }, [inView, index, onActive]);
+
+  return <div ref={ref}>{children}</div>;
+};
+
+export const LinguisticSection: React.FC<LinguisticSectionProps> = ({ onActiveBullet }) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
@@ -33,24 +56,19 @@ export const LinguisticSection: React.FC = () => {
               The Fazl Ali Commission was appointed in 1953. In 1956, the States Reorganisation Act redrew India's entire map along linguistic lines: <strong style={{ color: 'hsl(40, 60%, 55%)' }}>14 states and 6 Union Territories</strong>.
             </p>
 
-            <div className="space-y-2 mb-6">
-              {[
-                'Andhra Pradesh carved from Madras (Telugu speakers)',
-                'Kerala created from Travancore-Cochin + Malabar (Malayalam)',
-                'Karnataka from Mysore + parts of Bombay/Hyderabad (Kannada)',
-                'Multiple Part B & C states merged into larger linguistic units',
-                'Rajasthan consolidated from 19+ princely states',
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  className="flex items-start gap-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.6 + i * 0.1 }}
-                >
-                  <div className="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={{ background: 'hsl(150, 45%, 50%)' }} />
-                  <p className="font-body text-sm" style={{ color: 'hsl(40, 20%, 62%)' }}>{item}</p>
-                </motion.div>
+            <div className="space-y-3 mb-6">
+              {LINGUISTIC_BULLETS.map((item, i) => (
+                <BulletTracker key={i} index={i} onActive={(idx) => onActiveBullet?.(idx)}>
+                  <motion.div
+                    className="flex items-start gap-3 rounded-lg px-3 py-2 -mx-3 transition-colors duration-300"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={inView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ delay: 0.6 + i * 0.1 }}
+                  >
+                    <div className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ background: item.color }} />
+                    <p className="font-body text-sm" style={{ color: 'hsl(40, 20%, 65%)' }}>{item.text}</p>
+                  </motion.div>
+                </BulletTracker>
               ))}
             </div>
 

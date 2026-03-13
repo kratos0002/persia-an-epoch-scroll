@@ -1,26 +1,12 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
-import { InteractiveMap } from '@/components/visuals/InteractiveMap';
+import { ParthianCampaignGraphic } from '@/components/visuals/ParthianCampaignGraphic';
 import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
 
 export const ParthianSection = () => (
   <section id="parthian" style={{ '--era-primary': ERA_COLORS.parthian } as React.CSSProperties}>
     <StickyScroll
-      graphic={(activeStep, progress) => (
-        <InteractiveMap
-          empire="parthian"
-          showCities
-          highlightCities={
-            activeStep === 0
-              ? ['Ecbatana', 'Merv']
-              : activeStep === 1
-              ? ['Ctesiphon', 'Babylon', 'Ecbatana']
-              : ['Ctesiphon', 'Merv', 'Samarkand', 'Babylon']
-          }
-          center={activeStep === 2 ? [34, 52] as [number, number] : undefined}
-          zoom={activeStep === 2 ? 4 + progress * 0.3 : undefined}
-        />
-      )}
+      graphic={(activeStep) => <ParthianCampaignGraphic activeStep={activeStep} />}
       steps={[
         <div key={0}>
           <p className="text-xs tracking-[0.3em] uppercase text-[hsl(350,60%,45%,0.7)] mb-4">247 BCE</p>

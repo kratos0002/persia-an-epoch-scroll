@@ -24,17 +24,46 @@ const About = () => {
             </h1>
 
             <div className="space-y-6 font-body text-lg text-[hsl(25,15%,35%)] leading-relaxed">
+
+              {/* ── Who ──────────────────────────────── */}
+
               <p>
-                <strong className="text-[hsl(25,25%,22%)]">Epoch Lives</strong> is a collection of visual essays about the turning points of civilizations. Each essay uses a different visual mechanic — scrollytelling, interactive maps, data-driven narratives — to make a historical moment visceral rather than academic.
+                <strong className="text-[hsl(25,25%,22%)]">Epoch Lives</strong> is built by VT — a designer and builder who treats knowledge the way a museum curator treats objects: with care, context, and respect for the audience's intelligence.
               </p>
 
               <p>
-                We don't summarize history. We reconstruct how it <em>felt</em> to live through it. What did a soldier at Thermopylae see when he looked across the pass? What did a merchant in Song Dynasty Kaifeng hear walking through the world's largest city? What did a librarian in Baghdad feel as Mongol armies appeared on the horizon?
+                Epoch Lives is one part of a larger knowledge-first ecosystem. The same philosophy — no gamification, no FOMO, content is the reward — runs through everything:
               </p>
 
+              <ul className="space-y-3 pl-1">
+                <li className="flex gap-3">
+                  <span className="text-[hsl(25,30%,55%)] shrink-0">—</span>
+                  <span>
+                    <a href="https://etymology.life" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-[hsl(25,30%,30%)] hover:text-[hsl(25,40%,20%)] transition-colors font-medium">etymology.life</a>
+                    {' '}— the origin stories of words
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-[hsl(25,30%,55%)] shrink-0">—</span>
+                  <span>
+                    <a href="https://marginalia.life" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-[hsl(25,30%,30%)] hover:text-[hsl(25,40%,20%)] transition-colors font-medium">marginalia.life</a>
+                    {' '}— a curated digital library of public domain literature, short stories, and classic writing with no distractions
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-[hsl(25,30%,55%)] shrink-0">—</span>
+                  <span>
+                    <a href="https://sayingly.me" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-[hsl(25,30%,30%)] hover:text-[hsl(25,40%,20%)] transition-colors font-medium">sayingly.me</a>
+                    {' '}— capturing words that matter, from quotes to phrases worth preserving
+                  </span>
+                </li>
+              </ul>
+
               <p>
-                Every essay is built on primary sources — chronicles, diaries, archaeological records, diplomatic letters. The visual design serves the story, not the other way around.
+                The thread connecting all of them: the past has texture. Words carry the fingerprints of the civilizations that shaped them. Books leave traces in the people who read them. History is not a timeline — it is a landscape, and the web is the best medium we have to let people walk through it.
               </p>
+
+              {/* ── Philosophy ────────────────────────── */}
 
               <div className="border-l-2 border-[hsl(25,30%,60%)]/30 pl-6 my-10">
                 <p className="italic text-[hsl(25,20%,30%)]">
@@ -52,36 +81,56 @@ const About = () => {
               </p>
 
               <p>
-                The Persia essay uses scrollytelling with interactive maps because the story of Persia is fundamentally geographic — an empire that connected three continents. Constantinople might use a countdown timer because the siege lasted exactly 57 days. Each form follows the story.
+                The Persia essay uses scrollytelling because the story of Persia is fundamentally geographic — an empire that connected three continents. The Samurai essay reads like a ledger because the warrior class was dismantled not by swords but by accounting. Each form follows the story.
               </p>
+
+              <p>
+                No two essays use the same visual mechanic. The design serves the history, never the other way around.
+              </p>
+
+              {/* ── Sources ───────────────────────────── */}
 
               <h2 className="font-display text-2xl font-bold text-[hsl(25,25%,20%)] pt-4">
                 Sources & integrity
               </h2>
 
               <p>
-                We are not historians — we are designers who take history seriously. Every factual claim is cited. Every date is cross-referenced. When sources conflict, we note the disagreement. When we speculate, we say so.
+                This is design work, not academic publishing — but every factual claim is grounded. Dates are cross-referenced. Maps use historically informed boundaries. Population figures come from published demographic research.
               </p>
 
               <p>
-                Maps use historically informed boundaries. Population figures come from published demographic research. Direct quotes are sourced.
+                When sources conflict, we note the disagreement. When we speculate, we say so. The goal is honesty with the material, not authority over it.
               </p>
+
+              {/* ── Contact ───────────────────────────── */}
 
               <h2 className="font-display text-2xl font-bold text-[hsl(25,25%,20%)] pt-4">
                 Get in touch
               </h2>
 
               <p>
-                If you're a historian, designer, or educator and want to collaborate — or if you've found an error — reach out on{' '}
-                <a
-                  href="https://twitter.com/EpochLives"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline underline-offset-2 text-[hsl(25,30%,30%)] hover:text-[hsl(25,40%,20%)] transition-colors"
-                >
-                  Twitter/X
-                </a>.
+                If you're a historian, designer, or educator who wants to collaborate — or if you've found an error — reach out:
               </p>
+
+              <ul className="space-y-2 pl-1">
+                <li className="flex gap-3">
+                  <span className="text-[hsl(25,30%,55%)] shrink-0">—</span>
+                  <a href="https://x.com/watimreading" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-[hsl(25,30%,30%)] hover:text-[hsl(25,40%,20%)] transition-colors">@watimreading on X</a>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-[hsl(25,30%,55%)] shrink-0">—</span>
+                  <a href="https://www.instagram.com/whatiamreadingtoday7/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-[hsl(25,30%,30%)] hover:text-[hsl(25,40%,20%)] transition-colors">@whatiamreadingtoday7 on Instagram</a>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-[hsl(25,30%,55%)] shrink-0">—</span>
+                  <a href="https://www.threads.com/@whatiamreadingtoday7" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-[hsl(25,30%,30%)] hover:text-[hsl(25,40%,20%)] transition-colors">@whatiamreadingtoday7 on Threads</a>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-[hsl(25,30%,55%)] shrink-0">—</span>
+                  <a href="https://whatiamreadingtoday.life/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-[hsl(25,30%,30%)] hover:text-[hsl(25,40%,20%)] transition-colors">whatiamreadingtoday.life</a>
+                </li>
+              </ul>
+
             </div>
           </motion.div>
         </div>

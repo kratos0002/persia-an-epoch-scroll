@@ -14,7 +14,7 @@ export const VajrayanaSection = () => (
             background: `radial-gradient(ellipse at center, hsl(${VAJRAYANA} / 0.05) 0%, transparent 70%)`
           }} />
           <BranchingTree
-            activePhase={2}
+            activePhase={activeStep >= 2 ? 3 : 2}
             highlightBranch={activeStep <= 1 ? 'vajrayana' : undefined}
           />
         </div>

@@ -17,10 +17,10 @@ export const BuddhismHero = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const petalProgress = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-  const titleOpacity = useTransform(scrollYProgress, [0.05, 0.2], [0, 1]);
-  const subtitleOpacity = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 0.85], [1, 1, 0]);
+  const petalProgress = useTransform(scrollYProgress, [0, 0.35], [0, 1]);
+  const titleOpacity = useTransform(scrollYProgress, [0.05, 0.2, 0.5], [0, 1, 1]);
+  const subtitleOpacity = useTransform(scrollYProgress, [0.15, 0.3, 0.5], [0, 1, 1]);
 
   return (
     <section id="buddhism-hero" ref={ref} className="relative h-[200vh]">
@@ -51,7 +51,7 @@ export const BuddhismHero = () => {
                 strokeWidth={1.5}
                 strokeLinecap="round"
                 style={{ pathLength: petalProgress }}
-                opacity={0.7}
+                opacity={1}
               />
             ))}
             {/* Center circle */}
@@ -59,14 +59,14 @@ export const BuddhismHero = () => {
               cx={250} cy={250} r={8}
               fill={`hsl(${GOLD})`}
               style={{ scale: petalProgress }}
-              opacity={0.8}
+              opacity={1}
             />
           </svg>
         </div>
 
         <motion.p
           className="text-xs tracking-[0.4em] uppercase font-body mb-4"
-          style={{ opacity: subtitleOpacity, color: `hsl(${SAFFRON} / 0.6)` }}
+          style={{ opacity: subtitleOpacity, color: `hsl(${SAFFRON})` }}
         >
           An Epoch Lives Visual Essay
         </motion.p>
@@ -80,7 +80,7 @@ export const BuddhismHero = () => {
 
         <motion.p
           className="font-body text-lg md:text-xl text-center max-w-lg px-6"
-          style={{ opacity: subtitleOpacity, color: `hsl(${SAFFRON} / 0.5)` }}
+          style={{ opacity: subtitleOpacity, color: `hsl(${SAFFRON} / 0.8)` }}
         >
           From one man's awakening under a tree to 500 million followers across a thousand traditions
         </motion.p>
