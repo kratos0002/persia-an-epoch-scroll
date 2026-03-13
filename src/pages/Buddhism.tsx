@@ -12,6 +12,8 @@ import { BuddhismEpilogue } from '@/components/buddhism/BuddhismEpilogue';
 import { BuddhismSectionNav } from '@/components/buddhism/BuddhismSectionNav';
 import { BuddhismProgressTimeline } from '@/components/buddhism/BuddhismProgressTimeline';
 import { useBuddhismScrollSpy } from '@/hooks/useBuddhismScrollSpy';
+import { CommentsSection } from '@/components/site/CommentsSection';
+import { SiteFooter } from '@/components/site/SiteFooter';
 
 const Buddhism = () => {
   const { activeSection, globalProgress } = useBuddhismScrollSpy();
@@ -30,6 +32,8 @@ const Buddhism = () => {
       <BranchesSection />
       <ModernBuddhismSection />
       <BuddhismEpilogue />
+      <CommentsSection pageSlug="buddhism" />
+      <SiteFooter />
     </div>
   );
 };

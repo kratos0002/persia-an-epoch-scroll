@@ -15,6 +15,8 @@ import { MongolSection } from '@/components/sections/MongolSection';
 import { SafavidSection } from '@/components/sections/SafavidSection';
 import { ModernSection } from '@/components/sections/ModernSection';
 import { EpilogueSection } from '@/components/sections/EpilogueSection';
+import { CommentsSection } from '@/components/site/CommentsSection';
+import { SiteFooter } from '@/components/site/SiteFooter';
 
 const Index = () => {
   const { activeSection, globalProgress } = useScrollSpy();
@@ -36,6 +38,8 @@ const Index = () => {
       <SafavidSection />
       <ModernSection />
       <EpilogueSection />
+      <CommentsSection pageSlug="persia" />
+      <SiteFooter />
     </div>
   );
 };

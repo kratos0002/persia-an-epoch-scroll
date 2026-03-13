@@ -13,6 +13,8 @@ import { DepthGauge } from '@/components/visuals/DepthGauge';
 import { StratumTransition } from '@/components/visuals/StratumTransition';
 import { useConstantinopleScrollSpy } from '@/hooks/useConstantinopleScrollSpy';
 import { STRATA } from '@/components/visuals/constantinopleData';
+import { CommentsSection } from '@/components/site/CommentsSection';
+import { SiteFooter } from '@/components/site/SiteFooter';
 
 const Constantinople = () => {
   const { activeSection, globalProgress } = useConstantinopleScrollSpy();
@@ -21,7 +23,6 @@ const Constantinople = () => {
     <div className="relative" style={{ background: 'hsl(25, 15%, 10%)' }}>
       <ConstantinopleSectionNav activeSection={activeSection} />
       <DepthGauge activeSection={activeSection} globalProgress={globalProgress} />
-
       <SurfaceSection />
       <StratumTransition fromColor={STRATA[0].earthColor} toColor={STRATA[1].earthColor} />
       <OttomanSection />
@@ -39,6 +40,8 @@ const Constantinople = () => {
       <GreekSection />
       <StratumTransition fromColor={STRATA[7].earthColor} toColor={STRATA[8].earthColor} />
       <BedrockEpilogue />
+      <CommentsSection pageSlug="constantinople" />
+      <SiteFooter />
     </div>
   );
 };
