@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { CommentsSection } from '@/components/site/CommentsSection';
 import { SamuraiProgressTimeline } from '@/components/samurai/SamuraiProgressTimeline';
 import { SamuraiSectionNav } from '@/components/samurai/SamuraiSectionNav';
 import { useSamuraiScrollSpy } from '@/hooks/useSamuraiScrollSpy';

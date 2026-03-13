@@ -14,6 +14,8 @@ import { IndiaProgressTimeline } from '@/components/india/IndiaProgressTimeline'
 import { StateCounter } from '@/components/visuals/StateCounter';
 import { TimelineRibbon } from '@/components/visuals/TimelineRibbon';
 import { IndiaMap } from '@/components/visuals/IndiaMap';
+import { CommentsSection } from '@/components/site/CommentsSection';
+import { SiteFooter } from '@/components/site/SiteFooter';
 import { useIndiaScrollSpy } from '@/hooks/useIndiaScrollSpy';
 import type { EraId } from '@/components/visuals/indiaStatesData';
 
