@@ -14,7 +14,7 @@ const SITE_TITLE = "Epoch Lives — Turning points in history, felt";
 const SITE_DESC =
   "Visual essays on the turning points of civilizations. Immersive scrollytelling with maps, data, and primary sources.";
 const SITE_IMAGE =
-  "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a1d18bd5-5022-4f58-bfaa-ddf86f5cf162/id-preview-d28c64ec--379849b8-e25a-40db-9b86-56b603dda73d.lovable.app-1773255702732.png";
+  "https://pastlives.site/images/alexander-entry-babylon-lebrun.png";
 
 const STORY_DEFAULTS: Record<string, { title: string; desc: string }> = {
   persia: { title: "The Immortal Empire — 2,500 Years of Persia", desc: "From Cyrus the Great to the Islamic Revolution. The empire that was conquered, fractured, and reborn — again and again." },
