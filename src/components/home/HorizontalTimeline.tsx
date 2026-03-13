@@ -149,7 +149,7 @@ export const HorizontalTimeline = ({ stories }: HorizontalTimelineProps) => {
                   {/* Vertical tick */}
                   <motion.div
                     className="w-px h-8 md:h-10"
-                    style={{ background: `linear-gradient(180deg, ${story.color}, transparent)` }}
+                    style={{ background: `linear-gradient(180deg, ${isLive ? story.color : 'hsl(35, 15%, 75%)'}, transparent)` }}
                     initial={{ scaleY: 0, transformOrigin: 'top' }}
                     animate={inView ? { scaleY: 1 } : {}}
                     transition={{ duration: 0.4, delay: 0.7 + i * 0.06 }}
@@ -160,7 +160,9 @@ export const HorizontalTimeline = ({ stories }: HorizontalTimelineProps) => {
                     className={`relative w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center z-10 -mt-px transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(43,85%,55%)]/50 ${
                       isSelected
                         ? 'border-[hsl(43,85%,55%)] bg-[hsl(43,85%,55%)]/15'
-                        : 'border-[hsl(35,20%,78%)] bg-[hsl(38,30%,94%)] hover:border-[hsl(35,30%,65%)]'
+                        : isLive
+                          ? 'border-[hsl(35,20%,78%)] bg-[hsl(38,30%,94%)] hover:border-[hsl(35,30%,65%)]'
+                          : 'border-[hsl(35,15%,82%)] bg-[hsl(38,25%,95%)] hover:border-[hsl(35,20%,72%)]'
                     }`}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={inView ? { opacity: 1, scale: isSelected ? 1.3 : 1 } : {}}
@@ -181,8 +183,9 @@ export const HorizontalTimeline = ({ stories }: HorizontalTimelineProps) => {
                     <div
                       className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all duration-300"
                       style={{
-                        background: story.color,
+                        background: isLive ? story.color : 'hsl(35, 15%, 72%)',
                         boxShadow: isSelected ? `0 0 12px ${story.color}` : 'none',
+                        opacity: isLive ? 1 : 0.6,
                       }}
                     />
                     {isLive && !isSelected && (
@@ -199,7 +202,7 @@ export const HorizontalTimeline = ({ stories }: HorizontalTimelineProps) => {
                   <motion.div
                     className="mt-2 text-center cursor-pointer"
                     initial={{ opacity: 0, y: 8 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
+                    animate={inView ? { opacity: isLive ? 1 : 0.45, y: 0 } : {}}
                     transition={{ duration: 0.4, delay: 1 + i * 0.05 }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -210,7 +213,7 @@ export const HorizontalTimeline = ({ stories }: HorizontalTimelineProps) => {
                       {story.era}
                     </p>
                     <p className={`text-[10px] md:text-[11px] font-display font-semibold leading-tight max-w-[96px] mx-auto transition-colors duration-200 ${
-                      isSelected ? 'text-[hsl(25,30%,18%)]' : 'text-[hsl(25,20%,38%)] hover:text-[hsl(25,25%,25%)]'
+                      isSelected ? 'text-[hsl(25,30%,18%)]' : isLive ? 'text-[hsl(25,20%,38%)] hover:text-[hsl(25,25%,25%)]' : 'text-[hsl(25,15%,60%)]'
                     }`}>
                       {story.title}
                     </p>
