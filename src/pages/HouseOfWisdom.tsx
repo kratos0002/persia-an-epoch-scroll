@@ -11,6 +11,8 @@ import { InventionsSection } from '@/components/wisdom/InventionsSection';
 import { RippleSection } from '@/components/wisdom/RippleSection';
 import { DestructionSection } from '@/components/wisdom/DestructionSection';
 import { WisdomEpilogue } from '@/components/wisdom/WisdomEpilogue';
+import { CommentsSection } from '@/components/site/CommentsSection';
+import { SiteFooter } from '@/components/site/SiteFooter';
 
 const HouseOfWisdom = () => {
   const { activeSection, globalProgress } = useWisdomScrollSpy();
@@ -28,6 +30,8 @@ const HouseOfWisdom = () => {
       <RippleSection />
       <DestructionSection />
       <WisdomEpilogue />
+      <CommentsSection pageSlug="wisdom" />
+      <SiteFooter />
     </div>
   );
 };

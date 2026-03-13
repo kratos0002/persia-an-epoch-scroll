@@ -97,6 +97,8 @@ const IndiaStates = () => {
         <NewStatesSection onActiveCard={setActiveNewState} />
         <PresentSection />
         <IndiaEpilogue />
+        <CommentsSection pageSlug="india-states" />
+        <SiteFooter />
       </div>
     </div>
   );

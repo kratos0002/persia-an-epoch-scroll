@@ -36,7 +36,7 @@ const Rebellion1857 = () => {
       <ReconquestSection />
       <AftermathSection />
       <RebellionEpilogue />
-
+      <CommentsSection pageSlug="1857" />
       <SiteFooter />
     </div>
   );

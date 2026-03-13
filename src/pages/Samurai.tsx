@@ -36,7 +36,7 @@ const Samurai = () => {
       <BondConversionSection />
       <SatsumaSection />
       <SamuraiEpilogue />
-
+      <CommentsSection pageSlug="samurai" />
       <SiteFooter variant="light" />
     </div>
   );

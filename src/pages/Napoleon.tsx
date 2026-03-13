@@ -12,6 +12,8 @@ import { NapoleonEpilogue } from '@/components/napoleon/NapoleonEpilogue';
 import { NapoleonProgressTimeline } from '@/components/napoleon/NapoleonProgressTimeline';
 import { NapoleonSectionNav } from '@/components/napoleon/NapoleonSectionNav';
 import { useNapoleonScrollSpy } from '@/hooks/useNapoleonScrollSpy';
+import { CommentsSection } from '@/components/site/CommentsSection';
+import { SiteFooter } from '@/components/site/SiteFooter';
 
 const Napoleon = () => {
   const { activeSection, globalProgress } = useNapoleonScrollSpy();
@@ -20,7 +22,6 @@ const Napoleon = () => {
     <div className="relative" style={{ background: 'hsl(225, 30%, 7%)' }}>
       <NapoleonSectionNav activeSection={activeSection} />
       <NapoleonProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
-
       <NapoleonHero />
       <RevolutionSection />
       <ToulonSection />
@@ -31,6 +32,8 @@ const Napoleon = () => {
       <MoscowSection />
       <WaterlooSection />
       <NapoleonEpilogue />
+      <CommentsSection pageSlug="napoleon" />
+      <SiteFooter />
     </div>
   );
 };
