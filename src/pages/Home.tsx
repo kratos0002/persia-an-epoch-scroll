@@ -88,6 +88,12 @@ const STORIES: StoryCard[] = [
     image: storyMongol, tags: ['Horizontal Scroll', 'Pan Map', '1221–1327'],
     status: 'live', href: '/mongol-india', color: 'hsl(15, 75%, 50%)', era: '1221', sortYear: 1221,
   },
+  {
+    id: 'nuclear', number: 10, title: 'The Chain Reaction', subtitle: 'How Nine Countries Built the Bomb',
+    hook: 'The secret of the atom was unlocked once. Then it spread — through espionage, ambition, desperation, and pride — until nine nations held the power to end civilization.',
+    image: storyNuclear, tags: ['Countdown Clock', 'Warhead Counter', '1945–2017'],
+    status: 'live', href: '/nuclear', color: 'hsl(140, 70%, 45%)', era: '1945', sortYear: 1945,
+  },
 ];
 
 /* ── Era Groupings ─────────────────────────────── */
