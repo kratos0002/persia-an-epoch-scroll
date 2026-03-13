@@ -58,7 +58,7 @@ export const MongolIndiaEpilogue = () => (
       </RevealOnScroll>
 
       <RevealOnScroll delay={0.45}>
-        <EditionColophon slug="mongol-india" />
+        <EditionColophon essayId="mongol-india" />
       </RevealOnScroll>
     </div>
   </section>

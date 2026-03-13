@@ -76,4 +76,12 @@ export const EDITIONS: Record<string, EditionMeta> = {
       { version: '1.0', date: 'March 2026', note: 'Initial essay' },
     ],
   },
+  'mongol-india': {
+    edition: 'First Edition',
+    version: '1.0',
+    lastUpdated: 'March 2026',
+    changelog: [
+      { version: '1.0', date: 'March 2026', note: 'Initial essay — the wall that held, 1221–1327' },
+    ],
+  },
 };

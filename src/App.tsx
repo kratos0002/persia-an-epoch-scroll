@@ -36,6 +36,7 @@ const App = () => (
           <Route path="/napoleon" element={<Napoleon />} />
           <Route path="/constantinople" element={<Constantinople />} />
           <Route path="/india-states" element={<IndiaStates />} />
+          <Route path="/mongol-india" element={<MongolIndia />} />
           <Route path="/auth" element={<Auth />} />
           {/* reset-password route removed — OTP auth only */}
           <Route path="/about" element={<About />} />

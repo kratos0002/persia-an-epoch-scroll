@@ -80,10 +80,10 @@ const STORIES: StoryCard[] = [
     status: 'live', href: '/india-states', color: 'hsl(40, 60%, 55%)', era: '1947',
   },
   {
-    id: 'mongol', number: 9, title: 'The World Conqueror', subtitle: 'The Mongol Storm',
-    hook: 'He asked for trade. They sent back heads. What followed reshaped every civilization from China to Hungary.',
-    image: storyMongol, tags: ['Empire System', 'Multi-front', '1206–1294'],
-    status: 'coming-soon', href: '#', color: 'hsl(25, 70%, 50%)', era: '1206',
+    id: 'mongol-india', number: 9, title: 'The Wall That Held', subtitle: 'Mongol Invasions of India',
+    hook: 'They conquered Persia, Baghdad, China, Russia. Nothing stopped them. Then they turned toward India — and something held.',
+    image: storyMongol, tags: ['Horizontal Scroll', 'Pan Map', '1221–1327'],
+    status: 'live', href: '/mongol-india', color: 'hsl(15, 75%, 50%)', era: '1221',
   },
 ];
 
