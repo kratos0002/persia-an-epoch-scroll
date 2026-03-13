@@ -10,7 +10,7 @@ const EraMarker = ({
 }: {
   era: (typeof ERAS)[number];
   index: number;
-  progress: ReturnType<typeof useTransform<number>>;
+  progress: MotionValue<number>;
   total: number;
 }) => {
   const threshold = index / total;
