@@ -16,6 +16,7 @@ import { useNuclearScrollSpy } from '@/hooks/useNuclearScrollSpy';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
+import { MobileNotice } from '@/components/site/MobileNotice';
 
 const Nuclear = () => {
   const { activeSection, globalProgress } = useNuclearScrollSpy();
