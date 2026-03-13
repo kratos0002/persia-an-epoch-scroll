@@ -16,6 +16,19 @@ const SITE_DESC =
 const SITE_IMAGE =
   "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a1d18bd5-5022-4f58-bfaa-ddf86f5cf162/id-preview-d28c64ec--379849b8-e25a-40db-9b86-56b603dda73d.lovable.app-1773255702732.png";
 
+// Built-in defaults per essay — used when DB has no entry
+const STORY_DEFAULTS: Record<string, { title: string; desc: string }> = {
+  persia: { title: "The Immortal Empire — 2,500 Years of Persia", desc: "From Cyrus the Great to the Islamic Revolution. The empire that was conquered, fractured, and reborn — again and again." },
+  wisdom: { title: "The Library That Lit the World", desc: "Baghdad's House of Wisdom sparked a golden age that shaped modern science, mathematics, and medicine. Then the Mongols came." },
+  buddhism: { title: "The Path That Split — How Buddhism Fractured", desc: "One man's awakening became a world religion — then fractured into competing visions of enlightenment." },
+  samurai: { title: "How Japan Killed the Samurai — With Pension Bonds", desc: "The warrior class that ruled Japan for 700 years was dismantled not by war, but by bureaucratic precision." },
+  "1857": { title: "The Signal and the Fire — India's First Rebellion", desc: "A greased cartridge ignited India's first war of independence. The British Empire was never the same." },
+  napoleon: { title: "The Rise and Fall of Napoleon Bonaparte", desc: "From artillery officer to Emperor of Europe — and the catastrophic hubris that brought it all down." },
+  constantinople: { title: "Constantinople — The City That Was the World's Hinge", desc: "Seven names, three empires, one strait. The city that controlled the flow of history for 1,600 years." },
+  "india-states": { title: "The Mosaic Republic — How 565 States Became India", desc: "The greatest political integration in modern history. 565 princely states unified into one nation in under two years." },
+  "mongol-india": { title: "The Wall That Held — Why the Mongols Failed in India", desc: "The Mongols conquered everything from China to Hungary. India stopped them cold." },
+};
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -26,11 +39,10 @@ Deno.serve(async (req: Request) => {
   const ua = req.headers.get("user-agent") || "";
   const isCrawler = CRAWLER_UA.test(ua);
 
-  // Determine target page URL
   const targetPath = storyId ? `/${storyId}` : "/";
   const targetUrl = `${SITE_URL}${targetPath}`;
 
-  // Default OG values
+  // Start with site defaults
   let ogTitle = SITE_TITLE;
   let ogDesc = SITE_DESC;
   let ogImage = SITE_IMAGE;
@@ -39,19 +51,24 @@ Deno.serve(async (req: Request) => {
   if (storyId) {
     ogUrl = `${SITE_URL}/${storyId}`;
 
-    // Try to fetch custom OG data from database
+    // Apply built-in defaults first
+    const defaults = STORY_DEFAULTS[storyId];
+    if (defaults) {
+      ogTitle = defaults.title;
+      ogDesc = defaults.desc;
+    }
+
+    // Then try DB override
     try {
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL")!,
         Deno.env.get("SUPABASE_ANON_KEY")!
       );
-
       const { data } = await supabase
         .from("story_og")
         .select("og_title, og_description, og_image_url")
         .eq("story_id", storyId)
         .maybeSingle();
-
       if (data) {
         if (data.og_title) ogTitle = data.og_title;
         if (data.og_description) ogDesc = data.og_description;
@@ -62,15 +79,12 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  // For crawlers: serve HTML with OG tags
-  // For humans: redirect to the real page
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>${escapeHtml(ogTitle)}</title>
   <meta name="description" content="${escapeHtml(ogDesc)}" />
-
   <meta property="og:type" content="article" />
   <meta property="og:url" content="${escapeHtml(ogUrl)}" />
   <meta property="og:title" content="${escapeHtml(ogTitle)}" />
@@ -78,13 +92,11 @@ Deno.serve(async (req: Request) => {
   <meta property="og:image" content="${escapeHtml(ogImage)}" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@EpochLives" />
   <meta name="twitter:title" content="${escapeHtml(ogTitle)}" />
   <meta name="twitter:description" content="${escapeHtml(ogDesc)}" />
   <meta name="twitter:image" content="${escapeHtml(ogImage)}" />
-
   ${!isCrawler ? `<meta http-equiv="refresh" content="0;url=${escapeHtml(targetUrl)}" />` : ""}
 </head>
 <body>
