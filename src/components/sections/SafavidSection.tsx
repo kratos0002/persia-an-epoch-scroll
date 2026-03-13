@@ -2,7 +2,8 @@ import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
-import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
+import { EraWaypoint } from '@/components/visuals/EraWaypoint';
+import { ERA_COLORS } from '@/data/eras';
 import type { EmpireId } from '@/components/visuals/InteractiveMap';
 
 /* ─────────────────── Stage definitions ─────────────────── */
@@ -46,7 +47,7 @@ const stages: SafavidStage[] = [
       eyebrow: '1501 CE',
       label: 'A Kingdom from Nothing',
       detail: 'Ismail crowned at 14 · Conquers Tabriz with his Qizilbash warriors',
-      imageSrc: '/images/safavid-shah-ismail.jpg',
+      imageSrc: '/images/shah-ismail-i.jpg',
       imageAlt: 'Shah Ismail I',
       imagePosition: 'center 20%',
     },
@@ -832,11 +833,6 @@ export const SafavidSection = () => (
       ]}
     />
 
-    <EraTransition
-      fromColor={ERA_COLORS.safavid}
-      toColor={ERA_COLORS.modern}
-      year="1905 CE"
-      label="The Modern Age"
-    />
+    <EraWaypoint activeIndex={10} label="The Modern Age" year="1905 CE" />
   </section>
 );

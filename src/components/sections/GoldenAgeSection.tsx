@@ -1,7 +1,9 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { InteractiveMap, EmpireId } from '@/components/visuals/InteractiveMap';
-import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
+import { GoldenAgeIntroGraphic } from '@/components/visuals/GoldenAgeIntroGraphic';
+import { EraWaypoint } from '@/components/visuals/EraWaypoint';
+import { ERA_COLORS } from '@/data/eras';
 
 const stages: {
   empire: EmpireId;
@@ -137,6 +139,9 @@ export const GoldenAgeSection = () => (
   <section id="golden-age" style={{ '--era-primary': ERA_COLORS.goldenAge } as React.CSSProperties}>
     <StickyScroll
       graphic={(activeStep) => {
+        // Step 0: Constellation of knowledge — cities as luminous nodes
+        if (activeStep === 0) return <GoldenAgeIntroGraphic />;
+
         const stage = stages[Math.min(activeStep, stages.length - 1)];
 
         return (
@@ -148,6 +153,7 @@ export const GoldenAgeSection = () => (
               visibleCities={stage.cities}
               center={stage.center}
               zoom={stage.zoom}
+              showTerritories={false}
               routeCities={stage.routeCities}
               annotatedCities={stage.annotatedCities}
               spotlightCity={stage.spotlight}
@@ -248,11 +254,6 @@ export const GoldenAgeSection = () => (
         </div>,
       ]}
     />
-    <EraTransition
-      fromColor={ERA_COLORS.goldenAge}
-      toColor={ERA_COLORS.mongol}
-      year="1219 CE"
-      label="The Catastrophe"
-    />
+    <EraWaypoint activeIndex={8} label="The Catastrophe" year="1219 CE" />
   </section>
 );

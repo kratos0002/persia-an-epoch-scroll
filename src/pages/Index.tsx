@@ -3,6 +3,7 @@ import { useScrollSpy } from '@/hooks/useScrollSpy';
 import { ProgressTimeline } from '@/components/scroll/ProgressTimeline';
 import { SectionNav } from '@/components/scroll/SectionNav';
 import { HeroSection } from '@/components/sections/HeroSection';
+import { PrologueSection } from '@/components/sections/PrologueSection';
 import { CyrusSection } from '@/components/sections/CyrusSection';
 import { DariusSection } from '@/components/sections/DariusSection';
 import { PersianWarsSection } from '@/components/sections/PersianWarsSection';
@@ -28,6 +29,7 @@ const Index = () => {
       <ProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <HeroSection />
       <EditionBadge essayId="persia" />
+      <PrologueSection />
       <CyrusSection />
       <DariusSection />
       <PersianWarsSection />

@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
+import { HorizontalTimeline } from '@/components/home/HorizontalTimeline';
+import { StoryGrid } from '@/components/home/StoryGrid';
 import { usePageAnalytics } from '@/hooks/usePageAnalytics';
 import { useStoryOverrides } from '@/hooks/useStoryOverrides';
 import storyPersia from '@/assets/story-persia.jpg';
@@ -96,26 +97,6 @@ const STORIES: StoryCard[] = [
   },
 ];
 
-/* ── Era Groupings ─────────────────────────────── */
-
-interface EraGroup {
-  label: string;
-  range: string;
-  stories: StoryCard[];
-}
-
-const groupStoriesByEra = (stories: StoryCard[]): EraGroup[] => {
-  const sorted = [...stories].sort((a, b) => a.sortYear - b.sortYear);
-  const eras: { label: string; range: string; test: (y: number) => boolean }[] = [
-    { label: 'The Ancient World', range: '657 BCE – 528 BCE', test: y => y < 0 },
-    { label: 'The Medieval World', range: '762 – 1294 CE', test: y => y >= 0 && y < 1500 },
-    { label: 'Early Modern', range: '1603 – 1821', test: y => y >= 1500 && y < 1850 },
-    { label: 'The Modern Age', range: '1857 – Present', test: y => y >= 1850 },
-  ];
-  return eras
-    .map(era => ({ label: era.label, range: era.range, stories: sorted.filter(s => era.test(s.sortYear)) }))
-    .filter(g => g.stories.length > 0);
-};
 
 /* ── Floating Historical Symbols ─────────────── */
 
@@ -257,258 +238,6 @@ const WordReveal = ({ text, className, italic }: { text: string; className?: str
   );
 };
 
-/* ── Era Header ──────────────────────────────── */
-
-const EraHeader = ({ label, range }: { label: string; range: string }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
-
-  return (
-    <motion.div
-      ref={ref}
-      className="col-span-1 md:col-span-3 flex items-center gap-4 py-8 md:py-12"
-      initial={{ opacity: 0 }}
-      animate={inView ? { opacity: 1 } : {}}
-      transition={{ duration: 0.8 }}
-    >
-      {/* Left ornament line */}
-      <motion.div
-        className="hidden md:block flex-1 h-px"
-        style={{ background: 'linear-gradient(90deg, transparent, hsl(35,25%,75%))' }}
-        initial={{ scaleX: 0, transformOrigin: 'right' }}
-        animate={inView ? { scaleX: 1 } : {}}
-        transition={{ duration: 1, delay: 0.2 }}
-      />
-      <div className="text-center flex-shrink-0">
-        <p className="text-[9px] tracking-[0.4em] uppercase font-body font-semibold text-[hsl(25,20%,55%)] mb-1">
-          {range}
-        </p>
-        <h3 className="font-display text-xl md:text-2xl font-bold text-[hsl(25,30%,22%)]">
-          {label}
-        </h3>
-      </div>
-      {/* Right ornament line */}
-      <motion.div
-        className="hidden md:block flex-1 h-px"
-        style={{ background: 'linear-gradient(90deg, hsl(35,25%,75%), transparent)' }}
-        initial={{ scaleX: 0, transformOrigin: 'left' }}
-        animate={inView ? { scaleX: 1 } : {}}
-        transition={{ duration: 1, delay: 0.2 }}
-      />
-    </motion.div>
-  );
-};
-
-/* ── River Node (dot on the river line) ──────── */
-
-const RiverNode = ({ color, era }: { color: string; era: string }) => (
-  <div className="hidden md:flex flex-col items-center justify-start pt-8 relative">
-    {/* Era year label */}
-    <span className="absolute -top-1 text-[9px] tracking-[0.15em] uppercase font-body font-semibold text-[hsl(25,15%,55%)] whitespace-nowrap">
-      {era}
-    </span>
-    {/* Node circle */}
-    <div className="w-5 h-5 rounded-full border-2 border-[hsl(35,20%,78%)] bg-[hsl(38,30%,94%)] flex items-center justify-center z-10 mt-1">
-      <div className="w-2 h-2 rounded-full" style={{ background: color }} />
-    </div>
-    {/* Connection line extending down */}
-    <div className="w-px flex-1 bg-[hsl(35,20%,82%)]" />
-  </div>
-);
-
-/* ── Timeline Card ───────────────────────────── */
-
-const TimelineCard = ({ story, side }: { story: StoryCard; side: 'left' | 'right' }) => {
-  const isLive = story.status === 'live';
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '5%']);
-
-  const inner = (
-    <motion.div
-      ref={ref}
-      className={`group relative overflow-hidden rounded-xl ${isLive ? 'cursor-pointer' : 'opacity-70'}`}
-      style={{
-        background: 'hsl(38, 28%, 92%)',
-        border: '1px solid hsl(35, 20%, 85%)',
-        boxShadow: '0 2px 16px hsla(25, 20%, 20%, 0.06)',
-      }}
-      initial={{ opacity: 0, x: side === 'left' ? -40 : 40 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={isLive ? { y: -3, boxShadow: '0 8px 30px hsla(25, 20%, 20%, 0.1)' } : {}}
-    >
-      {/* Image */}
-      <div className="relative w-full h-48 md:h-56 overflow-hidden">
-        <motion.img
-          src={story.image}
-          alt={story.title}
-          className={`w-full h-full object-cover ${isLive ? 'group-hover:scale-[1.03] transition-transform duration-700' : 'grayscale-[30%]'}`}
-          style={{ y: imgY }}
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        {/* Watermark number */}
-        <div className="absolute top-3 right-4 font-display text-6xl font-black leading-none text-white/[0.06] select-none">
-          {String(story.number).padStart(2, '0')}
-        </div>
-        {/* Coming soon badge */}
-        {!isLive && (
-          <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-[hsl(25,15%,30%)]/80 text-[hsl(38,30%,92%)] text-[9px] tracking-[0.15em] uppercase font-semibold backdrop-blur-sm">
-            Coming Soon
-          </div>
-        )}
-        {/* Tags over image */}
-        <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-          {story.tags.slice(0, 2).map(tag => (
-            <span key={tag} className="text-[9px] tracking-[0.1em] uppercase font-body font-semibold text-white/80 bg-black/20 backdrop-blur-sm px-2 py-0.5 rounded-full">
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-5 md:p-6">
-        <h3 className="font-display text-xl md:text-2xl font-bold text-[hsl(25,25%,18%)] mb-1 leading-tight">
-          {story.title}
-        </h3>
-        <p className="font-body text-xs text-[hsl(25,15%,50%)] mb-3">{story.subtitle}</p>
-        <p className="font-body text-sm text-[hsl(25,15%,35%)] leading-relaxed mb-4 line-clamp-3">
-          {story.hook}
-        </p>
-        {isLive ? (
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] tracking-[0.12em] uppercase font-body font-semibold text-emerald-700">Live</span>
-            <span className="ml-auto text-[10px] tracking-[0.1em] uppercase font-body font-semibold text-[hsl(25,15%,45%)] group-hover:text-[hsl(25,30%,25%)] transition-colors">
-              Read <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
-            </span>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] tracking-[0.12em] uppercase font-body font-semibold text-[hsl(25,15%,55%)]">
-              {story.tags[2] || ''}
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* Accent bottom line */}
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 h-0.5 origin-left"
-        style={{ background: story.color }}
-        initial={{ scaleX: 0 }}
-        whileHover={{ scaleX: 1 }}
-        transition={{ duration: 0.4 }}
-      />
-    </motion.div>
-  );
-
-  if (isLive) return <Link to={story.href}>{inner}</Link>;
-  return inner;
-};
-
-/* ── Timeline River ──────────────────────────── */
-
-const TimelineRiver = ({ stories }: { stories: StoryCard[] }) => {
-  const riverRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: riverRef, offset: ['start end', 'end start'] });
-  const fillHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-  const eraGroups = groupStoriesByEra(stories);
-
-  return (
-    <div ref={riverRef} className="relative max-w-5xl mx-auto">
-      {/* ── The River Line (desktop) ── */}
-      <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-[hsl(35,22%,82%)] z-0" />
-      <motion.div
-        className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 w-px z-0"
-        style={{
-          height: fillHeight,
-          background: 'linear-gradient(180deg, hsl(43,85%,55%), hsl(35,50%,45%))',
-        }}
-      />
-
-      {/* ── Mobile river line (left edge) ── */}
-      <div className="md:hidden absolute left-4 top-0 bottom-0 w-px bg-[hsl(35,22%,82%)]" />
-      <motion.div
-        className="md:hidden absolute left-4 top-0 w-px"
-        style={{
-          height: fillHeight,
-          background: 'linear-gradient(180deg, hsl(43,85%,55%), hsl(35,50%,45%))',
-        }}
-      />
-
-      {/* ── Era groups ── */}
-      {eraGroups.map((group) => (
-        <div key={group.label}>
-          {/* Era header */}
-          <div className="px-4 md:px-0">
-            <EraHeader label={group.label} range={group.range} />
-          </div>
-
-          {/* Stories in this era */}
-          {group.stories.map((story, i) => {
-            const side: 'left' | 'right' = i % 2 === 0 ? 'left' : 'right';
-
-            return (
-              <div key={story.id} className="relative">
-                {/* ── Desktop: 3-column grid ── */}
-                <div className="hidden md:grid grid-cols-[1fr_48px_1fr] gap-4 mb-10 items-start">
-                  {side === 'left' ? (
-                    <>
-                      <div className="pr-4">
-                        <TimelineCard story={story} side="left" />
-                      </div>
-                      <RiverNode color={story.color} era={story.era} />
-                      <div /> {/* empty right column */}
-                    </>
-                  ) : (
-                    <>
-                      <div /> {/* empty left column */}
-                      <RiverNode color={story.color} era={story.era} />
-                      <div className="pl-4">
-                        <TimelineCard story={story} side="right" />
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                {/* ── Mobile: single column with left river ── */}
-                <div className="md:hidden flex gap-4 mb-8 pl-4">
-                  {/* Mobile node */}
-                  <div className="flex flex-col items-center pt-6 flex-shrink-0">
-                    <div className="w-4 h-4 rounded-full border-2 border-[hsl(35,20%,78%)] bg-[hsl(38,30%,94%)] flex items-center justify-center z-10">
-                      <div className="w-1.5 h-1.5 rounded-full" style={{ background: story.color }} />
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0 pr-2">
-                    <p className="text-[9px] tracking-[0.15em] uppercase font-body font-semibold text-[hsl(25,15%,55%)] mb-2">
-                      {story.era}
-                    </p>
-                    <TimelineCard story={story} side="left" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ))}
-
-      {/* ── River terminus ornament ── */}
-      <div className="hidden md:flex justify-center py-8">
-        <motion.div
-          className="w-3 h-3 rotate-45 border border-[hsl(35,25%,70%)]"
-          initial={{ opacity: 0, scale: 0 }}
-          whileInView={{ opacity: 0.6, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        />
-      </div>
-    </div>
-  );
-};
 
 /* ── Grain texture overlay ───────────────────── */
 
@@ -539,8 +268,6 @@ const Home = () => {
     status: (overrides[s.id] || s.status) as StoryCard['status'],
     href: (overrides[s.id] === 'coming-soon' || (!overrides[s.id] && s.status === 'coming-soon')) ? '#' : s.href,
   })).filter(s => s.status !== 'draft');
-
-  const liveCount = mergedStories.filter(s => s.status === 'live').length;
 
   return (
     <div className="bg-[hsl(38,30%,94%)] min-h-screen text-[hsl(25,20%,20%)] relative">
@@ -610,29 +337,11 @@ const Home = () => {
       {/* ── Ornamental Divider ───────────────────── */}
       <OrnamentalDivider />
 
-      {/* ── Stories — Timeline River ─────────────── */}
-      <section id="stories" className="relative py-16 md:py-24 px-4 md:px-6">
-        {/* Section heading */}
-        <motion.div
-          className="max-w-2xl mx-auto text-center mb-8 md:mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
-          <p className="text-[10px] tracking-[0.35em] uppercase text-[hsl(25,15%,55%)] mb-3 font-body font-semibold">
-            {liveCount} Stories · Chronological
-          </p>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-[hsl(25,25%,20%)]">
-            Each essay has one visual mechanic.
-          </h2>
-          <p className="font-body text-lg text-[hsl(25,15%,45%)] mt-3">
-            Not a textbook. Not a summary. A designed experience that makes a historical moment visceral.
-          </p>
-        </motion.div>
+      {/* ── Horizontal Timeline — Visual Arc ────── */}
+      <HorizontalTimeline stories={mergedStories} />
 
-        <TimelineRiver stories={mergedStories} />
-      </section>
+      {/* ── Stories — Filterable Grid ─────────────── */}
+      <StoryGrid stories={mergedStories} />
 
       <SiteFooter variant="light" />
     </div>

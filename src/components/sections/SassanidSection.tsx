@@ -1,7 +1,7 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { SassanidCampaignGraphic } from '@/components/visuals/SassanidCampaignGraphic';
-import { ERA_COLORS } from '@/components/visuals/EraTransition';
+import { ERA_COLORS } from '@/data/eras';
 import { IslamicTransition } from '@/components/visuals/IslamicTransition';
 
 export const SassanidSection = () => (

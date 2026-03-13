@@ -1,7 +1,10 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { InteractiveMap, EmpireId } from '@/components/visuals/InteractiveMap';
-import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
+import { SassanidDeclineGraphic } from '@/components/visuals/SassanidDeclineGraphic';
+import { AbsorptionGraphic } from '@/components/visuals/AbsorptionGraphic';
+import { EraWaypoint } from '@/components/visuals/EraWaypoint';
+import { ERA_COLORS } from '@/data/eras';
 
 const stages: {
   empire: EmpireId;
@@ -76,14 +79,17 @@ const stages: {
   },
 ];
 
-const CtesiphonInset = () => (
-  <div className="pointer-events-none absolute right-[8%] bottom-[14%] z-[1200] w-[200px] sm:w-[220px] lg:w-[250px]">
-    <div className="overflow-hidden rounded-2xl border border-[hsl(160,45%,38%,0.35)] bg-[rgba(7,12,22,0.88)] shadow-[0_18px_56px_rgba(0,0,0,0.5)] backdrop-blur-xl">
-      <div className="space-y-3 p-5">
-        <p className="text-[10px] uppercase tracking-[0.28em] text-[hsl(160,45%,50%,0.72)]">637 CE</p>
-        <h4 className="font-display text-xl font-bold leading-tight text-[hsl(160,45%,55%)]">Ctesiphon Falls</h4>
-        <p className="font-body text-sm leading-relaxed text-foreground/65">
-          The Taq Kasra — world's largest brick vault — survived. Its conquerors had never seen anything like it.
+const TaqKasraImage = () => (
+  <div className="w-full h-full flex items-center justify-center bg-[hsl(220,18%,8%)]">
+    <div className="relative max-h-[85vh] max-w-[80vw]">
+      <img
+        src="/images/taq-kasra-1934.jpg"
+        alt="The Taq Kasra — the Great Arch of Ctesiphon, world's largest unreinforced brick vault, photographed in 1934"
+        className="max-h-[80vh] max-w-[76vw] object-contain rounded-lg shadow-2xl"
+      />
+      <div className="absolute -bottom-12 left-0 right-0 text-center">
+        <p className="font-body text-xs tracking-[0.2em] uppercase text-white/40">
+          Taq Kasra — the world's largest brick vault, still standing
         </p>
       </div>
     </div>
@@ -112,6 +118,15 @@ export const IslamicConquestSection = () => (
   <section id="islamic-conquest" style={{ '--era-primary': ERA_COLORS.islamic } as React.CSSProperties}>
     <StickyScroll
       graphic={(activeStep) => {
+        // Step 0: Taq Kasra arch decay — cinematic decline visual
+        if (activeStep === 0) return <SassanidDeclineGraphic />;
+
+        // Step 1: Full-bleed Taq Kasra photograph
+        if (activeStep === 1) return <TaqKasraImage />;
+
+        // Step 3: Absorption — Sassanid territory fades, Persian cities persist
+        if (activeStep === 3) return <AbsorptionGraphic />;
+
         // Step 4: full-screen Shahnameh image
         if (activeStep === 4) return <ShahnamehImage />;
 
@@ -129,21 +144,7 @@ export const IslamicConquestSection = () => (
               showTerritories={stage.showTerritories}
               routeCities={stage.routeCities}
               annotatedCities={stage.annotatedCities}
-              spotlightCity={
-                activeStep === 0 ? {
-                  name: 'Ctesiphon',
-                  eyebrow: '633 CE',
-                  label: 'An Empire Hollow',
-                  detail: 'Capital of the Sassanids • Treasury empty • Army broken',
-                } : activeStep === 3 ? {
-                  name: 'Baghdad',
-                  eyebrow: '762 CE',
-                  label: 'Built by Persians',
-                  detail: 'Persian architect • Persian name • On a Sassanid village',
-                } : undefined
-              }
             />
-            {activeStep === 1 && <CtesiphonInset />}
           </div>
         );
       }}
@@ -215,11 +216,6 @@ export const IslamicConquestSection = () => (
         </div>,
       ]}
     />
-    <EraTransition
-      fromColor={ERA_COLORS.islamic}
-      toColor={ERA_COLORS.goldenAge}
-      year="800 CE"
-      label="The Flowering"
-    />
+    <EraWaypoint activeIndex={7} label="The Flowering" year="800 CE" />
   </section>
 );

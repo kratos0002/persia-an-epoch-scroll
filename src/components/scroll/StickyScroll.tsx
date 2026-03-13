@@ -59,7 +59,7 @@ export const StickyScroll = ({ graphic, steps, className, graphicClassName }: St
       <div className={cn(
         "sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden",
         graphicClassName
-      )}>
+      )} style={{ willChange: 'transform' }}>
         {graphic(activeStep, progress)}
       </div>
 

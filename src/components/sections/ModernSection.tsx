@@ -2,7 +2,8 @@ import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { InteractiveMap } from '@/components/visuals/InteractiveMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
-import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
+import { EraWaypoint } from '@/components/visuals/EraWaypoint';
+import { ERA_COLORS } from '@/data/eras';
 import type { EmpireId } from '@/components/visuals/InteractiveMap';
 
 /* ─────────────────── Stage definitions ─────────────────── */
@@ -411,10 +412,6 @@ export const ModernSection = () => (
       ]}
     />
 
-    <EraTransition
-      fromColor={ERA_COLORS.modern}
-      toColor={ERA_COLORS.epilogue}
-      label="The Legacy"
-    />
+    <EraWaypoint activeIndex={10} label="The Legacy" isEpilogue />
   </section>
 );

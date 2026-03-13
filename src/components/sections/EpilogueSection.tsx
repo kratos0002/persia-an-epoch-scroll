@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { PersianPattern } from '@/components/visuals/PersianPattern';
-import { ERA_COLORS } from '@/components/visuals/EraTransition';
+import { ERA_COLORS } from '@/data/eras';
 import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 const timelineEras = [

@@ -367,11 +367,14 @@ const BattleTheaterMap = ({
       className: 'reference-city-label',
     });
 
-    const aegeanLabel = L.marker([37.65, 24.65], {
-      icon: buildReferenceLabel('Aegean Sea', 'rgba(73,119,177,0.72)'),
+    L.marker([37.65, 24.65], {
+      icon: L.divIcon({
+        className: '',
+        html: '',
+        iconSize: [0, 0],
+      }),
       interactive: false,
-    }).addTo(layer);
-    aegeanLabel.bindTooltip('Aegean Sea', {
+    }).addTo(layer).bindTooltip('Aegean Sea', {
       permanent: true,
       direction: 'center',
       offset: L.point(0, 0),
@@ -399,9 +402,6 @@ const BattleTheaterMap = ({
   return (
     <div className={`relative overflow-hidden rounded-[30px] border border-white/80 bg-[#f4f0e4] shadow-[0_28px_80px_rgba(0,0,0,0.22)] ${className || ''}`}>
       <div className="pointer-events-none absolute inset-0 z-[400] bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0)),radial-gradient(circle_at_15%_20%,rgba(255,255,255,0.45),transparent_24%)]" />
-      <div className="pointer-events-none absolute left-4 top-4 z-[450] rounded-full border border-[#0b1320]/18 bg-white/88 px-3 py-1.5 text-[10px] tracking-[0.28em] uppercase text-[#0b1320]/68 backdrop-blur-sm">
-        Battle Theater
-      </div>
       <div
         ref={containerRef}
         className="battle-theater-map relative z-10 min-h-[390px] w-full sm:min-h-[430px] xl:min-h-[520px]"

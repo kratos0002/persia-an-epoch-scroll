@@ -1,7 +1,8 @@
 import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { PersianWarsBattleExplorer } from '@/components/visuals/PersianWarsBattleExplorer';
-import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
+import { EraWaypoint } from '@/components/visuals/EraWaypoint';
+import { ERA_COLORS } from '@/data/eras';
 
 export const PersianWarsSection = () => (
   <section id="persian-wars" style={{ '--era-primary': ERA_COLORS.achaemenid } as React.CSSProperties}>
@@ -24,11 +25,6 @@ export const PersianWarsSection = () => (
       </RevealOnScroll>
     </div>
 
-    <EraTransition
-      fromColor={ERA_COLORS.achaemenid}
-      toColor={ERA_COLORS.alexander}
-      year="334 BCE"
-      label="The Conqueror Arrives"
-    />
+    <EraWaypoint activeIndex={3} label="The Conqueror Arrives" year="334 BCE" />
   </section>
 );

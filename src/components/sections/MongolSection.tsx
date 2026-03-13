@@ -3,7 +3,8 @@ import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { InteractiveMap, EmpireId } from '@/components/visuals/InteractiveMap';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
 import { QanatAnimation } from '@/components/visuals/QanatAnimation';
-import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
+import { EraWaypoint } from '@/components/visuals/EraWaypoint';
+import { ERA_COLORS } from '@/data/eras';
 
 const TOTAL_STEPS = 7;
 const QANAT_STEP = 3;
@@ -185,7 +186,7 @@ export const MongolSection = () => (
                 visibleCities={stage.cities}
                 center={stage.center}
                 zoom={stage.zoom}
-                showTerritories={stage.showTerritories}
+                showTerritories={false}
                 routeCities={stage.routeCities}
                 annotatedCities={stage.annotatedCities}
                 spotlightCity={stage.spotlight}
@@ -327,11 +328,6 @@ export const MongolSection = () => (
         ]}
       />
 
-      <EraTransition
-        fromColor={ERA_COLORS.mongol}
-        toColor={ERA_COLORS.safavid}
-        year="1501 CE"
-        label="Rebirth"
-      />
+      <EraWaypoint activeIndex={9} label="Rebirth" year="1501 CE" />
     </section>
 );

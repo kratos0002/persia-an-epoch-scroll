@@ -2,7 +2,8 @@ import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { InteractiveMap, EmpireId } from '@/components/visuals/InteractiveMap';
 import { EmpireScaleGraphic } from '@/components/visuals/EmpireScaleGraphic';
-import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
+import { EraWaypoint } from '@/components/visuals/EraWaypoint';
+import { ERA_COLORS } from '@/data/eras';
 
 const empireStages: {
   empire: EmpireId;
@@ -31,28 +32,6 @@ const empireStages: {
   { empire: 'none', cities: ['Pasargadae'], center: [30.2, 53.2], zoom: 8 },
 ];
 
-const BabylonInset = () => (
-  <div className="pointer-events-none absolute left-[20%] top-[50%] z-[1200] w-[200px] sm:w-[220px] lg:w-[250px]">
-    <div className="overflow-hidden rounded-2xl border border-[hsl(43,85%,55%,0.35)] bg-[rgba(7,12,22,0.88)] shadow-[0_18px_56px_rgba(0,0,0,0.5)] backdrop-blur-xl">
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <img
-          src="/images/babylon-ishtar-gate.jpg"
-          alt="Ishtar Gate associated with ancient Babylon"
-          className="h-full w-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(7,12,22,0.82)] via-transparent to-[rgba(7,12,22,0.12)]" />
-      </div>
-      <div className="space-y-3 p-5">
-        <p className="text-[10px] uppercase tracking-[0.28em] text-[hsl(43,85%,55%,0.72)]">539 BCE</p>
-        <h4 className="font-display text-[2.2rem] font-bold leading-none text-gradient-gold">Babylon</h4>
-        <p className="font-body text-base leading-relaxed text-foreground/72">
-          The gates opened. The city surrendered without a battle.
-        </p>
-      </div>
-    </div>
-  </div>
-);
-
 const HistoricalStageImage = ({
   src,
   alt,
@@ -74,7 +53,6 @@ export const CyrusSection = () => (
     <StickyScroll
       graphic={(activeStep, progress) => {
         const stage = empireStages[Math.min(activeStep, empireStages.length - 1)];
-        const zoomBoost = progress * 0.3;
         const activeSpotlight = activeStep === 0 ? {
           name: 'Pasargadae',
           eyebrow: '550 BCE',
@@ -83,6 +61,14 @@ export const CyrusSection = () => (
           imageSrc: '/images/cyrus-portrait.jpg',
           imageAlt: 'Portrait-style reconstruction of Cyrus the Great',
           imagePosition: 'center 20%',
+        } : activeStep === 1 ? {
+          name: 'Babylon',
+          eyebrow: '539 BCE',
+          label: 'Babylon',
+          detail: 'The gates opened. The city surrendered without a battle.',
+          imageSrc: '/images/babylon-ishtar-gate.jpg',
+          imageAlt: 'Ishtar Gate associated with ancient Babylon',
+          imagePosition: 'center center',
         } : undefined;
 
         return activeStep < 4 ? (
@@ -101,7 +87,7 @@ export const CyrusSection = () => (
                 visibleCities={activeStep === 1 ? ['Pasargadae', 'Ecbatana', 'Sardis', 'Babylon'] : undefined}
                 highlightCities={activeStep === 1 ? ['Babylon'] : stage.cities}
                 center={stage.center}
-                zoom={stage.zoom + zoomBoost}
+                zoom={stage.zoom}
                 showTerritories={stage.showTerritories}
                 routeCities={stage.routeCities}
                 annotatedCities={activeStep === 1 ? [
@@ -110,7 +96,6 @@ export const CyrusSection = () => (
                 spotlightCity={activeSpotlight}
               />
             )}
-            {activeStep === 1 && <BabylonInset />}
           </div>
         ) : (
           <HistoricalStageImage
@@ -171,11 +156,6 @@ export const CyrusSection = () => (
         </div>,
       ]}
     />
-    <EraTransition
-      fromColor={ERA_COLORS.achaemenid}
-      toColor={ERA_COLORS.achaemenid}
-      year="518 BCE"
-      label="The Empire Matures"
-    />
+    <EraWaypoint activeIndex={1} label="The Empire Matures" year="518 BCE" />
   </section>
 );

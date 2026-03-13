@@ -1,7 +1,8 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { ParthianCampaignGraphic } from '@/components/visuals/ParthianCampaignGraphic';
-import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
+import { EraWaypoint } from '@/components/visuals/EraWaypoint';
+import { ERA_COLORS } from '@/data/eras';
 
 export const ParthianSection = () => (
   <section id="parthian" style={{ '--era-primary': ERA_COLORS.parthian } as React.CSSProperties}>
@@ -43,11 +44,6 @@ export const ParthianSection = () => (
         </div>,
       ]}
     />
-    <EraTransition
-      fromColor={ERA_COLORS.parthian}
-      toColor={ERA_COLORS.sassanid}
-      year="224 CE"
-      label="A New Persian Renaissance"
-    />
+    <EraWaypoint activeIndex={5} label="A New Persian Renaissance" year="224 CE" />
   </section>
 );

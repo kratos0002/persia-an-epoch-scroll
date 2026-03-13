@@ -88,6 +88,9 @@ const stageConfigs: Record<StageId, StageConfig> = {
       eyebrow: '334 BCE',
       title: 'A spear thrown at an empire',
       detail: 'He crosses from Macedon into Asia and strikes the Achaemenid west before anyone believes the empire can actually fall.',
+      imageSrc: '/images/alexander-lebrun-detail.webp',
+      imageAlt: 'Alexander the Great, detail from The Battle of Porus by Charles Le Brun',
+      credit: 'Detail from The Battles of Alexander, Charles Le Brun, c. 1673 / Louvre, Paris.',
       bullets: ['40,000 men', 'Crossing at the Hellespont', 'The first shock comes at Granicus'],
     },
   },
@@ -155,9 +158,9 @@ const stageConfigs: Record<StageId, StageConfig> = {
       eyebrow: '323 BCE',
       title: 'He became what he conquered',
       detail: 'From Babylon he rules as more than a Macedonian king, adopting Persian court ritual, Persian marriage politics, and Persian imperial scale.',
-      imageSrc: '/images/alexander-entry-babylon-lebrun.png',
-      imageAlt: 'Alexander the Great entering Babylon, painting by Charles Le Brun',
-      credit: 'Entry of Alexander into Babylon, Charles Le Brun, 1665 / Louvre, Paris.',
+      imageSrc: '/images/death-of-alexander-piloty.webp',
+      imageAlt: 'The Death of Alexander the Great, painting by Karl von Piloty',
+      credit: 'The Death of Alexander the Great, Karl von Piloty, 1886 / Neue Pinakothek, Munich.',
       bullets: [
         'Died in the palace of Nebuchadnezzar',
         'No named successor',
@@ -209,6 +212,113 @@ function ensureStyles() {
 }
 
 const deathColor = '#7858B4';
+
+function buildSpotlightIcon(overlay: OverlayConfig) {
+  const width = 196;
+  const height = 228;
+  const dotSize = 16;
+  const haloSize = 44;
+  const accentColor = routeStroke;
+
+  return L.divIcon({
+    className: '',
+    html: `
+      <div style="position:relative;width:${width}px;height:${height}px;display:flex;align-items:flex-end;justify-content:center;">
+        <div style="position:absolute;left:50%;bottom:${dotSize + 12}px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;">
+          <div style="
+            padding:10px 14px 11px;
+            border-radius:16px;
+            background:linear-gradient(180deg, rgba(8,12,22,0.96), rgba(10,16,28,0.9));
+            border:1px solid rgba(86,166,255,0.45);
+            box-shadow:0 14px 40px rgba(0,0,0,0.45), 0 0 28px rgba(86,166,255,0.16);
+            backdrop-filter:blur(12px);
+            min-width:168px;
+            white-space:normal;
+          ">
+            ${overlay.imageSrc ? `
+              <div style="
+                position:relative;
+                width:100%;
+                height:132px;
+                overflow:hidden;
+                border-radius:12px;
+                margin-bottom:10px;
+                border:1px solid rgba(86,166,255,0.18);
+                box-shadow:0 10px 24px rgba(0,0,0,0.3);
+              ">
+                <img
+                  src="${overlay.imageSrc}"
+                  alt="${overlay.imageAlt || overlay.title}"
+                  style="
+                    display:block;
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    object-position:center 20%;
+                    filter:saturate(0.88) contrast(1.04);
+                  "
+                />
+                <div style="
+                  position:absolute;
+                  inset:0;
+                  background:linear-gradient(180deg, rgba(6,10,18,0.08), rgba(6,10,18,0.5));
+                "></div>
+              </div>
+            ` : ''}
+            <div style="
+              font-family:'Source Sans 3', 'Source Sans Pro', system-ui, sans-serif;
+              font-size:10px;
+              text-transform:uppercase;
+              letter-spacing:0.22em;
+              color:rgba(86,166,255,0.72);
+              margin-bottom:5px;
+            ">${overlay.eyebrow}</div>
+            <div style="
+              font-family:'Playfair Display', Georgia, serif;
+              font-size:21px;
+              font-weight:700;
+              line-height:1.05;
+              color:${accentColor};
+              text-shadow:0 0 18px rgba(86,166,255,0.12);
+            ">${overlay.title}</div>
+          </div>
+          <div style="
+            width:1px;
+            height:18px;
+            background:linear-gradient(180deg, rgba(86,166,255,0.8), rgba(86,166,255,0));
+            box-shadow:0 0 10px rgba(86,166,255,0.35);
+          "></div>
+        </div>
+        <div style="
+          position:absolute;
+          left:50%;
+          bottom:${(dotSize - haloSize) / 2}px;
+          width:${haloSize}px;
+          height:${haloSize}px;
+          transform:translateX(-50%);
+          border-radius:50%;
+          background:rgba(86,166,255,0.3);
+          opacity:0.3;
+          animation: mapBeaconPulse 2.8s ease-out infinite;
+        "></div>
+        <div style="
+          position:absolute;
+          left:50%;
+          bottom:0;
+          width:${dotSize}px;
+          height:${dotSize}px;
+          transform:translateX(-50%);
+          border-radius:50%;
+          background:${accentColor};
+          border:3px solid rgba(255,255,255,0.95);
+          box-shadow:0 0 0 5px rgba(86,166,255,0.18), 0 8px 20px rgba(0,0,0,0.18);
+        "></div>
+      </div>
+    `,
+    iconSize: [width, height],
+    iconAnchor: [width / 2, height],
+  });
+}
 
 function buildMarkerIcon(kind: PointKind, highlighted: boolean, stageId: StageId, pointId: PointId) {
   const isPersepolisFire = stageId === 2 && pointId === 'persepolis';
@@ -362,7 +472,7 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
     if (stageId !== 3) setBabylonPopout(null);
     map.flyTo(stage.center, stage.zoom, { duration: 1.4, easeLinearity: 0.2 });
 
-    if (stage.showEmpire) {
+    if (stage.showEmpire && stageId > 1) {
       renderEmpireTerritory(layer);
     }
 
@@ -397,11 +507,15 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
 
     visiblePoints.forEach((point) => {
       const highlighted = stage.highlightedPoints.includes(point.id);
+      const useSpotlight = stageId === 0 && point.id === 'macedon';
+
       const marker = L.marker([point.lat, point.lng], {
-        icon: buildMarkerIcon(point.kind, highlighted, stageId, point.id),
+        icon: useSpotlight
+          ? buildSpotlightIcon(stage.overlay)
+          : buildMarkerIcon(point.kind, highlighted, stageId, point.id),
       }).addTo(layer);
 
-      if (stage.labeledPoints.includes(point.id)) {
+      if (!useSpotlight && stage.labeledPoints.includes(point.id)) {
         marker.bindTooltip(point.label, {
           permanent: true,
           direction: point.kind === 'origin' ? 'left' : point.kind === 'frontier' ? 'right' : 'top',
@@ -456,13 +570,10 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
         const point = map.latLngToContainerPoint(toLatLng('babylon'));
         const width = containerRef.current.clientWidth;
         const height = containerRef.current.clientHeight;
-        const cardWidth = Math.min(344, Math.max(304, Math.round(width * 0.22)));
-        const cardHeight = 532;
-        const rightGutter = width >= 1600 ? 136 : width >= 1280 ? 124 : 104;
-        const cardX = Math.min(
-          width - cardWidth - rightGutter,
-          Math.max(point.x + 54, width * 0.58),
-        );
+        const cardWidth = Math.min(320, Math.max(280, Math.round(width * 0.2)));
+        const cardHeight = 580;
+        const rightGutter = width >= 1600 ? 56 : width >= 1280 ? 44 : 32;
+        const cardX = width - cardWidth - rightGutter;
         const cardY = Math.min(
           Math.max(point.y - cardHeight * 0.46, 28),
           height - cardHeight - 32,
@@ -484,11 +595,11 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
   }, [stage, stageId, visiblePoints]);
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[radial-gradient(circle_at_30%_30%,rgba(86,166,255,0.09),transparent_30%),radial-gradient(circle_at_78%_22%,rgba(212,168,67,0.08),transparent_25%),linear-gradient(180deg,rgba(5,9,16,0.15),rgba(5,9,16,0.58))]">
+    <div className="relative h-full w-full overflow-hidden bg-[radial-gradient(circle_at_30%_30%,rgba(86,166,255,0.09),transparent_30%),linear-gradient(180deg,rgba(5,9,16,0.15),rgba(5,9,16,0.58))]">
       <div ref={containerRef} className="alexander-campaign-map absolute inset-0" />
 
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,11,18,0.8)_0%,rgba(7,11,18,0.34)_24%,rgba(7,11,18,0.08)_38%,rgba(7,11,18,0.08)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_76%_18%,rgba(86,166,255,0.08),transparent_22%),radial-gradient(circle_at_73%_78%,rgba(212,168,67,0.08),transparent_24%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_76%_18%,rgba(86,166,255,0.08),transparent_22%)]" />
 
       {stageId === 2 && persepolisPopout ? (
         <AnimatePresence mode="wait">
@@ -664,7 +775,7 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
             </div>
           </motion.div>
         </AnimatePresence>
-      ) : (
+      ) : stageId === 1 ? null : stageId !== 0 ? (
         <AnimatePresence mode="wait">
           <motion.div
             key={stageId}
@@ -724,7 +835,7 @@ export const AlexanderCampaignGraphic = ({ activeStep }: { activeStep: number })
             ) : null}
           </motion.div>
         </AnimatePresence>
-      )}
+      ) : null}
     </div>
   );
 };

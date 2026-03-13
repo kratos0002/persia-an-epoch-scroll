@@ -2,7 +2,8 @@ import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
 import { HistoricalImage } from '@/components/visuals/HistoricalImage';
-import { EraTransition, ERA_COLORS } from '@/components/visuals/EraTransition';
+import { EraWaypoint } from '@/components/visuals/EraWaypoint';
+import { ERA_COLORS } from '@/data/eras';
 
 const achievements = [
   {
@@ -53,16 +54,39 @@ export const DariusSection = () => (
   <section id="darius" style={{ '--era-primary': ERA_COLORS.achaemenid } as React.CSSProperties}>
     <div className="max-w-4xl mx-auto px-6 py-20 md:py-32">
       <RevealOnScroll>
-        <p className="text-xs tracking-[0.3em] uppercase text-[hsl(43,85%,55%,0.6)] mb-4">518 BCE · Administration</p>
-        <h2 className="font-display text-4xl md:text-5xl font-bold mb-6 text-gradient-gold">
-          Darius the Great
-        </h2>
-        <p className="text-foreground/80 text-xl leading-relaxed font-body mb-4 max-w-2xl">
-          Cyrus conquered the world. Darius made it work.
-        </p>
-        <p className="text-foreground/50 text-lg font-body max-w-2xl">
-          He invented the infrastructure that every empire since has copied.
-        </p>
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
+          {/* Portrait */}
+          <div className="flex-shrink-0 w-48 md:w-56">
+            <div className="relative overflow-hidden rounded-2xl border border-[hsl(43,85%,55%,0.25)] shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+              <div className="aspect-[3/4] overflow-hidden">
+                <img
+                  src="/images/darius-portrait.webp"
+                  alt="Relief portrait of Darius the Great"
+                  className="h-full w-full object-cover object-center"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(7,12,22,0.7)] via-transparent to-transparent" />
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <p className="text-[9px] uppercase tracking-[0.25em] font-body" style={{ color: 'hsl(43, 85%, 55%, 0.6)' }}>518 BCE</p>
+                <p className="text-xs font-body mt-0.5" style={{ color: 'hsl(38, 20%, 75%)' }}>Behistun · Persian heartland</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Text */}
+          <div className="flex-1">
+            <p className="text-xs tracking-[0.3em] uppercase text-[hsl(43,85%,55%,0.6)] mb-4">518 BCE · Administration</p>
+            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6 text-gradient-gold">
+              Darius the Great
+            </h2>
+            <p className="text-foreground/80 text-xl leading-relaxed font-body mb-4 max-w-2xl">
+              Cyrus conquered the world. Darius made it work.
+            </p>
+            <p className="text-foreground/50 text-lg font-body max-w-2xl">
+              He invented the infrastructure that every empire since has copied.
+            </p>
+          </div>
+        </div>
       </RevealOnScroll>
 
       <div className="mt-20 space-y-24">
@@ -93,11 +117,6 @@ export const DariusSection = () => (
         ))}
       </div>
     </div>
-    <EraTransition
-      fromColor={ERA_COLORS.achaemenid}
-      toColor={ERA_COLORS.achaemenid}
-      year="499 BCE"
-      label="The Wars Begin"
-    />
+    <EraWaypoint activeIndex={2} label="The Wars Begin" year="499 BCE" />
   </section>
 );
