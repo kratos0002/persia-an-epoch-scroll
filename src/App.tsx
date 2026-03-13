@@ -13,6 +13,7 @@ import Rebellion1857 from "./pages/Rebellion1857.tsx";
 import Napoleon from "./pages/Napoleon.tsx";
 import Constantinople from "./pages/Constantinople.tsx";
 import IndiaStates from "./pages/IndiaStates.tsx";
+import MongolIndia from "./pages/MongolIndia.tsx";
 import Auth from "./pages/Auth.tsx";
 // ResetPassword removed — using OTP-only auth
 import NotFound from "./pages/NotFound.tsx";
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/napoleon" element={<Napoleon />} />
           <Route path="/constantinople" element={<Constantinople />} />
           <Route path="/india-states" element={<IndiaStates />} />
+          <Route path="/mongol-india" element={<MongolIndia />} />
           <Route path="/auth" element={<Auth />} />
           {/* reset-password route removed — OTP auth only */}
           <Route path="/about" element={<About />} />
