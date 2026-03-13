@@ -11,7 +11,7 @@ interface OgMeta {
 const DEFAULTS: OgMeta = {
   title: 'Epoch Lives — Turning points in history, felt',
   description: 'Visual essays on the turning points of civilizations. Immersive scrollytelling with maps, data, and primary sources.',
-  image: `${SITE}/images/alexander-entry-babylon-lebrun.png`,
+  image: `${SITE}/images/liberty-delacroix.jpg`,
 };
 
 const OG_MAP: Record<string, OgMeta> = {
