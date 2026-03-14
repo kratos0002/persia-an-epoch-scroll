@@ -100,4 +100,12 @@ export const EDITIONS: Record<string, EditionMeta> = {
       { version: '1.0', date: 'March 2026', note: 'Initial essay — the nutmeg wars, 1512–1667' },
     ],
   },
+  hormuz: {
+    edition: 'First Edition',
+    version: '1.0',
+    lastUpdated: 'March 2026',
+    changelog: [
+      { version: '1.0', date: 'March 2026', note: 'Initial essay — the Strait of Hormuz, 3000 BCE–today' },
+    ],
+  },
 };

@@ -44,6 +44,7 @@ const App = () => (
           <Route path="/mongol-india" element={<MongolIndia />} />
           <Route path="/nuclear" element={<Nuclear />} />
           <Route path="/nutmeg" element={<Nutmeg />} />
+          <Route path="/hormuz" element={<Hormuz />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/share/:storyId" element={<ShareRedirect />} />
