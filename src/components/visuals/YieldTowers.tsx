@@ -187,7 +187,7 @@ const CurieLineageVisual = () => {
         fontSize={7}
         fontFamily="var(--font-body)"
         letterSpacing={3}
-        textTransform="uppercase"
+        style={{ textTransform: 'uppercase' }}
       >
         FRENCH ATOMIC LINEAGE
       </text>
