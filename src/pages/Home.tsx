@@ -103,6 +103,12 @@ const STORIES: StoryCard[] = [
     image: storyNutmeg, tags: ['Zoom Map', 'Spice Trade', '1512–1667'],
     status: 'coming-soon', href: '/nutmeg', color: 'hsl(25, 75%, 45%)', era: '1512', sortYear: 1512,
   },
+  {
+    id: 'hormuz', number: 12, title: 'The Throat of the World', subtitle: 'The Strait of Hormuz',
+    hook: 'Every empire that ever ruled the East held this strait. Every one that lost it fell. A 3,000-year story of the world\'s most contested waterway.',
+    image: storyHormuz, tags: ['Zoom Map', 'Chokepoints', '3000 BCE–Today'],
+    status: 'coming-soon', href: '/hormuz', color: 'hsl(195, 55%, 35%)', era: '3000 BCE', sortYear: -3000,
+  },
 ];
 
 
