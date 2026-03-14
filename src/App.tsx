@@ -16,6 +16,7 @@ import IndiaStates from "./pages/IndiaStates.tsx";
 import MongolIndia from "./pages/MongolIndia.tsx";
 import Nuclear from "./pages/Nuclear.tsx";
 import Nutmeg from "./pages/Nutmeg.tsx";
+import Hormuz from "./pages/Hormuz.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
 import ShareRedirect from "./pages/ShareRedirect.tsx";
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/mongol-india" element={<MongolIndia />} />
           <Route path="/nuclear" element={<Nuclear />} />
           <Route path="/nutmeg" element={<Nutmeg />} />
+          <Route path="/hormuz" element={<Hormuz />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/share/:storyId" element={<ShareRedirect />} />
