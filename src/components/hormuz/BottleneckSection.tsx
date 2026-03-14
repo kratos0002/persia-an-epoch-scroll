@@ -1,5 +1,5 @@
 import React from 'react';
-import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { motion } from 'framer-motion';
 import { OilFlowGauge } from '@/components/visuals/OilFlowGauge';
 import { StraitZoomMap } from '@/components/visuals/StraitZoomMap';
 
@@ -12,57 +12,52 @@ const SMOKE = 'hsl(210, 15%, 40%)';
 export const BottleneckSection = () => {
   return (
     <section id="bottleneck" className="relative" style={{ background: NAVY }}>
-      {/* Intro text */}
-      <div className="min-h-screen flex items-center justify-center py-32 px-6">
-        <div className="max-w-2xl mx-auto">
-          <RevealOnScroll>
-            <p className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-6 text-center" style={{ color: AMBER }}>
-              Today — The 21-Mile Bottleneck
-            </p>
-          </RevealOnScroll>
+      {/* Opening — Oil flow gauge as hero visual */}
+      <div className="relative h-screen flex flex-col items-center justify-center px-6">
+        {/* Background glow */}
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 50% 30% at 50% 50%, hsla(35, 80%, 50%, 0.04), transparent)' }} />
 
-          <RevealOnScroll delay={0.2}>
-            <h2 className="font-display text-4xl md:text-6xl font-black leading-[0.95] mb-8 text-center" style={{ color: PARCHMENT }}>
-              One fifth of the<br />
-              <span style={{ color: AMBER }}>world's oil.</span>
-            </h2>
-          </RevealOnScroll>
+        <motion.div
+          className="relative z-10 w-full max-w-3xl"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+        >
+          <p className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-4 text-center" style={{ color: AMBER }}>
+            Today — The 21-Mile Bottleneck
+          </p>
+          <h2 className="font-display text-4xl md:text-6xl font-black leading-[0.95] mb-10 text-center" style={{ color: PARCHMENT }}>
+            One fifth of the world's <span style={{ color: AMBER }}>oil.</span>
+          </h2>
 
-          <RevealOnScroll delay={0.4}>
-            <p className="font-body text-lg leading-relaxed mb-6" style={{ color: SMOKE }}>
-              Today, approximately <strong style={{ color: AMBER }}>21 million barrels of oil</strong> pass
-              through the Strait of Hormuz every day — roughly one-fifth of global petroleum consumption.
-              Liquefied natural gas, petrochemicals, and container shipping add to the flow.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll delay={0.5}>
-            <p className="font-body text-lg leading-relaxed mb-10" style={{ color: SMOKE }}>
-              The strait is divided into two shipping lanes, each two miles wide,
-              separated by a two-mile buffer zone. Every tanker, every carrier, every warship
-              must thread through this six-mile corridor between Oman and Iran.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll delay={0.6}>
-            <div className="my-8">
-              <OilFlowGauge />
-            </div>
-          </RevealOnScroll>
-
-          <RevealOnScroll delay={0.7}>
-            <p className="font-body text-lg leading-relaxed" style={{ color: SMOKE }}>
-              The US Fifth Fleet is permanently stationed in Bahrain. Aircraft carrier strike groups
-              rotate through regularly. Iran's Revolutionary Guard Corps operates fast attack boats
-              in the strait. Both sides know the stakes: close Hormuz, even briefly,
-              and the global economy <strong style={{ color: TEAL }}>shudders</strong>.
-            </p>
-          </RevealOnScroll>
-        </div>
+          <OilFlowGauge />
+        </motion.div>
       </div>
 
-      {/* The zoom map */}
+      {/* The strait zoom map — the signature visual */}
       <StraitZoomMap />
+
+      {/* Brief floating context after the map */}
+      <div className="relative h-screen flex items-center justify-center px-8">
+        <motion.div
+          className="max-w-md p-8 rounded-xl backdrop-blur-md text-center"
+          style={{ background: 'hsla(215, 45%, 8%, 0.8)', border: `1px solid hsla(195, 55%, 35%, 0.1)` }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-20%' }}
+          transition={{ duration: 0.8 }}
+        >
+          <p className="font-body text-sm leading-relaxed mb-4" style={{ color: SMOKE }}>
+            The US Fifth Fleet is permanently stationed in Bahrain.
+            Iran's Revolutionary Guard operates fast attack boats in the strait.
+          </p>
+          <p className="font-body text-sm leading-relaxed" style={{ color: SMOKE }}>
+            Both sides know: close Hormuz, even briefly,
+            and the global economy <strong style={{ color: TEAL }}>shudders</strong>.
+          </p>
+        </motion.div>
+      </div>
     </section>
   );
 };
