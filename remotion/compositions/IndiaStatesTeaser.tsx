@@ -270,15 +270,6 @@ export const IndiaStatesTeaser: React.FC<{ layout: 'desktop' | 'mobile' }> = ({ 
                 <path key={`clip-${loc.id}`} d={loc.path} />
               ))}
             </clipPath>
-            <filter id="mosaic-glow">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feFlood floodColor="hsl(35, 65%, 50%)" floodOpacity="0.4" result="color" />
-              <feComposite in="color" in2="blur" operator="in" result="glow" />
-              <feMerge>
-                <feMergeNode in="glow" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
           </defs>
 
           {/* Dark base silhouette (always visible beneath mosaic) */}

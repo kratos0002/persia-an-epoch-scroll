@@ -2,6 +2,7 @@ import React from 'react';
 import { Composition } from 'remotion';
 import { India1857Teaser } from './compositions/India1857Teaser';
 import { IndiaStatesTeaser } from './compositions/IndiaStatesTeaser';
+import { BuddhismTeaser } from './compositions/BuddhismTeaser';
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -29,7 +30,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="IndiaStates-Desktop"
         component={IndiaStatesTeaser}
-        durationInFrames={150}
+        durationInFrames={450}
         fps={30}
         width={1920}
         height={1080}
@@ -38,6 +39,25 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="IndiaStates-Mobile"
         component={IndiaStatesTeaser}
+        durationInFrames={450}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{ layout: 'mobile' as const }}
+      />
+      {/* Buddhism: The Path That Split */}
+      <Composition
+        id="Buddhism-Desktop"
+        component={BuddhismTeaser}
+        durationInFrames={450}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{ layout: 'desktop' as const }}
+      />
+      <Composition
+        id="Buddhism-Mobile"
+        component={BuddhismTeaser}
         durationInFrames={450}
         fps={30}
         width={1080}

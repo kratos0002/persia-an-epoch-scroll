@@ -33,7 +33,7 @@ export const NapoleonEpilogue = () => {
         <RevealOnScroll>
           <div className="relative max-w-xl mx-auto mb-6 overflow-hidden rounded-lg">
             <img
-              src="/images/napoleon-st-helena.avif"
+              src="/images/napoleon-st-helena.jpg"
               alt="Napoleon in exile on St. Helena"
               className="w-full object-cover"
               style={{ filter: 'brightness(0.85) contrast(1.1) saturate(0.85)' }}
