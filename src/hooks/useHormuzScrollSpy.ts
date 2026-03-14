@@ -7,8 +7,7 @@ export interface HormuzSection {
 }
 
 export const HORMUZ_SECTIONS: HormuzSection[] = [
-  { id: 'hormuz-hero',      label: 'The Throat of the World',   year: '' },
-  { id: 'ancient-gulf',     label: 'The Prize',                 year: '~3000 BCE' },
+  { id: 'hormuz-hero',      label: 'The Throat of the World',   year: '~3000 BCE' },
   { id: 'portugal-seizes',  label: 'Portugal Seizes the Throat', year: '1507' },
   { id: 'british-gulf',     label: "Britain's Invisible Empire", year: '1820' },
   { id: 'tanker-war',       label: 'The Tanker War',            year: '1984' },
