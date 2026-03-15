@@ -95,34 +95,43 @@ const BroadcastPanel = () => {
     }
   }, [selectedEssay]);
 
-  const handleSend = async () => {
+  const sendEmail = async (testMode: boolean) => {
     if (!selectedEssay) return;
-    setSendStatus('sending');
+    const setStatus = testMode ? setTestStatus : setSendStatus;
+    setStatus('sending');
     setConfirmOpen(false);
 
     try {
-      const { data, error } = await supabase.functions.invoke('send-transactional-email', {
-        body: {
-          template: 'new-essay',
-          data: {
-            essayTitle: customTitle,
-            essaySubtitle: customSubtitle,
-            essayHook: customHook,
-            essayUrl: `${SITE_URL}${essay?.path || `/${selectedEssay}`}`,
-            essayImageUrl: customImage || undefined,
-          },
+      const body: Record<string, unknown> = {
+        template: 'new-essay',
+        data: {
+          essayTitle: customTitle,
+          essaySubtitle: customSubtitle,
+          essayHook: customHook,
+          essayUrl: `${SITE_URL}${essay?.path || `/${selectedEssay}`}`,
+          essayImageUrl: customImage || undefined,
+          ...(testMode ? { testRecipients: TEST_RECIPIENTS } : {}),
         },
-      });
+      };
+
+      const { data, error } = await supabase.functions.invoke('send-transactional-email', { body });
 
       if (error) throw error;
       setEnqueuedCount(data?.enqueued || 0);
-      setSendStatus('sent');
-      toast.success(`Enqueued ${data?.enqueued || 0} emails for delivery`);
+      setStatus('sent');
+      toast.success(
+        testMode
+          ? `Test email sent to ${TEST_RECIPIENTS.length} addresses`
+          : `Enqueued ${data?.enqueued || 0} emails for delivery`
+      );
     } catch (err: unknown) {
-      setSendStatus('error');
+      setStatus('error');
       toast.error(err instanceof Error ? err.message : 'Failed to send');
     }
   };
+
+  const handleSend = () => sendEmail(false);
+  const handleTestSend = () => sendEmail(true);
 
   return (
     <div className="space-y-4">
