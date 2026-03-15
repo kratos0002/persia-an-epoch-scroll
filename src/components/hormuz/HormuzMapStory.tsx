@@ -403,7 +403,7 @@ export const HormuzMapStory = () => {
           </p>
         </Card>
 
-        <TransitionBeat quote=""Geography does not change. What changes is who controls it."" />
+        <TransitionBeat quote={"\u201CGeography does not change. What changes is who controls it.\u201D"} />
 
         {/* ═══ ERA 2: Portugal ═══ */}
         <div id="portugal-seizes" />
