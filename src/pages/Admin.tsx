@@ -116,6 +116,7 @@ const Admin = () => {
             {([
               { key: 'status' as const, label: 'Status' },
               { key: 'social' as const, label: 'Social Sharing' },
+              { key: 'emails' as const, label: 'Emails' },
             ]).map(t => (
               <button
                 key={t.key}
