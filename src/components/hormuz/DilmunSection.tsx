@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { HormuzGulfMap, type MapMarker, type MapRoute } from '@/components/visuals/HormuzGulfMap';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { ANCIENT_CITIES, ANCIENT_TRADE_ROUTES, HZ } from '@/components/visuals/hormuzMapData';
 
 export const DilmunSection = () => {
@@ -19,6 +20,13 @@ export const DilmunSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         Long before Rome, before Athens, before the first stone of the Parthenon was cut — ships were crossing this water. The island of Dilmun, modern Bahrain, was the world's first international trading hub. Sumerian tablets record it as a paradise of fresh water and abundant dates — but more importantly, as the place where all trade routes converged.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Ancient Dilmun archaeological site in modern Bahrain"
+        caption="Placeholder: Archaeological remains of Dilmun — the world's first trading hub"
+        className="mt-4"
+        aspectRatio="16/10"
+      />
     </div>,
     <div key="goods">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.PARCHMENT }}>Copper, Lapis, and Pearls</h3>

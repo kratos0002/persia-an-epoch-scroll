@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { HormuzGulfMap, type MapMarker, type MapRoute } from '@/components/visuals/HormuzGulfMap';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { PERSIAN_ERA_CITIES, MONSOON_ROUTES, HZ } from '@/components/visuals/hormuzMapData';
 
 const STEP_CONFIGS: { markers: string[]; routes: boolean; center: [number, number]; zoom: number }[] = [
@@ -27,6 +28,13 @@ export const PersianGulfSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         When Darius I built the Achaemenid Empire — the largest the world had ever seen — he didn't just conquer land. He commissioned Scylax of Caryanda to sail from the Indus River to the Red Sea, mapping every port. The Persian navy patrolled both coasts of the Gulf. For the first time, a single empire controlled the entire waterway from Mesopotamia to the Indian Ocean.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Relief carving of Darius I from Persepolis"
+        caption="Placeholder: Persepolis relief showing Darius I receiving tribute from subject nations"
+        className="mt-4"
+        aspectRatio="4/3"
+      />
     </div>,
     <div key="sassanid">
       <p className="text-[10px] tracking-[0.3em] uppercase font-body font-semibold mb-3" style={{ color: HZ.PERSIAN_GOLD }}>224–651 CE</p>
@@ -41,6 +49,13 @@ export const PersianGulfSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         After the Islamic conquest, Arab and Persian sailors built a trading system that stretched from Basra to Canton. The monsoon winds dictated the rhythm: southwest in summer carried ships to India and China, northeast in winter brought them home. Every return voyage funneled through the strait. The Gulf became one terminal of the greatest maritime trade network the pre-modern world had ever seen.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Medieval Arab dhow sailing vessel"
+        caption="Placeholder: Arab dhow — the vessel that connected the Gulf to India, China, and East Africa"
+        className="mt-4"
+        aspectRatio="16/10"
+      />
     </div>,
     <div key="siraf">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.PARCHMENT }}>Siraf and Old Hormuz</h3>
@@ -53,6 +68,13 @@ export const PersianGulfSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         Around 1300, the rulers of Hormuz made a fateful decision: they moved their kingdom from the mainland to a barren, waterless island at the very mouth of the strait. It was militarily defensible and commercially perfect. Marco Polo visited in 1293 and called it <em className="italic" style={{ color: HZ.AMBER }}>"the greatest market in the world."</em> Merchants from India, China, Africa, and Europe crowded its docks. The island had no fresh water, no agriculture — only its position. And that was enough.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Hormuz Island with its distinctive red soil"
+        caption="Placeholder: Hormuz Island — barren, waterless, and the richest port in the medieval world"
+        className="mt-4"
+        aspectRatio="16/9"
+      />
     </div>,
   ];
 

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { HormuzGulfMap, type MapMarker, type MapRoute } from '@/components/visuals/HormuzGulfMap';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { INBOUND_LANE, OUTBOUND_LANE, GULF_CITIES, HZ } from '@/components/visuals/hormuzMapData';
 
 export const BottleneckSection = () => {
@@ -20,6 +21,13 @@ export const BottleneckSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         Two shipping lanes, each two miles wide, separated by a two-mile buffer zone. Inbound traffic hugs the Omani coast. Outbound traffic passes closer to Iran. This is the Traffic Separation Scheme — the world's most consequential traffic regulation. Every supertanker carrying Gulf oil to the world's refineries follows these lanes through a passage narrower than the length of Manhattan.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Satellite view of the Strait of Hormuz showing shipping traffic"
+        caption="Placeholder: Satellite view of the strait — every dot is a supertanker carrying the world's energy"
+        className="mt-4"
+        aspectRatio="16/9"
+      />
     </div>,
     <div key="21m">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.AMBER }}>
@@ -35,6 +43,13 @@ export const BottleneckSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         The US Fifth Fleet is stationed permanently in Bahrain — 20 minutes by helicopter from the strait. Iran's Islamic Revolutionary Guard Corps operates fast attack boats, anti-ship missiles, and mines from islands and coastal bases along the northern shore. Both sides know the calculus: close Hormuz, even briefly, and global oil prices spike, stock markets crash, and supply chains seize. The threat alone is a weapon.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="US Navy aircraft carrier in the Persian Gulf"
+        caption="Placeholder: A US carrier strike group transiting the strait — the permanent guarantor of 21 miles"
+        className="mt-4"
+        aspectRatio="16/9"
+      />
     </div>,
     <div key="no-bypass">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.AMBER }}>No Bypass</h3>
