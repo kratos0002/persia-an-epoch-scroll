@@ -91,7 +91,7 @@ const BroadcastPanel = () => {
       setCustomTitle(essay.title);
       setCustomSubtitle(essay.subtitle);
       setCustomHook(essay.hook);
-      setCustomImage('');
+      setCustomImage(essay.image || '');
     }
   }, [selectedEssay]);
 
