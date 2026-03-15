@@ -67,9 +67,11 @@ Deno.serve(async (req) => {
 
       // Enqueue for delivery
       const messageId = crypto.randomUUID()
+      const runId = crypto.randomUUID()
       await supabase.rpc('enqueue_email', {
         queue_name: 'transactional_emails',
         payload: {
+          run_id: runId,
           message_id: messageId,
           to: email,
           from: 'Epoch Lives <notify@notify.pastlives.site>',
