@@ -6,10 +6,9 @@ const DEFAULT_BATCH_SIZE = 10
 const DEFAULT_SEND_DELAY_MS = 200
 const DEFAULT_AUTH_TTL_MINUTES = 15
 const DEFAULT_TRANSACTIONAL_TTL_MINUTES = 60
+const DEFAULT_SEND_URL = 'https://api.lovable.dev/v1/email/send'
 
 // Check if an error is a rate-limit (429) response.
-// Uses EmailAPIError.status when available (email-js >=0.x with structured errors),
-// falls back to parsing the error message for older versions.
 function isRateLimited(error: unknown): boolean {
   if (error && typeof error === 'object' && 'status' in error) {
     return (error as { status: number }).status === 429
@@ -27,19 +26,58 @@ function getRetryAfterSeconds(error: unknown): number {
 
 function parseJwtClaims(token: string): Record<string, unknown> | null {
   const parts = token.split('.')
-  if (parts.length < 2) {
-    return null
-  }
-
+  if (parts.length < 2) return null
   try {
     const payload = parts[1]
       .replaceAll('-', '+')
       .replaceAll('_', '/')
       .padEnd(Math.ceil(parts[1].length / 4) * 4, '=')
-
     return JSON.parse(atob(payload)) as Record<string, unknown>
   } catch {
     return null
+  }
+}
+
+/**
+ * Send an email via raw HTTP fetch to the Lovable API.
+ * Used for transactional emails that have no run_id.
+ */
+async function sendViaHttp(
+  apiKey: string,
+  sendUrl: string,
+  payload: Record<string, unknown>
+): Promise<void> {
+  const body: Record<string, unknown> = {
+    to: payload.to,
+    from: payload.from,
+    sender_domain: payload.sender_domain,
+    subject: payload.subject,
+    html: payload.html,
+    text: payload.text,
+    purpose: payload.purpose || 'transactional',
+    label: payload.label,
+    message_id: payload.message_id,
+  }
+  if (payload.idempotency_key) body.idempotency_key = payload.idempotency_key
+  if (payload.unsubscribe_token) body.unsubscribe_token = payload.unsubscribe_token
+
+  const res = await fetch(sendUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!res.ok) {
+    const text = await res.text()
+    const err = new Error(`Email API error: ${res.status} ${text}`) as Error & { status: number; retryAfterSeconds: number | null }
+    err.status = res.status
+    err.retryAfterSeconds = res.headers.get('retry-after')
+      ? parseInt(res.headers.get('retry-after')!, 10)
+      : null
+    throw err
   }
 }
 
@@ -64,9 +102,6 @@ Deno.serve(async (req) => {
     )
   }
 
-  // Defense in depth: verify_jwt=true already requires a valid JWT at the
-  // gateway layer. This adds an explicit role check so only service-role
-  // callers can trigger queue processing.
   const token = authHeader.slice('Bearer '.length).trim()
   const claims = parseJwtClaims(token)
   if (claims?.role !== 'service_role') {
@@ -77,6 +112,7 @@ Deno.serve(async (req) => {
   }
 
   const supabase = createClient(supabaseUrl, supabaseServiceKey)
+  const sendUrl = Deno.env.get('LOVABLE_SEND_URL') || DEFAULT_SEND_URL
 
   // 1. Check rate-limit cooldown and read queue config
   const { data: state } = await supabase
@@ -116,18 +152,16 @@ Deno.serve(async (req) => {
 
     if (!messages?.length) continue
 
-    // Retry budget is based on real send failures, not pgmq read_ct.
-    // read_ct increments for every message in a claimed batch, including
-    // messages not attempted when a 429 stops processing early.
+    // Build failed-attempt counters from send log
     const messageIds = Array.from(
       new Set(
         messages
-          .map((msg) =>
+          .map((msg: { message: Record<string, unknown> }) =>
             msg?.message?.message_id && typeof msg.message.message_id === 'string'
               ? msg.message.message_id
               : null
           )
-          .filter((id): id is string => Boolean(id))
+          .filter((id: string | null): id is string => Boolean(id))
       )
     )
     const failedAttemptsByMessageId = new Map<string, number>()
@@ -139,44 +173,33 @@ Deno.serve(async (req) => {
         .eq('status', 'failed')
 
       if (failedRowsError) {
-        console.error('Failed to load failed-attempt counters', {
-          queue,
-          error: failedRowsError,
-        })
+        console.error('Failed to load failed-attempt counters', { queue, error: failedRowsError })
       } else {
         for (const row of failedRows ?? []) {
           const messageId = row?.message_id
           if (typeof messageId !== 'string' || !messageId) continue
-          failedAttemptsByMessageId.set(
-            messageId,
-            (failedAttemptsByMessageId.get(messageId) ?? 0) + 1
-          )
+          failedAttemptsByMessageId.set(messageId, (failedAttemptsByMessageId.get(messageId) ?? 0) + 1)
         }
       }
     }
 
     for (let i = 0; i < messages.length; i++) {
       const msg = messages[i]
-      const payload = msg.message
+      const payload = msg.message as Record<string, unknown>
       const failedAttempts =
         payload?.message_id && typeof payload.message_id === 'string'
-          ? (failedAttemptsByMessageId.get(payload.message_id) ?? 0)
+          ? (failedAttemptsByMessageId.get(payload.message_id as string) ?? 0)
           : 0
 
       // Drop expired messages (TTL exceeded)
       if (payload.queued_at) {
-        const ageMs = Date.now() - new Date(payload.queued_at).getTime()
+        const ageMs = Date.now() - new Date(payload.queued_at as string).getTime()
         const maxAgeMs = ttlMinutes[queue] * 60 * 1000
         if (ageMs > maxAgeMs) {
-          console.warn('Email expired (TTL exceeded)', {
-            queue,
-            msg_id: msg.msg_id,
-            queued_at: payload.queued_at,
-            ttl_minutes: ttlMinutes[queue],
-          })
+          console.warn('Email expired (TTL exceeded)', { queue, msg_id: msg.msg_id, queued_at: payload.queued_at, ttl_minutes: ttlMinutes[queue] })
           await supabase.from('email_send_log').insert({
             message_id: payload.message_id,
-            template_name: payload.label || queue,
+            template_name: (payload.label as string) || queue,
             recipient_email: payload.to,
             status: 'dlq',
             error_message: `TTL exceeded (${ttlMinutes[queue]} minutes)`,
@@ -194,11 +217,11 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Move to DLQ if max failed send attempts reached.
+      // Move to DLQ if max failed send attempts reached
       if (failedAttempts >= MAX_RETRIES) {
         await supabase.from('email_send_log').insert({
           message_id: payload.message_id,
-          template_name: payload.label || queue,
+          template_name: (payload.label as string) || queue,
           recipient_email: payload.to,
           status: 'dlq',
           error_message: `Max retries (${MAX_RETRIES}) exceeded (attempted ${failedAttempts} times)`,
@@ -215,25 +238,18 @@ Deno.serve(async (req) => {
         continue
       }
 
-      // Guard: skip if another worker already sent this message (VT expired race)
+      // Guard: skip if another worker already sent this message
       if (payload.message_id) {
         const { data: alreadySent } = await supabase
           .from('email_send_log')
           .select('id')
-          .eq('message_id', payload.message_id)
+          .eq('message_id', payload.message_id as string)
           .eq('status', 'sent')
           .maybeSingle()
 
         if (alreadySent) {
-          console.warn('Skipping duplicate send (already sent)', {
-            queue,
-            msg_id: msg.msg_id,
-            message_id: payload.message_id,
-          })
-          const { error: dupDelError } = await supabase.rpc('delete_email', {
-            queue_name: queue,
-            message_id: msg.msg_id,
-          })
+          console.warn('Skipping duplicate send (already sent)', { queue, msg_id: msg.msg_id, message_id: payload.message_id })
+          const { error: dupDelError } = await supabase.rpc('delete_email', { queue_name: queue, message_id: msg.msg_id })
           if (dupDelError) {
             console.error('Failed to delete duplicate message from queue', { queue, msg_id: msg.msg_id, error: dupDelError })
           }
@@ -242,40 +258,40 @@ Deno.serve(async (req) => {
       }
 
       try {
-        await sendLovableEmail(
-          {
-            run_id: payload.run_id,
-            to: payload.to,
-            from: payload.from,
-            sender_domain: payload.sender_domain,
-            subject: payload.subject,
-            html: payload.html,
-            text: payload.text,
-            purpose: payload.purpose,
-            label: payload.label,
-            idempotency_key: payload.idempotency_key,
-            unsubscribe_token: payload.unsubscribe_token,
-            message_id: payload.message_id,
-          },
-          // sendUrl is optional — when LOVABLE_SEND_URL is not set, the library
-          // falls back to the default Lovable API endpoint (https://api.lovable.dev).
-          // Set LOVABLE_SEND_URL as a Supabase secret to override (e.g. for local dev).
-          { apiKey, sendUrl: Deno.env.get('LOVABLE_SEND_URL') }
-        )
+        // --- Dispatch: auth emails use sendLovableEmail (has run_id), transactional use raw HTTP ---
+        if (payload.run_id) {
+          await sendLovableEmail(
+            {
+              run_id: payload.run_id as string,
+              to: payload.to as string,
+              from: payload.from as string,
+              sender_domain: payload.sender_domain as string,
+              subject: payload.subject as string,
+              html: payload.html as string,
+              text: payload.text as string,
+              purpose: payload.purpose as string,
+              label: payload.label as string,
+              idempotency_key: payload.idempotency_key as string | undefined,
+              unsubscribe_token: payload.unsubscribe_token as string | undefined,
+              message_id: payload.message_id as string | undefined,
+            },
+            { apiKey, sendUrl: Deno.env.get('LOVABLE_SEND_URL') }
+          )
+        } else {
+          // Transactional email — no run_id, use direct HTTP
+          await sendViaHttp(apiKey, sendUrl, payload)
+        }
 
         // Log success
         await supabase.from('email_send_log').insert({
           message_id: payload.message_id,
-          template_name: payload.label || queue,
+          template_name: (payload.label as string) || queue,
           recipient_email: payload.to,
           status: 'sent',
         })
 
         // Delete from queue
-        const { error: delError } = await supabase.rpc('delete_email', {
-          queue_name: queue,
-          message_id: msg.msg_id,
-        })
+        const { error: delError } = await supabase.rpc('delete_email', { queue_name: queue, message_id: msg.msg_id })
         if (delError) {
           console.error('Failed to delete sent message from queue', { queue, msg_id: msg.msg_id, error: delError })
         }
@@ -287,13 +303,14 @@ Deno.serve(async (req) => {
           msg_id: msg.msg_id,
           read_ct: msg.read_ct,
           failed_attempts: failedAttempts,
+          has_run_id: Boolean(payload.run_id),
           error: errorMsg,
         })
 
         if (isRateLimited(error)) {
           await supabase.from('email_send_log').insert({
             message_id: payload.message_id,
-            template_name: payload.label || queue,
+            template_name: (payload.label as string) || queue,
             recipient_email: payload.to,
             status: 'rate_limited',
             error_message: errorMsg.slice(0, 1000),
@@ -303,24 +320,21 @@ Deno.serve(async (req) => {
           await supabase
             .from('email_send_state')
             .update({
-              retry_after_until: new Date(
-                Date.now() + retryAfterSecs * 1000
-              ).toISOString(),
+              retry_after_until: new Date(Date.now() + retryAfterSecs * 1000).toISOString(),
               updated_at: new Date().toISOString(),
             })
             .eq('id', 1)
 
-          // Stop processing — remaining messages stay in queue (VT expires, retried next cycle)
           return new Response(
             JSON.stringify({ processed: totalProcessed, stopped: 'rate_limited' }),
             { headers: { 'Content-Type': 'application/json' } }
           )
         }
 
-        // Log non-429 failures to track real retry attempts.
+        // Log non-429 failures
         await supabase.from('email_send_log').insert({
           message_id: payload.message_id,
-          template_name: payload.label || queue,
+          template_name: (payload.label as string) || queue,
           recipient_email: payload.to,
           status: 'failed',
           error_message: errorMsg.slice(0, 1000),
@@ -328,11 +342,9 @@ Deno.serve(async (req) => {
         if (payload?.message_id && typeof payload.message_id === 'string') {
           failedAttemptsByMessageId.set(payload.message_id, failedAttempts + 1)
         }
-
-        // Non-429 errors: message stays invisible until VT expires, then retried
       }
 
-      // Small delay between sends to smooth bursts
+      // Small delay between sends
       if (i < messages.length - 1) {
         await new Promise((r) => setTimeout(r, sendDelayMs))
       }
