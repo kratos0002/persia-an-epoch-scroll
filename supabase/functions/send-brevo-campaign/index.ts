@@ -21,7 +21,8 @@ async function brevoFetch(path: string, apiKey: string, opts: RequestInit = {}) 
       ...(opts.headers || {}),
     },
   })
-  const data = await res.json()
+  const text = await res.text()
+  const data = text ? JSON.parse(text) : {}
   if (!res.ok) {
     throw new Error(`Brevo ${res.status}: ${JSON.stringify(data)}`)
   }
