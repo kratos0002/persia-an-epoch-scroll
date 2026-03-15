@@ -24,9 +24,9 @@ export const SubscribeForm = ({ variant = 'dark' }: { variant?: 'dark' | 'light'
       }
     } else {
       setStatus('success');
-      // Fire-and-forget welcome email
-      supabase.functions.invoke('send-transactional-email', {
-        body: { template: 'subscriber-welcome', data: { email: trimmedEmail } },
+      // Fire-and-forget: sync subscriber to MailerLite
+      supabase.functions.invoke('send-mailerlite-campaign', {
+        body: { action: 'sync-subscriber', data: { email: trimmedEmail } },
       }).catch(() => {});
     }
   };
