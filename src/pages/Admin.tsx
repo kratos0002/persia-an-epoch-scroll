@@ -37,7 +37,7 @@ const Admin = () => {
   const [overrides, setOverrides] = useState<Record<string, StoryStatus>>({});
   const [saving, setSaving] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const [tab, setTab] = useState<'status' | 'social'>('status');
+  const [tab, setTab] = useState<'status' | 'social' | 'emails'>('status');
 
   useEffect(() => {
     if (!authLoading && !isAdmin) navigate('/');
