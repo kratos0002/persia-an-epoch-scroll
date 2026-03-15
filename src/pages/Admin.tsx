@@ -183,6 +183,8 @@ const Admin = () => {
           )}
 
           {tab === 'social' && <OgManager />}
+
+          {tab === 'emails' && <EmailManager />}
         </motion.div>
       </div>
     </div>
