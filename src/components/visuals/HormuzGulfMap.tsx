@@ -10,6 +10,7 @@ export interface MapMarker {
   color: string;
   size?: number;
   pulse?: boolean;
+  detail?: string;
 }
 
 export interface MapRoute {
@@ -51,11 +52,23 @@ function makeDivIcon(html: string): L.DivIcon {
   return L.divIcon({ className: '', html, iconSize: [0, 0], iconAnchor: [-8, 3] });
 }
 
-function dotHtml(color: string, label: string, size = 6, pulse = false): string {
+function dotHtml(color: string, label: string, size = 6, pulse = false, clickable = false): string {
   const anim = pulse ? 'animation:hzPulse 1.5s infinite;' : '';
-  return `<div style="display:flex;align-items:center;gap:5px;white-space:nowrap;">
-    <div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};box-shadow:0 0 10px ${color}55;${anim}"></div>
-    <span style="font-family:'Source Sans 3',sans-serif;font-size:10px;color:${color};text-shadow:0 1px 4px rgba(0,0,0,0.9);font-weight:600;">${label}</span>
+  const cursor = clickable ? 'cursor:pointer;' : '';
+  const ring = clickable ? `<div style="position:absolute;inset:-3px;border-radius:50%;border:1px solid ${color};opacity:0.3;animation:hzPulse 2s infinite;"></div>` : '';
+  return `<div style="display:flex;align-items:center;gap:5px;white-space:nowrap;${cursor}">
+    <div style="position:relative;width:${size}px;height:${size}px;">
+      <div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};box-shadow:0 0 10px ${color}55;${anim}"></div>
+      ${ring}
+    </div>
+    <span style="font-family:'Source Sans 3',sans-serif;font-size:10px;color:${color};text-shadow:0 1px 4px rgba(0,0,0,0.9);font-weight:600;">${label}${clickable ? '<span style="opacity:0.4;font-size:8px;margin-left:3px;">ⓘ</span>' : ''}</span>
+  </div>`;
+}
+
+function popupHtml(label: string, detail: string, color: string): string {
+  return `<div style="background:hsla(215,45%,10%,0.95);border:1px solid ${color}33;border-radius:8px;padding:12px 14px;max-width:240px;">
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:14px;font-weight:700;color:${color};margin-bottom:6px;">${label}</div>
+    <div style="font-family:'Source Sans 3',sans-serif;font-size:12px;line-height:1.5;color:hsl(210,15%,60%);">${detail}</div>
   </div>`;
 }
 
@@ -120,9 +133,20 @@ export const HormuzGulfMap = ({ center, zoom, markers = [], routes = [], activeS
 
     // Draw markers
     markers.forEach(m => {
-      addLayer(L.marker(m.coords, {
-        icon: makeDivIcon(dotHtml(m.color, m.label, m.size ?? 6, m.pulse ?? false)),
-      }));
+      const hasDetail = !!m.detail;
+      const marker = L.marker(m.coords, {
+        icon: makeDivIcon(dotHtml(m.color, m.label, m.size ?? 6, m.pulse ?? false, hasDetail)),
+        interactive: hasDetail,
+      });
+      if (hasDetail) {
+        marker.bindPopup(popupHtml(m.label.replace(/^⚔\s*/, ''), m.detail!, m.color), {
+          className: 'hormuz-popup',
+          closeButton: true,
+          maxWidth: 260,
+          offset: [0, -4],
+        });
+      }
+      addLayer(marker);
     });
   }, [activeStep, center, zoom, markers, routes, clearLayers, addLayer]);
 

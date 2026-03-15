@@ -6,7 +6,7 @@ import { ANCIENT_CITIES, ANCIENT_TRADE_ROUTES, HZ } from '@/components/visuals/h
 
 export const DilmunSection = () => {
   const markers: MapMarker[] = useMemo(() =>
-    ANCIENT_CITIES.map(c => ({ coords: c.coords, label: c.name, color: c.color })),
+    ANCIENT_CITIES.map(c => ({ coords: c.coords, label: c.name, color: c.color, detail: c.detail })),
   []);
 
   const routes: MapRoute[] = useMemo(() =>
@@ -18,12 +18,13 @@ export const DilmunSection = () => {
       <p className="text-[10px] tracking-[0.3em] uppercase font-body font-semibold mb-3" style={{ color: HZ.AMBER }}>~3000 BCE</p>
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.PARCHMENT }}>The First Entrepôt</h3>
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
-        Long before Rome, before Athens, before the first stone of the Parthenon was cut — ships were crossing this water. The island of Dilmun, modern Bahrain, was the world's first international trading hub. Sumerian tablets record it as a paradise of fresh water and abundant dates — but more importantly, as the place where all trade routes converged.
+        Long before Rome, before Athens, before the first stone of the Parthenon was cut — ships were crossing this water. The island of <strong style={{ color: HZ.AMBER }}>Dilmun</strong>, modern <strong style={{ color: HZ.AMBER }}>Bahrain</strong>, was the world's first international trading hub. <strong style={{ color: HZ.PARCHMENT }}>Sumerian tablets</strong> record it as a paradise of fresh water and abundant dates — but more importantly, as the place where all trade routes converged.
       </p>
       <HistoricalImage
-        src="/placeholder.svg"
-        alt="Ancient Dilmun archaeological site in modern Bahrain"
-        caption="Placeholder: Archaeological remains of Dilmun — the world's first trading hub"
+        src="/images/dilmun-burial-mounds.jpg"
+        alt="Ancient Dilmun burial mounds in A'ali, Bahrain"
+        caption="Dilmun burial mounds in A'ali, Bahrain — evidence of the Gulf's first great trading civilization"
+        credit="Wikimedia Commons"
         className="mt-4"
         aspectRatio="16/10"
       />
@@ -31,7 +32,10 @@ export const DilmunSection = () => {
     <div key="goods">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.PARCHMENT }}>Copper, Lapis, and Pearls</h3>
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
-        Copper from Magan (modern Oman). Lapis lazuli carried overland from Afghanistan. Pearls harvested from the Gulf seabed. Textiles and grain from Mesopotamia. Carnelian and ivory from the Indus Valley. Every commodity moved on dhows that hugged these same coasts, funneling through the same narrow waters between Arabia and Iran.
+        <strong style={{ color: HZ.AMBER }}>Copper</strong> from <strong style={{ color: HZ.AMBER }}>Magan</strong> (modern Oman). <strong style={{ color: HZ.AMBER }}>Lapis lazuli</strong> carried overland from Afghanistan. <strong style={{ color: HZ.AMBER }}>Pearls</strong> harvested from the Gulf seabed. Textiles and grain from <strong style={{ color: HZ.AMBER }}>Mesopotamia</strong>. Carnelian and ivory from the <strong style={{ color: HZ.AMBER }}>Indus Valley</strong>. Every commodity moved on dhows that hugged these same coasts, funneling through the same narrow waters between Arabia and Iran.
+      </p>
+      <p className="font-body text-xs mt-3 italic" style={{ color: HZ.TEAL, opacity: 0.7 }}>
+        Click any city on the map to learn more about it.
       </p>
     </div>,
     <div key="funnel">
@@ -43,7 +47,7 @@ export const DilmunSection = () => {
     <div key="paradise">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.AMBER }}>Paradise at the Mouth of a Funnel</h3>
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
-        The Sumerians called Dilmun a paradise — the land where the sun rises, where death does not exist. But paradise sat at the mouth of a geographic chokepoint. Whoever controlled this water controlled the oldest long-distance trade network in human history. The pattern was set five thousand years ago. It has never changed.
+        The Sumerians called <strong style={{ color: HZ.AMBER }}>Dilmun</strong> a paradise — the land where the sun rises, where death does not exist. But paradise sat at the mouth of a <strong style={{ color: HZ.PARCHMENT }}>geographic chokepoint</strong>. Whoever controlled this water controlled the oldest long-distance trade network in human history. The pattern was set <strong style={{ color: HZ.AMBER }}>five thousand years ago</strong>. It has never changed.
       </p>
     </div>,
   ];
