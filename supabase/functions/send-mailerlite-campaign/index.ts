@@ -1,6 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { render } from 'npm:@react-email/render@0.0.12'
 import { NewEssayEmail } from '../_shared/email-templates/new-essay.tsx'
+import { SubscriberWelcomeEmail } from '../_shared/email-templates/subscriber-welcome.tsx'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -106,11 +107,61 @@ Deno.serve(async (req) => {
     // ── ACTION: sync-subscriber ──
     // Called when a new user subscribes on the site
     if (action === 'sync-subscriber') {
-      const { email } = data
+      const { email, sendWelcome = true } = data
       if (!email) throw new Error('Missing email')
 
       const groupId = await ensureGroup(mlApiKey, 'Epoch Lives Subscribers')
       await addSubscriber(mlApiKey, email, groupId)
+
+      // Send welcome email via a one-off MailerLite campaign
+      if (sendWelcome) {
+        try {
+          const welcomeGroupId = await ensureGroup(mlApiKey, 'Epoch Lives Welcome')
+          await addSubscriber(mlApiKey, email, welcomeGroupId)
+
+          const welcomeHtml = render(
+            SubscriberWelcomeEmail({
+              siteUrl: 'https://pastlives.site',
+              unsubscribeUrl: '{$unsubscribe}',
+            })
+          )
+
+          const sender = await getVerifiedSender(mlApiKey)
+
+          const { data: campaign } = await mlFetch('/campaigns', mlApiKey, {
+            method: 'POST',
+            body: JSON.stringify({
+              name: `Welcome – ${email} – ${new Date().toISOString()}`,
+              type: 'regular',
+              emails: [{
+                subject: "Welcome to Epoch Lives — history's turning points, felt",
+                from_name: 'Epoch Lives',
+                from: sender.email,
+                content: welcomeHtml,
+              }],
+              groups: [welcomeGroupId],
+            }),
+          })
+
+          await mlFetch(`/campaigns/${campaign.id}/schedule`, mlApiKey, {
+            method: 'POST',
+            body: JSON.stringify({ delivery: 'instant' }),
+          })
+
+          // Log
+          const messageId = crypto.randomUUID()
+          await supabase.from('email_send_log').insert({
+            message_id: messageId,
+            template_name: 'subscriber-welcome-ml',
+            recipient_email: email,
+            status: 'sent',
+          })
+
+          console.log('Welcome campaign sent to', email)
+        } catch (welcomeErr) {
+          console.error('Welcome email failed:', welcomeErr)
+        }
+      }
 
       return new Response(
         JSON.stringify({ success: true, synced: email }),
