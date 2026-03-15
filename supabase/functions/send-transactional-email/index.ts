@@ -1,4 +1,3 @@
-import { sendLovableEmail } from 'npm:@lovable.dev/email-js'
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { render } from 'npm:@react-email/render@0.0.12'
 import { SubscriberWelcomeEmail } from '../_shared/email-templates/subscriber-welcome.tsx'
@@ -9,8 +8,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-async function sendEmail(
-  apiKey: string,
+async function enqueueEmail(
   supabase: ReturnType<typeof createClient>,
   opts: {
     to: string
@@ -20,6 +18,7 @@ async function sendEmail(
     html: string
     text: string
     label: string
+    unsubscribeToken?: string
   }
 ) {
   const messageId = crypto.randomUUID()
@@ -32,41 +31,30 @@ async function sendEmail(
     status: 'pending',
   })
 
-  try {
-    await sendLovableEmail(
-      {
-        to: opts.to,
-        from: opts.from,
-        sender_domain: opts.senderDomain,
-        subject: opts.subject,
-        html: opts.html,
-        text: opts.text,
-        purpose: 'transactional',
-        label: opts.label,
-        message_id: messageId,
-      },
-      { apiKey, sendUrl: Deno.env.get('LOVABLE_SEND_URL') }
-    )
-
-    await supabase.from('email_send_log').insert({
+  // Enqueue to transactional_emails pgmq queue
+  const { error } = await supabase.rpc('enqueue_email', {
+    queue_name: 'transactional_emails',
+    payload: {
       message_id: messageId,
-      template_name: opts.label,
-      recipient_email: opts.to,
-      status: 'sent',
-    })
+      to: opts.to,
+      from: opts.from,
+      sender_domain: opts.senderDomain,
+      subject: opts.subject,
+      html: opts.html,
+      text: opts.text,
+      purpose: 'transactional',
+      label: opts.label,
+      unsubscribe_token: opts.unsubscribeToken,
+      queued_at: new Date().toISOString(),
+    },
+  })
 
-    return { success: true, messageId }
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error)
-    await supabase.from('email_send_log').insert({
-      message_id: messageId,
-      template_name: opts.label,
-      recipient_email: opts.to,
-      status: 'failed',
-      error_message: errorMsg.slice(0, 1000),
-    })
-    return { success: false, messageId, error: errorMsg }
+  if (error) {
+    console.error('Failed to enqueue email', { error, messageId })
+    return { success: false, messageId, error: error.message }
   }
+
+  return { success: true, messageId }
 }
 
 Deno.serve(async (req) => {
@@ -74,11 +62,10 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders })
   }
 
-  const apiKey = Deno.env.get('LOVABLE_API_KEY')
   const supabaseUrl = Deno.env.get('SUPABASE_URL')
   const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
 
-  if (!apiKey || !supabaseUrl || !supabaseServiceKey) {
+  if (!supabaseUrl || !supabaseServiceKey) {
     return new Response(
       JSON.stringify({ error: 'Server configuration error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -125,7 +112,7 @@ Deno.serve(async (req) => {
         })
       )
 
-      const result = await sendEmail(apiKey, supabase, {
+      const result = await enqueueEmail(supabase, {
         to: email,
         from: 'Epoch Lives <notify@notify.pastlives.site>',
         senderDomain: 'notify.pastlives.site',
@@ -133,6 +120,7 @@ Deno.serve(async (req) => {
         html,
         text: "Welcome to Epoch Lives — history's turning points, felt. Visit https://pastlives.site to explore.",
         label: 'subscriber-welcome',
+        unsubscribeToken: token,
       })
 
       return new Response(
@@ -160,7 +148,7 @@ Deno.serve(async (req) => {
         recipientEmails = (subscribers || []).map((s: { email: string }) => s.email)
       }
 
-      let sent = 0
+      let enqueued = 0
       let failed = 0
 
       for (const email of recipientEmails) {
@@ -194,7 +182,7 @@ Deno.serve(async (req) => {
 
         const plainText = `New essay: ${essayTitle}\n\n${essaySubtitle}\n\n"${essayHook}"\n\nRead the essay: ${essayUrl}\n\n— The editors, Epoch Lives`
 
-        const result = await sendEmail(apiKey, supabase, {
+        const result = await enqueueEmail(supabase, {
           to: email,
           from: 'Epoch Lives <notify@notify.pastlives.site>',
           senderDomain: 'notify.pastlives.site',
@@ -202,14 +190,15 @@ Deno.serve(async (req) => {
           html,
           text: plainText,
           label: isTest ? 'new-essay-test' : 'new-essay',
+          unsubscribeToken: token,
         })
 
-        if (result.success) sent++
+        if (result.success) enqueued++
         else failed++
       }
 
       return new Response(
-        JSON.stringify({ success: true, sent, failed, test: isTest }),
+        JSON.stringify({ success: true, enqueued, failed, test: isTest }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
