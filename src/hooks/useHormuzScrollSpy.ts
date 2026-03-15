@@ -7,17 +7,19 @@ export interface HormuzSection {
 }
 
 export const HORMUZ_SECTIONS: HormuzSection[] = [
-  { id: 'ancient-gulf',     label: 'The Ancient Gulf',            year: '~3000 BCE' },
-  { id: 'portugal-seizes',  label: 'Portugal Seizes the Throat',  year: '1507' },
-  { id: 'british-gulf',     label: "Britain's Invisible Empire",  year: '1820' },
-  { id: 'tanker-war',       label: 'The Tanker War',              year: '1984' },
-  { id: 'bottleneck',       label: 'The 21-Mile Bottleneck',      year: 'Today' },
-  { id: 'chokepoints',      label: "The World's Chokepoints",     year: 'Present' },
-  { id: 'hormuz-epilogue',  label: 'The Throat Remains',          year: '' },
+  { id: 'hormuz-hero',     label: 'The Throat of the World',     year: '' },
+  { id: 'ancient-gulf',    label: 'The Ancient Gulf',            year: '~3000 BCE' },
+  { id: 'persian-gulf',    label: 'The Imperial Lake',           year: '550 BCE' },
+  { id: 'portugal-seizes', label: 'Portugal Seizes the Throat',  year: '1507' },
+  { id: 'british-gulf',    label: "Britain's Invisible Empire",  year: '1820' },
+  { id: 'tanker-war',      label: 'The Tanker War',              year: '1984' },
+  { id: 'bottleneck',      label: 'The 21-Mile Bottleneck',      year: 'Today' },
+  { id: 'chokepoints',     label: "The World's Chokepoints",     year: 'Present' },
+  { id: 'hormuz-epilogue', label: 'The Throat Remains',          year: '' },
 ];
 
 export function useHormuzScrollSpy() {
-  const [activeSection, setActiveSection] = useState('ancient-gulf');
+  const [activeSection, setActiveSection] = useState('hormuz-hero');
   const [globalProgress, setGlobalProgress] = useState(0);
 
   useEffect(() => {
