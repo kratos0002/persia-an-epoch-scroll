@@ -78,6 +78,7 @@ Deno.serve(async (req) => {
           sender_domain: 'notify.pastlives.site',
           subject: "Welcome to Epoch Lives — history's turning points, felt",
           html,
+          text: "Welcome to Epoch Lives — history's turning points, felt. Visit https://pastlives.site to explore.",
           purpose: 'transactional',
           label: 'subscriber-welcome',
           queued_at: new Date().toISOString(),
@@ -140,6 +141,8 @@ Deno.serve(async (req) => {
           })
         )
 
+        const plainText = `New essay: ${essayTitle}\n\n${essaySubtitle}\n\n"${essayHook}"\n\nRead the essay: ${essayUrl}\n\n—The editors, Epoch Lives`
+
         const messageId = crypto.randomUUID()
         const runId = crypto.randomUUID()
         await supabase.rpc('enqueue_email', {
@@ -152,6 +155,7 @@ Deno.serve(async (req) => {
             sender_domain: 'notify.pastlives.site',
             subject: isTest ? `[TEST] New essay: ${essayTitle}` : `New essay: ${essayTitle}`,
             html,
+            text: plainText,
             purpose: 'transactional',
             label: isTest ? 'new-essay-test' : 'new-essay',
             queued_at: new Date().toISOString(),
