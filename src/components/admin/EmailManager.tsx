@@ -219,6 +219,7 @@ const BroadcastPanel = () => {
 const PreviewPanel = () => {
   const [selectedEssay, setSelectedEssay] = useState(ESSAYS[0].id);
   const essay = ESSAYS.find(e => e.id === selectedEssay)!;
+  const font = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 
   return (
     <div className="space-y-4">
@@ -237,57 +238,66 @@ const PreviewPanel = () => {
         </select>
       </div>
 
-      {/* Live preview render */}
-      <div className="rounded-lg border border-border overflow-hidden bg-[#F5F0E8]">
+      {/* Dark cinematic preview */}
+      <div className="rounded-lg border border-[#2A2318] overflow-hidden bg-[#0F0D0A]">
         {/* Gold bar */}
         <div className="h-1 bg-[#D4A933]" />
 
-        <div className="px-8 py-10 max-w-[520px] mx-auto bg-white border-x border-[#E8DFD0]">
+        <div className="px-10 py-10 max-w-[520px] mx-auto bg-[#1A1510] border-x border-[#2A2318]">
           {/* Brand */}
-          <p className="text-[13px] font-bold tracking-[0.25em] text-[#D4A933] text-center mb-5" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+          <p className="text-[13px] font-bold tracking-[0.25em] text-[#D4A933] text-center mb-1" style={font}>
             ✦ &nbsp; EPOCH LIVES &nbsp; ✦
           </p>
-          <hr className="border-[#D4A933] opacity-30 mb-7" />
+          <p className="text-[12px] text-[#6B5E4E] italic text-center tracking-[0.08em] mb-7" style={font}>
+            turning points, felt
+          </p>
 
-          {/* NEW ESSAY badge */}
-          <div className="bg-[#1A1510] text-[#D4A933] text-[10px] font-bold tracking-[0.3em] text-center py-2 rounded-sm mb-5">
-            NEW ESSAY
+          {/* Hero image placeholder */}
+          <div className="-mx-10 mb-6 bg-[#2A2318] flex items-center justify-center py-16">
+            <span className="text-[#4A4035] text-xs tracking-widest uppercase font-body">Hero Image</span>
           </div>
 
+          {/* Ornamental label */}
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-[#D4A933] text-center mb-4" style={font}>
+            ── &nbsp; NEW ESSAY &nbsp; ──
+          </p>
+
           {/* Title */}
-          <h2 className="text-[28px] font-bold text-[#1A1510] text-center leading-tight mb-2" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+          <h2 className="text-[34px] font-bold text-[#D4A933] text-center leading-[1.1] mb-2" style={font}>
             {essay.title}
           </h2>
-          <p className="text-[15px] text-[#8A7E6E] italic text-center mb-5">
+          <p className="text-[16px] text-[#C4B8A0] italic text-center mb-6 leading-relaxed" style={font}>
             {essay.subtitle}
           </p>
 
-          <hr className="border-[#E8DFD0] mb-6" />
+          {/* Gold divider */}
+          <hr className="border-[#D4A933] opacity-25 mx-16 mb-6" />
 
           {/* Hook */}
-          <p className="text-[16px] text-[#4A4035] leading-relaxed italic border-l-[3px] border-[#D4A933] pl-4 mb-2" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+          <p className="text-[18px] text-[#E8DFD0] leading-[1.7] italic border-l-[3px] border-[#D4A933] pl-4 mb-2" style={font}>
             "{essay.hook}"
           </p>
 
           {/* CTA */}
           <div className="text-center my-8">
-            <span className="inline-block bg-[#1A1510] text-[#D4A933] text-[13px] font-semibold rounded px-8 py-3.5 tracking-[0.12em] uppercase">
-              Read the Essay
+            <span className="inline-block bg-[#D4A933] text-[#1A1510] text-[13px] font-bold rounded px-10 py-4 tracking-[0.12em] uppercase" style={font}>
+              Read the Essay →
             </span>
           </div>
 
-          <hr className="border-[#E8DFD0] mb-5" />
+          {/* Footer divider */}
+          <hr className="border-[#D4A933] opacity-15 mb-5" />
 
-          <p className="text-[13px] text-[#9A8E7A] leading-relaxed mb-3" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
-            You're receiving this because you subscribed to <span className="text-[#B8922A] underline">Epoch Lives</span>.
+          <p className="text-[13px] text-[#6B5E4E] leading-relaxed mb-3" style={font}>
+            You're receiving this because you subscribed to <span className="text-[#D4A933] underline">Epoch Lives</span>.
             No schedule — just history.
           </p>
 
-          <p className="text-[14px] text-[#6B5E4E] italic mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+          <p className="text-[14px] text-[#8A7E6E] italic mb-4" style={font}>
             — The editors
           </p>
 
-          <p className="text-[11px] text-[#B0A898] text-center">
+          <p className="text-[11px] text-[#4A4035] text-center">
             <span className="underline">Unsubscribe</span>
           </p>
         </div>
