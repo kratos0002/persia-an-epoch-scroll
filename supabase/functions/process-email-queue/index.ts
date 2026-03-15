@@ -6,6 +6,57 @@ const DEFAULT_BATCH_SIZE = 10
 const DEFAULT_SEND_DELAY_MS = 200
 const DEFAULT_AUTH_TTL_MINUTES = 15
 const DEFAULT_TRANSACTIONAL_TTL_MINUTES = 60
+const DEFAULT_API_BASE_URL = 'https://api.lovable.dev'
+const DEFAULT_SEND_PATH = '/v1/messaging/email/send'
+
+/**
+ * Send an email via raw HTTP fetch to the Lovable API.
+ * Used for transactional emails that have no run_id.
+ */
+async function sendViaHttp(
+  apiKey: string,
+  sendUrl: string | undefined,
+  payload: Record<string, unknown>
+): Promise<void> {
+  const url = sendUrl || `${DEFAULT_API_BASE_URL}${DEFAULT_SEND_PATH}`
+  const body: Record<string, unknown> = {
+    to: payload.to,
+    from: payload.from,
+    sender_domain: payload.sender_domain,
+    subject: payload.subject,
+    html: payload.html,
+    text: payload.text,
+    purpose: payload.purpose || 'transactional',
+    label: payload.label,
+    message_id: payload.message_id,
+  }
+  if (payload.idempotency_key) body.idempotency_key = payload.idempotency_key
+  if (payload.unsubscribe_token) body.unsubscribe_token = payload.unsubscribe_token
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${apiKey}`,
+  }
+  if (payload.message_id) {
+    headers['Idempotency-Key'] = payload.message_id as string
+  }
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  })
+
+  if (!res.ok) {
+    const text = await res.text()
+    const err = new Error(`Email API error: ${res.status} ${text}`) as Error & { status: number; retryAfterSeconds: number | null }
+    err.status = res.status
+    err.retryAfterSeconds = res.headers.get('retry-after')
+      ? parseInt(res.headers.get('retry-after')!, 10)
+      : null
+    throw err
+  }
+}
 
 // Check if an error is a rate-limit (429) response.
 // Uses EmailAPIError.status when available (email-js >=0.x with structured errors),
