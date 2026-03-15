@@ -102,8 +102,8 @@ const BroadcastPanel = () => {
     setConfirmOpen(false);
 
     try {
-      const body: Record<string, unknown> = {
-        template: 'new-essay',
+      const body = {
+        action: 'send-new-essay',
         data: {
           essayTitle: customTitle,
           essaySubtitle: customSubtitle,
@@ -114,10 +114,10 @@ const BroadcastPanel = () => {
         },
       };
 
-      const { data, error } = await supabase.functions.invoke('send-transactional-email', { body });
+      const { data, error } = await supabase.functions.invoke('send-mailerlite-campaign', { body });
 
       if (error) throw error;
-      setEnqueuedCount(data?.enqueued || 0);
+      setEnqueuedCount(data?.enqueued || 1);
       setStatus('sent');
       toast.success(
         testMode
