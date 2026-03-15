@@ -25,7 +25,7 @@ export const SubscribeForm = ({ variant = 'dark' }: { variant?: 'dark' | 'light'
     } else {
       setStatus('success');
       // Fire-and-forget: sync subscriber to MailerLite
-      supabase.functions.invoke('send-mailerlite-campaign', {
+      supabase.functions.invoke('send-brevo-campaign', {
         body: { action: 'sync-subscriber', data: { email: trimmedEmail } },
       }).catch(() => {});
     }

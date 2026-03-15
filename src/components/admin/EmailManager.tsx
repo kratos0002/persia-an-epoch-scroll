@@ -114,7 +114,7 @@ const BroadcastPanel = () => {
         },
       };
 
-      const { data, error } = await supabase.functions.invoke('send-mailerlite-campaign', { body });
+      const { data, error } = await supabase.functions.invoke('send-brevo-campaign', { body });
 
       if (error) throw error;
       setEnqueuedCount(data?.enqueued || 1);
