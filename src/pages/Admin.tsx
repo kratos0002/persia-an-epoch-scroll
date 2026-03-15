@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { SiteHeader } from '@/components/site/SiteHeader';
 import { OgManager } from '@/components/admin/OgManager';
+import { EmailManager } from '@/components/admin/EmailManager';
 import { toast } from 'sonner';
 
 type StoryStatus = 'live' | 'coming-soon' | 'draft';
@@ -36,7 +37,7 @@ const Admin = () => {
   const [overrides, setOverrides] = useState<Record<string, StoryStatus>>({});
   const [saving, setSaving] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const [tab, setTab] = useState<'status' | 'social'>('status');
+  const [tab, setTab] = useState<'status' | 'social' | 'emails'>('status');
 
   useEffect(() => {
     if (!authLoading && !isAdmin) navigate('/');
@@ -115,6 +116,7 @@ const Admin = () => {
             {([
               { key: 'status' as const, label: 'Status' },
               { key: 'social' as const, label: 'Social Sharing' },
+              { key: 'emails' as const, label: 'Emails' },
             ]).map(t => (
               <button
                 key={t.key}
@@ -181,6 +183,8 @@ const Admin = () => {
           )}
 
           {tab === 'social' && <OgManager />}
+
+          {tab === 'emails' && <EmailManager />}
         </motion.div>
       </div>
     </div>
