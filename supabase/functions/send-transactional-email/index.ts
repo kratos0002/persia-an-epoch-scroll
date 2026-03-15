@@ -78,6 +78,7 @@ Deno.serve(async (req) => {
           sender_domain: 'notify.pastlives.site',
           subject: "Welcome to Epoch Lives — history's turning points, felt",
           html,
+          text: "Welcome to Epoch Lives — history's turning points, felt. Visit https://pastlives.site to explore.",
           purpose: 'transactional',
           label: 'subscriber-welcome',
           queued_at: new Date().toISOString(),
