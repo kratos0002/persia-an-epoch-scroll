@@ -55,14 +55,6 @@ async function addSubscriber(apiKey: string, email: string, groupId: string) {
 
 /** Get the account's default verified sender email */
 async function getVerifiedSender(apiKey: string): Promise<{ email: string; name: string }> {
-  // Try domains first
-  const { data: domains } = await mlFetch('/domains', apiKey)
-  // Find a verified domain
-  const verified = domains?.find((d: Record<string, unknown>) =>
-    d.is_verified || d.dns_records_verified
-  )
-
-  // Get account info for default sender
   try {
     const account = await mlFetch('/', apiKey)
     if (account?.data?.account_email_address) {
@@ -71,16 +63,12 @@ async function getVerifiedSender(apiKey: string): Promise<{ email: string; name:
         name: account.data.name || 'Epoch Lives',
       }
     }
-  } catch {
-    // fallback
+  } catch (e) {
+    console.warn('Failed to fetch MailerLite account info:', e)
   }
 
-  // Fallback: use the first domain or a generic
-  if (verified?.name) {
-    return { email: `notify@${verified.name}`, name: 'Epoch Lives' }
-  }
-
-  throw new Error('No verified sender found in MailerLite. Please verify a sender email/domain in your MailerLite dashboard.')
+  // Hardcoded fallback
+  return { email: 'hello@epochlives.com', name: 'Epoch Lives' }
 }
 
 Deno.serve(async (req) => {
