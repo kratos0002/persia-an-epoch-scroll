@@ -8,7 +8,7 @@ export const HZ = {
   TEAL:      'hsl(195, 55%, 35%)',
   AMBER:     'hsl(35, 80%, 50%)',
   PARCHMENT: 'hsl(40, 35%, 88%)',
-  SMOKE:     'hsl(210, 15%, 40%)',
+  SMOKE:     'hsl(210, 15%, 60%)',
   RED:       'hsl(0, 65%, 50%)',
   BRIT_RED:  'hsl(0, 60%, 40%)',
   PORT_GREEN:'hsl(140, 40%, 30%)',

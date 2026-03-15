@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { HormuzGulfMap, type MapMarker, type MapRoute } from '@/components/visuals/HormuzGulfMap';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { TRUCIAL_STATES, OIL_DISCOVERIES, HZ } from '@/components/visuals/hormuzMapData';
 
 export const BritishGulfSection = () => {
@@ -25,6 +26,13 @@ export const BritishGulfSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         Seven sheikhdoms lined the coast: Abu Dhabi, Dubai, Sharjah, Ajman, Umm al-Quwain, Ras al-Khaimah, and Fujairah. They were called the "Trucial States" — named not for their tribes or traditions, but for the truces they signed with Britain. For a century and a half, these were sleepy pearl-diving villages and fishing ports. Then everything changed.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Historical photograph of a Trucial States pearl diving village"
+        caption="Placeholder: A Trucial States pearl-diving village before oil — the Gulf coast before transformation"
+        className="mt-4"
+        aspectRatio="16/10"
+      />
     </div>,
     <div key="oil">
       <p className="text-[10px] tracking-[0.3em] uppercase font-body font-semibold mb-3" style={{ color: HZ.AMBER }}>1932–1969</p>
@@ -32,6 +40,13 @@ export const BritishGulfSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         Oil was discovered in Bahrain in 1932. Then Saudi Arabia in 1938. Kuwait the same year. Abu Dhabi in 1958. Dubai in 1969. One by one, the geological surveys returned the same answer: beneath these desert coasts lay the largest petroleum reserves on earth. The Gulf transformed overnight from a quiet shipping lane into the world's most strategically important body of water.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Early oil derrick in the Persian Gulf, 1930s"
+        caption="Placeholder: The first oil strikes in the Gulf — the discovery that changed the strait's meaning forever"
+        className="mt-4"
+        aspectRatio="4/3"
+      />
     </div>,
     <div key="petroleum">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.AMBER }}>Not Spices. Not Pearls. Petroleum.</h3>

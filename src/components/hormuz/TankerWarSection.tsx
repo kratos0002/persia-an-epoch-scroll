@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { HormuzGulfMap, type MapMarker, type MapRoute } from '@/components/visuals/HormuzGulfMap';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { TANKER_STRIKES, INBOUND_LANE, OUTBOUND_LANE, HZ } from '@/components/visuals/hormuzMapData';
 
 export const TankerWarSection = () => {
@@ -20,6 +21,13 @@ export const TankerWarSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         The Iran-Iraq War spilled into the Gulf in 1984. Iraq began attacking Iranian oil tankers to cut off Tehran's revenue. Iran retaliated by targeting ships carrying oil from Iraq's Arab allies — Kuwait, Saudi Arabia, the UAE. For the first time in its 5,000-year history, the strait was a war zone. Tankers burned. Shipping lanes became minefields.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Oil tanker burning in the Persian Gulf during the Tanker War, 1987"
+        caption="Placeholder: A burning tanker in the Gulf — for the first time in 5,000 years, the strait was a war zone"
+        className="mt-4"
+        aspectRatio="16/9"
+      />
     </div>,
     <div key="546">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.PARCHMENT }}>546 Ships</h3>
@@ -32,6 +40,13 @@ export const TankerWarSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         In 1987, the United States began Operation Earnest Will — the largest naval convoy operation since World War II. Kuwaiti tankers were reflagged with American flags and escorted through the strait by US warships. The message was explicit: the United States would use military force to keep Hormuz open. It was the moment America became the permanent guarantor of the world's most important shipping lane.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="US Navy warship escorting reflagged Kuwaiti tankers through the Strait of Hormuz, 1987"
+        caption="Placeholder: Operation Earnest Will — US Navy escorts reflagged tankers through the strait"
+        className="mt-4"
+        aspectRatio="16/10"
+      />
     </div>,
     <div key="battles">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.PARCHMENT }}>Missiles and Mines</h3>

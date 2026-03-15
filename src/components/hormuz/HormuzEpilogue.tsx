@@ -7,7 +7,7 @@ const NAVY = 'hsl(215, 45%, 8%)';
 const TEAL = 'hsl(195, 55%, 35%)';
 const AMBER = 'hsl(35, 80%, 50%)';
 const PARCHMENT = 'hsl(40, 35%, 88%)';
-const SMOKE = 'hsl(210, 15%, 40%)';
+const SMOKE = 'hsl(210, 15%, 60%)';
 
 export const HormuzEpilogue = () => {
   return (

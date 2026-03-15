@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { HormuzGulfMap, type MapMarker, type MapRoute } from '@/components/visuals/HormuzGulfMap';
+import { HistoricalImage } from '@/components/visuals/HistoricalImage';
 import { PORTUGUESE_CITIES, PORTUGUESE_ROUTE, HZ } from '@/components/visuals/hormuzMapData';
 
 export const PortugalSection = () => {
@@ -30,6 +31,13 @@ export const PortugalSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         The Portuguese built a massive stone fortress on the island — the Fort of Our Lady of the Conception. Every ship entering or leaving the Gulf paid tribute. Portuguese customs officers sat at the mouth of the strait extracting wealth from trade they didn't produce, from goods they didn't manufacture, on water they didn't own. For 115 years, a European garrison thousands of miles from Lisbon held the throat of the world.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Ruins of the Portuguese fortress on Hormuz Island"
+        caption="Placeholder: The Fort of Our Lady of the Conception — 115 years of Portuguese control over the strait"
+        className="mt-4"
+        aspectRatio="16/10"
+      />
     </div>,
     <div key="expulsion">
       <p className="text-[10px] tracking-[0.3em] uppercase font-body font-semibold mb-3" style={{ color: HZ.PERSIAN_GOLD }}>1622</p>
@@ -37,6 +45,13 @@ export const PortugalSection = () => {
       <p className="font-body text-sm leading-relaxed" style={{ color: HZ.SMOKE }}>
         Shah Abbas I of Persia — the Safavid king who rebuilt Isfahan into one of the world's great cities — formed an unlikely alliance with the English East India Company. In 1622, a combined Persian-English force besieged the fortress. After weeks of bombardment, the Portuguese surrendered. Iran reclaimed its coast. The English got trading privileges. The city of Bandar Abbas — "the port of Abbas" — was named for the victory.
       </p>
+      <HistoricalImage
+        src="/placeholder.svg"
+        alt="Portrait of Shah Abbas I of Persia"
+        caption="Placeholder: Shah Abbas I — the Safavid king who expelled the Portuguese from Hormuz"
+        className="mt-4"
+        aspectRatio="3/4"
+      />
     </div>,
     <div key="lesson">
       <h3 className="font-display text-xl font-bold mb-3" style={{ color: HZ.AMBER }}>The Permanent Lesson</h3>
