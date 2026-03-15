@@ -20,6 +20,7 @@ const ESSAYS = [
 ];
 
 const SITE_URL = 'https://pastlives.site';
+const TEST_RECIPIENTS = ['vishal27792@gmail.com', 'whatiamreadingtoday27@gmail.com'];
 
 type SendStatus = 'idle' | 'sending' | 'sent' | 'error';
 
