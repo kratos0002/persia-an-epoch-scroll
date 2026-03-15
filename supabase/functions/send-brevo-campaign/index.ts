@@ -9,7 +9,8 @@ const corsHeaders = {
 }
 
 const BREVO_BASE = 'https://api.brevo.com/v3'
-const SENDER = { name: 'Epoch Lives', email: 'notify@notify.pastlives.site' }
+const PRIMARY_SENDER = { name: 'Epoch Lives', email: 'notify@notify.pastlives.site' }
+const FALLBACK_SENDER = { name: 'Epoch Lives', email: 'hello@epochlives.com' }
 
 async function brevoFetch(path: string, apiKey: string, opts: RequestInit = {}) {
   const res = await fetch(`${BREVO_BASE}${path}`, {
@@ -21,11 +22,22 @@ async function brevoFetch(path: string, apiKey: string, opts: RequestInit = {}) 
       ...(opts.headers || {}),
     },
   })
+
   const text = await res.text()
-  const data = text ? JSON.parse(text) : {}
-  if (!res.ok) {
-    throw new Error(`Brevo ${res.status}: ${JSON.stringify(data)}`)
+  let data: Record<string, unknown> | string = {}
+
+  if (text) {
+    try {
+      data = JSON.parse(text)
+    } catch {
+      data = text
+    }
   }
+
+  if (!res.ok) {
+    throw new Error(`Brevo ${res.status}: ${typeof data === 'string' ? data : JSON.stringify(data)}`)
+  }
+
   return data
 }
 
@@ -36,15 +48,33 @@ async function sendTransactionalEmail(
   subject: string,
   htmlContent: string,
 ) {
-  return brevoFetch('/smtp/email', apiKey, {
-    method: 'POST',
-    body: JSON.stringify({
-      sender: SENDER,
-      to: [{ email: to }],
-      subject,
-      htmlContent,
-    }),
-  })
+  try {
+    return await brevoFetch('/smtp/email', apiKey, {
+      method: 'POST',
+      body: JSON.stringify({
+        sender: PRIMARY_SENDER,
+        to: [{ email: to }],
+        subject,
+        htmlContent,
+      }),
+    })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    if (!message.toLowerCase().includes('sender email must be verified')) {
+      throw err
+    }
+
+    console.warn('Primary sender not verified in Brevo, retrying with fallback sender')
+    return brevoFetch('/smtp/email', apiKey, {
+      method: 'POST',
+      body: JSON.stringify({
+        sender: FALLBACK_SENDER,
+        to: [{ email: to }],
+        subject,
+        htmlContent,
+      }),
+    })
+  }
 }
 
 /** Add or update a contact in Brevo, optionally adding to a list */
