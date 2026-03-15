@@ -9,7 +9,7 @@ const corsHeaders = {
 }
 
 const BREVO_BASE = 'https://api.brevo.com/v3'
-const SENDER = { name: 'Epoch Lives', email: 'hello@epochlives.com' }
+const SENDER = { name: 'Epoch Lives', email: 'notify@notify.pastlives.site' }
 
 async function brevoFetch(path: string, apiKey: string, opts: RequestInit = {}) {
   const res = await fetch(`${BREVO_BASE}${path}`, {
