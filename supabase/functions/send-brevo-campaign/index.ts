@@ -47,33 +47,15 @@ async function sendTransactionalEmail(
   subject: string,
   htmlContent: string,
 ) {
-  try {
-    return await brevoFetch('/smtp/email', apiKey, {
-      method: 'POST',
-      body: JSON.stringify({
-        sender: PRIMARY_SENDER,
-        to: [{ email: to }],
-        subject,
-        htmlContent,
-      }),
-    })
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    if (!message.toLowerCase().includes('sender email must be verified')) {
-      throw err
-    }
-
-    console.warn('Primary sender not verified in Brevo, retrying with fallback sender')
-    return brevoFetch('/smtp/email', apiKey, {
-      method: 'POST',
-      body: JSON.stringify({
-        sender: FALLBACK_SENDER,
-        to: [{ email: to }],
-        subject,
-        htmlContent,
-      }),
-    })
-  }
+  return brevoFetch('/smtp/email', apiKey, {
+    method: 'POST',
+    body: JSON.stringify({
+      sender: SENDER,
+      to: [{ email: to }],
+      subject,
+      htmlContent,
+    }),
+  })
 }
 
 /** Add or update a contact in Brevo, optionally adding to a list */
