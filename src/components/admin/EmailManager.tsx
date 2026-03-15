@@ -5,18 +5,18 @@ import { toast } from 'sonner';
 
 /* ── Story data for broadcast dropdown ── */
 const ESSAYS = [
-  { id: 'persia', title: 'The Immortal Empire', subtitle: 'How Persia shaped the world', hook: 'An empire that refused to die — from Cyrus to Khomeini, 2,500 years of survival.', path: '/persia' },
-  { id: 'wisdom', title: 'The Library That Lit the World', subtitle: 'Baghdad\'s House of Wisdom', hook: 'In a round city on the Tigris, scholars translated the world\'s knowledge — and changed it forever.', path: '/wisdom' },
-  { id: 'buddhism', title: 'The Path That Split', subtitle: 'How one teaching became many', hook: 'A prince abandoned everything. His followers couldn\'t agree on what he meant.', path: '/buddhism' },
-  { id: 'samurai', title: 'Stipends, Bonds & the Death of a Class', subtitle: 'The economic end of the samurai', hook: 'Japan didn\'t defeat the samurai with swords. It defeated them with bonds.', path: '/samurai' },
-  { id: '1857', title: 'The Signal and the Fire', subtitle: 'India\'s first war of independence', hook: 'A cartridge, a rumour, and a continent on fire.', path: '/1857' },
-  { id: 'napoleon', title: 'The Rise and Fall of Napoleon', subtitle: 'From Corsica to St. Helena', hook: 'He conquered Europe in a decade and lost it in a season.', path: '/napoleon' },
-  { id: 'constantinople', title: 'The City of Layers', subtitle: 'Byzantium → Constantinople → Istanbul', hook: 'Every empire wanted this city. Each one left a layer.', path: '/constantinople' },
-  { id: 'india-states', title: 'The Mosaic Republic', subtitle: 'How India unified 565 princely states', hook: 'One man, one map, 565 pieces. The greatest jigsaw puzzle in history.', path: '/india-states' },
-  { id: 'mongol-india', title: 'The Wall That Held', subtitle: 'Why the Mongols never conquered India', hook: 'The Mongols broke every wall they faced — except one.', path: '/mongol-india' },
-  { id: 'nuclear', title: 'The Chain Reaction', subtitle: 'How the bomb spread', hook: 'One secret. Nine nations. A world that can never go back.', path: '/nuclear' },
-  { id: 'nutmeg', title: 'The Spice That Built Empires', subtitle: 'Nutmeg, Manhattan, and genocide', hook: 'A seed so valuable they traded an island for it.', path: '/nutmeg' },
-  { id: 'hormuz', title: 'The Throat of the World', subtitle: 'The strait that controls the global economy', hook: 'Twenty-one miles. Twenty-one million barrels. Every single day.', path: '/hormuz' },
+  { id: 'persia', title: 'The Immortal Empire', subtitle: 'How Persia shaped the world', hook: 'An empire that refused to die — from Cyrus to Khomeini, 2,500 years of survival.', path: '/persia', image: 'https://pastlives.site/og/persia.jpg' },
+  { id: 'wisdom', title: 'The Library That Lit the World', subtitle: 'Baghdad\'s House of Wisdom', hook: 'In a round city on the Tigris, scholars translated the world\'s knowledge — and changed it forever.', path: '/wisdom', image: 'https://pastlives.site/og/wisdom.jpg' },
+  { id: 'buddhism', title: 'The Path That Split', subtitle: 'How one teaching became many', hook: 'A prince abandoned everything. His followers couldn\'t agree on what he meant.', path: '/buddhism', image: 'https://pastlives.site/og/buddhism.jpg' },
+  { id: 'samurai', title: 'Stipends, Bonds & the Death of a Class', subtitle: 'The economic end of the samurai', hook: 'Japan didn\'t defeat the samurai with swords. It defeated them with bonds.', path: '/samurai', image: 'https://pastlives.site/og/samurai.jpg' },
+  { id: '1857', title: 'The Signal and the Fire', subtitle: 'India\'s first war of independence', hook: 'A cartridge, a rumour, and a continent on fire.', path: '/1857', image: 'https://pastlives.site/og/1857.jpg' },
+  { id: 'napoleon', title: 'The Rise and Fall of Napoleon', subtitle: 'From Corsica to St. Helena', hook: 'He conquered Europe in a decade and lost it in a season.', path: '/napoleon', image: 'https://pastlives.site/og/napoleon.jpg' },
+  { id: 'constantinople', title: 'The City of Layers', subtitle: 'Byzantium → Constantinople → Istanbul', hook: 'Every empire wanted this city. Each one left a layer.', path: '/constantinople', image: 'https://pastlives.site/og/constantinople.jpg' },
+  { id: 'india-states', title: 'The Mosaic Republic', subtitle: 'How India unified 565 princely states', hook: 'One man, one map, 565 pieces. The greatest jigsaw puzzle in history.', path: '/india-states', image: 'https://pastlives.site/og/india-states.jpg' },
+  { id: 'mongol-india', title: 'The Wall That Held', subtitle: 'Why the Mongols never conquered India', hook: 'The Mongols broke every wall they faced — except one.', path: '/mongol-india', image: 'https://pastlives.site/og/mongol.jpg' },
+  { id: 'nuclear', title: 'The Chain Reaction', subtitle: 'How the bomb spread', hook: 'One secret. Nine nations. A world that can never go back.', path: '/nuclear', image: 'https://pastlives.site/og/persia.jpg' },
+  { id: 'nutmeg', title: 'The Spice That Built Empires', subtitle: 'Nutmeg, Manhattan, and genocide', hook: 'A seed so valuable they traded an island for it.', path: '/nutmeg', image: 'https://pastlives.site/og/persia.jpg' },
+  { id: 'hormuz', title: 'The Throat of the World', subtitle: 'The strait that controls the global economy', hook: 'Twenty-one miles. Twenty-one million barrels. Every single day.', path: '/hormuz', image: 'https://pastlives.site/og/persia.jpg' },
 ];
 
 const SITE_URL = 'https://pastlives.site';
@@ -91,7 +91,7 @@ const BroadcastPanel = () => {
       setCustomTitle(essay.title);
       setCustomSubtitle(essay.subtitle);
       setCustomHook(essay.hook);
-      setCustomImage('');
+      setCustomImage(essay.image || '');
     }
   }, [selectedEssay]);
 
