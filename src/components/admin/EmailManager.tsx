@@ -80,6 +80,7 @@ const BroadcastPanel = () => {
   const [customHook, setCustomHook] = useState('');
   const [customImage, setCustomImage] = useState('');
   const [sendStatus, setSendStatus] = useState<SendStatus>('idle');
+  const [testStatus, setTestStatus] = useState<SendStatus>('idle');
   const [enqueuedCount, setEnqueuedCount] = useState(0);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
