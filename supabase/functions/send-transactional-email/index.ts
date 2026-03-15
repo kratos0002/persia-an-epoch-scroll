@@ -89,30 +89,41 @@ Deno.serve(async (req) => {
     }
 
     if (template === 'new-essay') {
-      const { essayTitle, essaySubtitle, essayHook, essayUrl, essayImageUrl } = data
+      const { essayTitle, essaySubtitle, essayHook, essayUrl, essayImageUrl, testRecipients } = data
 
-      // Get all active subscribers
-      const { data: subscribers, error: subError } = await supabase
-        .from('subscribers')
-        .select('email')
-        .eq('status', 'active')
+      // Determine recipients: test mode or all subscribers
+      let recipientEmails: string[] = []
 
-      if (subError) throw subError
+      if (Array.isArray(testRecipients) && testRecipients.length > 0) {
+        recipientEmails = testRecipients
+      } else {
+        const { data: subscribers, error: subError } = await supabase
+          .from('subscribers')
+          .select('email')
+          .eq('status', 'active')
+
+        if (subError) throw subError
+        recipientEmails = (subscribers || []).map((s: { email: string }) => s.email)
+      }
 
       let enqueued = 0
-      for (const sub of subscribers || []) {
-        // Check suppression
-        const { data: suppressed } = await supabase
-          .from('suppressed_emails')
-          .select('id')
-          .eq('email', sub.email)
-          .maybeSingle()
+      const isTest = Array.isArray(testRecipients) && testRecipients.length > 0
 
-        if (suppressed) continue
+      for (const email of recipientEmails) {
+        // Skip suppression check for test emails
+        if (!isTest) {
+          const { data: suppressed } = await supabase
+            .from('suppressed_emails')
+            .select('id')
+            .eq('email', email)
+            .maybeSingle()
+
+          if (suppressed) continue
+        }
 
         // Generate unsubscribe token
         const token = crypto.randomUUID()
-        await supabase.from('email_unsubscribe_tokens').insert({ email: sub.email, token })
+        await supabase.from('email_unsubscribe_tokens').insert({ email, token })
         const unsubscribeUrl = `https://pastlives.site/unsubscribe?token=${token}`
 
         const html = render(
@@ -132,13 +143,13 @@ Deno.serve(async (req) => {
           queue_name: 'transactional_emails',
           payload: {
             message_id: messageId,
-            to: sub.email,
+            to: email,
             from: 'Epoch Lives <notify@notify.pastlives.site>',
             sender_domain: 'notify.pastlives.site',
-            subject: `New essay: ${essayTitle}`,
+            subject: isTest ? `[TEST] New essay: ${essayTitle}` : `New essay: ${essayTitle}`,
             html,
             purpose: 'transactional',
-            label: 'new-essay',
+            label: isTest ? 'new-essay-test' : 'new-essay',
             queued_at: new Date().toISOString(),
           },
         })
@@ -146,7 +157,7 @@ Deno.serve(async (req) => {
       }
 
       return new Response(
-        JSON.stringify({ success: true, enqueued }),
+        JSON.stringify({ success: true, enqueued, test: isTest }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }

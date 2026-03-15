@@ -20,6 +20,7 @@ const ESSAYS = [
 ];
 
 const SITE_URL = 'https://pastlives.site';
+const TEST_RECIPIENTS = ['vishal27792@gmail.com', 'whatiamreadingtoday27@gmail.com'];
 
 type SendStatus = 'idle' | 'sending' | 'sent' | 'error';
 
@@ -79,6 +80,7 @@ const BroadcastPanel = () => {
   const [customHook, setCustomHook] = useState('');
   const [customImage, setCustomImage] = useState('');
   const [sendStatus, setSendStatus] = useState<SendStatus>('idle');
+  const [testStatus, setTestStatus] = useState<SendStatus>('idle');
   const [enqueuedCount, setEnqueuedCount] = useState(0);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -93,34 +95,43 @@ const BroadcastPanel = () => {
     }
   }, [selectedEssay]);
 
-  const handleSend = async () => {
+  const sendEmail = async (testMode: boolean) => {
     if (!selectedEssay) return;
-    setSendStatus('sending');
+    const setStatus = testMode ? setTestStatus : setSendStatus;
+    setStatus('sending');
     setConfirmOpen(false);
 
     try {
-      const { data, error } = await supabase.functions.invoke('send-transactional-email', {
-        body: {
-          template: 'new-essay',
-          data: {
-            essayTitle: customTitle,
-            essaySubtitle: customSubtitle,
-            essayHook: customHook,
-            essayUrl: `${SITE_URL}${essay?.path || `/${selectedEssay}`}`,
-            essayImageUrl: customImage || undefined,
-          },
+      const body: Record<string, unknown> = {
+        template: 'new-essay',
+        data: {
+          essayTitle: customTitle,
+          essaySubtitle: customSubtitle,
+          essayHook: customHook,
+          essayUrl: `${SITE_URL}${essay?.path || `/${selectedEssay}`}`,
+          essayImageUrl: customImage || undefined,
+          ...(testMode ? { testRecipients: TEST_RECIPIENTS } : {}),
         },
-      });
+      };
+
+      const { data, error } = await supabase.functions.invoke('send-transactional-email', { body });
 
       if (error) throw error;
       setEnqueuedCount(data?.enqueued || 0);
-      setSendStatus('sent');
-      toast.success(`Enqueued ${data?.enqueued || 0} emails for delivery`);
+      setStatus('sent');
+      toast.success(
+        testMode
+          ? `Test email sent to ${TEST_RECIPIENTS.length} addresses`
+          : `Enqueued ${data?.enqueued || 0} emails for delivery`
+      );
     } catch (err: unknown) {
-      setSendStatus('error');
+      setStatus('error');
       toast.error(err instanceof Error ? err.message : 'Failed to send');
     }
   };
+
+  const handleSend = () => sendEmail(false);
+  const handleTestSend = () => sendEmail(true);
 
   return (
     <div className="space-y-4">
@@ -171,6 +182,24 @@ const BroadcastPanel = () => {
               </div>
             ) : (
               <>
+                {/* Test send button */}
+                <div className="flex gap-2 items-center">
+                  <button
+                    onClick={handleTestSend}
+                    disabled={testStatus === 'sending' || !customTitle}
+                    className="px-5 py-2.5 rounded-lg font-body font-semibold text-xs tracking-wide bg-muted text-foreground hover:bg-muted/80 border border-border transition-all disabled:opacity-50"
+                  >
+                    {testStatus === 'sending' ? 'Sending…' : '📧 Send Test Email'}
+                  </button>
+                  {testStatus === 'sent' && (
+                    <span className="text-xs font-body text-primary">✓ Test sent</span>
+                  )}
+                </div>
+                <p className="text-[10px] font-body text-muted-foreground -mt-2">
+                  Sends to {TEST_RECIPIENTS.join(', ')}
+                </p>
+
+                {/* Broadcast button */}
                 {!confirmOpen ? (
                   <button
                     onClick={() => setConfirmOpen(true)}
