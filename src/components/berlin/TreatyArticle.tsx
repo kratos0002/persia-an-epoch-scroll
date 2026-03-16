@@ -62,9 +62,6 @@ export const GeneralActSection = () => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
 
-  // Import data inline to avoid circular deps
-  const { GENERAL_ACT_ARTICLES, KEY_QUOTES } = require('@/components/visuals/berlinMapData');
-
   return (
     <section id="general-act" ref={ref} className="relative py-24 px-6" style={{ background: BL.PAPER_DARK }}>
       <div className="absolute inset-0 pointer-events-none" style={{
