@@ -110,6 +110,12 @@ const STORIES: StoryCard[] = [
     image: storyHormuz, tags: ['Zoom Map', 'Chokepoints', '3000 BCE–Today'],
     status: 'coming-soon', href: '/hormuz', color: 'hsl(195, 55%, 35%)', era: '3000 BCE', sortYear: -3000,
   },
+  {
+    id: 'ramayana', number: 13, title: 'The Route', subtitle: 'Tracing the Ramayana',
+    hook: 'A 2,500-kilometre journey from the northern plains to the southern sea. One prince, fourteen years, and a route that became the most retold story in human history.',
+    image: storyRamayana, tags: ['Zoom Dive', 'Route Map', '~500 BCE'],
+    status: 'coming-soon', href: '/ramayana', color: 'hsl(25, 85%, 52%)', era: '~500 BCE', sortYear: -500,
+  },
 ];
 
 
