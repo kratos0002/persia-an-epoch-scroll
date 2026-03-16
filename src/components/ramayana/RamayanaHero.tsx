@@ -42,6 +42,27 @@ export const RamayanaHero = () => {
       <div className="absolute inset-0 ramayana-paper-grain pointer-events-none" />
 
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6">
+        {/* Devanagari watermark — राम */}
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+          style={{ opacity: titleOpacity }}
+        >
+          <motion.span
+            style={{
+              fontSize: 'clamp(300px, 42vw, 550px)',
+              fontWeight: 900,
+              color: RM.VERMILLION,
+              opacity: 0.04,
+              lineHeight: 1,
+              userSelect: 'none',
+            }}
+            animate={{ y: [0, -20, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            राम
+          </motion.span>
+        </motion.div>
+
         {/* Mandala behind title */}
         <div className="absolute pointer-events-none">
           <LotusMandala />
@@ -72,7 +93,7 @@ export const RamayanaHero = () => {
             className="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-center leading-[0.95] max-w-4xl"
             style={{ color: RM.INK }}
           >
-            The Route
+            The Exile's Road
           </h1>
         </motion.div>
 
@@ -88,6 +109,17 @@ export const RamayanaHero = () => {
           style={{ color: RM.OCHRE, opacity: subtitleOpacity }}
         >
           Part 1 of 2
+        </motion.p>
+
+        {/* Opening shloka */}
+        <motion.p
+          className="mt-5 font-body text-[11px] text-center tracking-wide"
+          style={{ color: RM.VERMILLION, opacity: subtitleOpacity }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.3 }}
+          transition={{ duration: 2, delay: 2 }}
+        >
+          तपःस्वाध्यायनिरतं तपस्वी वाग्विदां वरम्
         </motion.p>
 
         {/* Scroll indicator */}

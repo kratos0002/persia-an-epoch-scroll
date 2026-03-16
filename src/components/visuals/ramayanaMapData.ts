@@ -123,10 +123,19 @@ export const STAGES: RamayanaStage[] = [
     phase: 'The Departure',
     year: '',
     routeUpTo: -1,
-    markers: [],
+    markers: [
+      { coords: [26.80, 82.19], label: 'Ayodhya', detail: 'Where it begins' },
+      { coords: [6.97, 80.72], label: 'Lanka', detail: 'Where it ends' },
+    ],
     narrative: {
-      title: 'The Route',
-      body: 'A 2,500-kilometre journey from the northern plains to the southern sea. One prince, fourteen years, and a route that would become the most retold story in human history. Every stop on this route is a real place. Most of them still have temples.',
+      title: "The Exile's Road",
+      body: 'Rama, prince of Ayodhya, was hours from becoming king. His father Dasharatha had ruled for sixty years. The kingdom was ready. The city was decorated. Then Queen Kaikeyi called in a promise — two boons the king had granted her decades ago on a battlefield. She used them both: exile Rama for fourteen years, crown her son Bharata instead. The king, bound by his word, collapsed. Rama, bound by duty, walked south into the forest with his wife Sita and his brother Lakshmana. He did not argue. He did not look back. He did not return for fourteen years.',
+      accent: '2,500 kilometres. 14 years. 19 stops across India and Sri Lanka. Every one a real place. Most of them still have temples.',
+    },
+    image: {
+      src: '/images/ramayana/rama-exile-forest.jpg',
+      alt: 'Rama, Sita, and Lakshmana in exile — Pahari miniature painting',
+      caption: 'Rama, Sita, and Lakshmana in the forest — Pahari painting / Wikimedia Commons',
     },
   },
   {
@@ -149,9 +158,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '26.80°N, 82.19°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Sarayu Ghats at Ayodhya',
-      caption: 'The ghats of Ayodhya on the banks of the Sarayu',
+      src: '/images/ramayana/ayodhya-departure.jpg',
+      alt: 'Rama bestows his possessions before exile — Shangri Ramayana',
+      caption: 'Rama departs Ayodhya — Shangri Ramayana / Wikimedia Commons',
     },
   },
   {
@@ -174,9 +183,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '25.39°N, 81.88°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'The Ganga at Shringverpur',
-      caption: 'The crossing point on the Ganga where Guha ferried the exiles',
+      src: '/images/ramayana/ganga-crossing.jpg',
+      alt: 'Rama, Sita and Lakshmana cross the Ganga — Ramayana folio',
+      caption: 'Crossing the Ganga — Ramayana manuscript folio / Wikimedia Commons',
     },
   },
   {
@@ -198,9 +207,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '25.43°N, 81.85°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'The Triveni Sangam at Prayagraj',
-      caption: 'The confluence of the Ganga, Yamuna, and mythical Saraswati',
+      src: '/images/ramayana/prayagraj-bharadvaja.jpg',
+      alt: 'Rama visits Bharadvaja\'s hermitage — LACMA Ramayana folio',
+      caption: 'Rama at Bharadvaja\'s ashram — LACMA / Wikimedia Commons',
     },
   },
   {
@@ -223,9 +232,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '25.20°N, 80.83°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Kamadgiri hill at Chitrakoot',
-      caption: 'The sacred hill of Kamadgiri, circumambulated by pilgrims',
+      src: '/images/ramayana/bharata-meets-rama.jpg',
+      alt: 'Bharata meets Rama in the forest — Mughal miniature',
+      caption: 'Bharata meets Rama — Mughal Ramayana / Wikimedia Commons',
     },
   },
   {
@@ -247,9 +256,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '25.15°N, 80.70°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Mandakini waterfall near Atri Ashram',
-      caption: 'The waterfall near Sati Anasuya\'s ashram',
+      src: '/images/ramayana/anasuya-sita.jpg',
+      alt: 'Sita talks to Anasuya at Atri\'s ashram — Sackler Museum',
+      caption: 'Sita with Anasuya — Arthur M. Sackler Museum / Wikimedia Commons',
     },
   },
   {
@@ -271,9 +280,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '20.50°N, 79.00°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Dense forest of central India',
-      caption: 'The Dandakaranya — central India\'s ancient wilderness belt',
+      src: '/images/ramayana/dandakaranya-forest.jpg',
+      alt: 'Episodes in the Panchavati Forest — LACMA Ramayana folio',
+      caption: 'Life in the forest — LACMA Ramayana / Wikimedia Commons',
     },
   },
   {
@@ -296,9 +305,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '20.10°N, 76.50°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Ancient ashram ruins in western Deccan',
-      caption: 'The Deccan plateau — where Agastya\'s ashram traditions survive',
+      src: '/images/ramayana/rama-exile-forest.jpg',
+      alt: 'Rama, Sita and Lakshmana in the forest — Pahari painting',
+      caption: 'The exiles in the forest — Pahari painting / Wikimedia Commons',
     },
   },
   {
@@ -321,9 +330,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '19.98°N, 73.79°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Godavari river at Panchavati, Nashik',
-      caption: 'The Godavari at Panchavati — where the exile became a war',
+      src: '/images/ramayana/ravana-abducts-sita.jpg',
+      alt: 'Ravana abducts Sita — Indian miniature painting',
+      caption: 'Ravana abducts Sita — Indian miniature / Wikimedia Commons',
     },
   },
   {
@@ -346,9 +355,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '15.48°N, 77.61°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Virabhadra Temple at Lepakshi',
-      caption: 'The 16th-century Virabhadra Temple at Lepakshi, Andhra Pradesh',
+      src: '/images/ramayana/jatayu-fights-ravana.jpg',
+      alt: 'Jatayu confronts Ravana — Indian miniature painting',
+      caption: 'Jatayu fights Ravana — Indian miniature / Wikimedia Commons',
     },
   },
   {
@@ -371,9 +380,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '15.35°N, 76.50°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Pampa Sarovar lake',
-      caption: 'Pampa Sarovar — where Shabari offered the tasted berries',
+      src: '/images/ramayana/ravi-varma-jatayu.jpg',
+      alt: 'Rama searches for Sita — Raja Ravi Varma',
+      caption: 'The search begins — Raja Ravi Varma / Wikimedia Commons',
     },
   },
   {
@@ -395,9 +404,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '15.34°N, 76.46°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Boulder landscape of Hampi / Kishkindha',
-      caption: 'The granite boulders of Hampi — the landscape of Kishkindha',
+      src: '/images/ramayana/sugriva-vali.jpg',
+      alt: 'Vali and Sugriva fight — Shangri Ramayana',
+      caption: 'Vali and Sugriva — Shangri Ramayana / Wikimedia Commons',
     },
   },
   {
@@ -419,9 +428,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '10.28°N, 79.86°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Coastal wetlands at Kodikkarai',
-      caption: 'Point Calimere — where the army first sighted the sea',
+      src: '/images/ramayana/siege-of-lanka.jpg',
+      alt: 'The Siege of Lanka — LACMA Ramayana folio',
+      caption: 'The vanara army — LACMA Ramayana / Wikimedia Commons',
     },
   },
   {
@@ -444,9 +453,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '9.29°N, 79.31°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Ramanathaswamy Temple corridor',
-      caption: 'The 1,220-metre corridor of Ramanathaswamy Temple',
+      src: '/images/ramayana/siege-of-lanka.jpg',
+      alt: 'Building the bridge to Lanka — Ramayana folio',
+      caption: 'The bridge to Lanka — LACMA Ramayana / Wikimedia Commons',
     },
   },
   {
@@ -469,9 +478,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '9.17°N, 79.43°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Ruins at Dhanushkodi',
-      caption: 'Dhanushkodi — the ghost town destroyed by the 1964 cyclone',
+      src: '/images/ramayana/siege-of-lanka.jpg',
+      alt: 'Crossing to Lanka — Ramayana manuscript',
+      caption: 'The crossing — LACMA Ramayana / Wikimedia Commons',
     },
   },
   {
@@ -494,9 +503,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '6.97°N, 80.72°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Sita Amman Temple at Sita Eliya',
-      caption: 'Sita Amman Temple — the traditional site of Ashok Vatika',
+      src: '/images/ramayana/hanuman-sita-ashokavana.jpg',
+      alt: 'Hanuman finds Sita in the Ashoka garden',
+      caption: 'Hanuman in the Ashokavana — Indian miniature / Wikimedia Commons',
     },
   },
   {
@@ -518,9 +527,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '6.86°N, 81.05°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Ravana Falls near Ella, Sri Lanka',
-      caption: 'Ravana Ella Falls — named for Lanka\'s legendary king',
+      src: '/images/ramayana/ravana-court.jpg',
+      alt: 'The Court of Ravana — MET Ramayana folio',
+      caption: 'The Court of Ravana — The Met / Wikimedia Commons',
     },
   },
   {
@@ -543,9 +552,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '6.10°N, 80.98°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Red soil plateau of Ussangoda',
-      caption: 'Ussangoda — the scorched plateau where nothing grows',
+      src: '/images/ramayana/hanuman-lanka-burn.jpg',
+      alt: 'Hanuman watches Lanka burn — Indian miniature',
+      caption: 'Hanuman watches Lanka burn — Indian miniature / Wikimedia Commons',
     },
   },
   {
@@ -568,9 +577,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '7.29°N, 80.63°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Sigiriya rock fortress',
-      caption: 'Sigiriya — one of the sites associated with Ravana\'s Lanka',
+      src: '/images/ramayana/battle-at-lanka.jpg',
+      alt: 'Battle at Lanka — Mewar Ramayana, Udaipur, 1649',
+      caption: 'Battle at Lanka — Mewar Ramayana, 1649 / Wikimedia Commons',
     },
   },
   {
@@ -593,9 +602,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '6.96°N, 80.77°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Divurumpola temple site',
-      caption: 'Divurumpola — where tradition places the trial by fire',
+      src: '/images/ramayana/agni-pariksha.jpg',
+      alt: 'Sita\'s Agni Pariksha — the trial by fire',
+      caption: 'Agni Pariksha — Indian painting / Wikimedia Commons',
     },
   },
   {
@@ -618,9 +627,9 @@ export const STAGES: RamayanaStage[] = [
       coordinates: '26.80°N, 82.19°E',
     },
     image: {
-      src: '/placeholder.svg',
-      alt: 'Diwali lamps on the Sarayu',
-      caption: 'Millions of diyas on the Sarayu — Ayodhya\'s Diwali',
+      src: '/images/ramayana/rama-coronation-lacma.jpg',
+      alt: 'Coronation of Rama — LACMA Ramayana folio',
+      caption: 'Rama\'s coronation — LACMA Ramayana / Wikimedia Commons',
     },
   },
 ];

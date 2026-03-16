@@ -53,7 +53,7 @@ export const RamayanaSectionNav = ({ activeSection }: RamayanaSectionNavProps) =
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
             >
               <p className="text-[9px] tracking-[0.3em] uppercase font-body font-semibold mb-6" style={{ color: RM.VERMILLION, opacity: 0.6 }}>
-                The Route
+                The Exile's Road
               </p>
               <div className="space-y-0.5">
                 {RAMAYANA_SECTIONS.map((section) => {

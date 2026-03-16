@@ -8,7 +8,7 @@ export interface RamayanaSection {
 }
 
 export const RAMAYANA_SECTIONS: RamayanaSection[] = [
-  { id: 'ramayana-hero', label: 'The Route', year: '', phase: 'The Departure' },
+  { id: 'ramayana-hero', label: "The Exile's Road", year: '', phase: 'The Departure' },
   { id: 'ayodhya', label: 'Ayodhya', year: 'Year 0', phase: 'The Departure' },
   { id: 'shringverpur', label: 'Shringverpur', year: 'Year 0', phase: 'The Departure' },
   { id: 'prayagraj', label: 'Prayagraj', year: 'Year 0', phase: 'The Departure' },

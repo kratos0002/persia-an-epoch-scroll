@@ -1,180 +1,358 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import { useScroll } from 'framer-motion';
 import { motion, AnimatePresence } from 'framer-motion';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { STAGES, ROUTE_SEGMENTS, RM, TOTAL_DISTANCE_KM } from '@/components/visuals/ramayanaMapData';
+import Map, { Source, Layer, Marker, type MapRef } from 'react-map-gl/maplibre';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import lineSliceAlong from '@turf/line-slice-along';
+import turfAlong from '@turf/along';
+import {
+  STAGES_GL,
+  RM,
+  TOTAL_DISTANCE_KM,
+  ROUTE_GEOJSON,
+  GHOST_ROUTE_GEOJSON,
+  ROUTE_CUMULATIVE_DISTANCES,
+  TOTAL_ROUTE_LENGTH_KM,
+} from '@/components/ramayana/ramayanaGeoData';
+import { PHASES } from '@/components/visuals/ramayanaMapData';
+import { RAMAYANA_MAP_STYLE } from '@/components/ramayana/ramayanaMapStyle';
 import { MiniatureBorder, toDevanagari } from '@/components/ramayana/MiniatureBorder';
 
-/* ── Polyline styles — painted manuscript line ── */
-const glowPolylineOptions: L.PolylineOptions = {
-  color: RM.GOLD_LEAF,
-  weight: 7,
-  opacity: 0.2,
-  lineCap: 'round',
-  lineJoin: 'round',
-};
-
-const corePolylineOptions: L.PolylineOptions = {
-  color: RM.VERMILLION,
-  weight: 3,
-  opacity: 0.85,
-  lineCap: 'round',
-  lineJoin: 'round',
-};
-
-/* ── Marker builders — miniature painting style ── */
-function buildMarkerIcon(_label: string, active: boolean): L.DivIcon {
-  const size = active ? 14 : 8;
-  const bg = active ? RM.VERMILLION : RM.OCHRE;
-  const border = active ? RM.GOLD_LEAF : RM.PARCHMENT_DK;
-  const shadow = active ? `0 0 10px hsla(8,78%,48%,0.4)` : 'none';
-  return L.divIcon({
-    className: '',
-    html: `<div style="
-      width:${size}px;height:${size}px;border-radius:50%;
-      background:${bg};border:2px solid ${border};
-      box-shadow:${shadow};
-    "></div>`,
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
-  });
-}
-
-function buildActiveLabel(label: string, detail?: string): L.DivIcon {
-  return L.divIcon({
-    className: '',
-    html: `
-      <div style="position:relative;width:200px;display:flex;flex-direction:column;align-items:center;">
-        <div style="
-          padding:10px 14px;border-radius:4px;
-          background:hsl(38, 45%, 92%);
-          border:2px solid ${RM.GOLD_LEAF};
-          box-shadow:0 4px 20px rgba(0,0,0,0.15), inset 0 0 0 1px ${RM.VERMILLION}40;
-          text-align:center;
-        ">
-          <div style="font-family:'Playfair Display',Georgia,serif;font-size:14px;font-weight:700;color:${RM.VERMILLION};line-height:1.2;">${label}</div>
-          ${detail ? `<div style="margin-top:3px;font-family:'Cormorant Garamond',Georgia,serif;font-size:10px;color:${RM.INK};opacity:0.6;">${detail}</div>` : ''}
-        </div>
-        <div style="width:2px;height:10px;background:linear-gradient(180deg,${RM.GOLD_LEAF},transparent);"></div>
-        <div style="width:12px;height:12px;border-radius:50%;background:${RM.VERMILLION};border:3px solid ${RM.GOLD_LEAF};box-shadow:0 0 8px hsla(8,78%,48%,0.4);"></div>
+/* ── Active marker label — React component instead of L.divIcon ── */
+const ActiveMarkerLabel = ({ label, detail }: { label: string; detail?: string }) => (
+  <div className="flex flex-col items-center" style={{ width: 200 }}>
+    <div
+      style={{
+        padding: '10px 14px',
+        borderRadius: 4,
+        background: 'hsl(38, 45%, 92%)',
+        border: `2px solid ${RM.GOLD_LEAF}`,
+        boxShadow: `0 4px 20px rgba(0,0,0,0.15), inset 0 0 0 1px ${RM.VERMILLION}40`,
+        textAlign: 'center',
+      }}
+    >
+      <div
+        style={{
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontSize: 14,
+          fontWeight: 700,
+          color: RM.VERMILLION,
+          lineHeight: 1.2,
+        }}
+      >
+        {label}
       </div>
-    `,
-    iconSize: [200, 76],
-    iconAnchor: [100, 76],
-  });
-}
+      {detail && (
+        <div
+          style={{
+            marginTop: 3,
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontSize: 10,
+            color: RM.INK,
+            opacity: 0.6,
+          }}
+        >
+          {detail}
+        </div>
+      )}
+    </div>
+    <div
+      style={{
+        width: 2,
+        height: 10,
+        background: `linear-gradient(180deg, ${RM.GOLD_LEAF}, transparent)`,
+      }}
+    />
+    <div
+      style={{
+        width: 12,
+        height: 12,
+        borderRadius: '50%',
+        background: RM.VERMILLION,
+        border: `3px solid ${RM.GOLD_LEAF}`,
+        boxShadow: '0 0 8px hsla(8,78%,48%,0.4)',
+      }}
+    />
+  </div>
+);
+
+/* ── Inactive marker dot ── */
+const InactiveDot = () => (
+  <div
+    style={{
+      width: 8,
+      height: 8,
+      borderRadius: '50%',
+      background: RM.OCHRE,
+      border: `2px solid ${RM.PARCHMENT_DK}`,
+    }}
+  />
+);
+
+/* ── Route head marker (glowing dot at the tip of the drawn route) ── */
+const RouteHead = () => (
+  <div
+    style={{
+      width: 10,
+      height: 10,
+      borderRadius: '50%',
+      background: RM.VERMILLION,
+      border: `2px solid ${RM.GOLD_LEAF}`,
+      boxShadow: `0 0 12px hsla(8, 78%, 48%, 0.5)`,
+    }}
+  />
+);
+
+/* ── Phase names in Devanagari ── */
+const PHASE_DEVANAGARI: Record<string, string> = {
+  'The Departure': 'प्रस्थान',
+  'The Wilderness': 'वनवास',
+  'The Search': 'खोज',
+  'The War Path': 'युद्धपथ',
+  'Lanka': 'लंका',
+  'The Return': 'वापसी',
+};
+
+const PHASE_NUMBER: Record<string, number> = {
+  'The Departure': 1,
+  'The Wilderness': 2,
+  'The Search': 3,
+  'The War Path': 4,
+  'Lanka': 5,
+  'The Return': 6,
+};
+
+/* ── Phase transition card — full overlay ── */
+const PhaseCard = ({ phase, visible }: { phase: string; visible: boolean }) => (
+  <AnimatePresence>
+    {visible && (
+      <motion.div
+        className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Semi-transparent parchment backdrop */}
+        <motion.div
+          className="absolute inset-0"
+          style={{ background: `${RM.PARCHMENT}ee` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        />
+
+        {/* Card content */}
+        <motion.div
+          className="relative text-center"
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -15, scale: 0.98 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* Decorative top line */}
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="w-16 h-px" style={{ background: RM.GOLD_LEAF }} />
+            <div
+              className="w-3 h-3 rotate-45"
+              style={{ border: `1.5px solid ${RM.GOLD_LEAF}`, background: RM.VERMILLION }}
+            />
+            <div className="w-16 h-px" style={{ background: RM.GOLD_LEAF }} />
+          </div>
+
+          {/* Phase number */}
+          <p className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-3" style={{ color: RM.OCHRE }}>
+            Part {PHASE_NUMBER[phase] ?? ''} of {PHASES.length}
+          </p>
+
+          {/* Devanagari */}
+          <p
+            className="text-3xl mb-2"
+            style={{ fontFamily: "'Tiro Devanagari', serif", color: RM.VERMILLION, opacity: 0.7 }}
+          >
+            {PHASE_DEVANAGARI[phase] ?? ''}
+          </p>
+
+          {/* English phase name */}
+          <h2 className="font-display text-4xl md:text-5xl font-bold" style={{ color: RM.INK }}>
+            {phase}
+          </h2>
+
+          {/* Decorative bottom line */}
+          <div className="flex items-center justify-center gap-4 mt-6">
+            <div className="w-16 h-px" style={{ background: RM.GOLD_LEAF }} />
+            <div
+              className="w-3 h-3 rotate-45"
+              style={{ border: `1.5px solid ${RM.GOLD_LEAF}`, background: RM.VERMILLION }}
+            />
+            <div className="w-16 h-px" style={{ background: RM.GOLD_LEAF }} />
+          </div>
+        </motion.div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
 
 export const RamayanaZoomDive = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
-  const markersRef = useRef<L.Marker[]>([]);
-  const activeLabelRef = useRef<L.Marker | null>(null);
-  const routeGlowRef = useRef<L.Polyline[]>([]);
-  const routeCoreRef = useRef<L.Polyline[]>([]);
+  const mapRef = useRef<MapRef>(null);
   const [currentStage, setCurrentStage] = useState(0);
+  const [routeDistanceKm, setRouteDistanceKm] = useState(0);
+  const [showPhaseCard, setShowPhaseCard] = useState(false);
+  const [activePhase, setActivePhase] = useState('');
+  const prevPhaseRef = useRef('');
+  const shownPhasesRef = useRef<Set<string>>(new Set());
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
 
-  const stage = STAGES[currentStage];
+  const stage = STAGES_GL[currentStage];
 
-  // Init map — watercolor tiles
-  useEffect(() => {
-    if (!mapContainerRef.current || mapRef.current) return;
-    const map = L.map(mapContainerRef.current, {
-      center: STAGES[0].center,
-      zoom: STAGES[0].zoom,
-      zoomControl: false,
-      attributionControl: false,
-      scrollWheelZoom: false,
-      doubleClickZoom: false,
-      dragging: true,
-      keyboard: false,
-    });
-    // Warm vintage CartoDB tiles with sepia CSS filter
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap',
-      maxZoom: 16,
-      minZoom: 3,
-    }).addTo(map);
-    mapRef.current = map;
-    return () => { map.remove(); mapRef.current = null; };
-  }, []);
-
-  // Scroll → stage
+  // Scroll → stage index (discrete) + route distance (continuous)
+  const stageRef = useRef(0);
   useEffect(() => {
     const unsubscribe = scrollYProgress.on('change', (v) => {
-      const idx = Math.min(STAGES.length - 1, Math.floor(v * STAGES.length));
-      if (idx !== currentStage) setCurrentStage(idx);
+      const stageCount = STAGES_GL.length;
+      const idx = Math.min(stageCount - 1, Math.floor(v * stageCount));
+
+      // Discrete stage change
+      if (idx !== stageRef.current) {
+        stageRef.current = idx;
+        setCurrentStage(idx);
+      }
+
+      // Continuous route distance
+      const s = STAGES_GL[idx];
+      const nextS = STAGES_GL[Math.min(idx + 1, stageCount - 1)];
+      const intraProgress = (v * stageCount) - idx; // 0..1 within current stage
+
+      const currentDist =
+        s.routeUpTo >= 0 ? ROUTE_CUMULATIVE_DISTANCES[s.routeUpTo] : 0;
+      const nextDist =
+        nextS.routeUpTo >= 0 ? ROUTE_CUMULATIVE_DISTANCES[nextS.routeUpTo] : currentDist;
+
+      const dist = currentDist + (nextDist - currentDist) * intraProgress;
+      setRouteDistanceKm(dist);
     });
     return unsubscribe;
-  }, [scrollYProgress, currentStage]);
+  }, [scrollYProgress]);
 
-  // Stage change → map updates (accumulated markers)
+  // Phase transition detection — show once per phase, never again
   useEffect(() => {
-    const map = mapRef.current;
+    const phase = STAGES_GL[currentStage].phase;
+    if (
+      phase !== prevPhaseRef.current &&
+      prevPhaseRef.current !== '' &&
+      currentStage > 0 &&
+      !shownPhasesRef.current.has(phase)
+    ) {
+      shownPhasesRef.current.add(phase);
+      setActivePhase(phase);
+      setShowPhaseCard(true);
+      const timer = setTimeout(() => setShowPhaseCard(false), 2000);
+      return () => clearTimeout(timer);
+    }
+    prevPhaseRef.current = phase;
+  }, [currentStage]);
+
+  // Camera flyTo on stage change
+  useEffect(() => {
+    const map = mapRef.current?.getMap();
     if (!map) return;
 
-    const s = STAGES[currentStage];
-    map.flyTo(s.center, s.zoom, { duration: 1.8, easeLinearity: 0.25 });
+    const s = STAGES_GL[currentStage];
 
-    // Clear all markers and re-add accumulated
-    markersRef.current.forEach(m => m.remove());
-    markersRef.current = [];
-    activeLabelRef.current?.remove();
-    activeLabelRef.current = null;
-
-    for (let i = 0; i <= currentStage; i++) {
-      const st = STAGES[i];
-      st.markers.forEach(mk => {
-        const isActive = i === currentStage;
-        if (isActive) {
-          const label = L.marker(mk.coords, {
-            icon: buildActiveLabel(mk.label, mk.detail),
-          }).addTo(map);
-          activeLabelRef.current = label;
-        } else {
-          const dot = L.marker(mk.coords, {
-            icon: buildMarkerIcon(mk.label, false),
-          }).addTo(map);
-          markersRef.current.push(dot);
-        }
+    if (currentStage === 0) {
+      map.jumpTo({ center: s.center, zoom: s.zoom });
+    } else {
+      map.stop();
+      map.flyTo({
+        center: s.center,
+        zoom: s.zoom,
+        duration: 1200,
+        essential: true,
       });
-    }
-
-    // Draw route
-    routeGlowRef.current.forEach(p => p.remove());
-    routeCoreRef.current.forEach(p => p.remove());
-    routeGlowRef.current = [];
-    routeCoreRef.current = [];
-
-    if (s.routeUpTo >= 0) {
-      for (let i = 0; i <= Math.min(s.routeUpTo, ROUTE_SEGMENTS.length - 1); i++) {
-        const glow = L.polyline(ROUTE_SEGMENTS[i], glowPolylineOptions).addTo(map);
-        const core = L.polyline(ROUTE_SEGMENTS[i], corePolylineOptions).addTo(map);
-        routeGlowRef.current.push(glow);
-        routeCoreRef.current.push(core);
-      }
     }
   }, [currentStage]);
 
-  const progressFraction = currentStage / (STAGES.length - 1);
+  // Visible route GeoJSON (sliced from full route based on scroll)
+  const visibleRoute = useMemo(() => {
+    if (routeDistanceKm <= 0.5) return null;
+    const clampedDist = Math.min(routeDistanceKm, TOTAL_ROUTE_LENGTH_KM - 0.1);
+    try {
+      return lineSliceAlong(ROUTE_GEOJSON, 0, clampedDist, { units: 'kilometers' });
+    } catch {
+      return null;
+    }
+  }, [routeDistanceKm]);
+
+  // Route head position (glowing dot at the tip)
+  const routeHeadPos = useMemo(() => {
+    if (routeDistanceKm <= 0.5) return null;
+    const clampedDist = Math.min(routeDistanceKm, TOTAL_ROUTE_LENGTH_KM - 0.1);
+    try {
+      const pt = turfAlong(ROUTE_GEOJSON, clampedDist, { units: 'kilometers' });
+      return pt.geometry.coordinates as [number, number];
+    } catch {
+      return null;
+    }
+  }, [routeDistanceKm]);
+
+  // Accumulated markers
+  const { inactiveMarkers, activeMarkers } = useMemo(() => {
+    const inactive: { key: string; lng: number; lat: number }[] = [];
+    const active: { key: string; lng: number; lat: number; label: string; detail?: string }[] = [];
+
+    for (let i = 0; i <= currentStage; i++) {
+      const s = STAGES_GL[i];
+      for (const mk of s.markers) {
+        const entry = {
+          key: `${s.id}-${mk.label}`,
+          lng: mk.coords[0],
+          lat: mk.coords[1],
+          label: mk.label,
+          detail: mk.detail,
+        };
+        if (i === currentStage) {
+          active.push(entry);
+        } else {
+          inactive.push(entry);
+        }
+      }
+    }
+    return { inactiveMarkers: inactive, activeMarkers: active };
+  }, [currentStage]);
+
+  const progressFraction = currentStage / (STAGES_GL.length - 1);
   const distanceSoFar = Math.round(progressFraction * TOTAL_DISTANCE_KM);
 
+  // Prevent map from capturing scroll
+  const onMapWheel = useCallback((e: React.WheelEvent) => {
+    e.stopPropagation();
+  }, []);
+
   return (
-    <div ref={sectionRef} className="relative" style={{ height: `${STAGES.length * 100}vh`, background: RM.PARCHMENT }}>
-      {/* Sticky split layout */}
-      <div className="sticky top-0 h-screen w-full flex">
+    <div ref={sectionRef} className="relative" style={{ height: `${STAGES_GL.length * 100}vh`, background: RM.PARCHMENT }}>
+      {/* Sticky split layout — single manuscript folio frame */}
+      <div className="sticky top-0 h-screen w-full p-3">
+        <div
+          className="w-full h-full flex relative overflow-hidden"
+          style={{
+            border: `3px solid ${RM.GOLD_LEAF}`,
+            boxShadow: `inset 0 0 0 5px ${RM.PARCHMENT}, inset 0 0 0 6.5px ${RM.VERMILLION}50, 0 4px 24px rgba(0,0,0,0.08)`,
+            borderRadius: 3,
+          }}
+        >
+        {/* Phase transition card overlay */}
+        <PhaseCard phase={activePhase} visible={showPhaseCard} />
         {/* Left Panel — 40% — Manuscript Folio */}
         <div
           className="w-[40%] h-full flex flex-col relative overflow-hidden"
           style={{
             background: RM.PARCHMENT,
-            borderRight: `2px solid ${RM.GOLD_LEAF}40`,
+            borderRadius: '1px 0 0 1px',
           }}
         >
           {/* Paper grain texture overlay */}
@@ -192,20 +370,20 @@ export const RamayanaZoomDive = () => {
             </p>
             {currentStage > 0 && (
               <p className="text-[10px] mt-1" style={{ fontFamily: "'Tiro Devanagari', serif", color: RM.OCHRE, opacity: 0.6 }}>
-                फलक {toDevanagari(currentStage)} / {toDevanagari(STAGES.length - 1)}
+                फलक {toDevanagari(currentStage)} / {toDevanagari(STAGES_GL.length - 1)}
               </p>
             )}
           </div>
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-10 pb-10 scrollbar-hide relative z-20">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="popLayout">
               <motion.div
                 key={stage.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35 }}
               >
                 {/* Title band — vermillion rubric */}
                 <div className="relative mt-2 mb-4 -mx-2">
@@ -272,30 +450,6 @@ export const RamayanaZoomDive = () => {
                   </p>
                 )}
 
-                {/* TODAY block — marginal gloss style */}
-                {stage.today && (
-                  <div
-                    className="p-4 mb-4 relative"
-                    style={{
-                      background: 'hsla(38, 40%, 82%, 0.5)',
-                      borderLeft: `3px solid ${RM.GOLD_LEAF}`,
-                      borderRadius: '0 4px 4px 0',
-                    }}
-                  >
-                    <p className="text-[9px] tracking-[0.25em] uppercase font-body font-semibold mb-2" style={{ color: RM.MALACHITE }}>
-                      ☞ Today
-                    </p>
-                    <p className="font-display text-sm font-semibold mb-2" style={{ color: RM.INK }}>
-                      {stage.today.name}
-                    </p>
-                    <p className="font-body text-xs leading-relaxed mb-3" style={{ color: `${RM.INK}cc` }}>
-                      {stage.today.detail}
-                    </p>
-                    <p className="font-mono text-[10px]" style={{ color: RM.OCHRE, opacity: 0.7 }}>
-                      {stage.today.coordinates}
-                    </p>
-                  </div>
-                )}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -316,47 +470,190 @@ export const RamayanaZoomDive = () => {
           </div>
         </div>
 
+        {/* Center divider — thin gold line */}
+        <div className="w-px h-[85%] self-center flex-shrink-0" style={{ background: `${RM.GOLD_LEAF}40` }} />
+
         {/* Right Map — 60% */}
-        <div className="w-[60%] h-full relative">
-          {/* Map with warm vintage filter */}
-          <div
-            ref={mapContainerRef}
-            className="w-full h-full ramayana-map-warm"
-            style={{ background: RM.PARCHMENT }}
-          />
+        <div className="flex-1 h-full relative overflow-hidden" style={{ borderRadius: '0 1px 1px 0' }}>
+          {/* MapLibre GL map */}
+          <div className="absolute inset-0 ramayana-map-warm" onWheel={onMapWheel}>
+            <Map
+              ref={mapRef}
+              mapStyle={RAMAYANA_MAP_STYLE}
+              initialViewState={{
+                longitude: STAGES_GL[0].center[0],
+                latitude: STAGES_GL[0].center[1],
+                zoom: STAGES_GL[0].zoom,
+              }}
+              scrollZoom={false}
+              doubleClickZoom={false}
+              dragRotate={false}
+              pitchWithRotate={false}
+              touchZoomRotate={false}
+              keyboard={false}
+              attributionControl={false}
+              style={{ width: '100%', height: '100%' }}
+            >
+              {/* Ghost route (stage 0) */}
+              {currentStage === 0 && (
+                <Source id="ghost-route" type="geojson" data={GHOST_ROUTE_GEOJSON}>
+                  <Layer
+                    id="ghost-line"
+                    type="line"
+                    paint={{
+                      'line-color': RM.VERMILLION,
+                      'line-width': 1.5,
+                      'line-opacity': 0.15,
+                      'line-dasharray': [2, 3],
+                    }}
+                    layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                  />
+                </Source>
+              )}
+
+              {/* Visible route — progressively revealed */}
+              {visibleRoute && (
+                <Source id="route" type="geojson" data={visibleRoute}>
+                  <Layer
+                    id="route-glow"
+                    type="line"
+                    paint={{
+                      'line-color': RM.GOLD_LEAF,
+                      'line-width': 7,
+                      'line-opacity': 0.2,
+                      'line-blur': 3,
+                    }}
+                    layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                  />
+                  <Layer
+                    id="route-core"
+                    type="line"
+                    paint={{
+                      'line-color': RM.VERMILLION,
+                      'line-width': 3,
+                      'line-opacity': 0.85,
+                    }}
+                    layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+                  />
+                </Source>
+              )}
+
+              {/* Route head dot */}
+              {routeHeadPos && (
+                <Marker longitude={routeHeadPos[0]} latitude={routeHeadPos[1]} anchor="center">
+                  <RouteHead />
+                </Marker>
+              )}
+
+              {/* Inactive markers (past stages) */}
+              {inactiveMarkers.map((mk) => (
+                <Marker key={mk.key} longitude={mk.lng} latitude={mk.lat} anchor="center">
+                  <InactiveDot />
+                </Marker>
+              ))}
+
+              {/* Active markers (current stage) */}
+              {activeMarkers.map((mk) => (
+                <Marker key={mk.key} longitude={mk.lng} latitude={mk.lat} anchor="bottom">
+                  <ActiveMarkerLabel label={mk.label} detail={mk.detail} />
+                </Marker>
+              ))}
+            </Map>
+          </div>
+
+          {/* Soft parchment fade on all edges */}
+          <div className="absolute inset-0 pointer-events-none z-10" style={{
+            boxShadow: `inset 0 0 40px 15px ${RM.PARCHMENT}, inset 0 0 15px 5px ${RM.PARCHMENT}`,
+          }} />
 
           {/* Paper grain overlay on map */}
-          <div className="absolute inset-0 pointer-events-none z-[5] ramayana-paper-grain" style={{ opacity: 0.4 }} />
+          <div className="absolute inset-0 pointer-events-none z-10 ramayana-paper-grain" style={{ opacity: 0.4 }} />
+
+          {/* Floating stats card — top-right */}
+          {currentStage > 0 && (
+            <div className="absolute top-5 right-5 z-20">
+              <motion.div
+                className="px-4 py-3 font-body"
+                style={{
+                  background: 'hsl(38, 40%, 95%)',
+                  border: `1.5px solid ${RM.GOLD_LEAF}`,
+                  borderRadius: 4,
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+                  minWidth: 140,
+                }}
+              >
+                  <div className="flex items-baseline gap-1.5 mb-1.5">
+                    <span className="text-lg font-display font-bold" style={{ color: RM.VERMILLION }}>{distanceSoFar.toLocaleString()}</span>
+                    <span className="text-[9px] uppercase tracking-wider font-semibold" style={{ color: RM.BURNT_UMBER }}>km</span>
+                  </div>
+                  <div className="text-[10px] leading-relaxed font-medium" style={{ color: RM.INK }}>
+                    {stage.year && <div>{stage.year} of exile</div>}
+                    <div style={{ opacity: 0.7 }}>{stage.phase}</div>
+                  </div>
+              </motion.div>
+            </div>
+          )}
+
+          {/* TODAY block — map overlay, below stats */}
+          {stage.today && (
+            <div className="absolute top-5 right-5 z-20" style={{ marginTop: currentStage > 0 ? 100 : 0 }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`today-${stage.id}`}
+                  className="font-body"
+                  style={{
+                    background: 'hsl(38, 40%, 95%)',
+                    border: `1.5px solid ${RM.GOLD_LEAF}`,
+                    borderRadius: 4,
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.12)',
+                    maxWidth: 220,
+                    padding: '10px 12px',
+                  }}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <p className="text-[8px] tracking-[0.25em] uppercase font-semibold mb-1.5" style={{ color: RM.MALACHITE }}>
+                    ☞ Today
+                  </p>
+                  <p className="font-display text-[12px] font-semibold mb-1" style={{ color: RM.INK }}>
+                    {stage.today.name}
+                  </p>
+                  <p className="text-[10px] leading-relaxed mb-1.5" style={{ color: RM.BURNT_UMBER }}>
+                    {stage.today.detail}
+                  </p>
+                  <p className="font-mono text-[9px]" style={{ color: RM.OCHRE }}>
+                    {stage.today.coordinates}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          )}
 
           {/* Stage label — cartouche style */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[10]">
-            <AnimatePresence mode="wait">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
               <motion.div
-                key={stage.id}
                 className="px-5 py-2.5"
                 style={{
-                  background: 'hsla(38, 45%, 92%, 0.95)',
+                  background: 'hsl(38, 40%, 95%)',
                   border: `2px solid ${RM.GOLD_LEAF}`,
-                  boxShadow: `0 4px 20px rgba(0,0,0,0.1), inset 0 0 0 1px ${RM.VERMILLION}30`,
+                  boxShadow: `0 4px 20px rgba(0,0,0,0.15), inset 0 0 0 1px ${RM.VERMILLION}30`,
                   borderRadius: 4,
                 }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
               >
-                <p className="text-[10px] tracking-[0.18em] uppercase font-body font-semibold text-center" style={{ color: RM.VERMILLION }}>
+                <p className="text-[11px] tracking-[0.18em] uppercase font-body font-bold text-center" style={{ color: RM.INK }}>
                   {stage.label}
                 </p>
               </motion.div>
-            </AnimatePresence>
           </div>
+        </div>
         </div>
       </div>
 
       {/* Invisible scroll step anchors */}
       <div className="absolute inset-0 pointer-events-none">
-        {STAGES.map((s) => (
+        {STAGES_GL.map((s) => (
           <div key={s.id} id={s.id} style={{ height: '100vh' }} />
         ))}
       </div>

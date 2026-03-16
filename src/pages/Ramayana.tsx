@@ -1,5 +1,6 @@
 import React from 'react';
 import { RamayanaHero } from '@/components/ramayana/RamayanaHero';
+import { RamayanaPaintingGallery } from '@/components/ramayana/RamayanaPaintingGallery';
 import { RamayanaZoomDive } from '@/components/ramayana/RamayanaZoomDive';
 import { RamayanaEpilogue } from '@/components/ramayana/RamayanaEpilogue';
 import { RamayanaProgressTimeline } from '@/components/ramayana/RamayanaProgressTimeline';
@@ -17,6 +18,7 @@ const Ramayana = () => {
       <RamayanaSectionNav activeSection={activeSection} />
       <RamayanaProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <RamayanaHero />
+      <RamayanaPaintingGallery />
       <RamayanaZoomDive />
       <RamayanaEpilogue />
       <SiteFooter variant="dark" />
