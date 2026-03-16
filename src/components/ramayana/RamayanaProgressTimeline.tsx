@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { RAMAYANA_SECTIONS } from '@/hooks/useRamayanaScrollSpy';
-import { RM, PHASES } from '@/components/visuals/ramayanaMapData';
+import { RM } from '@/components/visuals/ramayanaMapData';
 
 interface RamayanaProgressTimelineProps {
   activeSection: string;
@@ -10,13 +10,10 @@ interface RamayanaProgressTimelineProps {
 
 export const RamayanaProgressTimeline = ({ activeSection, globalProgress }: RamayanaProgressTimelineProps) => {
   const activeIndex = RAMAYANA_SECTIONS.findIndex(s => s.id === activeSection);
-
-  // Group sections by phase
   let lastPhase = '';
 
   return (
     <div className="fixed right-4 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col items-center gap-0" style={{ height: '55vh' }}>
-      {/* Phase labels + dots */}
       <div className="flex flex-col items-center h-full relative">
         {RAMAYANA_SECTIONS.map((section, i) => {
           const isActive = section.id === activeSection;
@@ -34,7 +31,7 @@ export const RamayanaProgressTimeline = ({ activeSection, globalProgress }: Rama
               {showPhase && (
                 <span
                   className="absolute -left-3 text-[7px] tracking-[0.1em] uppercase font-body font-semibold whitespace-nowrap origin-bottom-left -rotate-90"
-                  style={{ color: RM.SAFFRON, opacity: isActive ? 0.7 : 0.3 }}
+                  style={{ color: RM.VERMILLION, opacity: isActive ? 0.8 : 0.35 }}
                 >
                   {section.phase}
                 </span>
@@ -44,14 +41,15 @@ export const RamayanaProgressTimeline = ({ activeSection, globalProgress }: Rama
                 style={{
                   width: isActive ? 8 : 4,
                   height: isActive ? 8 : 4,
-                  background: isActive ? RM.SAFFRON : isPast ? RM.SAFFRON : 'hsl(215, 20%, 25%)',
-                  opacity: isActive ? 1 : isPast ? 0.4 : 0.2,
-                  boxShadow: isActive ? `0 0 8px ${RM.SAFFRON}` : 'none',
+                  background: isActive ? RM.VERMILLION : isPast ? RM.OCHRE : RM.PARCHMENT_DK,
+                  opacity: isActive ? 1 : isPast ? 0.6 : 0.3,
+                  boxShadow: isActive ? `0 0 8px ${RM.VERMILLION}` : 'none',
+                  border: isActive ? `1px solid ${RM.GOLD_LEAF}` : 'none',
                 }}
               />
               <span
                 className="absolute right-5 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-body whitespace-nowrap pointer-events-none"
-                style={{ color: RM.SANDSTONE }}
+                style={{ color: RM.INK }}
               >
                 {section.label}
               </span>
@@ -60,12 +58,12 @@ export const RamayanaProgressTimeline = ({ activeSection, globalProgress }: Rama
         })}
 
         {/* Progress line */}
-        <div className="absolute left-1/2 -translate-x-1/2 w-px top-0 bottom-0 pointer-events-none -z-10" style={{ background: 'hsl(215, 20%, 16%)' }}>
+        <div className="absolute left-1/2 -translate-x-1/2 w-px top-0 bottom-0 pointer-events-none -z-10" style={{ background: RM.PARCHMENT_DK }}>
           <motion.div
             className="w-full origin-top"
             style={{
               height: `${globalProgress * 100}%`,
-              background: `linear-gradient(to bottom, ${RM.SAFFRON}, ${RM.GOLD})`,
+              background: `linear-gradient(to bottom, ${RM.VERMILLION}, ${RM.GOLD_LEAF})`,
             }}
           />
         </div>
