@@ -13,7 +13,7 @@ const Ramayana = () => {
   const { activeSection, globalProgress } = useRamayanaScrollSpy();
 
   return (
-    <div className="min-h-screen" style={{ background: 'hsl(25, 30%, 10%)' }}>
+    <div className="min-h-screen" style={{ background: 'hsl(38, 45%, 88%)' }}>
       <RamayanaSectionNav activeSection={activeSection} />
       <RamayanaProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <RamayanaHero />
