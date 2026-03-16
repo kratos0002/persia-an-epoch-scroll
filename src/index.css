@@ -165,6 +165,36 @@
   }
 }
 
+/* ── Ramayana Indian miniature painting overrides ── */
+
+/* Paper grain texture (feTurbulence SVG noise) */
+.ramayana-paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Warm sepia filter on CartoDB light tiles */
+.ramayana-map-warm .leaflet-tile-pane {
+  filter: sepia(0.35) saturate(0.85) hue-rotate(-5deg) brightness(1.02);
+}
+
+/* Override Leaflet popup for miniature style */
+.ramayana-map-warm .leaflet-popup-content-wrapper {
+  background: hsl(38, 45%, 92%) !important;
+  color: hsl(25, 40%, 15%) !important;
+  border: 2px solid hsl(43, 90%, 52%) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+}
+.ramayana-map-warm .leaflet-popup-tip {
+  background: hsl(38, 45%, 92%) !important;
+}
+
+/* Tiro Devanagari utility */
+.font-devanagari {
+  font-family: 'Tiro Devanagari', serif;
+}
+
 /* Oil reserves bar animation (British section) */
 @keyframes oilBarGrow {
   from { width: 0; }
