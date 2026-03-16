@@ -3,7 +3,6 @@ import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
-import { MobileNotice } from '@/components/site/MobileNotice';
 import { SamuraiProgressTimeline } from '@/components/samurai/SamuraiProgressTimeline';
 import { SamuraiSectionNav } from '@/components/samurai/SamuraiSectionNav';
 import { useSamuraiScrollSpy } from '@/hooks/useSamuraiScrollSpy';
@@ -26,7 +25,6 @@ const Samurai = () => {
 
   return (
     <div className="min-h-screen" style={{ background: 'hsl(40, 25%, 95%)' }}>
-      <MobileNotice />
       <SiteHeader />
       <SamuraiSectionNav activeSection={activeSection} />
       <SamuraiProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />

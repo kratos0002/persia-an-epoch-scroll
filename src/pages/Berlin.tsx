@@ -3,7 +3,6 @@ import { SiteHeader } from '@/components/site/SiteHeader';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
-import { MobileNotice } from '@/components/site/MobileNotice';
 import { BerlinProgressTimeline } from '@/components/berlin/BerlinProgressTimeline';
 import { BerlinSectionNav } from '@/components/berlin/BerlinSectionNav';
 import { useBerlinScrollSpy } from '@/hooks/useBerlinScrollSpy';
@@ -27,7 +26,6 @@ const Berlin = () => {
 
   return (
     <div className="min-h-screen" style={{ background: BL.VELLUM }}>
-      <MobileNotice />
       <SiteHeader />
       <BerlinSectionNav activeSection={activeSection} />
       <BerlinProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />

@@ -14,14 +14,12 @@ import { WisdomEpilogue } from '@/components/wisdom/WisdomEpilogue';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
-import { MobileNotice } from '@/components/site/MobileNotice';
 
 const HouseOfWisdom = () => {
   const { activeSection, globalProgress } = useWisdomScrollSpy();
 
   return (
     <div className="bg-background min-h-screen">
-      <MobileNotice />
       <WisdomSectionNav activeSection={activeSection} />
       <WisdomProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <WisdomHero />

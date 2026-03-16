@@ -13,14 +13,12 @@ import { useNutmegScrollSpy } from '@/hooks/useNutmegScrollSpy';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
-import { MobileNotice } from '@/components/site/MobileNotice';
 
 const Nutmeg = () => {
   const { activeSection, globalProgress } = useNutmegScrollSpy();
 
   return (
     <div className="relative" style={{ background: 'hsl(210, 40%, 8%)' }}>
-      <MobileNotice />
       <NutmegSectionNav activeSection={activeSection} />
       <NutmegProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <NutmegHero />

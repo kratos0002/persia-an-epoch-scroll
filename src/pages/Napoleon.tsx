@@ -15,14 +15,12 @@ import { useNapoleonScrollSpy } from '@/hooks/useNapoleonScrollSpy';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
-import { MobileNotice } from '@/components/site/MobileNotice';
 
 const Napoleon = () => {
   const { activeSection, globalProgress } = useNapoleonScrollSpy();
 
   return (
     <div className="relative" style={{ background: 'hsl(225, 30%, 7%)' }}>
-      <MobileNotice />
       <NapoleonSectionNav activeSection={activeSection} />
       <NapoleonProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <NapoleonHero />

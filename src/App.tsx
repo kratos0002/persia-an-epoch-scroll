@@ -24,6 +24,7 @@ import Berlin from "./pages/Berlin.tsx";
 import ShareRedirect from "./pages/ShareRedirect.tsx";
 import StoryPreview from "./pages/StoryPreview.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { MobileNotice } from "@/components/site/MobileNotice";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <MobileNotice />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/persia" element={<Index />} />

@@ -15,14 +15,12 @@ import { useBuddhismScrollSpy } from '@/hooks/useBuddhismScrollSpy';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
-import { MobileNotice } from '@/components/site/MobileNotice';
 
 const Buddhism = () => {
   const { activeSection, globalProgress } = useBuddhismScrollSpy();
 
   return (
     <div className="bg-background text-foreground min-h-screen">
-      <MobileNotice />
       <BuddhismSectionNav activeSection={activeSection} />
       <BuddhismProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <BuddhismHero />

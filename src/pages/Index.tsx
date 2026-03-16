@@ -19,14 +19,12 @@ import { EpilogueSection } from '@/components/sections/EpilogueSection';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
-import { MobileNotice } from '@/components/site/MobileNotice';
 
 const Index = () => {
   const { activeSection, globalProgress } = useScrollSpy();
 
   return (
     <div className="bg-background min-h-screen">
-      <MobileNotice />
       <SectionNav activeSection={activeSection} />
       <ProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <HeroSection />

@@ -17,7 +17,6 @@ import { IndiaMap } from '@/components/visuals/IndiaMap';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { EditionBadge } from '@/components/scroll/EditionBadge';
-import { MobileNotice } from '@/components/site/MobileNotice';
 import { useIndiaScrollSpy } from '@/hooks/useIndiaScrollSpy';
 import type { EraId } from '@/components/visuals/indiaStatesData';
 
@@ -67,7 +66,6 @@ const IndiaStates = () => {
 
   return (
     <div className="relative" style={{ background: 'hsl(220, 20%, 10%)' }}>
-      <MobileNotice />
       {/* Fixed full-viewport map background */}
       <div className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none">
         <div className={`w-[85vw] h-[85vh] max-w-[900px] transition-opacity duration-1000 ${
