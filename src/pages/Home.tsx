@@ -117,6 +117,12 @@ const STORIES: StoryCard[] = [
     image: storyRamayana, tags: ['Zoom Dive', 'Route Map', '~500 BCE'],
     status: 'coming-soon', href: '/ramayana', color: 'hsl(25, 85%, 52%)', era: '~500 BCE', sortYear: -500,
   },
+  {
+    id: 'berlin', number: 14, title: 'The Architecture of Partition', subtitle: 'The Scramble for Africa',
+    hook: 'Fourteen nations sat around a table in Berlin. No African was invited. They drew lines on a map of a continent they had never surveyed — and those lines still draw blood today.',
+    image: storyBerlin, tags: ['Conference Table', 'Partition Map', '1884–1914'],
+    status: 'coming-soon', href: '/berlin', color: 'hsl(0, 65%, 42%)', era: '1884', sortYear: 1884,
+  },
 ];
 
 
