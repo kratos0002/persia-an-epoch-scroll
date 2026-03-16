@@ -18,6 +18,7 @@ import storyIndia from '@/assets/story-india.jpg';
 import storyNuclear from '@/assets/story-nuclear.jpg';
 import storyNutmeg from '@/assets/story-nutmeg.jpg';
 import storyHormuz from '@/assets/story-hormuz.jpg';
+import storyRamayana from '@/assets/story-ramayana.jpg';
 
 /* ── Types ───────────────────────────────────── */
 
