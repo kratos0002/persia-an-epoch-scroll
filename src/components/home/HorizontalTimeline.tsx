@@ -15,6 +15,7 @@ interface StoryCard {
   color: string;
   era: string;
   sortYear: number;
+  kind?: 'history' | 'epic';
 }
 
 interface HorizontalTimelineProps {

@@ -4,6 +4,7 @@ import { India1857Teaser } from './compositions/India1857Teaser';
 import { IndiaStatesTeaser } from './compositions/IndiaStatesTeaser';
 import { BuddhismTeaser } from './compositions/BuddhismTeaser';
 import { HormuzTeaser } from './compositions/HormuzTeaser';
+import { RamayanaTeaser } from './compositions/RamayanaTeaser';
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -79,6 +80,25 @@ export const RemotionRoot: React.FC = () => {
         id="Hormuz-Mobile"
         component={HormuzTeaser}
         durationInFrames={450}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{ layout: 'mobile' as const }}
+      />
+      {/* Ramayana: The Exile's Road */}
+      <Composition
+        id="Ramayana-Desktop"
+        component={RamayanaTeaser}
+        durationInFrames={600}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{ layout: 'desktop' as const }}
+      />
+      <Composition
+        id="Ramayana-Mobile"
+        component={RamayanaTeaser}
+        durationInFrames={600}
         fps={30}
         width={1080}
         height={1920}

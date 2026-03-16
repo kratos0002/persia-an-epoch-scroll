@@ -15,6 +15,7 @@ interface StoryCard {
   color: string;
   era: string;
   sortYear: number;
+  kind?: 'history' | 'epic';
 }
 
 interface StoryGridProps {
@@ -31,10 +32,11 @@ interface Filter {
 
 const FILTERS: Filter[] = [
   { key: 'all', label: 'All', test: () => true },
-  { key: 'ancient', label: 'Ancient World', test: s => s.sortYear < 0 },
+  { key: 'ancient', label: 'Ancient World', test: s => s.sortYear < 0 && s.kind !== 'epic' },
   { key: 'medieval', label: 'Medieval', test: s => s.sortYear >= 0 && s.sortYear < 1500 },
   { key: 'early-modern', label: 'Early Modern', test: s => s.sortYear >= 1500 && s.sortYear < 1850 },
   { key: 'modern', label: 'Modern', test: s => s.sortYear >= 1850 },
+  { key: 'epic', label: 'Myth & Epic', test: s => s.kind === 'epic' },
 ];
 
 /* ── Main Component ──────────────────────────── */

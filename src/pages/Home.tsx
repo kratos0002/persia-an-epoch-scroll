@@ -36,6 +36,7 @@ interface StoryCard {
   color: string;
   era: string;
   sortYear: number;
+  kind?: 'history' | 'epic';
 }
 
 const STORIES: StoryCard[] = [
@@ -114,8 +115,8 @@ const STORIES: StoryCard[] = [
   {
     id: 'ramayana', number: 13, title: "The Exile's Road", subtitle: 'Tracing the Ramayana',
     hook: 'A 2,500-kilometre journey from the northern plains to the southern sea. One prince, fourteen years, and a route that became the most retold story in human history.',
-    image: storyRamayana, tags: ['Zoom Dive', 'Route Map', '~500 BCE'],
-    status: 'coming-soon', href: '/ramayana', color: 'hsl(25, 85%, 52%)', era: '~500 BCE', sortYear: -500,
+    image: storyRamayana, tags: ['Sacred Epic', 'Route Map', '~500 BCE'],
+    status: 'coming-soon', href: '/ramayana', color: 'hsl(25, 85%, 52%)', era: '~500 BCE', sortYear: -500, kind: 'epic',
   },
   {
     id: 'berlin', number: 14, title: 'The Architecture of Partition', subtitle: 'The Scramble for Africa',
