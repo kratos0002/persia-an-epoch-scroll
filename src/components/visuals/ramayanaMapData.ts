@@ -36,15 +36,27 @@ export interface RamayanaStage {
   image?: RamayanaImage;
 }
 
-/* ── Colour tokens ── */
+/* ── Colour tokens — Indian miniature painting palette ── */
 export const RM = {
-  SAFFRON:   'hsl(25, 85%, 52%)',
-  EARTH:     'hsl(25, 30%, 10%)',
-  SANDSTONE: 'hsl(35, 40%, 85%)',
-  FOREST:    'hsl(140, 35%, 30%)',
-  OCEAN:     'hsl(210, 50%, 35%)',
-  GOLD:      'hsl(43, 80%, 55%)',
-  DIMMED:    'hsl(25, 30%, 30%)',
+  /* page ground */
+  PARCHMENT:    'hsl(38, 45%, 88%)',
+  PARCHMENT_DK: 'hsl(34, 38%, 78%)',
+  /* inks & accents */
+  VERMILLION:   'hsl(8, 78%, 48%)',
+  INK:          'hsl(25, 40%, 15%)',
+  GOLD_LEAF:    'hsl(43, 90%, 52%)',
+  GOLD_DIM:     'hsl(40, 55%, 40%)',
+  ULTRAMARINE:  'hsl(220, 65%, 35%)',
+  MALACHITE:    'hsl(155, 50%, 32%)',
+  LAKE:         'hsl(340, 55%, 52%)',
+  OCHRE:        'hsl(32, 60%, 50%)',
+  BURNT_UMBER:  'hsl(20, 40%, 30%)',
+  /* legacy aliases (ease migration) */
+  SAFFRON:      'hsl(8, 78%, 48%)',
+  EARTH:        'hsl(38, 45%, 88%)',
+  SANDSTONE:    'hsl(25, 40%, 15%)',
+  GOLD:         'hsl(43, 90%, 52%)',
+  DIMMED:       'hsl(32, 30%, 55%)',
 } as const;
 
 /* ── Phase labels ── */
