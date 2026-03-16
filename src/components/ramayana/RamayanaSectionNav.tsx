@@ -11,9 +11,11 @@ interface RamayanaSectionNavProps {
 export const RamayanaSectionNav = ({ activeSection }: RamayanaSectionNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Group by phase
+  let lastPhase = '';
+
   return (
     <>
-      {/* Toggle button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-6 left-6 z-50 hidden md:flex flex-col items-center justify-center w-10 h-10 rounded-full backdrop-blur-md cursor-pointer"
@@ -36,7 +38,7 @@ export const RamayanaSectionNav = ({ activeSection }: RamayanaSectionNavProps) =
               onClick={() => setIsOpen(false)}
             />
             <motion.nav
-              className="fixed top-0 left-0 h-full w-72 z-50 flex flex-col justify-center px-8 py-12 overflow-y-auto"
+              className="fixed top-0 left-0 h-full w-72 z-50 flex flex-col justify-start px-8 py-12 overflow-y-auto scrollbar-hide"
               style={{ background: RM.EARTH }}
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -46,27 +48,36 @@ export const RamayanaSectionNav = ({ activeSection }: RamayanaSectionNavProps) =
               <p className="text-[9px] tracking-[0.3em] uppercase font-body font-semibold mb-6" style={{ color: RM.SAFFRON, opacity: 0.5 }}>
                 The Route
               </p>
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 {RAMAYANA_SECTIONS.map((section) => {
                   const isActive = section.id === activeSection;
+                  const showPhase = section.phase && section.phase !== lastPhase;
+                  if (section.phase) lastPhase = section.phase;
+
                   return (
-                    <button
-                      key={section.id}
-                      onClick={() => {
-                        document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' });
-                        setIsOpen(false);
-                      }}
-                      className={cn(
-                        'w-full text-left px-3 py-2 rounded-lg text-sm font-body transition-all',
-                        isActive ? 'font-semibold' : 'opacity-50 hover:opacity-80'
+                    <React.Fragment key={section.id}>
+                      {showPhase && (
+                        <p className="text-[8px] tracking-[0.25em] uppercase font-body font-semibold pt-4 pb-1 px-3" style={{ color: RM.GOLD, opacity: 0.4 }}>
+                          {section.phase}
+                        </p>
                       )}
-                      style={{ color: isActive ? RM.SAFFRON : RM.SANDSTONE }}
-                    >
-                      <span>{section.label}</span>
-                      {section.year && (
-                        <span className="ml-2 text-[10px] opacity-50">{section.year}</span>
-                      )}
-                    </button>
+                      <button
+                        onClick={() => {
+                          document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' });
+                          setIsOpen(false);
+                        }}
+                        className={cn(
+                          'w-full text-left px-3 py-1.5 rounded-lg text-xs font-body transition-all',
+                          isActive ? 'font-semibold' : 'opacity-40 hover:opacity-70'
+                        )}
+                        style={{ color: isActive ? RM.SAFFRON : RM.SANDSTONE }}
+                      >
+                        <span>{section.label}</span>
+                        {section.year && (
+                          <span className="ml-2 text-[9px] opacity-50">{section.year}</span>
+                        )}
+                      </button>
+                    </React.Fragment>
                   );
                 })}
               </div>
