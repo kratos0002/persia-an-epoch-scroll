@@ -180,7 +180,7 @@ export const RamayanaZoomDive = () => {
           {/* Paper grain texture overlay */}
           <div className="absolute inset-0 pointer-events-none z-30 ramayana-paper-grain" />
 
-          <MiniatureBorder className="absolute inset-0 pointer-events-none" />
+          <MiniatureBorder className="absolute inset-0 pointer-events-none"><span /></MiniatureBorder>
 
           {/* Phase + Stop counter */}
           <div className="px-10 pt-10 pb-2 relative z-20">
