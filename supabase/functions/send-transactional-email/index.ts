@@ -1,4 +1,4 @@
-import { createClient } from 'npm:@supabase/supabase-js@2'
+import { createClient, SupabaseClient } from 'npm:@supabase/supabase-js@2'
 import { render } from 'npm:@react-email/render@0.0.12'
 import { SubscriberWelcomeEmail } from '../_shared/email-templates/subscriber-welcome.tsx'
 import { NewEssayEmail } from '../_shared/email-templates/new-essay.tsx'
