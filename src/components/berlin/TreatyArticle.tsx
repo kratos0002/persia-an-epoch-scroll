@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { BL, type TreatyArticleData } from '@/components/visuals/berlinMapData';
+import { BL, GENERAL_ACT_ARTICLES, KEY_QUOTES, type TreatyArticleData } from '@/components/visuals/berlinMapData';
 
 /* ── Red Wax Seal SVG ──────────────────────────── */
 const WaxSeal = () => (
