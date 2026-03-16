@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useState, useMemo } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useScroll } from 'framer-motion';
 import { motion, AnimatePresence } from 'framer-motion';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { STAGES, ROUTE_SEGMENTS, RM, TOTAL_DISTANCE_KM } from '@/components/visuals/ramayanaMapData';
 
-/* ── helpers ── */
+/* ── Polyline styles ── */
 const glowPolylineOptions: L.PolylineOptions = {
   color: RM.SAFFRON,
   weight: 6,
@@ -23,53 +23,59 @@ const corePolylineOptions: L.PolylineOptions = {
   lineJoin: 'round',
 };
 
-function buildMarkerIcon(label: string, detail?: string): L.DivIcon {
+const dimmedMarkerOptions: L.PolylineOptions = {
+  color: RM.DIMMED,
+  weight: 1,
+  opacity: 0.4,
+};
+
+function buildMarkerIcon(label: string, active: boolean): L.DivIcon {
+  const size = active ? 12 : 7;
+  const bg = active ? RM.SAFFRON : RM.DIMMED;
+  const border = active ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)';
+  const shadow = active ? `0 0 12px hsla(25,85%,52%,0.5)` : 'none';
   return L.divIcon({
     className: '',
-    html: `
-      <div style="position:relative;width:200px;display:flex;flex-direction:column;align-items:center;">
-        <div style="
-          padding:10px 14px;
-          border-radius:14px;
-          background:linear-gradient(180deg, rgba(8,12,22,0.96), rgba(10,16,28,0.9));
-          border:1px solid hsla(25,85%,52%,0.45);
-          box-shadow:0 14px 40px rgba(0,0,0,0.45);
-          backdrop-filter:blur(12px);
-          text-align:center;
-        ">
-          <div style="
-            font-family:'Playfair Display',Georgia,serif;
-            font-size:16px;font-weight:700;line-height:1.2;
-            color:${RM.SAFFRON};
-          ">${label}</div>
-          ${detail ? `<div style="
-            margin-top:4px;font-family:'Source Sans 3',system-ui,sans-serif;
-            font-size:10px;color:rgba(255,255,255,0.55);
-          ">${detail}</div>` : ''}
-        </div>
-        <div style="width:1px;height:14px;background:linear-gradient(180deg,hsla(25,85%,52%,0.8),transparent);"></div>
-        <div style="width:10px;height:10px;border-radius:50%;background:${RM.SAFFRON};border:3px solid rgba(255,255,255,0.9);box-shadow:0 0 12px hsla(25,85%,52%,0.5);"></div>
-      </div>
-    `,
-    iconSize: [200, 90],
-    iconAnchor: [100, 90],
+    html: `<div style="
+      width:${size}px;height:${size}px;border-radius:50%;
+      background:${bg};border:2px solid ${border};
+      box-shadow:${shadow};
+    "></div>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
   });
 }
 
-/* ── Card position classes ── */
-const CARD_CLASSES: Record<string, string> = {
-  'bottom-left': 'bottom-8 left-8',
-  'bottom-right': 'bottom-8 right-8',
-  'top-left': 'top-24 left-8',
-  'top-right': 'top-24 right-8',
-  'center': 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
-};
+function buildActiveLabel(label: string, detail?: string): L.DivIcon {
+  return L.divIcon({
+    className: '',
+    html: `
+      <div style="position:relative;width:180px;display:flex;flex-direction:column;align-items:center;">
+        <div style="
+          padding:8px 12px;border-radius:12px;
+          background:linear-gradient(180deg, rgba(8,12,22,0.94), rgba(10,16,28,0.88));
+          border:1px solid hsla(25,85%,52%,0.4);
+          box-shadow:0 10px 30px rgba(0,0,0,0.4);
+          backdrop-filter:blur(10px);text-align:center;
+        ">
+          <div style="font-family:'Playfair Display',Georgia,serif;font-size:14px;font-weight:700;color:${RM.SAFFRON};line-height:1.2;">${label}</div>
+          ${detail ? `<div style="margin-top:3px;font-family:'Source Sans 3',system-ui,sans-serif;font-size:9px;color:rgba(255,255,255,0.5);">${detail}</div>` : ''}
+        </div>
+        <div style="width:1px;height:10px;background:linear-gradient(180deg,hsla(25,85%,52%,0.7),transparent);"></div>
+        <div style="width:10px;height:10px;border-radius:50%;background:${RM.SAFFRON};border:3px solid rgba(255,255,255,0.9);box-shadow:0 0 12px hsla(25,85%,52%,0.5);"></div>
+      </div>
+    `,
+    iconSize: [180, 70],
+    iconAnchor: [90, 70],
+  });
+}
 
 export const RamayanaZoomDive = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const activeLabelRef = useRef<L.Marker | null>(null);
   const routeGlowRef = useRef<L.Polyline[]>([]);
   const routeCoreRef = useRef<L.Polyline[]>([]);
   const [currentStage, setCurrentStage] = useState(0);
@@ -84,7 +90,6 @@ export const RamayanaZoomDive = () => {
   // Init map
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
-
     const map = L.map(mapContainerRef.current, {
       center: STAGES[0].center,
       zoom: STAGES[0].zoom,
@@ -95,13 +100,11 @@ export const RamayanaZoomDive = () => {
       dragging: true,
       keyboard: false,
     });
-
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap',
       maxZoom: 16,
       minZoom: 3,
     }).addTo(map);
-
     mapRef.current = map;
     return () => { map.remove(); mapRef.current = null; };
   }, []);
@@ -109,34 +112,46 @@ export const RamayanaZoomDive = () => {
   // Scroll → stage
   useEffect(() => {
     const unsubscribe = scrollYProgress.on('change', (v) => {
-      const idx = Math.min(
-        STAGES.length - 1,
-        Math.floor(v * STAGES.length)
-      );
+      const idx = Math.min(STAGES.length - 1, Math.floor(v * STAGES.length));
       if (idx !== currentStage) setCurrentStage(idx);
     });
     return unsubscribe;
   }, [scrollYProgress, currentStage]);
 
-  // Stage change → map updates
+  // Stage change → map updates (accumulated markers)
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
     const s = STAGES[currentStage];
-    map.flyTo(s.center, s.zoom, { duration: 2, easeLinearity: 0.25 });
+    map.flyTo(s.center, s.zoom, { duration: 1.8, easeLinearity: 0.25 });
 
-    // Clear old markers
+    // Clear all markers and re-add accumulated
     markersRef.current.forEach(m => m.remove());
     markersRef.current = [];
+    activeLabelRef.current?.remove();
+    activeLabelRef.current = null;
 
-    // Add markers
-    s.markers.forEach(mk => {
-      const marker = L.marker(mk.coords, {
-        icon: buildMarkerIcon(mk.label, mk.detail),
-      }).addTo(map);
-      markersRef.current.push(marker);
-    });
+    // Add markers for all stages up to current (accumulated, dimmed for past)
+    for (let i = 0; i <= currentStage; i++) {
+      const st = STAGES[i];
+      st.markers.forEach(mk => {
+        const isActive = i === currentStage;
+        if (isActive) {
+          // Active label marker
+          const label = L.marker(mk.coords, {
+            icon: buildActiveLabel(mk.label, mk.detail),
+          }).addTo(map);
+          activeLabelRef.current = label;
+        } else {
+          // Dimmed dot
+          const dot = L.marker(mk.coords, {
+            icon: buildMarkerIcon(mk.label, false),
+          }).addTo(map);
+          markersRef.current.push(dot);
+        }
+      });
+    }
 
     // Draw route up to this stage
     routeGlowRef.current.forEach(p => p.remove());
@@ -154,90 +169,138 @@ export const RamayanaZoomDive = () => {
     }
   }, [currentStage]);
 
-  // Progress fraction for bottom bar
   const progressFraction = currentStage / (STAGES.length - 1);
   const distanceSoFar = Math.round(progressFraction * TOTAL_DISTANCE_KM);
 
   return (
     <div ref={sectionRef} className="relative" style={{ height: `${STAGES.length * 100}vh`, background: RM.EARTH }}>
-      {/* Sticky map */}
-      <div className="sticky top-0 h-screen w-full">
-        <div ref={mapContainerRef} className="w-full h-full" style={{ background: RM.EARTH }} />
+      {/* Sticky split layout */}
+      <div className="sticky top-0 h-screen w-full flex">
+        {/* Left Panel — 40% */}
+        <div className="w-[40%] h-full flex flex-col relative overflow-hidden" style={{ background: RM.EARTH, borderRight: `1px solid hsla(25, 30%, 20%, 0.6)` }}>
+          {/* Phase + Stop counter */}
+          <div className="px-8 pt-8 pb-2">
+            <p className="text-[9px] tracking-[0.3em] uppercase font-body font-semibold" style={{ color: RM.SAFFRON, opacity: 0.5 }}>
+              {stage.phase}
+            </p>
+            {currentStage > 0 && (
+              <p className="text-[10px] font-body mt-1" style={{ color: RM.SANDSTONE, opacity: 0.4 }}>
+                Stop {currentStage} of {STAGES.length - 1}
+              </p>
+            )}
+          </div>
 
-        {/* Overlay narrative card */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={stage.id}
-            className={`absolute z-[10] ${CARD_CLASSES[stage.cardPosition]} max-w-md pointer-events-auto`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div
-              className="rounded-xl p-6 backdrop-blur-md"
-              style={{
-                background: 'rgba(10,15,25,0.88)',
-                border: `1px solid hsla(25,85%,52%,0.25)`,
-              }}
-            >
-              {stage.narrative.title && (
-                <h3
-                  className="font-display text-xl font-bold mb-2"
-                  style={{ color: RM.SAFFRON }}
-                >
+          {/* Scrollable content */}
+          <div className="flex-1 overflow-y-auto px-8 pb-8 scrollbar-hide">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={stage.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {/* Title */}
+                <h3 className="font-display text-2xl font-bold mt-2 mb-1" style={{ color: RM.SAFFRON }}>
                   {stage.narrative.title}
                 </h3>
-              )}
-              <p
-                className="font-body text-sm leading-relaxed"
-                style={{ color: 'rgba(255,255,255,0.75)' }}
-              >
-                {stage.narrative.body}
-              </p>
-              {stage.narrative.accent && (
-                <p
-                  className="mt-3 font-body text-xs italic"
-                  style={{ color: RM.SAFFRON, opacity: 0.7 }}
-                >
-                  {stage.narrative.accent}
-                </p>
-              )}
-            </div>
-          </motion.div>
-        </AnimatePresence>
+                {stage.year && (
+                  <p className="text-[11px] font-body font-semibold tracking-wide mb-4" style={{ color: RM.GOLD, opacity: 0.7 }}>
+                    {stage.year}
+                  </p>
+                )}
 
-        {/* Bottom progress bar */}
-        <div className="absolute bottom-0 left-0 right-0 z-[10] h-10 flex items-center px-6" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)' }}>
-          <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
-            <motion.div
-              className="h-full rounded-full"
-              style={{ background: RM.SAFFRON }}
-              animate={{ width: `${progressFraction * 100}%` }}
-              transition={{ duration: 0.6 }}
-            />
+                {/* Image placeholder */}
+                {stage.image && (
+                  <div className="w-full aspect-[16/10] rounded-lg overflow-hidden mb-5 relative" style={{ background: 'hsl(25, 20%, 15%)' }}>
+                    <img
+                      src={stage.image.src}
+                      alt={stage.image.alt}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <p className="absolute bottom-0 left-0 right-0 px-3 py-2 text-[9px] font-body" style={{ color: 'rgba(255,255,255,0.5)', background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)' }}>
+                      {stage.image.caption}
+                    </p>
+                  </div>
+                )}
+
+                {/* Narrative */}
+                <p className="font-body text-sm leading-[1.8] mb-4" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                  {stage.narrative.body}
+                </p>
+
+                {stage.narrative.accent && (
+                  <p className="font-body text-xs italic mb-6 pl-4" style={{ color: RM.SAFFRON, opacity: 0.7, borderLeft: `2px solid hsla(25, 85%, 52%, 0.3)` }}>
+                    {stage.narrative.accent}
+                  </p>
+                )}
+
+                {/* TODAY block */}
+                {stage.today && (
+                  <div className="rounded-lg p-4 mb-4" style={{ background: 'hsla(25, 20%, 14%, 1)', border: '1px solid hsla(25, 30%, 22%, 0.6)' }}>
+                    <p className="text-[9px] tracking-[0.25em] uppercase font-body font-semibold mb-2" style={{ color: RM.GOLD, opacity: 0.6 }}>
+                      Today
+                    </p>
+                    <p className="font-display text-sm font-semibold mb-2" style={{ color: RM.SANDSTONE }}>
+                      {stage.today.name}
+                    </p>
+                    <p className="font-body text-xs leading-relaxed mb-3" style={{ color: 'rgba(255,255,255,0.55)' }}>
+                      {stage.today.detail}
+                    </p>
+                    <p className="font-mono text-[10px]" style={{ color: RM.SAFFRON, opacity: 0.4 }}>
+                      {stage.today.coordinates}
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
-          <span className="ml-4 text-[10px] tracking-[0.15em] uppercase font-body font-semibold whitespace-nowrap" style={{ color: RM.SANDSTONE, opacity: 0.6 }}>
-            {distanceSoFar} / {TOTAL_DISTANCE_KM} km
-          </span>
+
+          {/* Bottom progress */}
+          <div className="px-8 py-3 flex items-center gap-3" style={{ borderTop: '1px solid hsla(25, 30%, 20%, 0.4)' }}>
+            <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: 'hsla(25, 20%, 18%, 1)' }}>
+              <motion.div
+                className="h-full rounded-full"
+                style={{ background: `linear-gradient(to right, ${RM.SAFFRON}, ${RM.GOLD})` }}
+                animate={{ width: `${progressFraction * 100}%` }}
+                transition={{ duration: 0.6 }}
+              />
+            </div>
+            <span className="text-[10px] tracking-[0.12em] font-body font-semibold whitespace-nowrap" style={{ color: RM.SANDSTONE, opacity: 0.5 }}>
+              {distanceSoFar} / {TOTAL_DISTANCE_KM} km
+            </span>
+          </div>
         </div>
 
-        {/* Stage label */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-[10]">
-          <div className="px-5 py-2 rounded-full backdrop-blur-md" style={{
-            background: 'rgba(10,15,25,0.85)',
-            border: '1px solid hsla(25,85%,52%,0.3)',
-          }}>
-            <p className="text-[10px] tracking-[0.2em] uppercase font-body font-semibold text-center" style={{ color: RM.SAFFRON }}>
-              {stage.label}
-            </p>
+        {/* Right Map — 60% */}
+        <div className="w-[60%] h-full relative">
+          <div ref={mapContainerRef} className="w-full h-full" style={{ background: RM.EARTH }} />
+
+          {/* Stage label floating on map */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[10]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={stage.id}
+                className="px-4 py-2 rounded-full backdrop-blur-md"
+                style={{ background: 'rgba(10,15,25,0.85)', border: '1px solid hsla(25,85%,52%,0.25)' }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <p className="text-[10px] tracking-[0.18em] uppercase font-body font-semibold text-center" style={{ color: RM.SAFFRON }}>
+                  {stage.label}
+                </p>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
 
-      {/* Invisible scroll steps (for scroll-spy anchors) */}
+      {/* Invisible scroll step anchors */}
       <div className="absolute inset-0 pointer-events-none">
-        {STAGES.map((s, i) => (
+        {STAGES.map((s) => (
           <div key={s.id} id={s.id} style={{ height: '100vh' }} />
         ))}
       </div>
