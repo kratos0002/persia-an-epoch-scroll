@@ -8,8 +8,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// deno-lint-ignore no-explicit-any
 async function enqueueEmail(
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClient<any>,
   opts: {
     to: string
     from: string
