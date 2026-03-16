@@ -19,6 +19,7 @@ import storyNuclear from '@/assets/story-nuclear.jpg';
 import storyNutmeg from '@/assets/story-nutmeg.jpg';
 import storyHormuz from '@/assets/story-hormuz.jpg';
 import storyRamayana from '@/assets/story-ramayana.jpg';
+import storyBerlin from '@/assets/story-berlin.jpg';
 
 /* ── Types ───────────────────────────────────── */
 
@@ -115,6 +116,12 @@ const STORIES: StoryCard[] = [
     hook: 'A 2,500-kilometre journey from the northern plains to the southern sea. One prince, fourteen years, and a route that became the most retold story in human history.',
     image: storyRamayana, tags: ['Zoom Dive', 'Route Map', '~500 BCE'],
     status: 'coming-soon', href: '/ramayana', color: 'hsl(25, 85%, 52%)', era: '~500 BCE', sortYear: -500,
+  },
+  {
+    id: 'berlin', number: 14, title: 'The Architecture of Partition', subtitle: 'The Scramble for Africa',
+    hook: 'Fourteen nations sat around a table in Berlin. No African was invited. They drew lines on a map of a continent they had never surveyed — and those lines still draw blood today.',
+    image: storyBerlin, tags: ['Conference Table', 'Partition Map', '1884–1914'],
+    status: 'coming-soon', href: '/berlin', color: 'hsl(0, 65%, 42%)', era: '1884', sortYear: 1884,
   },
 ];
 

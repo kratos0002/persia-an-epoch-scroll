@@ -20,6 +20,7 @@ import Hormuz from "./pages/Hormuz.tsx";
 import Ramayana from "./pages/Ramayana.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
+import Berlin from "./pages/Berlin.tsx";
 import ShareRedirect from "./pages/ShareRedirect.tsx";
 import StoryPreview from "./pages/StoryPreview.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/nutmeg" element={<Nutmeg />} />
           <Route path="/hormuz" element={<Hormuz />} />
           <Route path="/ramayana" element={<Ramayana />} />
+          <Route path="/berlin" element={<Berlin />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/share/:storyId" element={<ShareRedirect />} />
