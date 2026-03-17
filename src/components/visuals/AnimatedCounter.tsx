@@ -9,6 +9,7 @@ interface AnimatedCounterProps {
   suffix?: string;
   className?: string;
   label?: string;
+  decimals?: number;
 }
 
 export const AnimatedCounter = ({
