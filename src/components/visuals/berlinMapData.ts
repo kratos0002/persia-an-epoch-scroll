@@ -151,16 +151,16 @@ export interface SplitEthnicGroup {
 }
 
 export const SPLIT_ETHNIC_GROUPS: SplitEthnicGroup[] = [
-  { name: 'Maasai', stateCount: 2, states: ['Kenya', 'Tanzania'] },
-  { name: 'Somali', stateCount: 5, states: ['Somalia', 'Ethiopia', 'Kenya', 'Djibouti', 'Eritrea'] },
-  { name: 'Ewe', stateCount: 2, states: ['Ghana', 'Togo'] },
-  { name: 'Bakongo', stateCount: 3, states: ['DRC', 'Republic of Congo', 'Angola'] },
-  { name: 'Tuareg', stateCount: 5, states: ['Mali', 'Niger', 'Algeria', 'Libya', 'Burkina Faso'] },
-  { name: 'Hausa', stateCount: 2, states: ['Nigeria', 'Niger'] },
-  { name: 'Yoruba', stateCount: 2, states: ['Nigeria', 'Benin'] },
-  { name: 'Mandinka', stateCount: 6, states: ['Senegal', 'Gambia', 'Guinea-Bissau', 'Guinea', 'Mali', 'Ivory Coast'] },
-  { name: 'Lunda', stateCount: 3, states: ['DRC', 'Angola', 'Zambia'] },
-  { name: 'Chewa', stateCount: 3, states: ['Malawi', 'Mozambique', 'Zambia'] },
+  { name: 'Maasai', stateCount: 2, states: ['Kenya', 'Tanzania'], lat: -2.5, lng: 36.8 },
+  { name: 'Somali', stateCount: 5, states: ['Somalia', 'Ethiopia', 'Kenya', 'Djibouti', 'Eritrea'], lat: 5.0, lng: 46.0 },
+  { name: 'Ewe', stateCount: 2, states: ['Ghana', 'Togo'], lat: 6.6, lng: 1.0 },
+  { name: 'Bakongo', stateCount: 3, states: ['DRC', 'Republic of Congo', 'Angola'], lat: -5.5, lng: 14.5 },
+  { name: 'Tuareg', stateCount: 5, states: ['Mali', 'Niger', 'Algeria', 'Libya', 'Burkina Faso'], lat: 20.0, lng: 5.0 },
+  { name: 'Hausa', stateCount: 2, states: ['Nigeria', 'Niger'], lat: 12.0, lng: 8.5 },
+  { name: 'Yoruba', stateCount: 2, states: ['Nigeria', 'Benin'], lat: 7.5, lng: 3.9 },
+  { name: 'Mandinka', stateCount: 6, states: ['Senegal', 'Gambia', 'Guinea-Bissau', 'Guinea', 'Mali', 'Ivory Coast'], lat: 12.5, lng: -12.0 },
+  { name: 'Lunda', stateCount: 3, states: ['DRC', 'Angola', 'Zambia'], lat: -10.0, lng: 25.0 },
+  { name: 'Chewa', stateCount: 3, states: ['Malawi', 'Mozambique', 'Zambia'], lat: -14.0, lng: 34.0 },
 ];
 
 /* ── Border Topology ────────────────────────────────────────────────── */
