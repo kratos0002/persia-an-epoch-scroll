@@ -116,28 +116,31 @@ export interface PartitionEvent {
   power: string;
   territory: string;
   description: string;
+  lat: number;
+  lng: number;
+  radius: number; // km for L.circle
 }
 
 export const PARTITION_TIMELINE: PartitionEvent[] = [
-  { year: 1830, power: 'france', territory: 'Algeria', description: 'France invades Algeria, beginning formal colonization of North Africa.' },
-  { year: 1881, power: 'france', territory: 'Tunisia', description: 'France establishes a protectorate over Tunisia.' },
-  { year: 1882, power: 'britain', territory: 'Egypt', description: 'Britain occupies Egypt to secure the Suez Canal.' },
-  { year: 1884, power: 'germany', territory: 'South-West Africa', description: 'Germany declares a protectorate over Namibia.' },
-  { year: 1884, power: 'germany', territory: 'Togoland & Kamerun', description: 'Germany claims Togoland and Kamerun in rapid succession.' },
-  { year: 1885, power: 'belgium', territory: 'Congo Free State', description: 'Leopold II receives personal control of the Congo Basin.' },
-  { year: 1885, power: 'germany', territory: 'German East Africa', description: 'Germany establishes control over Tanganyika.' },
-  { year: 1885, power: 'italy', territory: 'Eritrea', description: 'Italy establishes the colony of Eritrea on the Red Sea coast.' },
-  { year: 1890, power: 'britain', territory: 'Zanzibar & Uganda', description: 'Heligoland-Zanzibar Treaty: Britain gains Zanzibar, Germany gets Heligoland.' },
-  { year: 1891, power: 'britain', territory: 'Nyasaland', description: 'Britain declares a protectorate over modern Malawi.' },
-  { year: 1893, power: 'france', territory: 'French West Africa', description: 'France consolidates its West African territories into a federation.' },
-  { year: 1895, power: 'france', territory: 'Madagascar', description: 'France conquers the Merina Kingdom.' },
-  { year: 1896, power: 'italy', territory: 'Ethiopia (failed)', description: 'Italy defeated at Battle of Adwa — Ethiopia remains independent.' },
-  { year: 1898, power: 'britain', territory: 'Sudan', description: 'Battle of Omdurman — Britain conquers Sudan as Anglo-Egyptian Condominium.' },
-  { year: 1899, power: 'britain', territory: 'South Africa', description: 'Second Boer War begins — Britain seeks control of Transvaal gold.' },
-  { year: 1905, power: 'germany', territory: 'Tanganyika', description: 'Maji Maji Rebellion crushed — 300,000 Africans die.' },
-  { year: 1908, power: 'belgium', territory: 'Belgian Congo', description: 'Belgium annexes Congo from Leopold after international outcry.' },
-  { year: 1911, power: 'italy', territory: 'Libya', description: 'Italy invades Ottoman Libya.' },
-  { year: 1912, power: 'france', territory: 'Morocco', description: 'France establishes protectorate over Morocco after Agadir Crisis.' },
+  { year: 1830, power: 'france', territory: 'Algeria', description: 'France invades Algeria, beginning formal colonization of North Africa.', lat: 36.75, lng: 3.06, radius: 350 },
+  { year: 1881, power: 'france', territory: 'Tunisia', description: 'France establishes a protectorate over Tunisia.', lat: 36.81, lng: 10.18, radius: 150 },
+  { year: 1882, power: 'britain', territory: 'Egypt', description: 'Britain occupies Egypt to secure the Suez Canal.', lat: 30.04, lng: 31.24, radius: 350 },
+  { year: 1884, power: 'germany', territory: 'South-West Africa', description: 'Germany declares a protectorate over Namibia.', lat: -22.57, lng: 17.08, radius: 400 },
+  { year: 1884, power: 'germany', territory: 'Togoland & Kamerun', description: 'Germany claims Togoland and Kamerun in rapid succession.', lat: 7.37, lng: 3.60, radius: 250 },
+  { year: 1885, power: 'belgium', territory: 'Congo Free State', description: 'Leopold II receives personal control of the Congo Basin.', lat: -4.32, lng: 15.32, radius: 500 },
+  { year: 1885, power: 'germany', territory: 'German East Africa', description: 'Germany establishes control over Tanganyika.', lat: -6.80, lng: 39.28, radius: 350 },
+  { year: 1885, power: 'italy', territory: 'Eritrea', description: 'Italy establishes the colony of Eritrea on the Red Sea coast.', lat: 15.34, lng: 38.93, radius: 150 },
+  { year: 1890, power: 'britain', territory: 'Zanzibar & Uganda', description: 'Heligoland-Zanzibar Treaty: Britain gains Zanzibar, Germany gets Heligoland.', lat: -6.16, lng: 39.19, radius: 200 },
+  { year: 1891, power: 'britain', territory: 'Nyasaland', description: 'Britain declares a protectorate over modern Malawi.', lat: -13.97, lng: 33.79, radius: 200 },
+  { year: 1893, power: 'france', territory: 'French West Africa', description: 'France consolidates its West African territories into a federation.', lat: 14.69, lng: -17.44, radius: 500 },
+  { year: 1895, power: 'france', territory: 'Madagascar', description: 'France conquers the Merina Kingdom.', lat: -18.88, lng: 47.51, radius: 300 },
+  { year: 1896, power: 'italy', territory: 'Ethiopia (failed)', description: 'Italy defeated at Battle of Adwa — Ethiopia remains independent.', lat: 14.17, lng: 38.90, radius: 150 },
+  { year: 1898, power: 'britain', territory: 'Sudan', description: 'Battle of Omdurman — Britain conquers Sudan as Anglo-Egyptian Condominium.', lat: 15.60, lng: 32.53, radius: 500 },
+  { year: 1899, power: 'britain', territory: 'South Africa', description: 'Second Boer War begins — Britain seeks control of Transvaal gold.', lat: -26.20, lng: 28.04, radius: 300 },
+  { year: 1905, power: 'germany', territory: 'Tanganyika', description: 'Maji Maji Rebellion crushed — 300,000 Africans die.', lat: -8.00, lng: 34.00, radius: 300 },
+  { year: 1908, power: 'belgium', territory: 'Belgian Congo', description: 'Belgium annexes Congo from Leopold after international outcry.', lat: -2.50, lng: 23.50, radius: 500 },
+  { year: 1911, power: 'italy', territory: 'Libya', description: 'Italy invades Ottoman Libya.', lat: 32.90, lng: 13.18, radius: 350 },
+  { year: 1912, power: 'france', territory: 'Morocco', description: 'France establishes protectorate over Morocco after Agadir Crisis.', lat: 33.97, lng: -6.85, radius: 300 },
 ];
 
 /* ── Ethnic Partition Statistics ─────────────────────────────────────── */
