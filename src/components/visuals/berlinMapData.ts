@@ -252,7 +252,21 @@ export interface ExtractionEntry {
   method: string;
   toll: string;
   period: string;
+  deathCount: number; // for animated counter
 }
+
+/* ── Geometric border lines for map visualization ──────────────────── */
+export const GEOMETRIC_BORDERS: [number, number, number, number][] = [
+  // [lat1, lng1, lat2, lng2] — major straight-line borders
+  [22, -17, 22, 12],     // Western Sahara / Mauritania / Mali
+  [23.5, 25, 23.5, 37],  // Egypt / Sudan (22nd parallel region)
+  [-22, 14, -22, 29],    // Namibia / Botswana (straight segment)
+  [4, 9.2, 13, 15],      // Nigeria / Cameroon (segments)
+  [-1, 29, -1, 41],      // Kenya / Tanzania (1st parallel S)
+  [5, 24, -5, 30],       // DRC eastern border (Belgian-British)
+  [15.5, -17, 15.5, 0],  // Senegal / Mali (straight segments)
+  [-15, 22, -15, 33],    // Zambia / Zimbabwe border area
+];
 
 export const EXTRACTION_DATA: ExtractionEntry[] = [
   { territory: 'Congo Free State', power: 'Belgium (Leopold II)', method: 'Forced rubber collection, hand-cutting, hostage-taking', toll: '~10 million deaths (estimated)', period: '1885–1908', deathCount: 10000000 },
