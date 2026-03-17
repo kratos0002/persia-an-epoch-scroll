@@ -255,10 +255,10 @@ export interface ExtractionEntry {
 }
 
 export const EXTRACTION_DATA: ExtractionEntry[] = [
-  { territory: 'Congo Free State', power: 'Belgium (Leopold II)', method: 'Forced rubber collection, hand-cutting, hostage-taking', toll: '~10 million deaths (estimated)', period: '1885–1908' },
-  { territory: 'German South-West Africa', power: 'Germany', method: 'Extermination order, concentration camps, forced labor', toll: '65,000 Herero (80%) + 10,000 Nama (50%)', period: '1904–1908' },
-  { territory: 'Boer War camps', power: 'Britain', method: 'Concentration camps for civilians', toll: '14,000–20,000 Black Africans', period: '1899–1902' },
-  { territory: 'French West/Central Africa', power: 'France', method: 'Prestations (forced labor corvée)', toll: 'Widespread famine, unknown toll', period: '1880s–1940s' },
+  { territory: 'Congo Free State', power: 'Belgium (Leopold II)', method: 'Forced rubber collection, hand-cutting, hostage-taking', toll: '~10 million deaths (estimated)', period: '1885–1908', deathCount: 10000000 },
+  { territory: 'German South-West Africa', power: 'Germany', method: 'Extermination order, concentration camps, forced labor', toll: '65,000 Herero (80%) + 10,000 Nama (50%)', period: '1904–1908', deathCount: 75000 },
+  { territory: 'Boer War camps', power: 'Britain', method: 'Concentration camps for civilians', toll: '14,000–20,000 Black Africans', period: '1899–1902', deathCount: 20000 },
+  { territory: 'French West/Central Africa', power: 'France', method: 'Prestations (forced labor corvée)', toll: 'Widespread famine, unknown toll', period: '1880s–1940s', deathCount: 0 },
 ];
 
 /* ── Key Quotes ─────────────────────────────────────────────────────── */
