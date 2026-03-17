@@ -148,6 +148,8 @@ export interface SplitEthnicGroup {
   name: string;
   stateCount: number;
   states: string[];
+  lat: number;
+  lng: number;
 }
 
 export const SPLIT_ETHNIC_GROUPS: SplitEthnicGroup[] = [
