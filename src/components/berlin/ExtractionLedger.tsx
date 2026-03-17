@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { BL, EXTRACTION_DATA, type ExtractionEntry } from '@/components/visuals/berlinMapData';
+import { AnimatedCounter } from '@/components/visuals/AnimatedCounter';
 
 const ExtractionRow = ({ entry, index }: { entry: ExtractionEntry; index: number }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -24,6 +25,15 @@ const ExtractionRow = ({ entry, index }: { entry: ExtractionEntry; index: number
             {entry.power} · {entry.period}
           </p>
         </div>
+        {/* Animated death counter */}
+        {entry.deathCount > 0 && inView && (
+          <AnimatedCounter
+            end={entry.deathCount}
+            duration={2500}
+            suffix=" dead"
+            className="text-right"
+          />
+        )}
       </div>
 
       <p className="font-body text-sm leading-relaxed mb-3" style={{ color: 'hsl(220, 10%, 65%)' }}>

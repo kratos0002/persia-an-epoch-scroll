@@ -116,28 +116,31 @@ export interface PartitionEvent {
   power: string;
   territory: string;
   description: string;
+  lat: number;
+  lng: number;
+  radius: number; // km for L.circle
 }
 
 export const PARTITION_TIMELINE: PartitionEvent[] = [
-  { year: 1830, power: 'france', territory: 'Algeria', description: 'France invades Algeria, beginning formal colonization of North Africa.' },
-  { year: 1881, power: 'france', territory: 'Tunisia', description: 'France establishes a protectorate over Tunisia.' },
-  { year: 1882, power: 'britain', territory: 'Egypt', description: 'Britain occupies Egypt to secure the Suez Canal.' },
-  { year: 1884, power: 'germany', territory: 'South-West Africa', description: 'Germany declares a protectorate over Namibia.' },
-  { year: 1884, power: 'germany', territory: 'Togoland & Kamerun', description: 'Germany claims Togoland and Kamerun in rapid succession.' },
-  { year: 1885, power: 'belgium', territory: 'Congo Free State', description: 'Leopold II receives personal control of the Congo Basin.' },
-  { year: 1885, power: 'germany', territory: 'German East Africa', description: 'Germany establishes control over Tanganyika.' },
-  { year: 1885, power: 'italy', territory: 'Eritrea', description: 'Italy establishes the colony of Eritrea on the Red Sea coast.' },
-  { year: 1890, power: 'britain', territory: 'Zanzibar & Uganda', description: 'Heligoland-Zanzibar Treaty: Britain gains Zanzibar, Germany gets Heligoland.' },
-  { year: 1891, power: 'britain', territory: 'Nyasaland', description: 'Britain declares a protectorate over modern Malawi.' },
-  { year: 1893, power: 'france', territory: 'French West Africa', description: 'France consolidates its West African territories into a federation.' },
-  { year: 1895, power: 'france', territory: 'Madagascar', description: 'France conquers the Merina Kingdom.' },
-  { year: 1896, power: 'italy', territory: 'Ethiopia (failed)', description: 'Italy defeated at Battle of Adwa — Ethiopia remains independent.' },
-  { year: 1898, power: 'britain', territory: 'Sudan', description: 'Battle of Omdurman — Britain conquers Sudan as Anglo-Egyptian Condominium.' },
-  { year: 1899, power: 'britain', territory: 'South Africa', description: 'Second Boer War begins — Britain seeks control of Transvaal gold.' },
-  { year: 1905, power: 'germany', territory: 'Tanganyika', description: 'Maji Maji Rebellion crushed — 300,000 Africans die.' },
-  { year: 1908, power: 'belgium', territory: 'Belgian Congo', description: 'Belgium annexes Congo from Leopold after international outcry.' },
-  { year: 1911, power: 'italy', territory: 'Libya', description: 'Italy invades Ottoman Libya.' },
-  { year: 1912, power: 'france', territory: 'Morocco', description: 'France establishes protectorate over Morocco after Agadir Crisis.' },
+  { year: 1830, power: 'france', territory: 'Algeria', description: 'France invades Algeria, beginning formal colonization of North Africa.', lat: 36.75, lng: 3.06, radius: 350 },
+  { year: 1881, power: 'france', territory: 'Tunisia', description: 'France establishes a protectorate over Tunisia.', lat: 36.81, lng: 10.18, radius: 150 },
+  { year: 1882, power: 'britain', territory: 'Egypt', description: 'Britain occupies Egypt to secure the Suez Canal.', lat: 30.04, lng: 31.24, radius: 350 },
+  { year: 1884, power: 'germany', territory: 'South-West Africa', description: 'Germany declares a protectorate over Namibia.', lat: -22.57, lng: 17.08, radius: 400 },
+  { year: 1884, power: 'germany', territory: 'Togoland & Kamerun', description: 'Germany claims Togoland and Kamerun in rapid succession.', lat: 7.37, lng: 3.60, radius: 250 },
+  { year: 1885, power: 'belgium', territory: 'Congo Free State', description: 'Leopold II receives personal control of the Congo Basin.', lat: -4.32, lng: 15.32, radius: 500 },
+  { year: 1885, power: 'germany', territory: 'German East Africa', description: 'Germany establishes control over Tanganyika.', lat: -6.80, lng: 39.28, radius: 350 },
+  { year: 1885, power: 'italy', territory: 'Eritrea', description: 'Italy establishes the colony of Eritrea on the Red Sea coast.', lat: 15.34, lng: 38.93, radius: 150 },
+  { year: 1890, power: 'britain', territory: 'Zanzibar & Uganda', description: 'Heligoland-Zanzibar Treaty: Britain gains Zanzibar, Germany gets Heligoland.', lat: -6.16, lng: 39.19, radius: 200 },
+  { year: 1891, power: 'britain', territory: 'Nyasaland', description: 'Britain declares a protectorate over modern Malawi.', lat: -13.97, lng: 33.79, radius: 200 },
+  { year: 1893, power: 'france', territory: 'French West Africa', description: 'France consolidates its West African territories into a federation.', lat: 14.69, lng: -17.44, radius: 500 },
+  { year: 1895, power: 'france', territory: 'Madagascar', description: 'France conquers the Merina Kingdom.', lat: -18.88, lng: 47.51, radius: 300 },
+  { year: 1896, power: 'italy', territory: 'Ethiopia (failed)', description: 'Italy defeated at Battle of Adwa — Ethiopia remains independent.', lat: 14.17, lng: 38.90, radius: 150 },
+  { year: 1898, power: 'britain', territory: 'Sudan', description: 'Battle of Omdurman — Britain conquers Sudan as Anglo-Egyptian Condominium.', lat: 15.60, lng: 32.53, radius: 500 },
+  { year: 1899, power: 'britain', territory: 'South Africa', description: 'Second Boer War begins — Britain seeks control of Transvaal gold.', lat: -26.20, lng: 28.04, radius: 300 },
+  { year: 1905, power: 'germany', territory: 'Tanganyika', description: 'Maji Maji Rebellion crushed — 300,000 Africans die.', lat: -8.00, lng: 34.00, radius: 300 },
+  { year: 1908, power: 'belgium', territory: 'Belgian Congo', description: 'Belgium annexes Congo from Leopold after international outcry.', lat: -2.50, lng: 23.50, radius: 500 },
+  { year: 1911, power: 'italy', territory: 'Libya', description: 'Italy invades Ottoman Libya.', lat: 32.90, lng: 13.18, radius: 350 },
+  { year: 1912, power: 'france', territory: 'Morocco', description: 'France establishes protectorate over Morocco after Agadir Crisis.', lat: 33.97, lng: -6.85, radius: 300 },
 ];
 
 /* ── Ethnic Partition Statistics ─────────────────────────────────────── */
@@ -145,19 +148,21 @@ export interface SplitEthnicGroup {
   name: string;
   stateCount: number;
   states: string[];
+  lat: number;
+  lng: number;
 }
 
 export const SPLIT_ETHNIC_GROUPS: SplitEthnicGroup[] = [
-  { name: 'Maasai', stateCount: 2, states: ['Kenya', 'Tanzania'] },
-  { name: 'Somali', stateCount: 5, states: ['Somalia', 'Ethiopia', 'Kenya', 'Djibouti', 'Eritrea'] },
-  { name: 'Ewe', stateCount: 2, states: ['Ghana', 'Togo'] },
-  { name: 'Bakongo', stateCount: 3, states: ['DRC', 'Republic of Congo', 'Angola'] },
-  { name: 'Tuareg', stateCount: 5, states: ['Mali', 'Niger', 'Algeria', 'Libya', 'Burkina Faso'] },
-  { name: 'Hausa', stateCount: 2, states: ['Nigeria', 'Niger'] },
-  { name: 'Yoruba', stateCount: 2, states: ['Nigeria', 'Benin'] },
-  { name: 'Mandinka', stateCount: 6, states: ['Senegal', 'Gambia', 'Guinea-Bissau', 'Guinea', 'Mali', 'Ivory Coast'] },
-  { name: 'Lunda', stateCount: 3, states: ['DRC', 'Angola', 'Zambia'] },
-  { name: 'Chewa', stateCount: 3, states: ['Malawi', 'Mozambique', 'Zambia'] },
+  { name: 'Maasai', stateCount: 2, states: ['Kenya', 'Tanzania'], lat: -2.5, lng: 36.8 },
+  { name: 'Somali', stateCount: 5, states: ['Somalia', 'Ethiopia', 'Kenya', 'Djibouti', 'Eritrea'], lat: 5.0, lng: 46.0 },
+  { name: 'Ewe', stateCount: 2, states: ['Ghana', 'Togo'], lat: 6.6, lng: 1.0 },
+  { name: 'Bakongo', stateCount: 3, states: ['DRC', 'Republic of Congo', 'Angola'], lat: -5.5, lng: 14.5 },
+  { name: 'Tuareg', stateCount: 5, states: ['Mali', 'Niger', 'Algeria', 'Libya', 'Burkina Faso'], lat: 20.0, lng: 5.0 },
+  { name: 'Hausa', stateCount: 2, states: ['Nigeria', 'Niger'], lat: 12.0, lng: 8.5 },
+  { name: 'Yoruba', stateCount: 2, states: ['Nigeria', 'Benin'], lat: 7.5, lng: 3.9 },
+  { name: 'Mandinka', stateCount: 6, states: ['Senegal', 'Gambia', 'Guinea-Bissau', 'Guinea', 'Mali', 'Ivory Coast'], lat: 12.5, lng: -12.0 },
+  { name: 'Lunda', stateCount: 3, states: ['DRC', 'Angola', 'Zambia'], lat: -10.0, lng: 25.0 },
+  { name: 'Chewa', stateCount: 3, states: ['Malawi', 'Mozambique', 'Zambia'], lat: -14.0, lng: 34.0 },
 ];
 
 /* ── Border Topology ────────────────────────────────────────────────── */
@@ -171,52 +176,56 @@ export const BORDER_STATS = {
 export interface DisplacementData {
   country: string;
   idps: string;
+  idpNum: number; // for animated counter (in millions)
   refugees: string;
+  refugeeNum: number;
   colonialMechanism: string;
   consequence: string;
   date: string;
+  lat: number;
+  lng: number;
 }
 
 export const DISPLACEMENT_DATA: DisplacementData[] = [
   {
     country: 'Sudan',
-    idps: '11.6 million',
-    refugees: '4.0 million',
+    idps: '11.6 million', idpNum: 11.6,
+    refugees: '4.0 million', refugeeNum: 4.0,
     colonialMechanism: 'British "Southern Policy" (1930) — North and South treated as separate entities, South frozen in underdevelopment.',
     consequence: 'Two civil wars (1955–1972, 1983–2005), South Sudan secession (2011), ongoing Darfur crisis.',
-    date: 'Dec 2024',
+    date: 'Dec 2024', lat: 15.60, lng: 32.53,
   },
   {
     country: 'Somalia',
-    idps: '3.5 million',
-    refugees: '900,000',
+    idps: '3.5 million', idpNum: 3.5,
+    refugees: '900,000', refugeeNum: 0.9,
     colonialMechanism: 'Somali people split across five colonial jurisdictions (British, Italian, French, Ethiopian, Kenyan).',
     consequence: 'Pan-Somali irredentism, Ogaden War (1977), state collapse (1991), Al-Shabaab insurgency.',
-    date: 'Mid-2024',
+    date: 'Mid-2024', lat: 5.15, lng: 46.20,
   },
   {
     country: 'South Sudan',
-    idps: '2.0 million',
-    refugees: '2.3 million',
+    idps: '2.0 million', idpNum: 2.0,
+    refugees: '2.3 million', refugeeNum: 2.3,
     colonialMechanism: 'Closed Districts Ordinance (1922) prohibited Northern entry to the South.',
     consequence: 'Independence (2011) followed immediately by civil war (2013), ethnic militias.',
-    date: 'Mid-2024',
+    date: 'Mid-2024', lat: 6.88, lng: 31.58,
   },
   {
     country: 'Ethiopia',
-    idps: '3.3 million',
-    refugees: '1.1 million',
+    idps: '3.3 million', idpNum: 3.3,
+    refugees: '1.1 million', refugeeNum: 1.1,
     colonialMechanism: 'Treaty of Wichale (1889) split the Tigrayan people across the Italian-Ethiopian border.',
     consequence: '30-year Eritrean independence war, 1998–2000 border war, 2020–2022 Tigray conflict.',
-    date: 'Dec 2024',
+    date: 'Dec 2024', lat: 9.03, lng: 38.75,
   },
   {
     country: 'DRC',
-    idps: '7.0 million+',
-    refugees: '1.0 million+',
+    idps: '7.0 million+', idpNum: 7.0,
+    refugees: '1.0 million+', refugeeNum: 1.0,
     colonialMechanism: 'Leopold II\'s Congo Free State — extractive labor system for rubber and ivory.',
     consequence: 'Congo Wars (1996–2003, 5.4M dead), ongoing conflict over coltan, cobalt, gold.',
-    date: '2024',
+    date: '2024', lat: -4.32, lng: 15.32,
   },
 ];
 
@@ -243,13 +252,27 @@ export interface ExtractionEntry {
   method: string;
   toll: string;
   period: string;
+  deathCount: number; // for animated counter
 }
 
+/* ── Geometric border lines for map visualization ──────────────────── */
+export const GEOMETRIC_BORDERS: [number, number, number, number][] = [
+  // [lat1, lng1, lat2, lng2] — major straight-line borders
+  [22, -17, 22, 12],     // Western Sahara / Mauritania / Mali
+  [23.5, 25, 23.5, 37],  // Egypt / Sudan (22nd parallel region)
+  [-22, 14, -22, 29],    // Namibia / Botswana (straight segment)
+  [4, 9.2, 13, 15],      // Nigeria / Cameroon (segments)
+  [-1, 29, -1, 41],      // Kenya / Tanzania (1st parallel S)
+  [5, 24, -5, 30],       // DRC eastern border (Belgian-British)
+  [15.5, -17, 15.5, 0],  // Senegal / Mali (straight segments)
+  [-15, 22, -15, 33],    // Zambia / Zimbabwe border area
+];
+
 export const EXTRACTION_DATA: ExtractionEntry[] = [
-  { territory: 'Congo Free State', power: 'Belgium (Leopold II)', method: 'Forced rubber collection, hand-cutting, hostage-taking', toll: '~10 million deaths (estimated)', period: '1885–1908' },
-  { territory: 'German South-West Africa', power: 'Germany', method: 'Extermination order, concentration camps, forced labor', toll: '65,000 Herero (80%) + 10,000 Nama (50%)', period: '1904–1908' },
-  { territory: 'Boer War camps', power: 'Britain', method: 'Concentration camps for civilians', toll: '14,000–20,000 Black Africans', period: '1899–1902' },
-  { territory: 'French West/Central Africa', power: 'France', method: 'Prestations (forced labor corvée)', toll: 'Widespread famine, unknown toll', period: '1880s–1940s' },
+  { territory: 'Congo Free State', power: 'Belgium (Leopold II)', method: 'Forced rubber collection, hand-cutting, hostage-taking', toll: '~10 million deaths (estimated)', period: '1885–1908', deathCount: 10000000 },
+  { territory: 'German South-West Africa', power: 'Germany', method: 'Extermination order, concentration camps, forced labor', toll: '65,000 Herero (80%) + 10,000 Nama (50%)', period: '1904–1908', deathCount: 75000 },
+  { territory: 'Boer War camps', power: 'Britain', method: 'Concentration camps for civilians', toll: '14,000–20,000 Black Africans', period: '1899–1902', deathCount: 20000 },
+  { territory: 'French West/Central Africa', power: 'France', method: 'Prestations (forced labor corvée)', toll: 'Widespread famine, unknown toll', period: '1880s–1940s', deathCount: 0 },
 ];
 
 /* ── Key Quotes ─────────────────────────────────────────────────────── */

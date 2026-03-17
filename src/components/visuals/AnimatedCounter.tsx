@@ -9,6 +9,7 @@ interface AnimatedCounterProps {
   suffix?: string;
   className?: string;
   label?: string;
+  decimals?: number;
 }
 
 export const AnimatedCounter = ({
@@ -18,10 +19,13 @@ export const AnimatedCounter = ({
   suffix = '',
   className,
   label,
+  decimals,
 }: AnimatedCounterProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
   const [count, setCount] = useState(0);
+  const hasDecimals = decimals !== undefined ? decimals > 0 : end % 1 !== 0;
+  const decimalPlaces = decimals !== undefined ? decimals : hasDecimals ? 1 : 0;
 
   useEffect(() => {
     if (!inView) return;
@@ -31,16 +35,17 @@ export const AnimatedCounter = ({
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(start + (end - start) * eased));
+      const val = start + (end - start) * eased;
+      setCount(hasDecimals ? parseFloat(val.toFixed(decimalPlaces)) : Math.floor(val));
       if (progress >= 1) clearInterval(timer);
     }, 16);
     return () => clearInterval(timer);
-  }, [inView, end, duration]);
+  }, [inView, end, duration, hasDecimals, decimalPlaces]);
 
   return (
     <div ref={ref} className={cn("text-center", className)}>
       <div className="font-display text-4xl md:text-5xl font-bold text-gradient-gold">
-        {prefix}{count.toLocaleString()}{suffix}
+        {prefix}{hasDecimals ? count.toFixed(decimalPlaces) : count.toLocaleString()}{suffix}
       </div>
       {label && <div className="text-sm text-muted-foreground mt-1 font-body">{label}</div>}
     </div>
