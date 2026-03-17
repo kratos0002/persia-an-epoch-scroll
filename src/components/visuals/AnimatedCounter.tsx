@@ -45,7 +45,7 @@ export const AnimatedCounter = ({
   return (
     <div ref={ref} className={cn("text-center", className)}>
       <div className="font-display text-4xl md:text-5xl font-bold text-gradient-gold">
-        {prefix}{count.toLocaleString()}{suffix}
+        {prefix}{hasDecimals ? count.toFixed(decimalPlaces) : count.toLocaleString()}{suffix}
       </div>
       {label && <div className="text-sm text-muted-foreground mt-1 font-body">{label}</div>}
     </div>
