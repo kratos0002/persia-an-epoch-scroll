@@ -176,10 +176,14 @@ export const BORDER_STATS = {
 export interface DisplacementData {
   country: string;
   idps: string;
+  idpNum: number; // for animated counter (in millions)
   refugees: string;
+  refugeeNum: number;
   colonialMechanism: string;
   consequence: string;
   date: string;
+  lat: number;
+  lng: number;
 }
 
 export const DISPLACEMENT_DATA: DisplacementData[] = [
