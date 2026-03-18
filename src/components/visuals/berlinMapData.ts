@@ -151,19 +151,20 @@ export interface SplitEthnicGroup {
   states: string[];
   lat: number;
   lng: number;
+  countryCodes: string[];
 }
 
 export const SPLIT_ETHNIC_GROUPS: SplitEthnicGroup[] = [
-  { name: 'Maasai', stateCount: 2, states: ['Kenya', 'Tanzania'], lat: -2.5, lng: 36.8 },
-  { name: 'Somali', stateCount: 5, states: ['Somalia', 'Ethiopia', 'Kenya', 'Djibouti', 'Eritrea'], lat: 5.0, lng: 46.0 },
-  { name: 'Ewe', stateCount: 2, states: ['Ghana', 'Togo'], lat: 6.6, lng: 1.0 },
-  { name: 'Bakongo', stateCount: 3, states: ['DRC', 'Republic of Congo', 'Angola'], lat: -5.5, lng: 14.5 },
-  { name: 'Tuareg', stateCount: 5, states: ['Mali', 'Niger', 'Algeria', 'Libya', 'Burkina Faso'], lat: 20.0, lng: 5.0 },
-  { name: 'Hausa', stateCount: 2, states: ['Nigeria', 'Niger'], lat: 12.0, lng: 8.5 },
-  { name: 'Yoruba', stateCount: 2, states: ['Nigeria', 'Benin'], lat: 7.5, lng: 3.9 },
-  { name: 'Mandinka', stateCount: 6, states: ['Senegal', 'Gambia', 'Guinea-Bissau', 'Guinea', 'Mali', 'Ivory Coast'], lat: 12.5, lng: -12.0 },
-  { name: 'Lunda', stateCount: 3, states: ['DRC', 'Angola', 'Zambia'], lat: -10.0, lng: 25.0 },
-  { name: 'Chewa', stateCount: 3, states: ['Malawi', 'Mozambique', 'Zambia'], lat: -14.0, lng: 34.0 },
+  { name: 'Maasai', stateCount: 2, states: ['Kenya', 'Tanzania'], lat: -2.5, lng: 36.8, countryCodes: ['KEN', 'TZA'] },
+  { name: 'Somali', stateCount: 5, states: ['Somalia', 'Ethiopia', 'Kenya', 'Djibouti', 'Eritrea'], lat: 5.0, lng: 46.0, countryCodes: ['SOM', 'ETH', 'KEN', 'DJI', 'ERI'] },
+  { name: 'Ewe', stateCount: 2, states: ['Ghana', 'Togo'], lat: 6.6, lng: 1.0, countryCodes: ['GHA', 'TGO'] },
+  { name: 'Bakongo', stateCount: 3, states: ['DRC', 'Republic of Congo', 'Angola'], lat: -5.5, lng: 14.5, countryCodes: ['COD', 'COG', 'AGO'] },
+  { name: 'Tuareg', stateCount: 5, states: ['Mali', 'Niger', 'Algeria', 'Libya', 'Burkina Faso'], lat: 20.0, lng: 5.0, countryCodes: ['MLI', 'NER', 'DZA', 'LBY', 'BFA'] },
+  { name: 'Hausa', stateCount: 2, states: ['Nigeria', 'Niger'], lat: 12.0, lng: 8.5, countryCodes: ['NGA', 'NER'] },
+  { name: 'Yoruba', stateCount: 2, states: ['Nigeria', 'Benin'], lat: 7.5, lng: 3.9, countryCodes: ['NGA', 'BEN'] },
+  { name: 'Mandinka', stateCount: 6, states: ['Senegal', 'Gambia', 'Guinea-Bissau', 'Guinea', 'Mali', 'Ivory Coast'], lat: 12.5, lng: -12.0, countryCodes: ['SEN', 'GMB', 'GNB', 'GIN', 'MLI', 'CIV'] },
+  { name: 'Lunda', stateCount: 3, states: ['DRC', 'Angola', 'Zambia'], lat: -10.0, lng: 25.0, countryCodes: ['COD', 'AGO', 'ZMB'] },
+  { name: 'Chewa', stateCount: 3, states: ['Malawi', 'Mozambique', 'Zambia'], lat: -14.0, lng: 34.0, countryCodes: ['MWI', 'MOZ', 'ZMB'] },
 ];
 
 /* ── Border Topology ────────────────────────────────────────────────── */
