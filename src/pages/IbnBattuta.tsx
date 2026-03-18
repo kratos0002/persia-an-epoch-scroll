@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { BattutaHero } from '@/components/battuta/BattutaHero';
-import { BattutaGenesis, PhaseSection } from '@/components/battuta/BattutaPhaseSections';
+import { BattutaZoomDive } from '@/components/battuta/BattutaZoomDive';
 import { BlackDeathCounters } from '@/components/battuta/BlackDeathCounters';
 import { ComparativeScale } from '@/components/battuta/ComparativeScale';
 import { IslamicNetwork } from '@/components/battuta/IslamicNetwork';
@@ -10,7 +10,6 @@ import { BattutaSectionNav } from '@/components/battuta/BattutaSectionNav';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { useBattutaScrollSpy } from '@/hooks/useBattutaScrollSpy';
 import { usePageAnalytics } from '@/hooks/usePageAnalytics';
-import { PHASES } from '@/components/visuals/battutaMapData';
 
 const IbnBattuta = () => {
   usePageAnalytics('battuta');
@@ -21,10 +20,8 @@ const IbnBattuta = () => {
       <BattutaSectionNav activeSection={activeSection} />
       <BattutaProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <BattutaHero />
-      <BattutaGenesis />
-      {PHASES.map((_, i) => (
-        <PhaseSection key={i} phaseIndex={i} />
-      ))}
+      <BattutaZoomDive />
+      <BlackDeathCounters />
       <IslamicNetwork />
       <ComparativeScale />
       <BattutaEpilogue />
