@@ -21,6 +21,7 @@ import Ramayana from "./pages/Ramayana.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
 import Berlin from "./pages/Berlin.tsx";
+import IbnBattuta from "./pages/IbnBattuta.tsx";
 import ShareRedirect from "./pages/ShareRedirect.tsx";
 import StoryPreview from "./pages/StoryPreview.tsx";
 import NotFound from "./pages/NotFound.tsx";
