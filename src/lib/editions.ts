@@ -116,4 +116,12 @@ export const EDITIONS: Record<string, EditionMeta> = {
       { version: '1.0', date: 'March 2026', note: 'Initial essay — the route, Ayodhya to Lanka' },
     ],
   },
+  battuta: {
+    edition: 'First Edition',
+    version: '1.0',
+    lastUpdated: 'March 2026',
+    changelog: [
+      { version: '1.0', date: 'March 2026', note: 'Initial essay — Ibn Battuta\'s global odyssey, 1325–1354' },
+    ],
+  },
 };

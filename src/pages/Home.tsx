@@ -20,6 +20,7 @@ import storyNutmeg from '@/assets/story-nutmeg.jpg';
 import storyHormuz from '@/assets/story-hormuz.jpg';
 import storyRamayana from '@/assets/story-ramayana.jpg';
 import storyBerlin from '@/assets/story-berlin.jpg';
+import storyBattuta from '@/assets/story-battuta.jpg';
 
 /* ── Types ───────────────────────────────────── */
 
@@ -123,6 +124,12 @@ const STORIES: StoryCard[] = [
     hook: 'Fourteen nations sat around a table in Berlin. No African was invited. They drew lines on a map of a continent they had never surveyed — and those lines still draw blood today.',
     image: storyBerlin, tags: ['Conference Table', 'Partition Map', '1884–1914'],
     status: 'coming-soon', href: '/berlin', color: 'hsl(0, 65%, 42%)', era: '1884', sortYear: 1884,
+  },
+  {
+    id: 'battuta', number: 15, title: 'The Global Odyssey', subtitle: 'Ibn Battuta',
+    hook: 'One man walked 117,000 kilometres across 44 modern nations in 29 years. His journey revealed a 14th-century world more connected than Europe would know for centuries.',
+    image: storyBattuta, tags: ['Route Map', 'Islamic World', '1325–1354'],
+    status: 'coming-soon', href: '/ibn-battuta', color: 'hsl(38, 80%, 55%)', era: '1325', sortYear: 1325,
   },
 ];
 
