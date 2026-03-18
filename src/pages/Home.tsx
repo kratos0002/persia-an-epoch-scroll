@@ -20,6 +20,7 @@ import storyNutmeg from '@/assets/story-nutmeg.jpg';
 import storyHormuz from '@/assets/story-hormuz.jpg';
 import storyRamayana from '@/assets/story-ramayana.jpg';
 import storyBerlin from '@/assets/story-berlin.jpg';
+import storyBattuta from '@/assets/story-battuta.jpg';
 
 /* ── Types ───────────────────────────────────── */
 
