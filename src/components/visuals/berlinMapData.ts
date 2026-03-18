@@ -99,15 +99,16 @@ export interface PreColonialPolity {
   region: string;
   lat: number;
   lng: number;
+  countryCodes: string[];
 }
 
 export const PRE_COLONIAL_POLITIES: PreColonialPolity[] = [
-  { name: 'Sokoto Caliphate', population: '10–20 million', governance: 'Islamic Caliphate / Shura Council', trade: 'Textiles, Leather, Grain', region: 'West Africa', lat: 13.06, lng: 5.24 },
-  { name: 'Ashanti Empire', population: '3–4 million', governance: 'Centralized Monarchy / National Assembly', trade: 'Gold, Kola Nuts', region: 'West Africa', lat: 6.69, lng: -1.62 },
-  { name: 'Zulu Kingdom', population: '250,000–500,000', governance: 'Militarized Monarchy / Age-regiments', trade: 'Cattle, Land expansion', region: 'Southern Africa', lat: -28.53, lng: 30.90 },
-  { name: 'Kingdom of Buganda', population: '1–2 million', governance: 'Centralized Monarchy / Professional Bureaucracy', trade: 'Ivory, Agriculture', region: 'East Africa', lat: 0.31, lng: 32.58 },
-  { name: 'Ethiopian Empire', population: '5–7 million', governance: 'Feudal Imperial System', trade: 'Coffee, Gold, Grains', region: 'East Africa', lat: 9.03, lng: 38.75 },
-  { name: 'Kingdom of Benin', population: '500,000–1 million', governance: 'Sacral Monarchy / Craft Guilds', trade: 'Ivory, Bronze, Palm Oil', region: 'West Africa', lat: 6.34, lng: 5.62 },
+  { name: 'Sokoto Caliphate', population: '10–20 million', governance: 'Islamic Caliphate / Shura Council', trade: 'Textiles, Leather, Grain', region: 'West Africa', lat: 13.06, lng: 5.24, countryCodes: ['NGA'] },
+  { name: 'Ashanti Empire', population: '3–4 million', governance: 'Centralized Monarchy / National Assembly', trade: 'Gold, Kola Nuts', region: 'West Africa', lat: 6.69, lng: -1.62, countryCodes: ['GHA'] },
+  { name: 'Zulu Kingdom', population: '250,000–500,000', governance: 'Militarized Monarchy / Age-regiments', trade: 'Cattle, Land expansion', region: 'Southern Africa', lat: -28.53, lng: 30.90, countryCodes: ['ZAF'] },
+  { name: 'Kingdom of Buganda', population: '1–2 million', governance: 'Centralized Monarchy / Professional Bureaucracy', trade: 'Ivory, Agriculture', region: 'East Africa', lat: 0.31, lng: 32.58, countryCodes: ['UGA'] },
+  { name: 'Ethiopian Empire', population: '5–7 million', governance: 'Feudal Imperial System', trade: 'Coffee, Gold, Grains', region: 'East Africa', lat: 9.03, lng: 38.75, countryCodes: ['ETH'] },
+  { name: 'Kingdom of Benin', population: '500,000–1 million', governance: 'Sacral Monarchy / Craft Guilds', trade: 'Ivory, Bronze, Palm Oil', region: 'West Africa', lat: 6.34, lng: 5.62, countryCodes: ['NGA'] },
 ];
 
 /* ── Partition Timeline Events ──────────────────────────────────────── */
@@ -118,29 +119,30 @@ export interface PartitionEvent {
   description: string;
   lat: number;
   lng: number;
-  radius: number; // km for L.circle
+  radius: number;
+  countryCodes: string[];
 }
 
 export const PARTITION_TIMELINE: PartitionEvent[] = [
-  { year: 1830, power: 'france', territory: 'Algeria', description: 'France invades Algeria, beginning formal colonization of North Africa.', lat: 36.75, lng: 3.06, radius: 350 },
-  { year: 1881, power: 'france', territory: 'Tunisia', description: 'France establishes a protectorate over Tunisia.', lat: 36.81, lng: 10.18, radius: 150 },
-  { year: 1882, power: 'britain', territory: 'Egypt', description: 'Britain occupies Egypt to secure the Suez Canal.', lat: 30.04, lng: 31.24, radius: 350 },
-  { year: 1884, power: 'germany', territory: 'South-West Africa', description: 'Germany declares a protectorate over Namibia.', lat: -22.57, lng: 17.08, radius: 400 },
-  { year: 1884, power: 'germany', territory: 'Togoland & Kamerun', description: 'Germany claims Togoland and Kamerun in rapid succession.', lat: 7.37, lng: 3.60, radius: 250 },
-  { year: 1885, power: 'belgium', territory: 'Congo Free State', description: 'Leopold II receives personal control of the Congo Basin.', lat: -4.32, lng: 15.32, radius: 500 },
-  { year: 1885, power: 'germany', territory: 'German East Africa', description: 'Germany establishes control over Tanganyika.', lat: -6.80, lng: 39.28, radius: 350 },
-  { year: 1885, power: 'italy', territory: 'Eritrea', description: 'Italy establishes the colony of Eritrea on the Red Sea coast.', lat: 15.34, lng: 38.93, radius: 150 },
-  { year: 1890, power: 'britain', territory: 'Zanzibar & Uganda', description: 'Heligoland-Zanzibar Treaty: Britain gains Zanzibar, Germany gets Heligoland.', lat: -6.16, lng: 39.19, radius: 200 },
-  { year: 1891, power: 'britain', territory: 'Nyasaland', description: 'Britain declares a protectorate over modern Malawi.', lat: -13.97, lng: 33.79, radius: 200 },
-  { year: 1893, power: 'france', territory: 'French West Africa', description: 'France consolidates its West African territories into a federation.', lat: 14.69, lng: -17.44, radius: 500 },
-  { year: 1895, power: 'france', territory: 'Madagascar', description: 'France conquers the Merina Kingdom.', lat: -18.88, lng: 47.51, radius: 300 },
-  { year: 1896, power: 'italy', territory: 'Ethiopia (failed)', description: 'Italy defeated at Battle of Adwa — Ethiopia remains independent.', lat: 14.17, lng: 38.90, radius: 150 },
-  { year: 1898, power: 'britain', territory: 'Sudan', description: 'Battle of Omdurman — Britain conquers Sudan as Anglo-Egyptian Condominium.', lat: 15.60, lng: 32.53, radius: 500 },
-  { year: 1899, power: 'britain', territory: 'South Africa', description: 'Second Boer War begins — Britain seeks control of Transvaal gold.', lat: -26.20, lng: 28.04, radius: 300 },
-  { year: 1905, power: 'germany', territory: 'Tanganyika', description: 'Maji Maji Rebellion crushed — 300,000 Africans die.', lat: -8.00, lng: 34.00, radius: 300 },
-  { year: 1908, power: 'belgium', territory: 'Belgian Congo', description: 'Belgium annexes Congo from Leopold after international outcry.', lat: -2.50, lng: 23.50, radius: 500 },
-  { year: 1911, power: 'italy', territory: 'Libya', description: 'Italy invades Ottoman Libya.', lat: 32.90, lng: 13.18, radius: 350 },
-  { year: 1912, power: 'france', territory: 'Morocco', description: 'France establishes protectorate over Morocco after Agadir Crisis.', lat: 33.97, lng: -6.85, radius: 300 },
+  { year: 1830, power: 'france', territory: 'Algeria', description: 'France invades Algeria, beginning formal colonization of North Africa.', lat: 36.75, lng: 3.06, radius: 350, countryCodes: ['DZA'] },
+  { year: 1881, power: 'france', territory: 'Tunisia', description: 'France establishes a protectorate over Tunisia.', lat: 36.81, lng: 10.18, radius: 150, countryCodes: ['TUN'] },
+  { year: 1882, power: 'britain', territory: 'Egypt', description: 'Britain occupies Egypt to secure the Suez Canal.', lat: 30.04, lng: 31.24, radius: 350, countryCodes: ['EGY'] },
+  { year: 1884, power: 'germany', territory: 'South-West Africa', description: 'Germany declares a protectorate over Namibia.', lat: -22.57, lng: 17.08, radius: 400, countryCodes: ['NAM'] },
+  { year: 1884, power: 'germany', territory: 'Togoland & Kamerun', description: 'Germany claims Togoland and Kamerun in rapid succession.', lat: 7.37, lng: 3.60, radius: 250, countryCodes: ['TGO', 'CMR'] },
+  { year: 1885, power: 'belgium', territory: 'Congo Free State', description: 'Leopold II receives personal control of the Congo Basin.', lat: -4.32, lng: 15.32, radius: 500, countryCodes: ['COD'] },
+  { year: 1885, power: 'germany', territory: 'German East Africa', description: 'Germany establishes control over Tanganyika.', lat: -6.80, lng: 39.28, radius: 350, countryCodes: ['TZA'] },
+  { year: 1885, power: 'italy', territory: 'Eritrea', description: 'Italy establishes the colony of Eritrea on the Red Sea coast.', lat: 15.34, lng: 38.93, radius: 150, countryCodes: ['ERI'] },
+  { year: 1890, power: 'britain', territory: 'Zanzibar & Uganda', description: 'Heligoland-Zanzibar Treaty: Britain gains Zanzibar, Germany gets Heligoland.', lat: -6.16, lng: 39.19, radius: 200, countryCodes: ['UGA'] },
+  { year: 1891, power: 'britain', territory: 'Nyasaland', description: 'Britain declares a protectorate over modern Malawi.', lat: -13.97, lng: 33.79, radius: 200, countryCodes: ['MWI'] },
+  { year: 1893, power: 'france', territory: 'French West Africa', description: 'France consolidates its West African territories into a federation.', lat: 14.69, lng: -17.44, radius: 500, countryCodes: ['SEN', 'MLI', 'GIN', 'CIV', 'BFA', 'NER', 'MRT', 'BEN'] },
+  { year: 1895, power: 'france', territory: 'Madagascar', description: 'France conquers the Merina Kingdom.', lat: -18.88, lng: 47.51, radius: 300, countryCodes: ['MDG'] },
+  { year: 1896, power: 'italy', territory: 'Ethiopia (failed)', description: 'Italy defeated at Battle of Adwa — Ethiopia remains independent.', lat: 14.17, lng: 38.90, radius: 150, countryCodes: ['ETH'] },
+  { year: 1898, power: 'britain', territory: 'Sudan', description: 'Battle of Omdurman — Britain conquers Sudan as Anglo-Egyptian Condominium.', lat: 15.60, lng: 32.53, radius: 500, countryCodes: ['SDN', 'SSD'] },
+  { year: 1899, power: 'britain', territory: 'South Africa', description: 'Second Boer War begins — Britain seeks control of Transvaal gold.', lat: -26.20, lng: 28.04, radius: 300, countryCodes: ['ZAF'] },
+  { year: 1905, power: 'germany', territory: 'Tanganyika', description: 'Maji Maji Rebellion crushed — 300,000 Africans die.', lat: -8.00, lng: 34.00, radius: 300, countryCodes: ['TZA'] },
+  { year: 1908, power: 'belgium', territory: 'Belgian Congo', description: 'Belgium annexes Congo from Leopold after international outcry.', lat: -2.50, lng: 23.50, radius: 500, countryCodes: ['COD'] },
+  { year: 1911, power: 'italy', territory: 'Libya', description: 'Italy invades Ottoman Libya.', lat: 32.90, lng: 13.18, radius: 350, countryCodes: ['LBY'] },
+  { year: 1912, power: 'france', territory: 'Morocco', description: 'France establishes protectorate over Morocco after Agadir Crisis.', lat: 33.97, lng: -6.85, radius: 300, countryCodes: ['MAR'] },
 ];
 
 /* ── Ethnic Partition Statistics ─────────────────────────────────────── */
@@ -150,19 +152,20 @@ export interface SplitEthnicGroup {
   states: string[];
   lat: number;
   lng: number;
+  countryCodes: string[];
 }
 
 export const SPLIT_ETHNIC_GROUPS: SplitEthnicGroup[] = [
-  { name: 'Maasai', stateCount: 2, states: ['Kenya', 'Tanzania'], lat: -2.5, lng: 36.8 },
-  { name: 'Somali', stateCount: 5, states: ['Somalia', 'Ethiopia', 'Kenya', 'Djibouti', 'Eritrea'], lat: 5.0, lng: 46.0 },
-  { name: 'Ewe', stateCount: 2, states: ['Ghana', 'Togo'], lat: 6.6, lng: 1.0 },
-  { name: 'Bakongo', stateCount: 3, states: ['DRC', 'Republic of Congo', 'Angola'], lat: -5.5, lng: 14.5 },
-  { name: 'Tuareg', stateCount: 5, states: ['Mali', 'Niger', 'Algeria', 'Libya', 'Burkina Faso'], lat: 20.0, lng: 5.0 },
-  { name: 'Hausa', stateCount: 2, states: ['Nigeria', 'Niger'], lat: 12.0, lng: 8.5 },
-  { name: 'Yoruba', stateCount: 2, states: ['Nigeria', 'Benin'], lat: 7.5, lng: 3.9 },
-  { name: 'Mandinka', stateCount: 6, states: ['Senegal', 'Gambia', 'Guinea-Bissau', 'Guinea', 'Mali', 'Ivory Coast'], lat: 12.5, lng: -12.0 },
-  { name: 'Lunda', stateCount: 3, states: ['DRC', 'Angola', 'Zambia'], lat: -10.0, lng: 25.0 },
-  { name: 'Chewa', stateCount: 3, states: ['Malawi', 'Mozambique', 'Zambia'], lat: -14.0, lng: 34.0 },
+  { name: 'Maasai', stateCount: 2, states: ['Kenya', 'Tanzania'], lat: -2.5, lng: 36.8, countryCodes: ['KEN', 'TZA'] },
+  { name: 'Somali', stateCount: 5, states: ['Somalia', 'Ethiopia', 'Kenya', 'Djibouti', 'Eritrea'], lat: 5.0, lng: 46.0, countryCodes: ['SOM', 'ETH', 'KEN', 'DJI', 'ERI'] },
+  { name: 'Ewe', stateCount: 2, states: ['Ghana', 'Togo'], lat: 6.6, lng: 1.0, countryCodes: ['GHA', 'TGO'] },
+  { name: 'Bakongo', stateCount: 3, states: ['DRC', 'Republic of Congo', 'Angola'], lat: -5.5, lng: 14.5, countryCodes: ['COD', 'COG', 'AGO'] },
+  { name: 'Tuareg', stateCount: 5, states: ['Mali', 'Niger', 'Algeria', 'Libya', 'Burkina Faso'], lat: 20.0, lng: 5.0, countryCodes: ['MLI', 'NER', 'DZA', 'LBY', 'BFA'] },
+  { name: 'Hausa', stateCount: 2, states: ['Nigeria', 'Niger'], lat: 12.0, lng: 8.5, countryCodes: ['NGA', 'NER'] },
+  { name: 'Yoruba', stateCount: 2, states: ['Nigeria', 'Benin'], lat: 7.5, lng: 3.9, countryCodes: ['NGA', 'BEN'] },
+  { name: 'Mandinka', stateCount: 6, states: ['Senegal', 'Gambia', 'Guinea-Bissau', 'Guinea', 'Mali', 'Ivory Coast'], lat: 12.5, lng: -12.0, countryCodes: ['SEN', 'GMB', 'GNB', 'GIN', 'MLI', 'CIV'] },
+  { name: 'Lunda', stateCount: 3, states: ['DRC', 'Angola', 'Zambia'], lat: -10.0, lng: 25.0, countryCodes: ['COD', 'AGO', 'ZMB'] },
+  { name: 'Chewa', stateCount: 3, states: ['Malawi', 'Mozambique', 'Zambia'], lat: -14.0, lng: 34.0, countryCodes: ['MWI', 'MOZ', 'ZMB'] },
 ];
 
 /* ── Border Topology ────────────────────────────────────────────────── */

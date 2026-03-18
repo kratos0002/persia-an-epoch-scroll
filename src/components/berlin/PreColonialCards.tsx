@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { BL, PRE_COLONIAL_POLITIES, type PreColonialPolity } from '@/components/visuals/berlinMapData';
+import { loadFeatures, getCountryFeatures } from '@/hooks/useAfricaGeoJSON';
 
 const STYLE_ID = 'berlin-precolonial-map-styles';
 function ensureStyles() {
@@ -83,7 +84,9 @@ export const PreColonialCards = () => {
   const inView = useInView(ref, { once: true, margin: '-100px' });
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
-  const layerRef = useRef<L.LayerGroup | null>(null);
+  const highlightLayerRef = useRef<L.LayerGroup | null>(null);
+  const baseLayerRef = useRef<L.LayerGroup | null>(null);
+  const geoRef = useRef<GeoJSON.Feature[]>([]);
   const [activePolity, setActivePolity] = useState<string | null>(null);
 
   // Init map
@@ -107,41 +110,67 @@ export const PreColonialCards = () => {
       minZoom: 3,
     }).addTo(map);
 
-    layerRef.current = L.layerGroup().addTo(map);
+    baseLayerRef.current = L.layerGroup().addTo(map);
+    highlightLayerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
 
-    // Add all polities
-    PRE_COLONIAL_POLITIES.forEach(polity => {
+    // Load GeoJSON and render all polity territories
+    loadFeatures().then(features => {
+      geoRef.current = features;
       const warmColor = 'hsl(25, 60%, 45%)';
 
-      L.circle([polity.lat, polity.lng], {
-        radius: 250000,
-        color: warmColor,
-        weight: 2,
-        fillColor: warmColor,
-        fillOpacity: 0.2,
-        dashArray: '6,4',
-      }).addTo(layerRef.current!);
+      PRE_COLONIAL_POLITIES.forEach(polity => {
+        const countryFeatures = getCountryFeatures(features, polity.countryCodes);
+        if (countryFeatures.length > 0) {
+          L.geoJSON(countryFeatures as any, {
+            style: {
+              color: warmColor,
+              weight: 2,
+              fillColor: warmColor,
+              fillOpacity: 0.15,
+              dashArray: '6,4',
+            },
+          }).addTo(baseLayerRef.current!);
+        }
 
-      L.marker([polity.lat, polity.lng], {
-        icon: L.divIcon({
-          className: 'precolonial-label',
-          html: `<span>${polity.name}</span>`,
-          iconSize: [120, 16],
-          iconAnchor: [60, 8],
-        }),
-      }).addTo(layerRef.current!);
+        L.marker([polity.lat, polity.lng], {
+          icon: L.divIcon({
+            className: 'precolonial-label',
+            html: `<span>${polity.name}</span>`,
+            iconSize: [120, 16],
+            iconAnchor: [60, 8],
+          }),
+        }).addTo(baseLayerRef.current!);
+      });
     });
 
-    return () => { map.remove(); mapRef.current = null; layerRef.current = null; };
+    return () => { map.remove(); mapRef.current = null; baseLayerRef.current = null; highlightLayerRef.current = null; };
   }, []);
 
-  // Fly to selected polity
+  // Fly to & highlight selected polity
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !activePolity) return;
+    const hLayer = highlightLayerRef.current;
+    if (!map || !hLayer) return;
+    hLayer.clearLayers();
+
+    if (!activePolity) return;
     const polity = PRE_COLONIAL_POLITIES.find(p => p.name === activePolity);
     if (!polity) return;
+
+    // Highlight country fill
+    const countryFeatures = getCountryFeatures(geoRef.current, polity.countryCodes);
+    if (countryFeatures.length > 0) {
+      L.geoJSON(countryFeatures as any, {
+        style: {
+          color: 'hsl(25, 70%, 40%)',
+          weight: 3,
+          fillColor: 'hsl(25, 60%, 45%)',
+          fillOpacity: 0.4,
+        },
+      }).addTo(hLayer);
+    }
+
     map.flyTo([polity.lat, polity.lng], 5, { duration: 1 });
   }, [activePolity]);
 
@@ -164,7 +193,7 @@ export const PreColonialCards = () => {
             </h2>
             <p className="font-body text-sm leading-relaxed" style={{ color: 'hsl(25, 20%, 40%)' }}>
               19th-century Africa was home to a diverse array of political systems with complex
-              administrative structures. Click a polity to see its location.
+              administrative structures. Click a polity to see its territory highlighted on the map.
             </p>
           </motion.div>
 

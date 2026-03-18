@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { BL, PARTITION_TIMELINE, POWER_COLORS, type PartitionEvent } from '@/components/visuals/berlinMapData';
+import { loadFeatures, getCountryFeatures } from '@/hooks/useAfricaGeoJSON';
 
 /* ── Inject map styles once ────────────────────────────────────────── */
 const STYLE_ID = 'berlin-partition-map-styles';
@@ -62,12 +63,13 @@ export const PartitionTimelapse = () => {
   const mapRef = useRef<L.Map | null>(null);
   const layerRef = useRef<L.LayerGroup | null>(null);
   const activeIndexRef = useRef(-1);
+  const geoRef = useRef<GeoJSON.Feature[]>([]);
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
   const currentYearMotion = useTransform(scrollYProgress, [0, 1], [1825, 1914]);
   const currentYear = useRoundedYear(currentYearMotion);
 
-  // Init Leaflet map
+  // Init Leaflet map + load GeoJSON
   useEffect(() => {
     ensureStyles();
     if (!mapContainerRef.current || mapRef.current) return;
@@ -91,20 +93,26 @@ export const PartitionTimelapse = () => {
     layerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
 
+    // Load GeoJSON features
+    loadFeatures().then(features => {
+      geoRef.current = features;
+      // Force a re-render of current state
+      activeIndexRef.current = -1;
+    });
+
     return () => { map.remove(); mapRef.current = null; layerRef.current = null; };
   }, []);
 
-  // Update map layers based on current year
+  // Update map layers based on current year — now using GeoJSON polygons
   useEffect(() => {
     const layer = layerRef.current;
     const map = mapRef.current;
-    if (!layer || !map) return;
+    const geo = geoRef.current;
+    if (!layer || !map || geo.length === 0) return;
 
-    // Find which events are visible
     const visibleEvents = PARTITION_TIMELINE.filter(e => e.year <= currentYear);
     const latestIndex = visibleEvents.length - 1;
 
-    // Only re-render if the count changed
     if (latestIndex === activeIndexRef.current) return;
     activeIndexRef.current = latestIndex;
 
@@ -113,19 +121,24 @@ export const PartitionTimelapse = () => {
     visibleEvents.forEach((event, i) => {
       const color = POWER_COLORS[event.power] || BL.MUTED;
       const isLatest = i === latestIndex;
-      const opacity = isLatest ? 0.45 : 0.25;
+      const opacity = isLatest ? 0.45 : 0.2;
+      const isFailed = event.territory.includes('failed');
 
-      // Territory circle
-      const circle = L.circle([event.lat, event.lng], {
-        radius: event.radius * 1000,
-        color: color,
-        weight: isLatest ? 2 : 1,
-        fillColor: color,
-        fillOpacity: opacity,
-        dashArray: event.territory.includes('failed') ? '6,4' : undefined,
-      }).addTo(layer);
+      // Render country polygons
+      const countryFeatures = getCountryFeatures(geo, event.countryCodes);
+      if (countryFeatures.length > 0) {
+        L.geoJSON(countryFeatures as any, {
+          style: {
+            color: color,
+            weight: isLatest ? 2.5 : 1,
+            fillColor: color,
+            fillOpacity: isFailed ? 0.08 : opacity,
+            dashArray: isFailed ? '6,4' : undefined,
+          },
+        }).addTo(layer);
+      }
 
-      // Label
+      // Label at event center
       L.marker([event.lat, event.lng], {
         icon: L.divIcon({
           className: 'berlin-territory-label',
@@ -135,17 +148,19 @@ export const PartitionTimelapse = () => {
         }),
       }).addTo(layer);
 
-      // Popup for latest
+      // Popup + pulse for latest
       if (isLatest) {
-        circle.bindPopup(`
-          <div style="font-family:'Cormorant Garamond',serif;">
-            <strong style="font-family:'Playfair Display',serif;font-size:14px;">${event.territory}</strong>
-            <br/><span style="font-size:11px;opacity:0.7;">${event.year} · ${event.power.charAt(0).toUpperCase() + event.power.slice(1)}</span>
-            <br/><span style="font-size:12px;margin-top:6px;display:block;">${event.description}</span>
-          </div>
-        `, { closeButton: false, maxWidth: 250 }).openPopup();
+        const popup = L.popup({ closeButton: false, maxWidth: 250 })
+          .setLatLng([event.lat, event.lng])
+          .setContent(`
+            <div style="font-family:'Cormorant Garamond',serif;">
+              <strong style="font-family:'Playfair Display',serif;font-size:14px;">${event.territory}</strong>
+              <br/><span style="font-size:11px;opacity:0.7;">${event.year} · ${event.power.charAt(0).toUpperCase() + event.power.slice(1)}</span>
+              <br/><span style="font-size:12px;margin-top:6px;display:block;">${event.description}</span>
+            </div>
+          `)
+          .addTo(layer);
 
-        // Pulse ring for current event
         const pulseIcon = L.divIcon({
           className: '',
           html: `<div style="width:20px;height:20px;border-radius:50%;background:${color};opacity:0.6;animation:berlinPulse 2s infinite;"></div>`,
@@ -163,7 +178,6 @@ export const PartitionTimelapse = () => {
     }
   }, [currentYear]);
 
-  // Determine active event for text highlight
   const activeEvent = PARTITION_TIMELINE.filter(e => e.year <= currentYear).pop();
 
   return (
