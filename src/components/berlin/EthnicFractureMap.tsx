@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { BL, SPLIT_ETHNIC_GROUPS, BORDER_STATS, GEOMETRIC_BORDERS, type SplitEthnicGroup } from '@/components/visuals/berlinMapData';
+import { loadFeatures, getCountryFeatures } from '@/hooks/useAfricaGeoJSON';
 
 const STYLE_ID = 'berlin-ethnic-map-styles';
 function ensureStyles() {
@@ -41,7 +42,9 @@ export const EthnicFractureMap = () => {
   const inView = useInView(ref, { once: true, margin: '-100px' });
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
-  const layerRef = useRef<L.LayerGroup | null>(null);
+  const baseLayerRef = useRef<L.LayerGroup | null>(null);
+  const highlightLayerRef = useRef<L.LayerGroup | null>(null);
+  const geoRef = useRef<GeoJSON.Feature[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<SplitEthnicGroup | null>(null);
 
   // Init map
@@ -65,7 +68,8 @@ export const EthnicFractureMap = () => {
       minZoom: 3,
     }).addTo(map);
 
-    layerRef.current = L.layerGroup().addTo(map);
+    baseLayerRef.current = L.layerGroup().addTo(map);
+    highlightLayerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
 
     // Draw geometric border lines
@@ -75,37 +79,64 @@ export const EthnicFractureMap = () => {
         weight: 1.5,
         opacity: 0.35,
         dashArray: '8,6',
-      }).addTo(layerRef.current!);
+      }).addTo(baseLayerRef.current!);
     });
 
-    // Add ethnic group markers
-    SPLIT_ETHNIC_GROUPS.forEach(group => {
-      const color = group.stateCount >= 3 ? BL.RED_WAX : BL.BRASS;
-      L.circle([group.lat, group.lng], {
-        radius: 150000 + group.stateCount * 30000,
-        color: color,
-        weight: 2,
-        fillColor: color,
-        fillOpacity: 0.15,
-      }).addTo(layerRef.current!);
+    // Load GeoJSON and add ethnic group labels
+    loadFeatures().then(features => {
+      geoRef.current = features;
 
-      L.marker([group.lat, group.lng], {
-        icon: L.divIcon({
-          className: 'ethnic-label',
-          html: `<span style="color:${color}">${group.name}</span>`,
-          iconSize: [80, 16],
-          iconAnchor: [40, 8],
-        }),
-      }).addTo(layerRef.current!);
+      // Show all ethnic groups as light-filled countries
+      SPLIT_ETHNIC_GROUPS.forEach(group => {
+        const color = group.stateCount >= 3 ? BL.RED_WAX : BL.BRASS;
+        const countryFeatures = getCountryFeatures(features, group.countryCodes);
+        if (countryFeatures.length > 0) {
+          L.geoJSON(countryFeatures as any, {
+            style: {
+              color: color,
+              weight: 1,
+              fillColor: color,
+              fillOpacity: 0.1,
+            },
+          }).addTo(baseLayerRef.current!);
+        }
+
+        L.marker([group.lat, group.lng], {
+          icon: L.divIcon({
+            className: 'ethnic-label',
+            html: `<span style="color:${color}">${group.name}</span>`,
+            iconSize: [80, 16],
+            iconAnchor: [40, 8],
+          }),
+        }).addTo(baseLayerRef.current!);
+      });
     });
 
-    return () => { map.remove(); mapRef.current = null; layerRef.current = null; };
+    return () => { map.remove(); mapRef.current = null; baseLayerRef.current = null; highlightLayerRef.current = null; };
   }, []);
 
-  // Fly to selected group
+  // Highlight selected group countries
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !selectedGroup) return;
+    const hLayer = highlightLayerRef.current;
+    if (!map || !hLayer) return;
+    hLayer.clearLayers();
+
+    if (!selectedGroup) return;
+
+    const color = selectedGroup.stateCount >= 3 ? BL.RED_WAX : BL.BRASS;
+    const countryFeatures = getCountryFeatures(geoRef.current, selectedGroup.countryCodes);
+    if (countryFeatures.length > 0) {
+      L.geoJSON(countryFeatures as any, {
+        style: {
+          color: color,
+          weight: 3,
+          fillColor: color,
+          fillOpacity: 0.35,
+        },
+      }).addTo(hLayer);
+    }
+
     map.flyTo([selectedGroup.lat, selectedGroup.lng], 5, { duration: 1 });
   }, [selectedGroup]);
 
@@ -133,7 +164,7 @@ export const EthnicFractureMap = () => {
             </h2>
             <p className="font-body text-sm leading-relaxed" style={{ color: BL.MUTED }}>
               Colonial borders partitioned <strong style={{ color: BL.RED_WAX }}>177 ethnic groups</strong> across
-              multiple states. Click a group to see its location on the map.
+              multiple states. Click a group to see the countries they were split across.
             </p>
           </motion.div>
 
