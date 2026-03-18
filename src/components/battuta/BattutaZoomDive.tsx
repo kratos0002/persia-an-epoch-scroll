@@ -325,10 +325,9 @@ export const BattutaZoomDive = () => {
 
                   {/* Quote */}
                   {stage.narrative.quote && (
-                    <RihlaQuote
-                      text={stage.narrative.quote.text}
-                      attribution={stage.narrative.quote.attribution}
-                    />
+                    <RihlaQuote attribution={stage.narrative.quote.attribution}>
+                      {stage.narrative.quote.text}
+                    </RihlaQuote>
                   )}
                 </motion.div>
               </AnimatePresence>
