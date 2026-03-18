@@ -99,15 +99,16 @@ export interface PreColonialPolity {
   region: string;
   lat: number;
   lng: number;
+  countryCodes: string[];
 }
 
 export const PRE_COLONIAL_POLITIES: PreColonialPolity[] = [
-  { name: 'Sokoto Caliphate', population: '10–20 million', governance: 'Islamic Caliphate / Shura Council', trade: 'Textiles, Leather, Grain', region: 'West Africa', lat: 13.06, lng: 5.24 },
-  { name: 'Ashanti Empire', population: '3–4 million', governance: 'Centralized Monarchy / National Assembly', trade: 'Gold, Kola Nuts', region: 'West Africa', lat: 6.69, lng: -1.62 },
-  { name: 'Zulu Kingdom', population: '250,000–500,000', governance: 'Militarized Monarchy / Age-regiments', trade: 'Cattle, Land expansion', region: 'Southern Africa', lat: -28.53, lng: 30.90 },
-  { name: 'Kingdom of Buganda', population: '1–2 million', governance: 'Centralized Monarchy / Professional Bureaucracy', trade: 'Ivory, Agriculture', region: 'East Africa', lat: 0.31, lng: 32.58 },
-  { name: 'Ethiopian Empire', population: '5–7 million', governance: 'Feudal Imperial System', trade: 'Coffee, Gold, Grains', region: 'East Africa', lat: 9.03, lng: 38.75 },
-  { name: 'Kingdom of Benin', population: '500,000–1 million', governance: 'Sacral Monarchy / Craft Guilds', trade: 'Ivory, Bronze, Palm Oil', region: 'West Africa', lat: 6.34, lng: 5.62 },
+  { name: 'Sokoto Caliphate', population: '10–20 million', governance: 'Islamic Caliphate / Shura Council', trade: 'Textiles, Leather, Grain', region: 'West Africa', lat: 13.06, lng: 5.24, countryCodes: ['NGA'] },
+  { name: 'Ashanti Empire', population: '3–4 million', governance: 'Centralized Monarchy / National Assembly', trade: 'Gold, Kola Nuts', region: 'West Africa', lat: 6.69, lng: -1.62, countryCodes: ['GHA'] },
+  { name: 'Zulu Kingdom', population: '250,000–500,000', governance: 'Militarized Monarchy / Age-regiments', trade: 'Cattle, Land expansion', region: 'Southern Africa', lat: -28.53, lng: 30.90, countryCodes: ['ZAF'] },
+  { name: 'Kingdom of Buganda', population: '1–2 million', governance: 'Centralized Monarchy / Professional Bureaucracy', trade: 'Ivory, Agriculture', region: 'East Africa', lat: 0.31, lng: 32.58, countryCodes: ['UGA'] },
+  { name: 'Ethiopian Empire', population: '5–7 million', governance: 'Feudal Imperial System', trade: 'Coffee, Gold, Grains', region: 'East Africa', lat: 9.03, lng: 38.75, countryCodes: ['ETH'] },
+  { name: 'Kingdom of Benin', population: '500,000–1 million', governance: 'Sacral Monarchy / Craft Guilds', trade: 'Ivory, Bronze, Palm Oil', region: 'West Africa', lat: 6.34, lng: 5.62, countryCodes: ['NGA'] },
 ];
 
 /* ── Partition Timeline Events ──────────────────────────────────────── */
