@@ -24,8 +24,11 @@ export interface BattutaMarker {
 
 export interface BattutaStage {
   id: string;
-  center: [number, number]; // [lat, lng] for Leaflet
+  center: [number, number]; // [lat, lng]
   zoom: number;
+  pitch: number;    // 0–60° camera tilt
+  bearing: number;  // compass rotation toward travel direction
+  speed: number;    // flyTo duration multiplier (1 = default 1.2s)
   label: string;
   phase: string;
   phaseIndex: number;
