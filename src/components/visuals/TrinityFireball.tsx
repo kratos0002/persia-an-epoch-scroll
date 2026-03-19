@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const GEIGER = 'hsl(140, 70%, 45%)';
@@ -109,70 +109,121 @@ const EinsteinLetter = () => (
 
 /* ── Step 1: Manhattan Project Sites Map ───── */
 
-// Simplified but accurate continental US outline path (viewBox 0 0 400 300)
-const US_OUTLINE = "M39 82 L42 80 L48 78 L50 75 L53 73 L55 74 L57 72 L60 68 L64 65 L67 64 L69 62 L73 60 L76 61 L78 60 L80 58 L82 56 L85 55 L88 56 L91 55 L95 53 L98 52 L101 53 L104 54 L106 56 L110 57 L113 55 L117 54 L121 55 L125 55 L129 54 L132 53 L135 52 L137 50 L140 48 L143 47 L147 46 L151 47 L154 49 L156 51 L158 54 L159 58 L161 60 L164 58 L168 57 L172 58 L175 60 L178 62 L181 61 L184 59 L187 57 L190 56 L194 55 L198 56 L201 58 L204 57 L208 56 L211 57 L214 58 L217 57 L220 55 L224 54 L228 53 L232 54 L235 56 L238 58 L240 60 L243 62 L247 64 L250 67 L252 70 L254 73 L257 75 L260 77 L263 78 L266 77 L270 76 L273 77 L276 79 L279 82 L281 85 L283 87 L286 88 L289 87 L292 86 L295 87 L298 89 L300 92 L302 95 L304 97 L306 100 L307 103 L308 106 L310 108 L312 110 L314 113 L315 116 L316 119 L317 122 L318 124 L320 126 L322 128 L323 131 L324 134 L325 137 L324 140 L323 143 L321 146 L319 148 L317 150 L316 152 L318 155 L320 158 L318 161 L316 163 L313 165 L310 167 L307 168 L305 170 L303 173 L300 175 L297 176 L294 177 L292 179 L290 181 L288 184 L286 186 L284 188 L282 189 L280 190 L278 192 L275 193 L272 193 L269 194 L266 196 L263 198 L260 200 L257 201 L254 200 L252 198 L250 196 L247 195 L244 196 L241 198 L238 199 L235 198 L232 196 L230 194 L228 192 L225 191 L222 192 L219 194 L216 196 L213 198 L210 199 L207 198 L204 197 L202 199 L200 201 L198 204 L196 207 L194 210 L190 212 L186 213 L182 212 L178 211 L174 212 L170 214 L166 216 L162 218 L158 219 L155 218 L152 216 L149 215 L146 216 L142 218 L138 219 L134 219 L130 218 L127 216 L124 215 L121 216 L118 218 L114 220 L110 221 L106 220 L102 218 L99 216 L96 215 L93 216 L89 218 L85 219 L81 218 L78 216 L75 214 L72 212 L69 210 L66 208 L63 206 L60 204 L57 203 L54 204 L51 206 L48 208 L44 208 L40 206 L37 204 L34 201 L32 198 L30 195 L28 192 L27 189 L26 186 L25 183 L24 180 L23 176 L22 172 L22 168 L23 164 L24 160 L25 157 L26 153 L27 150 L26 146 L25 142 L25 138 L26 134 L27 130 L28 126 L29 122 L30 118 L31 114 L32 110 L33 106 L34 102 L35 98 L36 94 L37 90 L38 86 Z";
-
-// Site positions mapped to the US outline coordinate system
-const SITES = [
-  { x: 105, y: 185, label: 'Los Alamos, NM', main: true },
-  { x: 274, y: 155, label: 'Oak Ridge, TN', main: true },
-  { x: 68, y: 72, label: 'Hanford, WA', main: true },
-  { x: 222, y: 120, label: 'Chicago', main: false },
-  { x: 110, y: 198, label: 'Alamogordo', main: false },
-  { x: 195, y: 108, label: 'Ames, IA', main: false },
-  { x: 252, y: 138, label: 'Dayton, OH', main: false },
-  { x: 296, y: 102, label: 'Rochester, NY', main: false },
-  { x: 316, y: 110, label: 'MIT', main: false },
-  { x: 270, y: 162, label: 'Morgantown', main: false },
-  { x: 200, y: 148, label: 'St. Louis', main: false },
-  { x: 128, y: 148, label: 'Denver', main: false },
-  { x: 38, y: 130, label: 'Berkeley, CA', main: false },
+// Real US state boundaries projected from GeoJSON (Albers-like, continental US)
+const US_STATES = [
+  "M225.7 132.6 L238.4 151.4 L239.5 156.2 L239.2 158.9 L238.8 165.4 L224.2 167.8 L225.1 172.1 L223.9 174.4 L221.8 170.6 L219.6 173.4 L221.3 133.6 Z",
+  "M98.5 115 L79.8 161.6 L66.4 152.4 L65.6 149.9 L66.6 144.1 L68 139.9 L66.7 135.1 L66.1 131.4 L65.2 122.9 L68.6 123.6 L90 114.9 Z",
+  "M183.9 119.4 L208.9 122.2 L211.6 125.5 L209.4 128.7 L208.3 132.6 L207.4 135.6 L205.8 138.2 L204.9 141.2 L204 146.4 L203.3 150.2 L186.5 145.4 L183.9 144.6 Z",
+  "M15.4 70.9 L34.3 71 L41.8 105.3 L58.6 124.1 L66.7 135.1 L68 139.9 L66.6 144.1 L65.6 149.9 L66.4 152.4 L51.2 154.3 L50 149.1 L45 143.5 L43.7 142.8 L38.9 140.1 L35 137.8 L30.5 136.3 L30.6 131.7 L28.4 128.5 L26.5 125.7 L23 118.2 L23 115.2 L20.1 112.9 L19.6 108.1 L19.7 105.2 L17.1 105.9 L14.8 101.2 L12.7 97.1 L11.7 90.1 L8.5 84.7 L9.9 78.6 L9.4 72.9 Z",
+  "M105.1 79.8 L139.5 79.8 L134 115 L108 115 L98.4 103.8 Z",
+  "M309.5 70.7 L316.9 76.2 L313.4 77.5 L307.7 78.9 L307 77.9 Z",
+  "M295.7 90.3 L294.6 93.4 L297 99.1 L294 102.1 Z",
+  "M236.6 167.8 L248.3 170.9 L256.8 173.4 L257.4 169.3 L260.7 174.2 L265.7 190.1 L266.6 196.5 L268.6 206.8 L266.8 216.5 L265.4 218.5 L261.9 218.6 L259.8 212.6 L258 209.2 L256.7 204.1 L255.6 205.1 L254.8 195.6 L252.1 195.2 L252.6 185.4 L249.9 181.7 L248.1 179.1 L243.2 176.1 L240.3 178.9 L237.1 177.1 L229.9 173.1 L225.6 172.8 L224 169 Z",
+  "M250.6 132.6 L251.2 137.3 L252.9 140.1 L255.9 144.6 L258.5 148.8 L260.5 153.5 L262.3 157.9 L261.9 163.2 L260.6 166.6 L257.4 169.3 L256.8 173.4 L248.3 170.9 L238.8 165.4 L239.2 158.9 L239.5 156.2 L238.4 151.4 L243.5 132.7 Z",
+  "M57.5 9.4 L59.4 23.3 L61.8 25.4 L65.8 29.6 L66.8 33.4 L66.1 37.8 L67.5 40.6 L70.6 39.3 L72 43.5 L73.3 46.5 L76 49.9 L79.8 48.4 L82.3 48.9 L85.7 48.3 L80.2 71 L51.7 54.9 L50.9 51.1 L52.3 46.5 L53.5 43.3 L54.6 38 L52.3 34.3 L51.6 20.3 Z",
+  "M206.4 66.5 L222.9 68.3 L224.7 94.3 L224.8 99.3 L222.9 103.6 L221.9 105.3 L221 109.2 L218.9 112.5 L216.5 113 L215.2 115.1 L213.5 112 L211.1 107 L208.1 104.3 L209 99.8 L207.4 97.7 L205.9 95.1 L201.4 88.3 L202 83.7 L204.5 80.5 L204 76.2 L208.3 73.3 L209.2 69.9 Z",
+  "M233.7 73.1 L240.6 84.2 L240.6 99.3 L237 99.8 L235.6 103.3 L233.4 106.6 L230.6 105.8 L229 106.3 L225.5 106.8 L223.8 107 L221.5 107.4 L222.2 103.8 L224.1 100.6 L224 95.9 L225.3 74.1 Z",
+  "M202.2 57.8 L204 60 L203.9 64.4 L207.7 68.1 L209.3 71 L208.2 74.6 L203.7 77.7 L203.8 81.4 L201.9 85.3 L199.4 83.2 L176.4 83.4 L175.4 78 L174.3 73.8 L173.4 70.7 L171.8 63.5 L171.7 60.2 L172.4 57.8 Z",
+  "M140.4 88.6 L181.5 90.1 L181.9 95.6 L151 115 Z",
+  "M245.9 99.4 L250.4 100.7 L252.1 101 L253.4 105.1 L255.4 109.1 L255 112.6 L252 115.2 L250.4 117.3 L242.2 118.6 L230.1 118 L221.6 119.4 L213.9 118.3 L215 114.7 L218.7 114.4 L219.1 111.6 L221.7 108 L224.2 106.4 L227 108.1 L229.3 107.1 L231.8 104.7 L234.1 106 L236 102.2 L238.5 100.2 L240.1 96.9 L244 98.3 Z",
+  "M189 150 L203.5 151.6 L204.4 157.1 L202 162.3 L200.6 165.5 L211.7 167.8 L212.3 174.1 L211.1 177.1 L214.4 177.7 L212.2 178.8 L213.1 182 L216 183.8 L213.2 183.5 L210 181.7 L208.8 184.3 L206.4 184.3 L203.8 183.7 L201.2 180.7 L199.1 178 L196.6 180.7 L191.3 178.6 L187.2 178.5 L188.5 172.7 L189.5 168.4 L187.8 161 Z",
+  "M323.3 61.7 L321.7 59.2 L323.6 40.7 L325.1 38.1 L325.6 35.2 L327.4 29.7 L333.1 24.9 L336.9 24.5 L340.4 26.4 L342.3 39.3 L342.1 42.1 L345.1 46.3 L342.6 48.1 L340.6 48.6 L337.8 49.1 L336.5 50.1 L334.3 49.4 L332.7 52.5 L330.7 53.7 L328.4 55.9 L325.9 56.2 L325.2 58.4 Z",
+  "M271.9 91 L297.8 102.2 L294.2 106.6 L292.5 105 L292 103.5 L290.7 101.8 L290.6 96.1 L292.4 92.5 L290.1 94.7 L289 99.4 L289.9 103.9 L288.8 104.3 L285.2 103 L286.1 99.2 L285.7 98 L283.7 95.4 L281.5 92.1 L278.9 92 L276 92.2 L272.9 94.8 Z",
+  "M322 63.2 L322.6 66.1 L322.9 68.8 L324.2 71.6 L327.8 72.7 L323.5 75 L321.9 75 L320.2 73.5 L318.4 70.8 L309.5 70.7 L308.3 64.4 L320.5 64.1 Z",
+  "M248.5 73.4 L233.7 73.1 L230.8 70 L232.4 64.7 L231.1 55 L232.3 48.4 L233.2 45.4 L235.8 46.7 L237.2 42.5 L238.8 39.5 L242.6 38.8 L245.9 40.3 L249.3 43.3 L249.6 47.1 L247.8 52.9 L245.9 56.3 L249.7 53.6 L253.3 54.7 L254.6 62.4 L253 64.9 L250.5 68.9 Z",
+  "M224.3 43.8 L222.6 41.4 L222 37.6 L218 35.9 L208.8 31.3 L211 28.8 L216.1 27 L219.5 23.7 L219.8 26.3 L220.5 27.6 L225.5 31.1 L228.1 31.7 L234.3 29.7 L239.1 29.1 L241.6 31.5 L244.6 31.1 L246.6 35.9 L248.4 35.9 L243.2 36.4 L241.2 37.1 L237.5 35 L234.1 36.4 L231.6 37.6 L229 37 L226.7 38.8 Z",
+  "M198.4 29.6 L196.7 35.1 L193.4 38.3 L194.7 40.7 L193.7 46.8 L197.1 49.5 L200.8 53.1 L202.7 56.8 L172.4 57.8 L170 39.3 L171.5 32.9 L170.4 27.7 L168.8 18.7 L168.6 12.2 L180 6 L182.7 11.4 L185.4 12.5 L189.9 13.4 L192.7 12.7 L195.5 14.3 L198.1 15 L200.1 17.2 L203.8 16.6 L206.8 17.1 L210.9 18.3 L210.3 19.7 L203.3 23.8 L197.9 28.9 Z",
+  "M219.1 132.6 L220.5 143.2 L218.9 173.7 L215.5 173.4 L212.3 174.1 L211.7 167.8 L200.6 165.5 L202 162.3 L204.4 157.1 L203.5 151.6 L203.8 149 L203 145.3 L204.6 140.2 L206.8 137.7 L207.8 134.1 Z",
+  "M199.4 83.2 L201.9 85.3 L202.2 91 L206.3 98 L208.7 98.1 L209.1 100.6 L209.8 106.1 L213 108.9 L213 112.5 L214.8 118.7 L213.2 119.4 L211.8 123.8 L209.8 121.1 L183.1 119.4 L181.9 95.6 L181.5 90.1 L177.6 86.3 L191.1 83.5 Z",
+  "M127.8 9.4 L127.9 44.6 L98.3 44.6 L85.7 48.3 L82.3 48.9 L79.8 48.4 L76 49.9 L73.3 46.5 L72 43.5 L70.6 39.3 L67.5 40.6 L66.1 37.8 L66.8 33.4 L65.8 29.6 L61.8 25.4 L59.4 23.3 L57.5 9.4 Z",
+  "M132.1 62.2 L160.5 62.7 L165.1 63.6 L171.3 66.5 L174.3 71.2 L174.4 75 L176 80 L177.6 86.3 L139.5 88.6 L127.8 62.2 Z",
+  "M51.7 71 L69.2 122.1 L67.3 122.6 L66 129.7 L58.6 124.1 L41.8 105.3 L34.3 71 Z",
+  "M321.1 41.9 L322.7 60.2 L322.6 63.3 L319.8 64.9 L312.6 62.6 L313.5 57.2 L315.5 52.7 L318.4 48.2 L318.6 44.5 Z",
+  "M302.6 78.6 L302.9 82.9 L304.1 86 L300.4 95.2 L297.1 95.3 L294.8 91.9 L297.2 89.6 L299.4 86.7 L297 83.5 L297.3 80.1 L299.9 76.6 Z",
+  "M108 115 L134 115 L133.7 141.3 L112.8 159 L103.4 160.9 L98.5 115 Z",
+  "M307.8 44.5 L308.1 49.5 L307.8 55.4 L308.2 63.7 L307 70.6 L305.6 78.9 L309 80.1 L314 78.4 L312.9 81.2 L305.3 83.4 L304.5 79.8 L299.6 76 L297.8 73.2 L296 71 L270.2 68.6 L275.5 64.1 L274.2 59.9 L281.9 59.2 L286.6 59.8 L290.9 57.5 L290.1 52.8 L293.6 48.9 L303.1 44.7 Z",
+  "M263.1 118.9 L293 118.9 L291.8 122.6 L288.2 123.7 L290.1 124.3 L293.5 124.3 L292.9 127.6 L289.1 131.3 L289.4 135.6 L285.1 136.1 L280.7 142.8 L270.7 134.3 L263.3 131.7 L255.4 130.9 L250.6 132.6 L243.6 130.6 L246.7 127.7 L251.2 125.8 L253.5 124.1 L257.6 121.1 Z",
+  "M167.8 9.4 L168.4 17 L170.2 27.3 L170.8 32 L127.8 36.3 Z",
+  "M265.8 71.2 L265.3 84.4 L263.9 91.1 L260.3 93.8 L258.2 96.7 L256.9 97.2 L255.4 101.1 L252.8 101.3 L251 99.8 L247.2 100.6 L244 98.3 L240.6 84.2 L250.8 74.6 L253.5 76 L258.6 75.5 Z",
+  "M151 115 L184.2 129.1 L181.1 142.6 L177.7 142.5 L175.4 142.4 L172.5 143.4 L169.6 141.7 L167 143 L164 142.7 L162.3 140.4 L159.9 140.1 L156.3 139.5 L153.3 138 L151.6 119.4 L134 115 Z",
+  "M15.5 34.3 L17.8 36.1 L23.7 38.4 L27.4 39.3 L33.1 38.2 L39.4 36.4 L53.2 37.4 L53.8 41.8 L52.9 45.2 L50.5 49.9 L52.5 52 L41.9 71.1 L20.4 70.9 L8.8 70 L7.6 63.6 L9.5 57.3 L10.4 46.6 L10.9 36.3 L14.6 34.5 Z",
+  "M270.2 68.8 L296.6 72.2 L297.7 74.5 L299.9 76.6 L297.3 80.1 L297 83.5 L299.4 86.7 L297.2 89.6 L293.5 91 L265.8 83 L266.8 70.7 Z",
+  "M252.6 132 L262.7 131.3 L264.2 133.2 L277.3 142.7 L273.8 146.9 L271.2 150.1 L268.8 153.6 L266.1 156.1 L262.3 157.9 L260.5 153.5 L258.5 148.8 L255.9 144.6 L252.9 140.1 L251.2 137.3 L250.6 132.6 Z",
+  "M127.8 36.3 L170 39.3 L172.4 57.8 L171.7 60.2 L171.8 63.5 L171.3 66.5 L165.1 63.6 L160.5 62.7 L132.1 62.2 L127.9 44.6 Z",
+  "M221.6 119.4 L230.1 118 L242.2 118.6 L258.9 118.6 L256.9 122.8 L253.3 123.2 L249.7 126.3 L245.2 129 L243.5 132.7 L220.7 132.6 L208.9 132.4 L210.5 127.3 L211.8 123.8 L213.2 119.4 Z",
+  "M140.9 119.4 L152 136.3 L155.9 137.8 L158.8 140.2 L161.2 140 L163.6 141.5 L166.4 142.2 L168.1 143.7 L171.3 142.8 L174.1 142.8 L177.3 142 L179.5 141.7 L183.9 144.6 L186.5 145.4 L187.8 161 L189.5 168.4 L188.5 172.7 L187.2 178.5 L183.7 180.6 L181.6 179.5 L181.4 181 L178.6 186.6 L173.7 189.1 L171.5 187.8 L171.5 191.1 L169 193.8 L166.1 199.8 L166.3 203 L166.4 205.1 L167.3 210.4 L165.3 211.6 L160.5 209.8 L157.2 208.2 L154.8 202.8 L154.6 198.8 L152.3 196 L149.8 191.7 L147.9 186.2 L145.6 182.1 L143.3 178.8 L137.8 177.8 L135.1 180.8 L133.3 185.5 L127.2 182 L124.1 177.3 L122.8 171.6 L118.7 167.1 L115.2 163.7 L112.6 159.9 L133.6 150.2 L134 119.4 Z",
+  "M80.2 71 L98.5 79.8 L98.5 104.7 L69.2 115 Z",
+  "M318.6 44.5 L318.4 48.2 L315.5 52.7 L313.5 57.2 L312.6 62.6 L308.3 64.4 L307.5 56.1 L307.9 51.2 L307.9 46.3 Z",
+  "M278.5 93.3 L283.1 94.7 L284.9 97.2 L285.6 100.6 L284.7 103.2 L288.6 104.9 L290.1 109.6 L289.9 113.6 L288.6 113.9 L292.3 115.7 L267.1 119 L247.3 118.5 L251.9 116 L252.8 113.9 L257.1 111 L259.7 113.2 L263.1 112.4 L267 110.5 L268.8 106.2 L270.9 101 L273.4 101.8 L278.1 95.9 Z",
+  "M51.7 9.4 L51.6 32.8 L40.2 35.8 L34.5 37.4 L30.6 38 L25.3 38.2 L18.1 38.8 L16 34.2 L13.5 33.5 L10.5 32.9 L10.3 29.3 L8.4 20.5 L7.4 14.8 L12.6 16.7 L16.5 17.5 L19.6 19.2 L20.7 24 L21.2 17.9 L19.8 14.1 L18.8 11.4 Z",
+  "M265.8 83 L271.8 95.6 L274.9 93.5 L278 91.9 L280.5 92.1 L281.5 96.2 L275.4 99.5 L272.8 102.6 L270.4 103 L267.7 107.5 L266 111.3 L261.6 112.9 L258.9 113.2 L257.2 110.3 L255.1 108.1 L253.6 102.5 L256.1 100.6 L257.7 98.5 L258.9 95 L260.9 94.4 L264.5 87.9 L264.9 83.5 Z",
+  "M207.7 30.8 L215.5 34.6 L221.3 36.5 L223.1 40.2 L223.4 42.8 L223 45 L222.3 48.7 L225.4 45.4 L227.5 43.8 L224.6 50.6 L223.4 54.5 L222.4 60 L223.1 66.7 L206 65.4 L203.3 61 L203 57.8 L201.8 53.5 L198.9 50.5 L195.2 48.4 L194 42.1 L193.3 39.5 L196.4 35.7 L197.9 29.2 L203.8 28.2 L205 29.2 Z",
+  "M98.3 44.6 L127.8 62.2 L105.1 79.8 L86.8 71 Z",
 ];
 
-const ManhattanMap = () => (
+// Site detail cards for the three main sites
+const SITE_DETAILS: Record<string, { image: string; caption: string; role: string }> = {
+  'Los Alamos, NM': {
+    image: '/images/nuclear/trinity-test.jpg',
+    caption: 'Trinity detonation, 0.016 seconds after ignition, July 16, 1945',
+    role: 'Weapons design laboratory — where Oppenheimer\'s team built the bomb',
+  },
+  'Oak Ridge, TN': {
+    image: '/images/nuclear/oak-ridge.jpg',
+    caption: 'Calutron diffusion pumps at the Y-12 plant, Oak Ridge',
+    role: 'Uranium enrichment — 75,000 workers, most unaware of the mission',
+  },
+  'Hanford, WA': {
+    image: '/images/nuclear/hanford.jpg',
+    caption: 'Workers loading uranium slugs into the B Reactor, Hanford',
+    role: 'Plutonium production — the B Reactor, world\'s first full-scale nuclear reactor',
+  },
+};
+
+// Site positions projected from real lat/lon coordinates
+const SITES = [
+  { x: 114.6, y: 124.9, label: 'Los Alamos, NM', main: true },
+  { x: 243.8, y: 123.7, label: 'Oak Ridge, TN', main: true },
+  { x: 38.6, y: 31, label: 'Hanford, WA', main: true },
+  { x: 224.1, y: 72.1, label: 'Chicago', main: false },
+  { x: 116.6, y: 151.1, label: 'Alamogordo', main: false },
+  { x: 188.9, y: 70.7, label: 'Ames, IA', main: false },
+  { x: 244.2, y: 90.7, label: 'Dayton, OH', main: false },
+  { x: 282.8, y: 60.8, label: 'Rochester, NY', main: false },
+  { x: 320.9, y: 67.7, label: 'MIT', main: false },
+  { x: 269.1, y: 91.9, label: 'Morgantown', main: false },
+  { x: 209, y: 100.7, label: 'St. Louis', main: false },
+  { x: 122.3, y: 90.9, label: 'Denver', main: false },
+  { x: 21, y: 107.3, label: 'Berkeley, CA', main: false },
+];
+
+const ManhattanMap = ({ onSiteClick }: { onSiteClick: (label: string) => void }) => (
   <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
     {/* Offset the map group to center it in the 400x400 viewBox */}
-    <g transform="translate(30, 50)">
-      {/* US outline — accurate simplified path */}
-      <motion.path
-        d={US_OUTLINE}
-        fill={`${GEIGER}06`}
-        stroke={DIM}
-        strokeWidth={1}
-        strokeLinejoin="round"
-        initial={{ pathLength: 0, fillOpacity: 0 }}
-        animate={{ pathLength: 1, fillOpacity: 1 }}
-        transition={{ duration: 2, ease: 'easeInOut' }}
-      />
-
-      {/* State-like internal lines for texture */}
-      {[
-        'M160 60 L160 220',  // rough central meridian
-        'M100 100 L100 210', // mountain line
-        'M220 55 L220 200',  // mississippi-ish
-        'M280 80 L280 190',  // appalachian-ish
-      ].map((d, i) => (
+    <g transform="translate(25, 55)">
+      {/* Real US state boundaries */}
+      {US_STATES.map((d, i) => (
         <motion.path
-          key={`grid-${i}`}
+          key={`state-${i}`}
           d={d}
-          fill="none"
+          fill={`${GEIGER}08`}
           stroke={DIM}
-          strokeWidth={0.2}
-          strokeDasharray="2 4"
+          strokeWidth={0.5}
+          strokeLinejoin="round"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
-          transition={{ delay: 1.5 + i * 0.1 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.1 + i * 0.03 }}
         />
       ))}
 
-      {/* Connection lines between major sites */}
+      {/* Connection lines between major sites (real coordinates) */}
       {[
-        [105, 185, 274, 155],
-        [105, 185, 68, 72],
-        [68, 72, 274, 155],
-        [222, 120, 105, 185],
-        [222, 120, 274, 155],
-        [222, 120, 68, 72],
+        [114.6, 124.9, 243.8, 123.7],
+        [114.6, 124.9, 38.6, 31],
+        [38.6, 31, 243.8, 123.7],
+        [224.1, 72.1, 114.6, 124.9],
+        [224.1, 72.1, 243.8, 123.7],
+        [224.1, 72.1, 38.6, 31],
       ].map(([x1, y1, x2, y2], i) => (
         <motion.line
           key={`conn-${i}`}
@@ -193,7 +244,13 @@ const ManhattanMap = () => (
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.8 + i * 0.06, type: 'spring', stiffness: 200 }}
+          style={{ cursor: site.main ? 'pointer' : 'default' }}
+          onClick={site.main ? () => onSiteClick(site.label) : undefined}
         >
+          {/* Larger invisible hit area for main sites */}
+          {site.main && (
+            <circle cx={site.x} cy={site.y} r={16} fill="transparent" />
+          )}
           <circle cx={site.x} cy={site.y} r={site.main ? 4 : 2} fill={site.main ? GEIGER : STEEL} />
           {site.main && (
             <motion.circle
@@ -527,6 +584,15 @@ interface Props {
 }
 
 export const TrinityFireball = ({ activeStep }: Props) => {
+  const [selectedSite, setSelectedSite] = useState<string | null>(null);
+
+  // Close card when step changes
+  React.useEffect(() => {
+    setSelectedSite(null);
+  }, [activeStep]);
+
+  const detail = selectedSite ? SITE_DETAILS[selectedSite] : null;
+
   return (
     <div className="w-full h-full flex items-center justify-center relative overflow-hidden">
       {/* Background glow */}
@@ -552,7 +618,7 @@ export const TrinityFireball = ({ activeStep }: Props) => {
           )}
           {activeStep === 1 && (
             <motion.g key="map" exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-              <ManhattanMap />
+              <ManhattanMap onSiteClick={(label) => setSelectedSite(prev => prev === label ? null : label)} />
             </motion.g>
           )}
           {activeStep === 2 && (
@@ -567,6 +633,63 @@ export const TrinityFireball = ({ activeStep }: Props) => {
           )}
         </AnimatePresence>
       </svg>
+
+      {/* Site detail card overlay */}
+      <AnimatePresence>
+        {detail && selectedSite && (
+          <motion.div
+            key={selectedSite}
+            className="absolute z-20 w-[280px] md:w-[320px] overflow-hidden rounded-lg shadow-2xl"
+            style={{
+              background: 'hsl(200, 20%, 10%)',
+              border: `1px solid hsl(140, 30%, 20%)`,
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.25 }}
+          >
+            {/* Photo */}
+            <div className="relative w-full h-[160px] overflow-hidden">
+              <img
+                src={detail.image}
+                alt={detail.caption}
+                className="w-full h-full object-cover"
+                style={{ filter: 'sepia(0.15) contrast(1.1)' }}
+              />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(transparent 50%, hsl(200, 20%, 10%) 100%)' }} />
+            </div>
+
+            {/* Text */}
+            <div className="px-4 pb-4 -mt-2 relative">
+              <p
+                className="text-[9px] tracking-[0.3em] uppercase font-body font-semibold mb-1"
+                style={{ color: GEIGER }}
+              >
+                {selectedSite}
+              </p>
+              <p className="font-body text-[13px] leading-relaxed mb-2" style={{ color: 'hsl(0, 0%, 85%)' }}>
+                {detail.role}
+              </p>
+              <p className="font-body text-[10px] italic" style={{ color: STEEL }}>
+                {detail.caption}
+              </p>
+            </div>
+
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedSite(null)}
+              className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"
+              style={{ background: 'hsl(200, 20%, 10%, 0.8)', color: STEEL }}
+            >
+              <span className="text-xs leading-none">&times;</span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Step label */}
       <motion.div

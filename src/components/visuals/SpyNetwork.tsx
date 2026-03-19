@@ -24,7 +24,7 @@ export const SpyNetwork = ({ activeStep }: Props) => {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <svg viewBox="0 0 400 400" className="w-full max-w-[500px] h-auto">
+      <svg viewBox="0 0 400 420" className="w-full max-w-[500px] h-auto">
         {/* Source: Los Alamos */}
         <motion.g
           initial={{ opacity: 0 }}
@@ -175,42 +175,105 @@ export const SpyNetwork = ({ activeStep }: Props) => {
         {/* Timeline compression (step 3) */}
         {activeStep >= 3 && (
           <motion.g
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Expected timeline */}
-            <rect x={80} y={340} width={240} height={6} rx={3} fill="hsl(200, 15%, 15%)" />
-            <text x={80} y={336} fill={STEEL} fontSize={6} fontFamily="var(--font-body)">
-              Expected: ~10 years
+            {/* Divider */}
+            <line x1={40} y1={320} x2={360} y2={320} stroke="hsl(200, 10%, 18%)" strokeWidth={0.5} />
+
+            {/* Title */}
+            <text x={200} y={340} textAnchor="middle" fill={STEEL} fontSize={6.5} fontFamily="var(--font-body)" letterSpacing={2}>
+              HOW ESPIONAGE COMPRESSED THE TIMELINE
             </text>
+
+            {/* Year axis labels */}
+            {[
+              { year: '1945', x: 60 },
+              { year: '1947', x: 108 },
+              { year: '1949', x: 156 },
+              { year: '1951', x: 204 },
+              { year: '1953', x: 252 },
+              { year: '1955', x: 300 },
+            ].map(({ year, x }) => (
+              <g key={year}>
+                <line x1={x} y1={350} x2={x} y2={396} stroke="hsl(200, 10%, 18%)" strokeWidth={0.5} />
+                <text x={x} y={404} textAnchor="middle" fill={STEEL} fontSize={5.5} fontFamily="monospace" opacity={0.6}>
+                  {year}
+                </text>
+              </g>
+            ))}
+
+            {/* Expected bar — US intelligence predicted 1953–1955 */}
+            <text x={56} y={365} textAnchor="end" fill={STEEL} fontSize={6.5} fontFamily="var(--font-body)" fontWeight={600}>
+              Expected
+            </text>
+            <rect x={60} y={356} width={240} height={14} rx={2} fill="hsl(200, 15%, 12%)" />
             <motion.rect
-              x={80}
-              y={340}
-              height={6}
-              rx={3}
-              fill={STEEL}
+              x={60}
+              y={356}
+              height={14}
+              rx={2}
+              fill={`${STEEL}40`}
               initial={{ width: 0 }}
               animate={{ width: 240 }}
-              transition={{ duration: 1.5 }}
-              opacity={0.3}
+              transition={{ duration: 1.5, ease: 'easeOut' }}
             />
+            <motion.text
+              x={308}
+              y={366}
+              fill={LIGHT}
+              fontSize={6}
+              fontFamily="var(--font-body)"
+              fontWeight={600}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.5 }}
+            >
+              1953–55
+            </motion.text>
 
-            {/* Actual timeline */}
-            <rect x={80} y={365} width={240} height={6} rx={3} fill="hsl(200, 15%, 15%)" />
-            <text x={80} y={361} fill={RED} fontSize={6} fontFamily="var(--font-body)" fontWeight={600}>
-              Actual: 4 years (espionage)
+            {/* Actual bar — espionage cut it to 4 years */}
+            <text x={56} y={390} textAnchor="end" fill={RED} fontSize={6.5} fontFamily="var(--font-body)" fontWeight={600}>
+              Actual
             </text>
+            <rect x={60} y={381} width={240} height={14} rx={2} fill="hsl(200, 15%, 12%)" />
             <motion.rect
-              x={80}
-              y={365}
-              height={6}
-              rx={3}
+              x={60}
+              y={381}
+              height={14}
+              rx={2}
               fill={RED}
               initial={{ width: 0 }}
               animate={{ width: 96 }}
-              transition={{ duration: 1, delay: 0.5 }}
+              transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
             />
+            <motion.text
+              x={164}
+              y={391}
+              fill={LIGHT}
+              fontSize={6}
+              fontFamily="var(--font-body)"
+              fontWeight={600}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
+            >
+              1949
+            </motion.text>
+
+            {/* "Saved" annotation with arrow */}
+            <motion.g
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2 }}
+            >
+              <line x1={160} y1={381} x2={300} y2={381} stroke={GEIGER} strokeWidth={0.8} strokeDasharray="3 2" />
+              <line x1={160} y1={378} x2={160} y2={398} stroke={GEIGER} strokeWidth={0.8} />
+              <text x={230} y={378} textAnchor="middle" fill={GEIGER} fontSize={7} fontFamily="var(--font-body)" fontWeight={700}>
+                2+ years saved by espionage
+              </text>
+            </motion.g>
           </motion.g>
         )}
       </svg>

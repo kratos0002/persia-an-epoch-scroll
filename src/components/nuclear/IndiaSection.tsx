@@ -1,6 +1,7 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { SeismicPulse } from '@/components/visuals/SeismicPulse';
+import { NewspaperClip } from '@/components/nuclear/NewspaperClip';
 
 const SAFFRON = 'hsl(25, 80%, 50%)';
 const STEEL = 'hsl(200, 10%, 50%)';
@@ -17,24 +18,24 @@ const steps = [
       The <span style={{ color: SAFFRON }}>Smiling Buddha</span>
     </h2>
     <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
-      India's relationship with nuclear weapons was paradoxical from the start. Jawaharlal Nehru, the country's first prime minister, was one of the loudest voices for nuclear disarmament. He called atomic weapons "a sin against humanity." But he also established India's nuclear research program in 1948 — just one year after independence — understanding that peaceful nuclear energy and weapons capability were two sides of the same coin.
+      India's relationship with nuclear weapons was paradoxical from the start. <span style={{ color: LIGHT }}>Jawaharlal Nehru</span>, the country's first prime minister, was one of the loudest voices for nuclear disarmament. He called atomic weapons "a sin against humanity." But he also established India's nuclear research program in <span style={{ color: LIGHT }}>1948 — just one year after independence</span> — understanding that peaceful nuclear energy and weapons capability were two sides of the same coin.
     </p>
   </div>,
 
   /* Step 1 — China catalyst */
   <div key="china-catalyst">
     <p className="font-body text-base leading-relaxed mb-4" style={{ color: STEEL }}>
-      The catalyst was China. When Beijing tested its bomb in 1964, India's security calculus changed overnight. China had already humiliated India in a border war in 1962. Now it was nuclear.
+      The catalyst was China. When Beijing tested its bomb in 1964, India's security calculus changed overnight. China had already <span style={{ color: LIGHT }}>humiliated India in a border war in 1962</span>. Now it was nuclear.
     </p>
     <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
-      Homi Bhabha, the father of India's nuclear program, began pushing for a weapons test. He didn't live to see it — he died in a plane crash in 1966 — but his successor, Raja Ramanna, carried the program forward.
+      <span style={{ color: LIGHT }}>Homi Bhabha</span>, the father of India's nuclear program, began pushing for a weapons test. He didn't live to see it — he died in a plane crash in 1966 — but his successor, <span style={{ color: LIGHT }}>Raja Ramanna</span>, carried the program forward.
     </p>
   </div>,
 
   /* Step 2 — Smiling Buddha 1974 */
   <div key="smiling-buddha">
     <p className="font-body text-base leading-relaxed mb-4" style={{ color: STEEL }}>
-      On May 18, 1974, India detonated a 12-kiloton plutonium device in the Thar Desert at Pokhran, Rajasthan. The official codename was "Smiling Buddha."
+      On May 18, 1974, India detonated a <span style={{ color: LIGHT }}>12-kiloton</span> plutonium device in the Thar Desert at <span style={{ color: LIGHT }}>Pokhran, Rajasthan</span>. The official codename was "Smiling Buddha."
     </p>
     <p className="font-body text-base leading-relaxed italic mb-3" style={{ color: LIGHT }}>
       "Peaceful nuclear explosion"
@@ -47,11 +48,18 @@ const steps = [
   /* Step 3 — Operation Shakti 1998 + no-first-use paradox */
   <div key="shakti">
     <p className="font-body text-base leading-relaxed mb-4" style={{ color: STEEL }}>
-      India did not test again for 24 years. Then, in May 1998, Prime Minister Atal Bihari Vajpayee ordered Operation Shakti — five underground tests at Pokhran in two days, including a thermonuclear device. India declared itself a nuclear weapons state.
+      India did not test again for 24 years. Then, in May 1998, Prime Minister Atal Bihari Vajpayee ordered <span style={{ color: LIGHT }}>Operation Shakti</span> — <span style={{ color: LIGHT }}>five underground tests</span> at Pokhran in two days, including a <span style={{ color: LIGHT }}>thermonuclear device</span>. India declared itself a nuclear weapons state.
     </p>
     <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
-      The paradox endures: India has never signed the Nuclear Non-Proliferation Treaty, yet it has a no-first-use policy and has never shared nuclear technology with another state. The country that preached disarmament became a nuclear power — and, by many measures, a more responsible one than several who signed the treaty.
+      The paradox endures: India has never signed the Nuclear Non-Proliferation Treaty, yet it has a <span style={{ color: LIGHT }}>no-first-use policy</span> and has never shared nuclear technology with another state. The country that preached disarmament became a nuclear power — and, by many measures, a more responsible one than several who signed the treaty.
     </p>
+    <NewspaperClip
+      paper="The Times of India"
+      date="May 12, 1998"
+      headline="INDIA IS NOW A NUCLEAR STATE"
+      subheadline="Five underground tests at Pokhran — PM declares India a nuclear weapons power"
+      delay={0.5}
+    />
   </div>,
 ];
 

@@ -8,7 +8,7 @@ const BUNKER = 'hsl(200, 25%, 6%)';
 
 // ─── Step 0: US Nuclear Umbrella ───────────────────────────────────────────────
 const UmbrellaVisual = () => (
-  <svg viewBox="0 0 360 300" className="w-full h-auto max-w-[420px]">
+  <svg viewBox="0 0 360 300" className="w-full h-auto max-w-[420px] mx-auto">
     {/* Background sky */}
     <rect width={360} height={300} fill={BUNKER} />
 
@@ -168,111 +168,136 @@ const UmbrellaVisual = () => (
 // ─── Step 1: Curie Family Tree / French atomic lineage ─────────────────────────
 const CurieLineageVisual = () => {
   const nodes = [
-    { id: 'pierre', label: 'Pierre Curie', sub: '1859–1906', x: 100, y: 60 },
-    { id: 'marie', label: 'Marie Curie', sub: '1867–1934', x: 260, y: 60 },
-    { id: 'irene', label: 'Irène Joliot-Curie', sub: '1897–1956', x: 180, y: 140 },
-    { id: 'frederic', label: 'Frédéric Joliot-Curie', sub: '1900–1958', x: 180, y: 210 },
-    { id: 'ceg', label: 'CEA · 1945', sub: 'Commissariat à l\'énergie atomique', x: 180, y: 272 },
+    { id: 'pierre', name: 'Pierre Curie', years: '1859–1906', x: 110, y: 90, nobel: '1903' },
+    { id: 'marie', name: 'Marie Curie', years: '1867–1934', x: 250, y: 90, nobel: '1911' },
+    { id: 'irene', name: 'Irène Joliot-Curie', years: '1897–1956', x: 180, y: 190, nobel: '1935' },
+    { id: 'frederic', name: 'Frédéric Joliot-Curie', years: '1900–1958', x: 180, y: 275 },
+    { id: 'cea', name: 'CEA', years: '1945', x: 180, y: 350 },
   ];
 
   return (
-    <svg viewBox="0 0 360 310" className="w-full h-auto max-w-[420px]">
-      <rect width={360} height={310} fill={BUNKER} />
-
+    <svg viewBox="0 0 360 400" className="w-full h-auto max-w-[520px] mx-auto">
       {/* Title */}
-      <text
-        x={180} y={28}
-        textAnchor="middle"
-        fill={STEEL}
-        fontSize={7}
-        fontFamily="var(--font-body)"
-        letterSpacing={3}
-        style={{ textTransform: 'uppercase' }}
-      >
+      <text x={180} y={30} textAnchor="middle" fill={STEEL} fontSize={7} fontFamily="var(--font-body)" letterSpacing={3}>
         FRENCH ATOMIC LINEAGE
       </text>
 
-      {/* Connection lines */}
-      {/* Pierre + Marie → Irène */}
-      <motion.line x1={100} y1={78} x2={180} y2={132} stroke={STEEL} strokeWidth={0.8} strokeDasharray="3 2" opacity={0.4}
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 0.4 }} transition={{ duration: 0.6, delay: 0.3 }} />
-      <motion.line x1={260} y1={78} x2={180} y2={132} stroke={STEEL} strokeWidth={0.8} strokeDasharray="3 2" opacity={0.4}
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 0.4 }} transition={{ duration: 0.6, delay: 0.4 }} />
-      {/* Irène → Frédéric */}
-      <motion.line x1={180} y1={158} x2={180} y2={202} stroke={TRICOLOR} strokeWidth={1} strokeDasharray="3 2" opacity={0.5}
-        initial={{ scaleY: 0, opacity: 0 }} animate={{ scaleY: 1, opacity: 0.5 }} transition={{ duration: 0.5, delay: 0.7 }}
-        style={{ transformOrigin: '180px 158px' }} />
-      {/* Frédéric → CEA */}
-      <motion.line x1={180} y1={226} x2={180} y2={260} stroke={TRICOLOR} strokeWidth={1.5} opacity={0.7}
-        initial={{ scaleY: 0, opacity: 0 }} animate={{ scaleY: 1, opacity: 0.7 }} transition={{ duration: 0.4, delay: 0.9 }}
-        style={{ transformOrigin: '180px 226px' }} />
+      {/* Vertical descent line — the spine */}
+      <motion.line x1={180} y1={110} x2={180} y2={340} stroke={`${TRICOLOR}30`} strokeWidth={0.5}
+        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 2, delay: 0.5 }} />
+
+      {/* Pierre → Irène */}
+      <motion.line x1={110} y1={108} x2={180} y2={170} stroke={`${STEEL}40`} strokeWidth={0.5}
+        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.8, delay: 0.4 }} />
+      {/* Marie → Irène */}
+      <motion.line x1={250} y1={108} x2={180} y2={170} stroke={`${STEEL}40`} strokeWidth={0.5}
+        initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.8, delay: 0.5 }} />
 
       {/* Nodes */}
       {nodes.map((node, i) => {
-        const isCEA = node.id === 'ceg';
-        const isJoliot = node.id === 'frederic';
+        const isCEA = node.id === 'cea';
+        const isFrederic = node.id === 'frederic';
+
         return (
-          <motion.g key={node.id}
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.1 + i * 0.15 }}
-            style={{ transformOrigin: `${node.x}px ${node.y}px` }}
+          <motion.g
+            key={node.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 + i * 0.18 }}
           >
-            <ellipse
-              cx={node.x} cy={node.y}
-              rx={isCEA ? 80 : 55} ry={isCEA ? 14 : 12}
-              fill={isCEA ? TRICOLOR : isJoliot ? 'hsl(220, 40%, 20%)' : 'hsl(200, 20%, 14%)'}
-              stroke={isCEA ? TRICOLOR : isJoliot ? TRICOLOR : STEEL}
-              strokeWidth={isCEA ? 0 : 0.8}
-              opacity={isCEA ? 0.9 : 1}
-            />
+            {/* Name */}
             <text
-              x={node.x} y={node.y - 3}
+              x={node.x}
+              y={node.y - (isCEA ? 2 : 6)}
               textAnchor="middle"
-              fill={isCEA ? BUNKER : isJoliot ? TRICOLOR : LIGHT}
-              fontSize={isCEA ? 7.5 : 8}
+              fill={isCEA || isFrederic ? TRICOLOR : LIGHT}
+              fontSize={isCEA ? 16 : 12}
               fontFamily="var(--font-display)"
-              fontWeight={isCEA || isJoliot ? 700 : 600}
+              fontWeight={isCEA || isFrederic ? 800 : 600}
             >
-              {node.label}
+              {node.name}
             </text>
+
+            {/* Years */}
             <text
-              x={node.x} y={node.y + 8}
+              x={node.x}
+              y={node.y + (isCEA ? 14 : 8)}
               textAnchor="middle"
-              fill={isCEA ? 'hsl(220, 40%, 30%)' : STEEL}
-              fontSize={5.5}
+              fill={STEEL}
+              fontSize={7}
               fontFamily="var(--font-body)"
+              opacity={0.7}
             >
-              {node.sub}
+              {node.years}
             </text>
+
+            {/* Nobel indicator — subtle */}
+            {'nobel' in node && node.nobel && (
+              <motion.g
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 + i * 0.12 }}
+              >
+                <text
+                  x={node.x + (node.id === 'pierre' ? -52 : node.id === 'marie' ? 52 : 60)}
+                  y={node.y + (node.id === 'irene' ? -2 : 0)}
+                  textAnchor="middle"
+                  fill="hsl(45, 60%, 55%)"
+                  fontSize={6}
+                  fontFamily="var(--font-body)"
+                  opacity={0.5}
+                >
+                  Nobel {node.nobel}
+                </text>
+              </motion.g>
+            )}
+
+            {/* Subtle dot marker */}
+            {!isCEA && (
+              <circle cx={node.x} cy={node.y + 16} r={2} fill={isFrederic ? TRICOLOR : STEEL} opacity={0.4} />
+            )}
+
+            {/* CEA — thin rule above */}
+            {isCEA && (
+              <motion.line
+                x1={node.x - 60} y1={node.y - 18}
+                x2={node.x + 60} y2={node.y - 18}
+                stroke={TRICOLOR} strokeWidth={0.5} opacity={0.3}
+                initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+                transition={{ delay: 1.2, duration: 0.6 }}
+                style={{ transformOrigin: `${node.x}px ${node.y - 18}px` }}
+              />
+            )}
           </motion.g>
         );
       })}
 
-      {/* Nobel badges */}
-      {[
-        { x: 37, y: 60, label: 'Nobel\n1903' },
-        { x: 316, y: 60, label: 'Nobel\n1911' },
-        { x: 315, y: 140, label: 'Nobel\n1935' },
-      ].map((badge, i) => (
-        <motion.g key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 + i * 0.1 }}>
-          <circle cx={badge.x} cy={badge.y} r={11} fill="hsl(45, 70%, 30%)" opacity={0.7} />
-          <text x={badge.x} y={badge.y - 3} textAnchor="middle" fill="hsl(45, 80%, 70%)" fontSize={4.5} fontFamily="var(--font-body)" fontWeight={700}>Nobel</text>
-          <text x={badge.x} y={badge.y + 5} textAnchor="middle" fill="hsl(45, 80%, 70%)" fontSize={4.5} fontFamily="var(--font-body)">{badge.label.split('\n')[1]}</text>
-        </motion.g>
-      ))}
-
-      {/* De Gaulle's political will label */}
+      {/* CEA subtitle */}
       <motion.text
-        x={180} y={298}
+        x={180} y={380}
         textAnchor="middle"
         fill={STEEL}
         fontSize={6.5}
         fontFamily="var(--font-body)"
+        opacity={0.5}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.5 }}
+        transition={{ delay: 1.3 }}
+      >
+        Commissariat à l'énergie atomique
+      </motion.text>
+
+      {/* Bottom line */}
+      <motion.text
+        x={180} y={392}
+        textAnchor="middle"
+        fill={STEEL}
+        fontSize={7}
+        fontFamily="var(--font-body)"
         fontStyle="italic"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
+        animate={{ opacity: 0.6 }}
+        transition={{ delay: 1.5 }}
       >
         Science built it. De Gaulle willed it into being.
       </motion.text>
@@ -288,7 +313,7 @@ const GerboiseBleueVisual = () => {
   const cappedGerboise = Math.min(GERBOISE_H, 200);
 
   return (
-    <svg viewBox="0 0 360 310" className="w-full h-auto max-w-[420px]">
+    <svg viewBox="0 0 360 310" className="w-full h-auto max-w-[420px] mx-auto">
       <rect width={360} height={310} fill={BUNKER} />
 
       {/* Desert ground */}
@@ -391,18 +416,18 @@ const TESTS = [
 ];
 
 const MAX_YIELD = 70;
-const MAX_HEIGHT = 180;
+const MAX_HEIGHT = 300;
 
 const YieldComparisonVisual = () => (
-  <div className="w-full max-w-[420px] mx-auto">
+  <div className="w-full max-w-[540px] mx-auto flex flex-col items-center">
     <p className="text-[9px] tracking-[0.3em] uppercase font-body text-center mb-4" style={{ color: STEEL }}>
       First Test Yields — Kilotons
     </p>
-    <svg viewBox="0 0 360 280" className="w-full h-auto">
+    <svg viewBox="0 0 400 420" className="w-full h-auto">
       {TESTS.map((test, i) => {
         const barHeight = (test.yield / MAX_YIELD) * MAX_HEIGHT;
-        const x = 40 + i * 76;
-        const y = 230 - barHeight;
+        const x = 30 + i * 90;
+        const y = 370 - barHeight;
         const isFrance = test.nation === 'France';
 
         return (
@@ -411,31 +436,31 @@ const YieldComparisonVisual = () => (
               initial={{ opacity: 0, scaleY: 0 }}
               animate={{ opacity: 1, scaleY: 1 }}
               transition={{ duration: 1.1, delay: i * 0.18, ease: [0.22, 1, 0.36, 1] }}
-              style={{ transformOrigin: `${x + 24}px 230px` }}
+              style={{ transformOrigin: `${x + 30}px 370px` }}
             >
               {/* Glow for France */}
               {isFrance && (
                 <motion.ellipse
-                  cx={x + 24} cy={y + 12}
-                  rx={32} ry={20}
+                  cx={x + 30} cy={y + 16}
+                  rx={40} ry={24}
                   fill="none" stroke={TRICOLOR} strokeWidth={1.5}
                   animate={{ opacity: [0.4, 0.08, 0.4] }}
                   transition={{ duration: 2.2, repeat: Infinity }}
                 />
               )}
               {/* Stem */}
-              <rect x={x + 17} y={y + 22} width={14} height={barHeight - 22}
+              <rect x={x + 22} y={y + 28} width={16} height={barHeight - 28}
                 fill={test.color} opacity={isFrance ? 0.9 : 0.45} rx={2} />
               {/* Cloud cap */}
-              <ellipse cx={x + 24} cy={y + 12} rx={22} ry={14}
+              <ellipse cx={x + 30} cy={y + 16} rx={28} ry={18}
                 fill={test.color} opacity={isFrance ? 0.75 : 0.3} />
-              <ellipse cx={x + 24} cy={y + 5} rx={15} ry={9}
+              <ellipse cx={x + 30} cy={y + 6} rx={20} ry={12}
                 fill={test.color} opacity={isFrance ? 0.55 : 0.18} />
             </motion.g>
 
-            <motion.text x={x + 24} y={y - 5} textAnchor="middle"
+            <motion.text x={x + 30} y={y - 8} textAnchor="middle"
               fill={isFrance ? LIGHT : STEEL}
-              fontSize={isFrance ? 11 : 8}
+              fontSize={isFrance ? 14 : 10}
               fontFamily="var(--font-display)" fontWeight={700}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               transition={{ delay: 0.7 + i * 0.18 }}
@@ -443,31 +468,24 @@ const YieldComparisonVisual = () => (
               {test.yield} kt
             </motion.text>
 
-            <text x={x + 24} y={245} textAnchor="middle"
-              fill={test.color} fontSize={6.5} fontFamily="var(--font-body)" fontWeight={600}>
+            <text x={x + 30} y={388} textAnchor="middle"
+              fill={test.color} fontSize={8} fontFamily="var(--font-body)" fontWeight={600}>
               {test.nation}
             </text>
-            <text x={x + 24} y={255} textAnchor="middle"
-              fill={STEEL} fontSize={5} fontFamily="var(--font-body)">
+            <text x={x + 30} y={400} textAnchor="middle"
+              fill={STEEL} fontSize={6} fontFamily="var(--font-body)">
               {test.name}
             </text>
-            <text x={x + 24} y={263} textAnchor="middle"
-              fill={STEEL} fontSize={5} fontFamily="var(--font-body)">
+            <text x={x + 30} y={410} textAnchor="middle"
+              fill={STEEL} fontSize={6} fontFamily="var(--font-body)">
               {test.year}
             </text>
           </motion.g>
         );
       })}
 
-      <line x1={30} y1={230} x2={326} y2={230} stroke={STEEL} strokeWidth={0.4} opacity={0.25} />
+      <line x1={20} y1={370} x2={380} y2={370} stroke={STEEL} strokeWidth={0.4} opacity={0.25} />
 
-      {/* Independent deterrent callout */}
-      <motion.text x={180} y={276} textAnchor="middle"
-        fill={TRICOLOR} fontSize={7} fontFamily="var(--font-body)" fontStyle="italic"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}
-      >
-        France — an independent deterrent, outside NATO command
-      </motion.text>
     </svg>
   </div>
 );
@@ -479,31 +497,31 @@ interface Props {
 
 export const YieldTowers = ({ activeStep }: Props) => {
   return (
-    <div className="w-full flex items-center justify-center px-4">
+    <div className="w-full h-full flex items-center justify-center px-4">
       <AnimatePresence mode="wait">
         {activeStep === 0 && (
-          <motion.div key="umbrella" className="w-full"
+          <motion.div key="umbrella" className="w-full flex items-center justify-center"
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5 }}>
             <UmbrellaVisual />
           </motion.div>
         )}
         {activeStep === 1 && (
-          <motion.div key="curie" className="w-full"
+          <motion.div key="curie" className="w-full flex items-center justify-center"
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5 }}>
             <CurieLineageVisual />
           </motion.div>
         )}
         {activeStep === 2 && (
-          <motion.div key="gerboise" className="w-full"
+          <motion.div key="gerboise" className="w-full flex items-center justify-center"
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5 }}>
             <GerboiseBleueVisual />
           </motion.div>
         )}
         {activeStep === 3 && (
-          <motion.div key="comparison" className="w-full"
+          <motion.div key="comparison" className="w-full flex items-center justify-center"
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5 }}>
             <YieldComparisonVisual />

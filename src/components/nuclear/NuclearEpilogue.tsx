@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { WarheadCounter } from '@/components/visuals/WarheadCounter';
+import { ProliferationMap } from '@/components/visuals/ProliferationMap';
 import { EditionColophon } from '@/components/scroll/EditionColophon';
 
 const BUNKER = 'hsl(200, 25%, 6%)';
@@ -58,6 +59,13 @@ export const NuclearEpilogue = () => {
                 <WarheadCounter key={s.nation} nation={s.nation} count={s.count} color={s.color} />
               ))}
             </div>
+          </div>
+        </RevealOnScroll>
+
+        {/* Proliferation chain map */}
+        <RevealOnScroll>
+          <div className="mb-20 -mx-6 md:-mx-12">
+            <ProliferationMap />
           </div>
         </RevealOnScroll>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StickyScroll } from '@/components/scroll/StickyScroll';
 import { EmpireFade } from '@/components/visuals/EmpireFade';
+import { NewspaperClip } from '@/components/nuclear/NewspaperClip';
 
 const NAVY = 'hsl(210, 50%, 40%)';
 const STEEL = 'hsl(200, 10%, 50%)';
@@ -19,13 +20,13 @@ const steps = [
       The United Kingdom
     </p>
     <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
-      Britain had been there from the beginning. British physicists — James Chadwick, who discovered the neutron; Rudolf Peierls and Otto Frisch, who calculated the critical mass — had done foundational work before the Americans even started. Under the wartime Quebec Agreement, Britain contributed scientists to the Manhattan Project as a full partner.
+      Britain had been there from the beginning. British physicists — <span style={{ color: LIGHT }}>James Chadwick</span>, who discovered the neutron; <span style={{ color: LIGHT }}>Rudolf Peierls and Otto Frisch</span>, who calculated the critical mass — had done foundational work before the Americans even started. Under the wartime <span style={{ color: LIGHT }}>Quebec Agreement</span>, Britain contributed scientists to the Manhattan Project as a full partner.
     </p>
   </div>,
 
   <div key="betrayal">
     <p className="font-body text-base leading-relaxed mb-5" style={{ color: STEEL }}>
-      Then, in 1946, the United States passed the McMahon Act, abruptly cutting off all nuclear cooperation with foreign nations — including Britain. Churchill was furious. The country that had helped invent the bomb was now locked out of its own creation.
+      Then, in 1946, the United States passed the <span style={{ color: LIGHT }}>McMahon Act</span>, abruptly cutting off all nuclear cooperation with foreign nations — including Britain. Churchill was furious. The country that had helped invent the bomb was now <span style={{ color: LIGHT }}>locked out of its own creation</span>.
     </p>
     <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
       Foreign Secretary Ernest Bevin settled the matter in a single sentence at a 1947 Cabinet meeting:
@@ -42,10 +43,10 @@ const steps = [
 
   <div key="penney">
     <p className="font-body text-base leading-relaxed mb-5" style={{ color: STEEL }}>
-      The program, codenamed "High Explosive Research," was run on a fraction of the American budget. William Penney, a mathematician who had witnessed the Nagasaki bombing as a British observer, led the weapons design. He worked from memory, notes, and sheer intellect.
+      The program, codenamed "High Explosive Research," was run on a fraction of the American budget. <span style={{ color: LIGHT }}>William Penney</span>, a mathematician who had witnessed the Nagasaki bombing as a British observer, led the weapons design. He worked from memory, notes, and sheer intellect.
     </p>
     <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
-      On October 3, 1952, Britain detonated "Hurricane" — a 25-kiloton plutonium device — inside the hull of a frigate anchored off the Monte Bello Islands in Western Australia. The ship vaporized. Britain was the third nuclear power.
+      On October 3, 1952, Britain detonated "<span style={{ color: LIGHT }}>Hurricane</span>" — a <span style={{ color: LIGHT }}>25-kiloton</span> plutonium device — inside the hull of a frigate anchored off the <span style={{ color: LIGHT }}>Monte Bello Islands</span> in Western Australia. <span style={{ color: LIGHT }}>The ship vaporized.</span> Britain was the third nuclear power.
     </p>
     <div className="mt-6 pt-4" style={{ borderTop: `1px solid hsl(210, 30%, 12%)` }}>
       <p className="text-[9px] tracking-[0.3em] uppercase font-body mb-2" style={{ color: STEEL }}>
@@ -62,7 +63,7 @@ const steps = [
       The empire was crumbling — India had gone, Palestine had gone, Suez would go. But the bomb gave Britain a permanent seat at the table.
     </p>
     <p className="font-body text-base leading-relaxed" style={{ color: STEEL }}>
-      The logic was cold and clear: in a world of superpowers, nuclear weapons were the price of relevance.
+      The logic was cold and clear: in a world of superpowers, <span style={{ color: LIGHT }}>nuclear weapons were the price of relevance</span>.
     </p>
     <div className="mt-6 pt-4" style={{ borderTop: `1px solid hsl(210, 30%, 12%)` }}>
       <p className="text-[9px] tracking-[0.3em] uppercase font-body mb-3" style={{ color: STEEL }}>
@@ -83,6 +84,13 @@ const steps = [
         ))}
       </div>
     </div>
+    <NewspaperClip
+      image="/images/nuclear/headline-1952-hurricane.png"
+      paper="The West Australian"
+      date="October 4, 1952"
+      headline="OPERATION HURRICANE"
+      delay={0.5}
+    />
   </div>,
 ];
 
