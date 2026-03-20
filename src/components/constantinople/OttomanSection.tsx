@@ -4,6 +4,7 @@ import { DigSection } from '@/components/visuals/DigSection';
 import { ArtifactCard } from '@/components/visuals/ArtifactCard';
 import { ArtifactParticles } from '@/components/visuals/ArtifactParticles';
 import { STRATA } from '@/components/visuals/constantinopleData';
+import { OttomanSiegeVisual } from './StratumVisuals';
 
 const stratum = STRATA[1]; // ottoman
 
@@ -11,20 +12,20 @@ export const OttomanSection: React.FC = () => (
   <DigSection id={stratum.id} color={stratum.color} earthColor={stratum.earthColor} depth={stratum.depth}>
     <ArtifactParticles color={stratum.color} count={15} />
     <div className="relative min-h-screen flex items-center px-6 py-24">
-      <div className="max-w-4xl mx-auto">
+      <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,1.1fr)] lg:items-center">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-[10px] tracking-[0.3em] uppercase font-body font-semibold mb-4" style={{ color: 'hsl(40 25% 65%)' }}>
+          <p className="mb-4 font-body text-[10px] font-semibold uppercase tracking-[0.3em] text-foreground/65">
             Stratum I · {stratum.depth}m below surface · {stratum.year}
           </p>
-          <h2 className="font-display text-4xl md:text-6xl font-bold mb-6" style={{ color: 'hsl(40 25% 90%)' }}>
+          <h2 className="mb-6 font-display text-4xl font-bold text-foreground md:text-6xl">
             {stratum.label}
           </h2>
-          <div className="max-w-2xl space-y-6 font-body text-lg leading-relaxed" style={{ color: 'hsl(40 25% 80%)' }}>
+          <div className="max-w-2xl space-y-6 font-body text-lg leading-relaxed text-foreground/80">
             <p>
               On May 29, 1453, the walls that had held for a thousand years finally broke.
               Mehmed II — twenty-one years old, obsessed with this city since boyhood — rode
@@ -43,6 +44,8 @@ export const OttomanSection: React.FC = () => (
             </p>
           </div>
         </motion.div>
+
+        <OttomanSiegeVisual accent={stratum.color} earth={stratum.earthColor} />
       </div>
 
       {/* Artifacts */}
