@@ -22,6 +22,7 @@ import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
 import Berlin from "./pages/Berlin.tsx";
 import IbnBattuta from "./pages/IbnBattuta.tsx";
+import ShaktiPeeths from "./pages/ShaktiPeeths.tsx";
 import ShareRedirect from "./pages/ShareRedirect.tsx";
 import StoryPreview from "./pages/StoryPreview.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -63,6 +64,7 @@ const App = () => (
           <Route path="/ramayana" element={<Ramayana />} />
           <Route path="/berlin" element={<Berlin />} />
           <Route path="/ibn-battuta" element={<IbnBattuta />} />
+          <Route path="/shaktipeeths" element={<ShaktiPeeths />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/share/:storyId" element={<ShareRedirect />} />
