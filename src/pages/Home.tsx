@@ -21,6 +21,7 @@ import storyHormuz from '@/assets/story-hormuz.jpg';
 import storyRamayana from '@/assets/story-ramayana.jpg';
 import storyBerlin from '@/assets/story-berlin.jpg';
 import storyBattuta from '@/assets/story-battuta.jpg';
+import storyShakti from '@/assets/story-shakti.jpg';
 
 /* ── Types ───────────────────────────────────── */
 
@@ -130,6 +131,12 @@ const STORIES: StoryCard[] = [
     hook: 'One man walked 117,000 kilometres across 44 modern nations in 29 years. His journey revealed a 14th-century world more connected than Europe would know for centuries.',
     image: storyBattuta, tags: ['Route Map', 'Islamic World', '1325–1354'],
     status: 'coming-soon', href: '/ibn-battuta', color: 'hsl(38, 80%, 55%)', era: '1325', sortYear: 1325,
+  },
+  {
+    id: 'shakti', number: 16, title: 'The Goddess as Geography', subtitle: 'The 52 Shaktipeeths',
+    hook: 'A sacred atlas where the body of Sati becomes the subcontinent itself — 52 sites, competing canons, cross-border memory, and a living map of feminine power.',
+    image: storyShakti, tags: ['Sacred Atlas', 'Mandala Map', 'Mythic Geography'],
+    status: 'live', href: '/shaktipeeths', color: 'hsl(var(--shakti-vermilion))', era: 'Sacred geography', sortYear: -200, kind: 'epic',
   },
 ];
 

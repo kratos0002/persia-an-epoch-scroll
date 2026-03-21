@@ -4,7 +4,8 @@ import { CANON_RINGS } from '@/components/visuals/shaktiPeethData';
 import { ShaktiSectionShell } from './ShaktiSectionShell';
 
 export const CanonWheelSection = () => {
-  const [active, setActive] = useState(CANON_RINGS[3]);
+  const [activeCount, setActiveCount] = useState<number>(CANON_RINGS[3].count);
+  const active = CANON_RINGS.find((ring) => ring.count === activeCount) ?? CANON_RINGS[3];
 
   return (
     <ShaktiSectionShell
@@ -20,7 +21,7 @@ export const CanonWheelSection = () => {
               const radius = 58 + index * 42;
               const activeRing = active.count === ring.count;
               return (
-                <g key={ring.count} onMouseEnter={() => setActive(ring)} onClick={() => setActive(ring)} className="cursor-pointer">
+                <g key={ring.count} onMouseEnter={() => setActiveCount(ring.count)} onClick={() => setActiveCount(ring.count)} className="cursor-pointer">
                   <motion.circle
                     cx="260"
                     cy="260"
@@ -55,8 +56,8 @@ export const CanonWheelSection = () => {
             return (
               <button
                 key={ring.count}
-                onMouseEnter={() => setActive(ring)}
-                onClick={() => setActive(ring)}
+                onMouseEnter={() => setActiveCount(ring.count)}
+                onClick={() => setActiveCount(ring.count)}
                 className={`shakti-panel p-5 text-left transition-all duration-300 ${isActive ? 'scale-[1.01] border-shakti-gold/35' : ''}`}
               >
                 <div className="flex items-center justify-between gap-4">
