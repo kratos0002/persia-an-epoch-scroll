@@ -1,177 +1,123 @@
 
-## Shaktipeeths Essay Concept
+# Shaktipeeths-Only Redesign Plan
 
-### The right theme
-This should not feel like another route essay, border essay, or dig essay.
+## Goal
+Keep the content and section architecture, but completely re-art-direct the **Shaktipeeths essay only** so it feels ceremonial, luminous, and world-class rather than “good content inside a dark UI.”
 
-The core idea should be:
+## What feels wrong now
+From the current code:
+- `ShaktiPeeths.tsx` is structurally fine, but the page reads as a **stack of similar dark sections**
+- `ShaktiSectionShell` gives every section the same rhythm, so the essay lacks escalation
+- `SacredBodyAtlas` is strong in concept, but the filter chips + side panel make it feel **dashboard-ish**
+- `ShaktiHero` has the right idea, but not enough **mythic atmosphere / lighting / ritual drama**
+- `ShaktiProgressTimeline` and `ShaktiSectionNav` are functional, but visually generic compared to the essay’s subject
+- current palette tokens are usable, but the essay needs a much stronger **lighting system**, not just different colors
 
-**“The Goddess as Geography”**
+## Implementation priorities
 
-A visual essay where the subcontinent is not just a map, but a **sacred body-field**. The experience should feel like entering a **tantric mandala / ritual atlas**, where mythology, anatomy, geography, and living pilgrimage all layer over one another.
+### 0. Fix the build first
+- Fix `useShaktiScrollSpy.ts` typing so `activeSection` is typed from the full `SHAKTI_SECTIONS` union, not inferred as only `"shakti-hero"`
+- This is a small baseline fix before any visual work
 
-## Design language: “Vermilion Cosmogram”
+### 1. Rebuild the page atmosphere
+Refine the essay’s visual language into a true **ritual chamber**:
+- darker indigo-black base
+- deeper vignette at edges
+- localized lamp-glow pools behind major visuals
+- richer gold/vermilion bloom
+- more tactile smoke / grain / yantra geometry
+- section-to-section light shifts so the essay “breathes”
 
-A totally different visual world from the current essays:
-- **Background**: deep indigo / temple-dark, not parchment, not paper
-- **Accents**: vermilion, sindoor red, gold leaf, lotus pink, ash black
-- **Textures**: lamp smoke, stone grain, faint yantra lines, temple metal glow
-- **Motif**: concentric mandala + 52 beads/petals + triangle/yantra geometry
-- **Feel**: lit by oil lamps, not daylight; sacred and charged, not cartographic or archival
-
-This makes it distinct from:
-- Ramayana = illuminated miniature manuscript
-- Berlin = diplomatic cartography
-- Battuta = leather route journal
-- Constantinople = archaeological dig
-- India States = political living map
-
-## Experience architecture
-This essay should be **modular and visual-first**, not one persistent map.
-
-### 1. Hero: The Dismemberment
-A cinematic full-bleed myth section:
-- Sati’s silhouette made of light
-- fragments separate into glowing points
-- those points fall across the subcontinent
-- the land slowly reveals underneath
-
-This is the signature opening. It immediately tells the reader: this is a myth mapped onto terrain.
-
-### 2. Canon Wheel
-A radial visualization for the competing lists:
-- 4 / 18 / 51 / 52 / 108
-- rings expand outward like a ritual diagram
-- hovering a ring reveals which texts support it
-- shows canon as **evolving sacred geometry**, not just text explanation
-
-### 3. Sacred Anatomy Atlas
-The centerpiece.
-A large illustrated South Asia map overlaid with a subtle goddess-body schema:
-- body parts/ornaments linked to sites
-- 52 markers as luminous beads
-- filters by body part, region, country, status, source tradition
-- clicking a marker opens a rich site panel:
-  - Shakti
-  - Bhairava
-  - body part
-  - country
-  - status
-  - source tradition
-  - current significance
-
-This should feel like a **living sacred atlas**, not a Google-style map.
-
-### 4. The Four Adi Peethas
-A cardinal-direction section:
-- four original peethas arranged like a mandala compass
-- each quadrant lights up one source tradition
-- geography + theology merge visually
-
-### 5. Bengal Bloom
-A density visualization, not just another map:
-- Bengal cluster blooms like lotus petals / pollen concentration
-- visually shows why eastern India dominates later canons
-- strongest candidate for a bespoke data-art section
-
-### 6. Cross-Border Sacred Geography
-A political-border reveal:
-- sacred network appears first with no modern borders
-- then present-day borders slide in over it
-- sites in Pakistan, Bangladesh, Nepal, Tibet, Sri Lanka glow as “severed but continuous”
-- visually communicates that the sacred geography predates the nation-state
-
-### 7. Presence Without Form
-A visual gallery of how the goddess manifests:
-- fissure / yoni at Kamakhya
-- flame at Jwalamukhi
-- cave at Hinglaj
-- eyes, stone, water, anklet, ruins
-This section should be abstract and sensory, showing that many sites are **energies and forms**, not only idols.
-
-### 8. Lost / Disputed / Relocated
-Ghost-map section:
-- missing sites appear as flickering outlines
-- disputed candidates pulse between locations
-- ruined sites show “memory persisting after architecture”
-This gives the essay tension and prevents it from becoming a devotional directory.
-
-### 9. Pilgrimage Constellations
-Instead of one prescribed route:
-- regional circuits animate in clusters
-- Himachal trail, Bengal cluster, Kamakhya axis, cross-border aspirations
-- festival pulses for Navratri / Ambubachi
-This shows how devotees actually encounter the network.
-
-### 10. Epilogue: The Motherland Reassembled
-All 52 points reconnect into one glowing sacred field across Bharatavarsha.
-The last image should feel like the body has reassembled as geography.
-
-## What makes it totally different
-- **Not chronological first** — it is anatomical and sacred-spatial
-- **Not one sticky route map** — it is a ritual atlas with changing visual systems
-- **Not text-led** — each section has its own visual grammar
-- **Not just temples** — it includes theology, canon, geography, politics, abstraction, and living practice
-
-## Recommended component system
-### New page
+Files:
 - `src/pages/ShaktiPeeths.tsx`
+- `src/index.css`
+- possibly `tailwind.config.ts` only if new tokens are needed
 
-### Core sections
-- `ShaktiHero`
-- `CanonWheelSection`
-- `SacredBodyAtlas`
-- `AdiPeethasSection`
-- `BengalBloomSection`
-- `CrossBorderSection`
-- `PresenceFormsSection`
-- `LostSitesSection`
-- `PilgrimageConstellationsSection`
-- `ShaktiEpilogue`
-- `ShaktiProgressTimeline`
-- `ShaktiSectionNav`
+### 2. Replace the “one-shell-fits-all” section feeling
+Keep `ShaktiSectionShell`, but make it more flexible:
+- support section variants like `heroic`, `ceremonial`, `atlas`, `ghost`, `epilogue`
+- vary heading treatment, border language, spacing, and background framing
+- add transition beats between major modules so the essay feels composed, not stacked
 
-### Data layer
-Create one strong structured dataset:
-- `id`
-- `name`
-- `coords`
-- `bodyPart`
-- `bodyCategory` (head/torso/limb/ornament/abstract)
-- `shakti`
-- `bhairava`
-- `country`
-- `regionCluster`
-- `status`
-- `manifestationType`
-- `sourceTraditions`
-- `isDisputed`
-- `isCrossBorder`
-- `isAdiPeetha`
+File:
+- `src/components/shakti/ShaktiSectionShell.tsx`
 
-## Best tech approach
-Use a **hybrid visual stack**:
-- **SVG + Framer Motion** for mandalas, body overlays, canon wheel, constellation layouts
-- **MapLibre or Leaflet only where geography truly matters**
-- **GeoJSON/TopoJSON for South Asia boundaries**
-- lightweight site markers + filters for the atlas
-- optional D3-style radial layout only for the canon wheel / cluster bloom if needed
+### 3. Redesign the Hero into a mythic opening
+Upgrade `ShaktiHero` from “nice intro” to the essay’s signature moment:
+- stronger Sati silhouette / fragment-fall choreography
+- land emerging out of darkness
+- ritual glow concentrated around the body-field
+- fewer UI-like pills; more editorial / ceremonial framing
+- stronger calligraphic / sacred framing around the title
 
-Important: the main identity should come from **custom SVG/data visuals**, not a generic basemap.
+File:
+- `src/components/shakti/ShaktiHero.tsx`
 
-## Implementation order
-1. Define the design system and palette for the Shakti essay
-2. Build the full 52-site data model
-3. Create the centerpiece `SacredBodyAtlas`
-4. Build the Hero dismemberment animation
-5. Add the Canon Wheel and Bengal Bloom data-art sections
-6. Add Cross-Border and Lost/Disputed sections
-7. Add pilgrimage/festival constellation section
-8. Integrate page shell, nav, timeline, home card, route, edition
+### 4. Rework the atlas so it feels sacred, not analytical
+`SacredBodyAtlas` should become the emotional centerpiece:
+- make the map panel feel like a **consecrated object**, not a chart container
+- redesign filters as ritual toggles / segmented beads instead of standard pills
+- strengthen marker hierarchy and hover/selection glow
+- redesign the detail panel to feel like a shrine-card / lit folio
+- improve composition so the anatomy overlay and geography feel fused
 
-## Recommendation
-If the goal is a truly distinct flagship essay, this should be positioned as:
+File:
+- `src/components/shakti/SacredBodyAtlas.tsx`
 
-**a sacred atlas, not a travelogue**
+### 5. Give each section its own visual grammar
+Do not redesign the whole essay into one persistent map. Instead:
+- `CanonWheelSection`: more mandala-like, less diagrammatic
+- `AdiPeethasSection`: stronger four-direction cosmogram treatment
+- `BengalBloomSection`: denser, more blooming / spreading visual language
+- `CrossBorderSection`: more dramatic sacred-network-first / border-second reveal
+- `PresenceFormsSection`: more sensory, object-like, less card-grid feeling
+- `LostSitesSection`: more ghosted / unstable / flickering memory aesthetic
+- `PilgrimageConstellationsSection`: stronger celestial / circuit animation
 
-That is the strongest way to make it feel unlike every other experience already on the site while still staying visual-first, high-fidelity, and worthy of the subject.
+Files:
+- all `src/components/shakti/*Section.tsx`
+
+### 6. Redesign navigation chrome to match the essay
+The timeline and drawer should feel like part of the ritual system:
+- progress dots become beads / embers / yantra nodes
+- stronger gold glow and less generic UI framing
+- nav drawer becomes more like an illuminated side-manuscript / ritual index
+
+Files:
+- `src/components/shakti/ShaktiProgressTimeline.tsx`
+- `src/components/shakti/ShaktiSectionNav.tsx`
+
+### 7. Fix the immersion breakers at the end
+The current generic badge/comments/footer likely flatten the finale.
+For this essay only:
+- restyle `EditionBadge` usage to feel less generic
+- make comments/footer sit on a softer, integrated endcap
+- preserve functionality, but visually absorb them into the Shakti world
+
+Files likely touched:
+- `src/pages/ShaktiPeeths.tsx`
+- possibly shared components only if they already support variants cleanly
+
+## Design target
+The finished essay should feel like:
+- a **lamp-lit ritual atlas**
+- a **myth being mapped onto land in real time**
+- a **sacred cosmogram** with changing visual systems
+- not an app page, not a dashboard, not a generic dark-mode essay
+
+## Execution order
+1. Fix `useShaktiScrollSpy.ts` typing
+2. Rebuild Shakti-only atmosphere in `index.css` + page wrapper
+3. Redesign `ShaktiHero`
+4. Redesign `SacredBodyAtlas`
+5. Add section variants via `ShaktiSectionShell`
+6. Upgrade the remaining Shakti section visuals one by one
+7. Restyle Shakti timeline/nav/endcap for immersion
+
+## Success criteria
+After the redesign:
+- the essay feels visually distinct even at a glance
+- the atlas reads as sacred and premium, not UI-heavy
+- lighting and depth carry as much weight as color
+- every section has a memorable visual identity
+- the existing content remains intact, but the presentation finally matches its ambition
