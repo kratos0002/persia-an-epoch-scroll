@@ -45,7 +45,13 @@ export const StoryGrid = ({ stories }: StoryGridProps) => {
   const [activeFilter, setActiveFilter] = useState('all');
   const sectionRef = useRef<HTMLDivElement>(null);
   const inView = useInView(sectionRef, { once: true, margin: '-60px' });
-  const sorted = [...stories].sort((a, b) => a.sortYear - b.sortYear);
+  const sorted = [...stories].sort((a, b) => {
+    // Live essays first, then coming-soon
+    if (a.status === 'live' && b.status !== 'live') return -1;
+    if (a.status !== 'live' && b.status === 'live') return 1;
+    // Within same status, sort chronologically
+    return a.sortYear - b.sortYear;
+  });
 
   const filtered = useMemo(() => {
     const filter = FILTERS.find(f => f.key === activeFilter);
