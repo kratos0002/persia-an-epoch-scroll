@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { SHAKTI_SECTIONS } from '@/components/visuals/shaktiPeethData';
+import { OPIUM_SECTIONS } from '@/components/opium/opiumData';
 
-export { SHAKTI_SECTIONS };
+export { OPIUM_SECTIONS };
 
-export function useShaktiScrollSpy() {
-  const [activeSection, setActiveSection] = useState(SHAKTI_SECTIONS[0].id as string);
+export function useOpiumScrollSpy() {
+  const [activeSection, setActiveSection] = useState(OPIUM_SECTIONS[0].id as string);
   const [globalProgress, setGlobalProgress] = useState(0);
 
   useEffect(() => {
@@ -14,10 +14,10 @@ export function useShaktiScrollSpy() {
       setGlobalProgress(docHeight > 0 ? scrollY / docHeight : 0);
 
       const mid = window.innerHeight / 2;
-      let closest = SHAKTI_SECTIONS[0].id;
+      let closest = OPIUM_SECTIONS[0].id as string;
       let closestDist = Infinity;
 
-      for (const section of SHAKTI_SECTIONS) {
+      for (const section of OPIUM_SECTIONS) {
         const element = document.getElementById(section.id);
         if (!element) continue;
         const rect = element.getBoundingClientRect();
