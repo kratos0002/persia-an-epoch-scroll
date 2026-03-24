@@ -24,6 +24,7 @@ import Berlin from "./pages/Berlin.tsx";
 import IbnBattuta from "./pages/IbnBattuta.tsx";
 import ShaktiPeeths from "./pages/ShaktiPeeths.tsx";
 import ShareRedirect from "./pages/ShareRedirect.tsx";
+import OpiumTrade from "./pages/OpiumTrade.tsx";
 import StoryPreview from "./pages/StoryPreview.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { MobileNotice } from "@/components/site/MobileNotice";
