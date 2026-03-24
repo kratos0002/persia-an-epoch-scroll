@@ -14,7 +14,7 @@ export function useShaktiScrollSpy() {
       setGlobalProgress(docHeight > 0 ? scrollY / docHeight : 0);
 
       const mid = window.innerHeight / 2;
-      let closest = SHAKTI_SECTIONS[0].id;
+      let closest: string = SHAKTI_SECTIONS[0].id;
       let closestDist = Infinity;
 
       for (const section of SHAKTI_SECTIONS) {
