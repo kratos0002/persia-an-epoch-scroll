@@ -100,6 +100,18 @@
     --shakti-glow: 38 86% 72%;
     --shakti-smoke: 245 16% 36%;
 
+    /* Opium / Ledger Noir palette */
+    --ledger-cream: 38 32% 93%;
+    --ledger-ink: 36 16% 9%;
+    --ledger-rule: 38 22% 72%;
+    --ledger-tea: 40 75% 31%;
+    --ledger-silver: 210 5% 51%;
+    --ledger-resin: 14 56% 27%;
+    --ledger-stain: 42 20% 17%;
+    --ledger-wax: 0 67% 32%;
+    --ledger-panel: 38 28% 88%;
+    --ledger-highlight: 40 45% 96%;
+
     /* Era colors — overridden by section classes */
     --era-primary: 43 85% 55%;
     --era-bg: 220 20% 7%;
