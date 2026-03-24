@@ -4,7 +4,8 @@ import { SHAKTI_SECTIONS } from '@/components/visuals/shaktiPeethData';
 export { SHAKTI_SECTIONS };
 
 export function useShaktiScrollSpy() {
-  const [activeSection, setActiveSection] = useState<string>(SHAKTI_SECTIONS[0].id);
+  type ShaktiSectionId = (typeof SHAKTI_SECTIONS)[number]['id'];
+  const [activeSection, setActiveSection] = useState<ShaktiSectionId>(SHAKTI_SECTIONS[0].id);
   const [globalProgress, setGlobalProgress] = useState(0);
 
   useEffect(() => {
