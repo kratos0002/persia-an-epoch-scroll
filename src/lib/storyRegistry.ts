@@ -1,4 +1,5 @@
 import storyPersia from '@/assets/story-persia.jpg';
+import storyOpium from '@/assets/story-opium.jpg';
 import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
 import storyBuddhism from '@/assets/story-buddhism.jpg';
