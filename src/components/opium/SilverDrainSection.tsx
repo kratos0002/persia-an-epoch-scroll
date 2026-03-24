@@ -43,7 +43,7 @@ export const SilverDrainSection = () => {
                   >
                     <td className="px-5 py-2.5 font-display font-bold text-ledger-ink">{row.period}</td>
                     <td className="px-5 py-2.5 tabular-nums text-ledger-silver">
-                      {row.tons ? `${(row.tons / 1000).toLocaleString()}k MT` : row.value ?? '—'}
+                      {row.tons ? `${(row.tons / 1000).toLocaleString()}k MT` : ('value' in row ? (row as any).value : '—')}
                     </td>
                     <td className="hidden px-5 py-2.5 text-ledger-stain/70 md:table-cell">{row.carrier}</td>
                     <td className="hidden px-5 py-2.5 text-ledger-stain/60 lg:table-cell">{row.driver}</td>
