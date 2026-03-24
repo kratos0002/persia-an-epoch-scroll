@@ -373,4 +373,60 @@
     background: hsl(var(--shakti-vermilion) / 0.14);
     border-color: hsl(var(--shakti-line) / 0.2);
   }
+
+  /* ── Ledger Noir (Opium essay) ── */
+  .ledger-bg {
+    background:
+      linear-gradient(180deg, hsl(var(--ledger-cream)) 0%, hsl(var(--ledger-panel)) 100%);
+  }
+
+  .ledger-ruled {
+    background-image:
+      repeating-linear-gradient(
+        180deg,
+        transparent,
+        transparent 31px,
+        hsl(var(--ledger-rule) / 0.35) 31px,
+        hsl(var(--ledger-rule) / 0.35) 32px
+      );
+    background-size: 100% 32px;
+  }
+
+  .ledger-grain {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+  }
+
+  .ledger-panel {
+    @apply border;
+    background: hsl(var(--ledger-highlight));
+    border-color: hsl(var(--ledger-rule) / 0.4);
+    box-shadow: 0 2px 12px hsl(var(--ledger-stain) / 0.08);
+  }
+
+  .ledger-title {
+    @apply font-display font-bold tracking-tight;
+    color: hsl(var(--ledger-ink));
+  }
+
+  .ledger-chip {
+    @apply rounded-sm border px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.28em];
+    color: hsl(var(--ledger-stain));
+    background: hsl(var(--ledger-rule) / 0.18);
+    border-color: hsl(var(--ledger-rule) / 0.35);
+  }
+
+  .ledger-stain-tea {
+    background-image: radial-gradient(ellipse at 70% 80%, hsl(var(--ledger-tea) / 0.08), transparent 50%);
+  }
+
+  .ledger-stain-resin {
+    background-image: radial-gradient(ellipse at 30% 70%, hsl(var(--ledger-resin) / 0.1), transparent 50%);
+  }
+
+  .ledger-margin-left {
+    border-left: 2px solid hsl(var(--ledger-wax) / 0.25);
+    padding-left: 2rem;
+  }
 }
