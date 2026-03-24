@@ -24,6 +24,7 @@ import Berlin from "./pages/Berlin.tsx";
 import IbnBattuta from "./pages/IbnBattuta.tsx";
 import ShaktiPeeths from "./pages/ShaktiPeeths.tsx";
 import ShareRedirect from "./pages/ShareRedirect.tsx";
+import OpiumTrade from "./pages/OpiumTrade.tsx";
 import StoryPreview from "./pages/StoryPreview.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { MobileNotice } from "@/components/site/MobileNotice";
@@ -65,6 +66,7 @@ const App = () => (
           <Route path="/berlin" element={<Berlin />} />
           <Route path="/ibn-battuta" element={<IbnBattuta />} />
           <Route path="/shaktipeeths" element={<ShaktiPeeths />} />
+          <Route path="/opium-trade" element={<OpiumTrade />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/share/:storyId" element={<ShareRedirect />} />

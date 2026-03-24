@@ -64,6 +64,18 @@ export default {
           glow: "hsl(var(--shakti-glow))",
           smoke: "hsl(var(--shakti-smoke))",
         },
+        ledger: {
+          cream: "hsl(var(--ledger-cream))",
+          ink: "hsl(var(--ledger-ink))",
+          rule: "hsl(var(--ledger-rule))",
+          tea: "hsl(var(--ledger-tea))",
+          silver: "hsl(var(--ledger-silver))",
+          resin: "hsl(var(--ledger-resin))",
+          stain: "hsl(var(--ledger-stain))",
+          wax: "hsl(var(--ledger-wax))",
+          panel: "hsl(var(--ledger-panel))",
+          highlight: "hsl(var(--ledger-highlight))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

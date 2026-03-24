@@ -1,4 +1,5 @@
 import storyPersia from '@/assets/story-persia.jpg';
+import storyOpium from '@/assets/story-opium.jpg';
 import storyWisdom from '@/assets/story-wisdom.jpg';
 import storyMongol from '@/assets/story-mongol.jpg';
 import storyBuddhism from '@/assets/story-buddhism.jpg';
@@ -129,6 +130,12 @@ export const STORY_REGISTRY: StoryDefinition[] = [
     hook: 'A sacred atlas where the body of Sati becomes the subcontinent itself — 52 sites, competing canons, cross-border memory, and a living map of feminine power.',
     image: storyShakti, tags: ['Sacred Atlas', 'Mandala Map', 'Mythic Geography'],
     status: 'coming-soon', href: '/shaktipeeths', color: 'hsl(var(--shakti-vermilion))', era: 'Sacred geography', sortYear: -200, kind: 'epic',
+  },
+  {
+    id: 'opium', number: 17, title: 'The Mercantilist Pivot', subtitle: 'The Opium Trade Triangle',
+    hook: 'The most profitable drug trade in history, dressed up as bookkeeping. Tea flowed east, silver drained west, and opium bridged the gap — until a single commissioner set 20,283 chests on fire.',
+    image: storyOpium, tags: ['Ledger Noir', 'Trade Triangle', '1757–1842'],
+    status: 'coming-soon', href: '/opium-trade', color: 'hsl(40, 75%, 31%)', era: '1757', sortYear: 1757,
   },
 ];
 
