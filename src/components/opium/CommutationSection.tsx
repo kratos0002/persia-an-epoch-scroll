@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { OpiumSectionShell } from './OpiumSectionShell';
 import { COMMUTATION_DATA } from './opiumData';
+import { TaxCollapseChart } from './visuals/TaxCollapseChart';
 
 export const CommutationSection = () => {
   const ref = useRef(null);
@@ -16,6 +17,9 @@ export const CommutationSection = () => {
         <p className="max-w-3xl font-body text-lg leading-relaxed text-ledger-stain/80">
           Prior to 1784, tea was taxed at a staggering <strong className="text-ledger-ink font-semibold">119%</strong>, incentivizing massive smuggling. Prime Minister William Pitt the Younger slashed the duty to <strong className="text-ledger-tea font-semibold">12.5%</strong> — eliminating smuggling but transforming tea into an inelastic staple of the British working class.
         </p>
+
+        {/* Tax collapse visualization */}
+        <TaxCollapseChart />
 
         {/* Before / After ledger comparison */}
         <div className="grid gap-6 md:grid-cols-2">

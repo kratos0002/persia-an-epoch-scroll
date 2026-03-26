@@ -418,15 +418,102 @@
   }
 
   .ledger-stain-tea {
-    background-image: radial-gradient(ellipse at 70% 80%, hsl(var(--ledger-tea) / 0.08), transparent 50%);
+    background-image:
+      radial-gradient(ellipse at 70% 80%, hsl(var(--ledger-tea) / 0.08), transparent 50%),
+      radial-gradient(ellipse at 20% 40%, hsl(var(--ledger-tea) / 0.05), transparent 40%);
   }
 
   .ledger-stain-resin {
-    background-image: radial-gradient(ellipse at 30% 70%, hsl(var(--ledger-resin) / 0.1), transparent 50%);
+    background-image:
+      radial-gradient(ellipse at 30% 70%, hsl(var(--ledger-resin) / 0.1), transparent 50%),
+      radial-gradient(ellipse at 75% 30%, hsl(var(--ledger-resin) / 0.06), transparent 45%);
+  }
+
+  .ledger-stain-corrupted {
+    background-image:
+      radial-gradient(ellipse at 50% 60%, hsl(var(--ledger-resin) / 0.14), transparent 55%),
+      radial-gradient(ellipse at 15% 85%, hsl(var(--ledger-wax) / 0.08), transparent 40%),
+      radial-gradient(ellipse at 80% 20%, hsl(var(--ledger-stain) / 0.1), transparent 50%);
   }
 
   .ledger-margin-left {
     border-left: 2px solid hsl(var(--ledger-wax) / 0.25);
     padding-left: 2rem;
+  }
+
+  /* Ink blot transition between sections */
+  .ledger-ink-blot {
+    position: relative;
+  }
+  .ledger-ink-blot::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 60px;
+    background:
+      radial-gradient(ellipse at 40% 50%, hsl(var(--ledger-stain) / 0.12), transparent 60%),
+      radial-gradient(ellipse at 65% 45%, hsl(var(--ledger-stain) / 0.08), transparent 55%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Red margin rule (like accounting margin) */
+  .ledger-red-margin {
+    border-left: 1px solid hsl(var(--ledger-wax) / 0.3);
+    margin-left: 3rem;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  .ledger-red-margin::before {
+    content: '';
+    position: absolute;
+    left: 0.25rem;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: hsl(var(--ledger-wax) / 0.15);
+  }
+
+  /* EIC monogram watermark */
+  .ledger-eic-watermark {
+    position: relative;
+  }
+  .ledger-eic-watermark::before {
+    content: 'EIC';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-family: 'Playfair Display', serif;
+    font-size: 12rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: hsl(var(--ledger-ink) / 0.025);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  /* Animated ruled shimmer on scroll */
+  @keyframes ledger-shimmer {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 32px; }
+  }
+  .ledger-shimmer {
+    animation: ledger-shimmer 8s linear infinite;
+  }
+
+  /* Document facsimile styling */
+  .ledger-document {
+    @apply border-2 p-6;
+    background:
+      linear-gradient(135deg, hsl(var(--ledger-highlight)) 0%, hsl(var(--ledger-cream)) 100%);
+    border-color: hsl(var(--ledger-rule) / 0.5);
+    box-shadow:
+      4px 4px 0 hsl(var(--ledger-stain) / 0.06),
+      8px 8px 0 hsl(var(--ledger-stain) / 0.03);
   }
 }

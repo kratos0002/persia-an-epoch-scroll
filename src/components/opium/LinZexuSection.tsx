@@ -3,6 +3,9 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { OpiumSectionShell } from './OpiumSectionShell';
 import { HUMEN_DATA } from './opiumData';
+import { AnimatedChestCounter } from './visuals/AnimatedChestCounter';
+import { DestructionPit } from './visuals/DestructionPit';
+import { WaxSeal } from './visuals/WaxSeal';
 
 export const LinZexuSection = () => {
   const ref = useRef(null);
@@ -25,40 +28,45 @@ export const LinZexuSection = () => {
           <div className="border-b border-ledger-wax/20 bg-ledger-wax/5 px-6 py-4 text-center">
             <p className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-ledger-wax">Destroyed at Humen Beach</p>
           </div>
-          <div className="bg-ledger-cream px-6 py-8 text-center">
-            <motion.p
-              className="font-display text-6xl font-bold text-ledger-wax"
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ delay: 0.6, duration: 1 }}
-            >
-              {HUMEN_DATA.chests.toLocaleString()}
-            </motion.p>
-            <p className="mt-1 font-body text-sm text-ledger-stain/60">chests of opium</p>
-            <p className="mt-4 font-body text-sm text-ledger-stain/50">
+          <div className="bg-ledger-cream px-6 py-8">
+            <AnimatedChestCounter target={HUMEN_DATA.chests} duration={3} label="chests of opium" />
+            <p className="mt-4 text-center font-body text-sm text-ledger-stain/50">
               {HUMEN_DATA.startDate} — {HUMEN_DATA.endDate}
             </p>
           </div>
         </motion.div>
 
+        {/* Destruction pit cross-section */}
+        <DestructionPit />
+
         <p className="max-w-3xl font-body text-lg leading-relaxed text-ledger-stain/80">
           Three large stone pits were dug, filled with sea water. Opium was mixed with salt and quicklime, creating a chemical reaction that dissolved the drug into a "boiling soup." The mixture was released into the Pearl River at low tide.
         </p>
 
-        {/* Lin's letter to Victoria */}
-        <motion.blockquote
+        {/* Lin's letter to Victoria — document facsimile */}
+        <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.8 }}
-          className="mx-auto max-w-2xl border-l-4 border-ledger-wax/40 bg-ledger-highlight/60 py-6 pl-6 pr-4"
+          className="relative mx-auto max-w-2xl ledger-document"
         >
-          <p className="font-body text-lg italic leading-relaxed text-ledger-ink/85">
-            "Suppose there were people from another country who carried opium for sale to England and seduced your people into buying and smoking it; certainly, your honorable ruler would deeply hate it and be bitterly aroused."
+          {/* Wax seal */}
+          <div className="absolute -top-5 -right-3">
+            <WaxSeal text="帝" size={56} />
+          </div>
+
+          <p className="font-body text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-ledger-stain/40 mb-4">
+            Letter to Her Majesty Queen Victoria — 1839
           </p>
+          <blockquote className="border-l-4 border-ledger-wax/40 py-4 pl-5 pr-2">
+            <p className="font-body text-lg italic leading-relaxed text-ledger-ink/85">
+              "Suppose there were people from another country who carried opium for sale to England and seduced your people into buying and smoking it; certainly, your honorable ruler would deeply hate it and be bitterly aroused."
+            </p>
+          </blockquote>
           <footer className="mt-4 font-body text-sm text-ledger-stain/60">
-            — Lin Zexu, letter to Queen Victoria, 1839
+            — Lin Zexu, Imperial Commissioner
           </footer>
-        </motion.blockquote>
+        </motion.div>
 
         <p className="max-w-3xl font-body text-lg leading-relaxed text-ledger-stain/80">
           The letter elicited no response. The British government, lobbied by William Jardine and other merchants, viewed the seizure as an assault on British property and "free trade."
