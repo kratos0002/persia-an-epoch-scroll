@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { OpiumSectionShell } from './OpiumSectionShell';
 import { SILVER_FLOW_DATA, SILVER_DIRECTION } from './opiumData';
+import { BullionThermometer } from './visuals/BullionThermometer';
 
 export const SilverDrainSection = () => {
   const ref = useRef(null);
@@ -15,43 +16,47 @@ export const SilverDrainSection = () => {
           Under the restrictive Canton System established in 1757, the Qing Empire limited all foreign maritime trade to Guangzhou. The primary commodity sought by Britain was tea — but China had little demand for British goods. The resulting imbalance necessitated massive silver exports: between the mid-17th and early 19th centuries, China received an estimated <strong className="text-ledger-silver font-semibold">28 million kilograms</strong> of silver from European powers.
         </p>
 
-        {/* Silver flow ledger */}
-        <div className="overflow-hidden border border-ledger-rule/40">
-          <div className="flex items-center border-b border-ledger-rule/30 bg-ledger-highlight px-5 py-3">
-            <span className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-ledger-stain/60">
-              Bullion Inflow to China — By Period
-            </span>
+        {/* Two-column: table + thermometer */}
+        <div className="grid gap-8 md:grid-cols-[1fr,auto]">
+          {/* Silver flow ledger */}
+          <div className="overflow-hidden border border-ledger-rule/40">
+            <div className="flex items-center border-b border-ledger-rule/30 bg-ledger-highlight px-5 py-3">
+              <span className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-ledger-stain/60">
+                Bullion Inflow to China — By Period
+              </span>
+            </div>
+            <div className="bg-ledger-cream/80">
+              <table className="w-full font-body text-sm">
+                <thead>
+                  <tr className="border-b-2 border-ledger-ink/15 text-left">
+                    <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ledger-stain/60">Period</th>
+                    <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ledger-stain/60">Volume</th>
+                    <th className="hidden px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ledger-stain/60 md:table-cell">Carrier</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {SILVER_FLOW_DATA.map((row, i) => (
+                    <motion.tr
+                      key={row.period}
+                      initial={{ opacity: 0 }}
+                      animate={inView ? { opacity: 1 } : {}}
+                      transition={{ delay: i * 0.12 }}
+                      className="border-b border-ledger-rule/20"
+                    >
+                      <td className="px-5 py-2.5 font-display font-bold text-ledger-ink">{row.period}</td>
+                      <td className="px-5 py-2.5 tabular-nums text-ledger-silver">
+                        {row.tons ? `${(row.tons / 1000).toLocaleString()}k MT` : ('value' in row ? (row as any).value : '—')}
+                      </td>
+                      <td className="hidden px-5 py-2.5 text-ledger-stain/70 md:table-cell">{row.carrier}</td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div className="bg-ledger-cream/80">
-            <table className="w-full font-body text-sm">
-              <thead>
-                <tr className="border-b-2 border-ledger-ink/15 text-left">
-                  <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ledger-stain/60">Period</th>
-                  <th className="px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ledger-stain/60">Volume</th>
-                  <th className="hidden px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ledger-stain/60 md:table-cell">Carrier</th>
-                  <th className="hidden px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ledger-stain/60 lg:table-cell">Driver</th>
-                </tr>
-              </thead>
-              <tbody>
-                {SILVER_FLOW_DATA.map((row, i) => (
-                  <motion.tr
-                    key={row.period}
-                    initial={{ opacity: 0 }}
-                    animate={inView ? { opacity: 1 } : {}}
-                    transition={{ delay: i * 0.12 }}
-                    className="border-b border-ledger-rule/20"
-                  >
-                    <td className="px-5 py-2.5 font-display font-bold text-ledger-ink">{row.period}</td>
-                    <td className="px-5 py-2.5 tabular-nums text-ledger-silver">
-                      {row.tons ? `${(row.tons / 1000).toLocaleString()}k MT` : ('value' in row ? (row as any).value : '—')}
-                    </td>
-                    <td className="hidden px-5 py-2.5 text-ledger-stain/70 md:table-cell">{row.carrier}</td>
-                    <td className="hidden px-5 py-2.5 text-ledger-stain/60 lg:table-cell">{row.driver}</td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+
+          {/* Bullion thermometer */}
+          <BullionThermometer />
         </div>
 
         <p className="max-w-3xl font-body text-lg leading-relaxed text-ledger-stain/80">

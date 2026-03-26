@@ -3,6 +3,8 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { OpiumSectionShell } from './OpiumSectionShell';
 import { TREATY_TERMS } from './opiumData';
+import { TreatyPortsMap } from './visuals/TreatyPortsMap';
+import { WaxSeal } from './visuals/WaxSeal';
 
 export const TreatySection = () => {
   const ref = useRef(null);
@@ -15,32 +17,39 @@ export const TreatySection = () => {
           The British naval expeditionary force — utilizing technologically superior steam-powered gunboats like the <em>Nemesis</em> — easily bypassed Qing coastal forts and blockaded the Grand Canal. The war concluded with the Treaty of Nanking, the first of the "Unequal Treaties."
         </p>
 
-        {/* Treaty terms as contract entries */}
-        <div className="overflow-hidden border-2 border-ledger-ink/20">
-          <div className="border-b-2 border-ledger-ink/15 bg-ledger-highlight px-6 py-4">
+        {/* Treaty terms as contract document */}
+        <div className="relative overflow-hidden ledger-document">
+          {/* Seal */}
+          <div className="absolute -top-3 -right-2">
+            <WaxSeal text="EIC" size={52} />
+          </div>
+
+          <div className="border-b-2 border-ledger-ink/15 pb-4 mb-6">
             <p className="font-display text-sm font-bold uppercase tracking-[0.3em] text-ledger-ink">
               Treaty of Nanking — Principal Terms
             </p>
             <p className="mt-1 font-body text-xs text-ledger-stain/50">Signed 29 August 1842, aboard HMS Cornwallis</p>
           </div>
-          <div className="bg-ledger-cream/90">
-            {TREATY_TERMS.map((item, i) => (
-              <motion.div
-                key={item.term}
-                initial={{ opacity: 0 }}
-                animate={inView ? { opacity: 1 } : {}}
-                transition={{ delay: 0.3 + i * 0.12 }}
-                className="flex gap-4 border-b border-ledger-rule/25 px-6 py-4 last:border-b-0"
-              >
-                <span className="mt-0.5 font-display text-xs font-bold text-ledger-rule tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-                <div>
-                  <p className="font-display text-base font-bold text-ledger-ink">{item.term}</p>
-                  <p className="mt-0.5 font-body text-sm text-ledger-stain/70">{item.detail}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+
+          {TREATY_TERMS.map((item, i) => (
+            <motion.div
+              key={item.term}
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.3 + i * 0.12 }}
+              className="flex gap-4 border-b border-ledger-rule/25 py-4 last:border-b-0"
+            >
+              <span className="mt-0.5 font-display text-xs font-bold text-ledger-rule tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <p className="font-display text-base font-bold text-ledger-ink">{item.term}</p>
+                <p className="mt-0.5 font-body text-sm text-ledger-stain/70">{item.detail}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Treaty ports map */}
+        <TreatyPortsMap />
 
         {/* Indemnity highlight */}
         <motion.div

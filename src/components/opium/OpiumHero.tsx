@@ -1,18 +1,36 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TRADE_TIMELINE } from '@/components/opium/opiumData';
+import { SilverFlowDiagram } from './visuals/SilverFlowDiagram';
 
 export const OpiumHero = () => {
-  const lastRow = TRADE_TIMELINE[TRADE_TIMELINE.length - 1];
-
   return (
-    <section id="opium-hero" className="ledger-bg ledger-grain relative overflow-hidden px-4 pt-24 pb-20 md:px-6 md:pt-32 md:pb-28">
-      {/* Ruled lines background */}
-      <div className="ledger-ruled absolute inset-0 opacity-40" />
+    <section id="opium-hero" className="ledger-bg ledger-grain ledger-eic-watermark relative overflow-hidden px-4 pt-24 pb-20 md:px-6 md:pt-32 md:pb-28">
+      {/* Ruled lines background with shimmer */}
+      <div className="ledger-ruled ledger-shimmer absolute inset-0 opacity-40" />
 
-      {/* Faint trade triangle watermark */}
+      {/* Faint trade triangle watermark — pulsing */}
       <svg className="absolute inset-0 h-full w-full opacity-[0.04]" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
-        <polygon points="500,80 150,650 850,650" fill="none" stroke="hsl(var(--ledger-ink))" strokeWidth="2" />
+        <polygon points="500,80 150,650 850,650" fill="none" stroke="hsl(var(--ledger-ink))" strokeWidth="2">
+          <animate attributeName="opacity" values="1;0.4;1" dur="6s" repeatCount="indefinite" />
+        </polygon>
+        {/* Animated flow along triangle edges */}
+        <circle r="4" fill="hsl(var(--ledger-silver))">
+          <animateMotion dur="8s" repeatCount="indefinite">
+            <mpath href="#heroTriPath" />
+          </animateMotion>
+        </circle>
+        <circle r="4" fill="hsl(var(--ledger-tea))">
+          <animateMotion dur="8s" begin="2.6s" repeatCount="indefinite">
+            <mpath href="#heroTriPath" />
+          </animateMotion>
+        </circle>
+        <circle r="4" fill="hsl(var(--ledger-resin))">
+          <animateMotion dur="8s" begin="5.3s" repeatCount="indefinite">
+            <mpath href="#heroTriPath" />
+          </animateMotion>
+        </circle>
+        <path id="heroTriPath" d="M500,80 L150,650 L850,650 Z" fill="none" />
         <text x="500" y="60" textAnchor="middle" fill="hsl(var(--ledger-ink))" fontSize="14" fontFamily="serif">LONDON</text>
         <text x="130" y="690" textAnchor="middle" fill="hsl(var(--ledger-ink))" fontSize="14" fontFamily="serif">CALCUTTA</text>
         <text x="870" y="690" textAnchor="middle" fill="hsl(var(--ledger-ink))" fontSize="14" fontFamily="serif">CANTON</text>
@@ -47,12 +65,22 @@ export const OpiumHero = () => {
           How the British Empire resolved its chronic silver deficit by converting Indian poppy fields into the most profitable narcotics operation in history — dressed up as bookkeeping.
         </motion.p>
 
+        {/* Silver flow diagram */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.35 }}
+          className="mt-10"
+        >
+          <SilverFlowDiagram />
+        </motion.div>
+
         {/* Ledger-style opening data */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="mt-12 overflow-hidden border border-ledger-rule/40"
+          transition={{ duration: 1, delay: 0.5 }}
+          className="mt-10 overflow-hidden border border-ledger-rule/40"
         >
           <div className="flex items-center border-b border-ledger-rule/30 bg-ledger-highlight px-5 py-3">
             <span className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-ledger-stain/60">
@@ -75,7 +103,7 @@ export const OpiumHero = () => {
                     key={row.year}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.6 + i * 0.08 }}
+                    transition={{ duration: 0.5, delay: 0.7 + i * 0.08 }}
                     className="border-b border-ledger-rule/20 transition-colors hover:bg-ledger-tea/5"
                   >
                     <td className="px-5 py-2.5 font-display font-bold text-ledger-ink">{row.year}</td>
@@ -92,7 +120,7 @@ export const OpiumHero = () => {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
+          transition={{ duration: 0.8, delay: 1.4 }}
           className="mt-6 text-center font-body text-sm italic text-ledger-stain/50"
         >
           Scroll to open the ledger ↓
