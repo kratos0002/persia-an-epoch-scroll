@@ -208,7 +208,7 @@ export const BattutaZoomDive = () => {
   const onMapWheel = useCallback((e: React.WheelEvent) => { e.stopPropagation(); }, []);
 
   return (
-    <div ref={sectionRef} className="relative" style={{ height: `${STAGES_GL.length * 100}vh`, background: IB.PARCHMENT }}>
+    <div ref={sectionRef} className="relative battuta-vellum-grain" style={{ height: `${STAGES_GL.length * 100}vh`, background: IB.PARCHMENT }}>
       <div className="sticky top-0 h-screen w-full p-3">
         <div className="w-full h-full flex relative overflow-hidden"
           style={{
@@ -220,7 +220,7 @@ export const BattutaZoomDive = () => {
           <PhaseCard phase={activePhase} visible={showPhaseCard} />
 
           {/* Left Panel — 40% — Narrative */}
-          <div className="w-[40%] h-full flex flex-col relative overflow-hidden" style={{ background: IB.PARCHMENT, borderRadius: '1px 0 0 1px' }}>
+          <div className="w-[40%] h-full flex flex-col relative overflow-hidden battuta-vellum-grain battuta-foxing" style={{ background: IB.PARCHMENT, borderRadius: '1px 0 0 1px' }}>
             <div className="px-10 pt-10 pb-2 relative z-20">
               <p className="text-[9px] tracking-[0.3em] uppercase font-body font-semibold"
                 style={{ color: phaseColor, opacity: 0.8 }}>
@@ -333,11 +333,12 @@ export const BattutaZoomDive = () => {
               </Map>
             </div>
 
-            {/* Sepia overlay */}
-            <div className="absolute inset-0 pointer-events-none mix-blend-multiply" style={{ background: 'hsla(38, 35%, 88%, 0.08)' }} />
+            {/* Sepia / vellum overlay for portolan feel */}
+            <div className="absolute inset-0 pointer-events-none mix-blend-multiply" style={{ background: 'hsla(38, 35%, 85%, 0.15)' }} />
+            <div className="absolute inset-0 pointer-events-none mix-blend-color" style={{ background: 'hsla(30, 30%, 70%, 0.08)' }} />
 
-            {/* Parchment edge fade */}
-            <div className="absolute inset-0 pointer-events-none z-10" style={{ boxShadow: `inset 0 0 40px 15px ${IB.PARCHMENT}, inset 0 0 15px 5px ${IB.PARCHMENT}` }} />
+            {/* Parchment edge fade — heavier for atlas feel */}
+            <div className="absolute inset-0 pointer-events-none z-10" style={{ boxShadow: `inset 0 0 60px 20px ${IB.PARCHMENT}, inset 0 0 20px 8px ${IB.PARCHMENT}` }} />
 
             {/* Stats card */}
             {currentStage > 0 && (
