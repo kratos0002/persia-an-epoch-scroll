@@ -516,4 +516,68 @@
       4px 4px 0 hsl(var(--ledger-stain) / 0.06),
       8px 8px 0 hsl(var(--ledger-stain) / 0.03);
   }
+
+  /* ── Portolan Atlas (Ibn Battuta essay) ── */
+
+  /* Battuta palette CSS vars */
+  --battuta-vellum: 38 35% 88%;
+  --battuta-leather: 25 45% 22%;
+  --battuta-ink: 30 15% 15%;
+  --battuta-saffron: 38 80% 55%;
+  --battuta-lapis: 215 55% 42%;
+  --battuta-henna: 15 60% 45%;
+  --battuta-verdigris: 170 30% 45%;
+  --battuta-cochineal: 350 55% 35%;
+  --battuta-sand: 40 30% 72%;
+
+  .battuta-vellum-grain {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 300px 300px;
+  }
+
+  .battuta-foxing {
+    background-image:
+      radial-gradient(circle at 15% 25%, hsl(30 40% 50% / 0.06), transparent 8%),
+      radial-gradient(circle at 78% 65%, hsl(28 35% 45% / 0.05), transparent 6%),
+      radial-gradient(circle at 45% 85%, hsl(32 30% 55% / 0.04), transparent 7%),
+      radial-gradient(circle at 88% 15%, hsl(25 45% 40% / 0.035), transparent 5%);
+  }
+
+  .battuta-ink-bleed {
+    filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='ink'%3E%3CfeTurbulence baseFrequency='0.04' numOctaves='3' seed='2'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='1.5'/%3E%3C/filter%3E%3C/svg%3E#ink");
+  }
+
+  .battuta-cochineal-bg {
+    background:
+      radial-gradient(ellipse at 50% 30%, hsl(350 55% 35% / 0.08), transparent 50%),
+      radial-gradient(ellipse at 30% 80%, hsl(350 40% 30% / 0.06), transparent 40%),
+      linear-gradient(180deg, hsl(25 40% 18%) 0%, hsl(350 30% 16%) 50%, hsl(25 45% 20%) 100%);
+  }
+
+  @keyframes battuta-rhumb-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes battuta-route-draw {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes battuta-tally-scratch {
+    0% { stroke-dashoffset: 20; opacity: 0; }
+    30% { opacity: 1; }
+    100% { stroke-dashoffset: 0; opacity: 1; }
+  }
+
+  @keyframes battuta-ink-spread {
+    0% { transform: scale(0); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 0.15; }
+  }
+
+  .battuta-gilt {
+    text-shadow: 0 0 12px hsl(38 80% 55% / 0.3), 0 0 4px hsl(38 80% 55% / 0.15);
+  }
 }
