@@ -519,17 +519,6 @@
 
   /* ── Portolan Atlas (Ibn Battuta essay) ── */
 
-  /* Battuta palette CSS vars */
-  --battuta-vellum: 38 35% 88%;
-  --battuta-leather: 25 45% 22%;
-  --battuta-ink: 30 15% 15%;
-  --battuta-saffron: 38 80% 55%;
-  --battuta-lapis: 215 55% 42%;
-  --battuta-henna: 15 60% 45%;
-  --battuta-verdigris: 170 30% 45%;
-  --battuta-cochineal: 350 55% 35%;
-  --battuta-sand: 40 30% 72%;
-
   .battuta-vellum-grain {
     background-image:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
