@@ -2,7 +2,7 @@ import React from 'react';
 import { BattutaHero } from '@/components/battuta/BattutaHero';
 import { BattutaZoomDive } from '@/components/battuta/BattutaZoomDive';
 import { BlackDeathCounters } from '@/components/battuta/BlackDeathCounters';
-import { ComparativeScale } from '@/components/battuta/ComparativeScale';
+import { ExplorerRoutes } from '@/components/battuta/ExplorerRoutes';
 import { IslamicNetwork } from '@/components/battuta/IslamicNetwork';
 import { BattutaEpilogue } from '@/components/battuta/BattutaEpilogue';
 import { BattutaProgressTimeline } from '@/components/battuta/BattutaProgressTimeline';
@@ -23,7 +23,7 @@ const IbnBattuta = () => {
       <BattutaZoomDive />
       <BlackDeathCounters />
       <IslamicNetwork />
-      <ComparativeScale />
+      <ExplorerRoutes />
       <BattutaEpilogue />
       <SiteFooter variant="dark" />
     </div>
