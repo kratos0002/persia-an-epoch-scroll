@@ -26,7 +26,7 @@ export const STAGES_GL: StageGL[] = STAGES.map((s) => ({
   center: flip(s.center),
   markers: s.markers.map((m) => ({
     ...m,
-    coords: flip(m.coords),
+    // markers are already [lng, lat] — do NOT flip
   })),
 }));
 
