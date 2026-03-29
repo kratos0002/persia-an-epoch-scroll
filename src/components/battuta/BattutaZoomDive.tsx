@@ -239,6 +239,23 @@ export const BattutaZoomDive = () => {
                       <h3 className="font-display text-xl font-bold" style={{ color: IB.PARCHMENT }}>{stage.narrative.title}</h3>
                     </div>
                   </div>
+                  {stage.narrative.image && (
+                    <div className="mb-4 -mx-2">
+                      <div className="relative overflow-hidden" style={{ border: `2px solid ${IB.SAFFRON}40`, boxShadow: `0 2px 12px rgba(0,0,0,0.1), inset 0 0 0 1px ${IB.LEATHER}20` }}>
+                        <img
+                          src={stage.narrative.image.src}
+                          alt={stage.narrative.image.alt}
+                          className="w-full h-40 object-cover"
+                          style={{ filter: 'sepia(0.2) saturate(0.85) contrast(1.05)' }}
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 pointer-events-none" style={{ boxShadow: `inset 0 0 30px 5px ${IB.PARCHMENT}60` }} />
+                      </div>
+                      <p className="mt-1.5 text-[9px] italic font-body leading-snug px-1" style={{ color: IB.INK_LIGHT, opacity: 0.7 }}>
+                        {stage.narrative.image.caption}
+                      </p>
+                    </div>
+                  )}
                   <p className="font-body text-sm leading-[1.85] mb-4" style={{ color: IB.INK }}>{stage.narrative.body}</p>
                   {stage.narrative.accent && (
                     <p className="font-body text-xs italic mb-6 pl-4" style={{ color: IB.SAFFRON_DIM, opacity: 0.9, borderLeft: `2px solid ${IB.SAFFRON}50` }}>
