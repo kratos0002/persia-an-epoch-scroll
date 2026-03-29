@@ -40,6 +40,7 @@ export interface BattutaStage {
     body: string;
     quote?: { text: string; attribution: string };
     accent?: string;
+    image?: { src: string; alt: string; caption: string };
   };
 }
 
