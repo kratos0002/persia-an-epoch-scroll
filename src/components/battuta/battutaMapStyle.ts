@@ -24,7 +24,7 @@ export const BATTUTA_MAP_STYLE: StyleSpecification = {
       source: 'carto-light',
       paint: {
         'raster-saturation': -0.25,
-        'raster-brightness-max': 1.05,
+        'raster-brightness-max': 1,
         'raster-brightness-min': 0.08,
         'raster-contrast': -0.08,
         'raster-hue-rotate': 15, // warm sepia shift
