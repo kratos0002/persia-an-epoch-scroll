@@ -100,6 +100,18 @@
     --shakti-glow: 38 86% 72%;
     --shakti-smoke: 245 16% 36%;
 
+    /* Kurukshetra — Fractured Yantra palette */
+    --kuru-dust: 35 28% 82%;
+    --kuru-clay: 18 45% 35%;
+    --kuru-bronze: 32 55% 42%;
+    --kuru-red: 355 65% 38%;
+    --kuru-indigo: 228 50% 22%;
+    --kuru-ash: 30 8% 55%;
+    --kuru-gold: 42 85% 58%;
+    --kuru-kohl: 25 18% 10%;
+    --kuru-conch: 38 20% 95%;
+    --kuru-patina: 165 25% 38%;
+
     /* Opium / Ledger Noir palette */
     --ledger-cream: 38 32% 93%;
     --ledger-ink: 36 16% 9%;
@@ -568,5 +580,28 @@
 
   .battuta-gilt {
     text-shadow: 0 0 12px hsl(38 80% 55% / 0.3), 0 0 4px hsl(38 80% 55% / 0.15);
+  }
+
+  /* ── Fractured Yantra (Kurukshetra essay) ── */
+
+  .kuru-grain {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 250px 250px;
+  }
+
+  .kuru-cracks {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M20,0 L25,40 L15,80 L30,120 L18,160 L28,200' fill='none' stroke='%23654' stroke-width='0.5' opacity='0.3'/%3E%3Cpath d='M80,0 L75,50 L90,100 L70,150 L85,200' fill='none' stroke='%23654' stroke-width='0.4' opacity='0.25'/%3E%3Cpath d='M140,0 L150,60 L135,110 L155,170 L140,200' fill='none' stroke='%23654' stroke-width='0.3' opacity='0.2'/%3E%3Cpath d='M0,40 L50,35 L100,50 L150,38 L200,45' fill='none' stroke='%23654' stroke-width='0.3' opacity='0.15'/%3E%3Cpath d='M0,130 L60,125 L120,140 L180,128 L200,135' fill='none' stroke='%23654' stroke-width='0.35' opacity='0.2'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+  }
+
+  .kuru-chip {
+    @apply rounded-sm border px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.28em];
+    color: hsl(var(--kuru-clay));
+    background: hsl(var(--kuru-bronze) / 0.1);
+    border-color: hsl(var(--kuru-bronze) / 0.25);
   }
 }

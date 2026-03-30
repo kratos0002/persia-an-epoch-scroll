@@ -64,6 +64,18 @@ export default {
           glow: "hsl(var(--shakti-glow))",
           smoke: "hsl(var(--shakti-smoke))",
         },
+        kuru: {
+          dust: "hsl(var(--kuru-dust))",
+          clay: "hsl(var(--kuru-clay))",
+          bronze: "hsl(var(--kuru-bronze))",
+          red: "hsl(var(--kuru-red))",
+          indigo: "hsl(var(--kuru-indigo))",
+          ash: "hsl(var(--kuru-ash))",
+          gold: "hsl(var(--kuru-gold))",
+          kohl: "hsl(var(--kuru-kohl))",
+          conch: "hsl(var(--kuru-conch))",
+          patina: "hsl(var(--kuru-patina))",
+        },
         ledger: {
           cream: "hsl(var(--ledger-cream))",
           ink: "hsl(var(--ledger-ink))",
