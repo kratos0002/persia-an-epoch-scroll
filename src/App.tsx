@@ -68,6 +68,7 @@ const App = () => (
           <Route path="/ibn-battuta" element={<IbnBattuta />} />
           <Route path="/shaktipeeths" element={<ShaktiPeeths />} />
           <Route path="/opium-trade" element={<OpiumTrade />} />
+          <Route path="/kurukshetra" element={<Kurukshetra />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/share/:storyId" element={<ShareRedirect />} />
