@@ -137,6 +137,12 @@ export const STORY_REGISTRY: StoryDefinition[] = [
     image: storyOpium, tags: ['Ledger Noir', 'Trade Triangle', '1757–1842'],
     status: 'coming-soon', href: '/opium-trade', color: 'hsl(40, 75%, 31%)', era: '1757', sortYear: 1757,
   },
+  {
+    id: 'kurukshetra', number: 18, title: 'The Fractured Yantra', subtitle: 'The Kurukshetra War',
+    hook: 'Eighteen days. Four million warriors. A sacred geometry of war that cracked open an age — and the design language cracks with it.',
+    image: storyOpium, tags: ['Fractured Yantra', 'Sacred Geometry', '~3000 BCE'],
+    status: 'coming-soon', href: '/kurukshetra', color: 'hsl(32, 55%, 42%)', era: '~3000 BCE', sortYear: -3000, kind: 'epic',
+  },
 ];
 
 export const STORY_ADMIN_LIST = STORY_REGISTRY.map(({ id, title, status }) => ({
