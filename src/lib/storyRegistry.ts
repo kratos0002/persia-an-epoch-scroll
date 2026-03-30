@@ -141,7 +141,7 @@ export const STORY_REGISTRY: StoryDefinition[] = [
   {
     id: 'kurukshetra', number: 18, title: 'The Fractured Yantra', subtitle: 'The Kurukshetra War',
     hook: 'Eighteen days. Four million warriors. A sacred geometry of war that cracked open an age — and the design language cracks with it.',
-    image: storyOpium, tags: ['Fractured Yantra', 'Sacred Geometry', '~3000 BCE'],
+    image: storyKurukshetra, tags: ['Fractured Yantra', 'Sacred Geometry', '~3000 BCE'],
     status: 'coming-soon', href: '/kurukshetra', color: 'hsl(32, 55%, 42%)', era: '~3000 BCE', sortYear: -3000, kind: 'epic',
   },
 ];
