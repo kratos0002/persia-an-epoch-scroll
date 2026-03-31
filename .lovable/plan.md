@@ -1,164 +1,113 @@
 
 
-# Design Language: "The Fractured Yantra"
+# Kurukshetra: From Text Wall to Visual-First Essay
 
-## Core Metaphor
+## The Problem
 
-The essay IS a **yantra** — a sacred geometric diagram — that **progressively cracks and bleeds** as dharma erodes across 18 days.
+Every section currently follows the same pattern: `KurukshetraSectionShell` → paragraph → small cards/list. The VyuhaDiagrams are 60px thumbnails tucked into card corners. The AstraBursts are 140px icons in a grid. There are **zero full-bleed visuals**, zero sticky scrollytelling sections, zero interactive data visualizations, zero historical imagery. Compare this to:
 
-A yantra is a mystical instrument: concentric squares, interlocking triangles, lotus petals, all radiating from a central bindu (point). They are perfect. They are order itself. The Kurukshetra essay begins as a perfect yantra and ends as a shattered one — cracked geometry, scattered petals, the bindu extinguished. The reader doesn't just read about the collapse of dharma; they **watch the design language itself break apart**.
+- **Opium**: SilverFlowDiagram, TradeTriangleMap, BalanceScale, TreatyPortsMap, FactoryBlueprint — every section has a dominant visual artifact
+- **Shakti**: SacredBodyAtlas — a full interactive SVG map as the essay's centerpiece
+- **Ibn Battuta**: ZoomDive — a 40-stage scrollytelling 3D map
 
-No other essay does this. Every other essay has a stable visual identity. This one **degrades by design**.
-
-```text
-OPIUM TRADE       = Ledger that stains
-RAMAYANA          = Miniature painting (warm, devotional)
-CONSTANTINOPLE    = Archaeological dig (strata layers)
-IBN BATTUTA       = Portolan atlas (cartographic craft)
-
-KURUKSHETRA       = Sacred geometry that fractures
-                    (yantra → cracked yantra → ash field)
-```
-
-## What Makes This Radical
-
-1. **The design system itself has a lifecycle.** Phase I (Bhishma) renders in pristine sacred geometry. By Phase IV (Shalya/collapse), the same geometric motifs are cracked, offset, bleeding color. CSS variables shift mid-scroll. Border-radius breaks. Grid lines misalign. The *UI deteriorates* as dharma does.
-
-2. **The battlefield is rendered as formation geometry, not geography.** The Vyuha formations (Vajra, Krauncha, Chakra, Garuda) are the visual centerpiece — animated SVG sacred-geometry diagrams that the reader scrolls through, not a geographic map. The war is about *patterns*, not places.
-
-3. **The 18-day counter is the spine.** A persistent vertical day-counter strip on the left edge acts like a cosmic clock / ritual calendar. Each day is a notch. As the reader scrolls, notches fill with blood-red. The strip itself cracks after Day 13 (Abhimanyu's death — the point of no return).
+Kurukshetra has **none of this**. It reads like a formatted research paper with faint SVG decorations.
 
 ---
 
-## Visual System
+## The Fix: One Major Visual Per Section
 
-### Palette: "Dust, Bronze, and Blood"
+Every section gets rebuilt around a **dominant, full-width or sticky visual** with text floating alongside or over it. Text is cut to the minimum needed for context. The visual IS the content.
 
-```text
-┌───────────────────────────────────────────────────┐
-│  DUST FIELD      hsl(35, 28%, 82%)   base ground  │
-│  FIRED CLAY      hsl(18, 45%, 35%)   earth/panels │
-│  BRONZE          hsl(32, 55%, 42%)   metal/accent  │
-│  SACRIFICIAL RED hsl(355, 65%, 38%)  blood/dharma  │
-│  CELESTIAL INDIGO hsl(228, 50%, 22%) astras/night  │
-│  ASH             hsl(30, 8%, 55%)    death/decline │
-│  GOLD LEAF       hsl(42, 85%, 58%)   dharma/divine │
-│  KOHL            hsl(25, 18%, 10%)   text/ink      │
-│  CONCH WHITE     hsl(38, 20%, 95%)   highlight     │
-│  COPPER PATINA   hsl(165, 25%, 38%)  age/evidence  │
-└───────────────────────────────────────────────────┘
-```
+### 1. Hero — "The Bindu" (already decent, minor polish)
+- Enlarge the yantra animation to be more dramatic
+- Add a slow parallax scroll-zoom so the yantra feels like it's "opening"
 
-The palette is **Iron Age material**: not jewel-toned like the Ramayana miniatures, not ocean-dark like Hormuz. It's dust, terracotta, cast bronze, and the dark red of dried blood on a sun-baked field.
+### 2. Gita — "The Still Point" → **Full-viewport kinetic typography**
+- Replace the current static quote with a **scroll-driven verse reveal**: as the reader scrolls, each line of the Gita verse materializes in gold on indigo, with Devanagari floating behind
+- The yantra SVG in the background should be large (90vh), crisp, and golden — not 6% opacity
 
-**Gold Leaf** is used for dharmic elements (Krishna's words, the Gita section, the rules of engagement). As the essay progresses, gold fades — replaced by Sacrificial Red and Ash. By the epilogue, there is almost no gold left.
+### 3. Logistics — "The Bronze Tablet" → **Animated Akshauhini Pyramid**
+- Replace the emoji grid with a **full-width animated infographic**: a cross-section pyramid showing the 1:1:3:5 ratio with actual SVG glyph icons (chariot, elephant, horse, infantry silhouettes) stacking up as the reader scrolls in
+- The alliance map becomes an **SVG map of the Indian subcontinent** with faction-colored regions pulsing in, connected by lines to a central Kurukshetra point
+- Scrollytelling: sticky visual on one side, alliance cards float on the other
 
-### Textures & Motifs
+### 4. Phase Sections (Days 1–18) → **Scrollytelling Vyuha Theater**
+This is the essay's centerpiece — the equivalent of the ZoomDive map.
 
-1. **Yantra Grid**: The background pattern. Concentric squares with diagonal lines radiating from a central bindu — rendered as a faint SVG grid behind all content. In Phase I it is clean; by Phase III the lines have slight offsets and hairline cracks (CSS transform jitter).
+**Architecture**: A sticky split-screen. Left: a large (50vh+) animated Vyuha formation diagram. Right: scrolling day cards.
 
-2. **Vyuha Diagrams**: The visual centerpieces. Each major formation rendered as animated sacred geometry: Vajra (diamond/thunderbolt), Krauncha (heron/wedge), Chakra (wheel/spiral), Garuda (eagle/V-shape), Padma (lotus), Sarvatobhadra (omnidirectional square). These are NOT decorative — they are the data visualization. Unit positions (chariots, elephants, cavalry, infantry) are represented as nested geometric tiers within each formation.
+As the reader scrolls through each day:
+- The **left Vyuha diagram morphs** from one formation to the next (animated SVG path transitions)
+- The formation **visibly degrades** across phases: clean geometry → hairline cracks → distorted → shattered
+- Key casualties appear as **names that ignite in gold then fade to ash** across the formation
+- The background color shifts per phase (dust → warm bronze → blood red → ash grey)
 
-3. **Day Notch Strip**: A thin vertical bar fixed to the left viewport edge. 18 notches, each representing a day. As the reader scrolls, notches transition from Bronze to Sacrificial Red. After Day 13, a visible crack/fracture line appears across the strip.
+This makes the 18-day journal a **visual experience** rather than a card list. The formations ARE the story.
 
-4. **Astra Burst**: When celestial weapons are described, a radial SVG burst (like a yantra mandala exploding outward) renders behind the text — in Celestial Indigo with Gold Leaf highlights. Each astra has a unique geometric signature.
+### 5. Astras — "The Celestial Arsenal" → **Full-viewport weapon gallery**
+- Each astra gets a **full-width or half-screen presentation**: the mandala burst at 400px+ diameter, centered, with a slow build animation and pulsing energy effect
+- Scroll through them one at a time in a **sticky scroll** format — each weapon takes over the viewport as you scroll to it
+- Add a particle/energy trail effect radiating from each burst
+- Dark indigo background for the whole section (cosmic night)
 
-5. **Cracked Earth Texture**: A terracotta/clay crack pattern that intensifies through the essay. Phase I: invisible. Phase II: faint hairlines. Phase III: visible fractures. Phase IV: full crack network across the background. Implemented as layered SVG paths with scroll-driven opacity.
+### 6. Dharma — "The Broken Rules" → **Scrollytelling crack sequence**
+- Sticky visual: a large intact yantra (the "rule set" as geometry)
+- As the reader scrolls through each violation, a **visible crack propagates** across the yantra in real-time
+- The rule text appears overlaid on the yantra, then the crack slashes through it
+- By the last rule, the yantra is fully shattered
+- Much more visceral than the current strikethrough cards
 
-6. **Archaeological Inset**: For the historicity/dating sections, a distinct "excavation card" style — a panel that looks like a museum specimen label: cream background, thin ruled border, serif type, with a small "stratum depth" indicator on the side.
+### 7. Historicity — "The Excavation Ledger" → **Astronomical dating dial**
+- Replace the card grid with a **circular SVG timeline**: a dial/clock-face with dates from 900 BCE to 5561 BCE plotted as points around the circumference
+- Each theory gets a radial spoke connecting to an evidence card that pops up on hover/scroll
+- Add Wikimedia Commons imagery: Sanauli chariot, PGW pottery shards, Hastinapur excavation site, Kurukshetra battlefield panorama
 
-### Typography
+### 8. Art — "The Relief Gallery" → **Immersive image gallery with Wikimedia imagery**
+- Replace text-only cards with **large image panels**: Angkor Wat bas-relief photos, Hoysaleswara temple friezes, Razmnama miniature paintings, Kangra miniatures
+- Each image fills the viewport width with a stone/manuscript texture frame
+- Text floats as overlay captions
+- Wikimedia Commons has extensive public domain imagery for all of these
 
-- **Headings**: Playfair Display, but with wide letter-spacing (0.08em) to feel inscribed — like text carved into temple stone
-- **Body**: Cormorant Garamond (existing)
-- **Sanskrit/Devanagari terms**: Rendered in a distinct weight with a subtle Gold Leaf color — these are sacred vocabulary, visually marked
-- **Day Numbers**: Large, bold, almost monumental — like date markers on a ritual calendar
-- **Data Tables**: Styled as bronze tablet inscriptions — dark background, light etched text, no modern table borders
-
----
-
-## Section Architecture
-
-### Hero — "The Bindu"
-A single point (bindu) at the center of the viewport. On scroll, sacred geometry radiates outward: first the innermost triangle, then concentric squares, then the lotus petals — building a complete yantra behind the title. The yantra is rendered in Gold Leaf lines on a Dust Field background. Title text: "KURUKSHETRA" in wide-tracked Playfair. Subtitle: "Eighteen Days at the End of an Age." A faint Devanagari verse (Gita 1.1 — "dharma-kshetre kuru-kshetre") floats as a watermark.
-
-### The Gita Moment — "The Still Point"
-Before the war begins narratively, a full-viewport section for the Bhagavad Gita. Visually, the yantra is complete and **perfectly still**. No animation. No scroll effects. Gold Leaf text on Celestial Indigo. Krishna's key verses rendered as gilt calligraphy in a centered column. This is the last moment of geometric perfection before everything fractures.
-
-### The 18-Day Journal — "The Fracturing Field"
-The core of the essay. Each day is a section with:
-- A large **day number** (Day 1, Day 2...) as a monumental header
-- The **Vyuha formation diagram** for that day — animated SVG showing both sides' formations
-- **Key casualties** rendered as names that visually "extinguish" — gold text that fades to ash
-- **Narrative text** in the essay's standard prose style
-- The **day notch strip** on the left advances
-
-As the days progress:
-- Phase I (Days 1-10, Bhishma): Clean geometry, gold accents, intact yantra background
-- Phase II (Days 11-15, Drona): Hairline cracks appear in the background yantra. Bronze tones shift warmer. The Chakra Vyuha day (Day 13) triggers a visible **geometric rupture** — the background yantra fractures at the center
-- Phase III (Days 16-17, Karna): Sacrificial Red dominates. Cracked earth texture is now prominent. The Vyuha diagrams themselves render with slight distortions
-- Phase IV (Day 18): The yantra is shattered. Background geometry is scattered fragments. Ash grey dominates. The mace duel section has no geometric framing at all — just raw text on cracked earth
-
-### Military Logistics — "The Bronze Tablet"
-The Akshauhini breakdown and alliance tables rendered as **bronze inscription tablets**: dark metallic panels with etched light text. The 1:1:3:5 ratio visualized as nested geometric tiers (like a pyramid cross-section). Unit icons (chariot, elephant, horse, infantry) rendered as simple Indus-seal-style glyphs.
-
-### Astras — "The Celestial Arsenal"
-Each weapon gets a **mandala burst** — a unique radial SVG design inspired by its deity. Brahmastra: a perfect expanding circle (totality). Agneyastra: flame-petal mandala. Varunastra: wave-spiral. Pashupatastra: the most complex — a Shiva trishula geometry with destructive radiating lines. These animate on scroll-enter: the mandala builds from center outward, then pulses.
-
-### Dharma vs. Adharma — "The Broken Rules"
-The ethical violation section. Rendered as a **rule scroll** — a list of the original rules of engagement in Gold Leaf text on a clean panel. As the reader scrolls through each violation, the corresponding rule **cracks** (a hairline fracture SVG renders across the text) and the gold fades to ash. By the section's end, every rule is broken.
-
-### Historicity & Dating — "The Excavation Ledger"
-A tonal shift to the **archaeological/scientific** register. Panels styled as museum specimen cards (Copper Patina accent, cream background, thin borders). The dating table becomes a **timeline dial** — a circular astronomical chart with competing date theories plotted as points on the circumference, connected to evidence cards. The PGW pottery and Sanauli chariot findings rendered as "artifact cards" with archaeological photography placeholders and stratum-depth indicators.
-
-### Art & Manuscripts — "The Relief Gallery"
-Temple relief and manuscript sections use a **stone texture** background — carved soapstone grey for Hoysala, sandstone warm for Angkor Wat. Images framed as if they are physical carved panels emerging from the wall. The Razmnama miniatures get the warm manuscript treatment (similar to existing Ramayana essay, but with a more martial, less devotional tone).
-
-### Epilogue — "Ash and Memory"
-The yantra is now fully shattered. Fragments of geometry float in a void of Ash grey. A single line of text: the Kali Yuga has begun. The day notch strip is fully red. Then — slowly — a new, faint yantra begins to form at the bottom of the page. Incomplete. A suggestion that the cycle continues.
+### 9. Epilogue — "Ash and Memory" → **Full-viewport shattered yantra animation**
+- The shattered fragments should be large, dramatic, slowly drifting
+- A particle field of ash/embers floating upward
+- The "new cycle" bindu should pulse with a heartbeat rhythm
+- Much more atmospheric — currently it's a small SVG and some text
 
 ---
 
-## The Degradation System (Technical Core)
+## Files to Create/Modify
 
-This is what makes this essay radical. CSS custom properties shift based on scroll position / section:
-
-```text
-Phase I  → --yantra-crack: 0;    --gold-opacity: 1;    --ash-mix: 0;
-Phase II → --yantra-crack: 0.3;  --gold-opacity: 0.7;  --ash-mix: 0.15;
-Phase III→ --yantra-crack: 0.7;  --gold-opacity: 0.3;  --ash-mix: 0.5;
-Phase IV → --yantra-crack: 1;    --gold-opacity: 0.05;  --ash-mix: 0.85;
-```
-
-Background yantra SVG paths get `stroke-dasharray` and `transform: translate(jitterX, jitterY)` driven by `--yantra-crack`. Gold Leaf color interpolates toward Ash via `--gold-opacity`. The cracked earth texture opacity tracks `--ash-mix`. The design itself tells the story of decline.
-
----
-
-## Emotional Arc
-
-```text
-STILLNESS       GLORY          RUPTURE         COLLAPSE        ASH
-─────────       ─────────      ─────────       ─────────       ─────
-Gita /          Bhishma        Abhimanyu /     Karna /         Day 18 /
-Hero            Phase I        Day 13          Phase III       Epilogue
-
-Perfect         Clean          Yantra          Geometry        Shattered
-yantra          geometry       cracks at       distorts        fragments
-Gold leaf       Bronze glow    center          Red dominates   Ash void
-Silence         Drum pulse     Fracture line   Cracked earth   New cycle
-```
+| File | What |
+|---|---|
+| `VyuhaTheater.tsx` | **NEW** — Sticky scrollytelling component: large morphing Vyuha + scrolling day cards |
+| `AkshauhiniPyramid.tsx` | **NEW** — Animated stacking pyramid infographic with SVG unit glyphs |
+| `AllianceMap.tsx` | **NEW** — SVG map of Indian subcontinent with faction-colored kingdoms |
+| `AstraGallery.tsx` | **NEW** — Full-viewport sticky-scroll weapon showcase (replaces grid) |
+| `YantraCrackSequence.tsx` | **NEW** — Sticky yantra that cracks per rule violation |
+| `DatingDial.tsx` | **NEW** — Circular astronomical timeline for dating theories |
+| `ReliefGallery.tsx` | **NEW** — Full-bleed image gallery with Wikimedia Commons photos |
+| `GitaSection.tsx` | Rewrite with scroll-driven verse reveal |
+| `LogisticsSection.tsx` | Rebuild around AkshauhiniPyramid + AllianceMap |
+| `PhaseSection.tsx` | Replace with single VyuhaTheater component |
+| `AstrasSection.tsx` | Replace grid with AstraGallery |
+| `DharmaSection.tsx` | Replace cards with YantraCrackSequence |
+| `HistoricitySection.tsx` | Replace cards with DatingDial + images |
+| `ArtSection.tsx` | Replace cards with ReliefGallery |
+| `KurukshetraEpilogue.tsx` | Enhance with larger fragments + particle effects |
+| `KurukshetraHero.tsx` | Minor: larger yantra, stronger parallax |
+| `Kurukshetra.tsx` | Update page to use VyuhaTheater instead of 4 PhaseSections |
 
 ---
 
-## Implementation Priority
+## Implementation Order
 
-1. **CSS palette + yantra background grid** — the atmospheric foundation
-2. **Day notch strip** — the persistent scroll-spine
-3. **Hero yantra animation** — the opening hook
-4. **Vyuha formation diagrams** (at least 4-5 key formations) — the visual centerpiece
-5. **Degradation system** — scroll-driven CSS variable shifts
-6. **Astra mandala bursts** — the spectacle moments
-7. **Dharma rule-cracking scroll** — the ethical narrative made visual
-8. **Archaeological/dating section** — the scholarly register
-9. **Epilogue ash field** — the emotional close
+1. **VyuhaTheater** — the centerpiece (largest impact, replaces 4 sections)
+2. **AstraGallery** — full-viewport weapon showcase
+3. **YantraCrackSequence** — dharma section visual
+4. **AkshauhiniPyramid + AllianceMap** — logistics visuals
+5. **ReliefGallery** — image-driven art section with Wikimedia imagery
+6. **DatingDial** — historicity circular timeline
+7. **GitaSection** — kinetic typography
+8. **Epilogue** — atmospheric enhancement
 
