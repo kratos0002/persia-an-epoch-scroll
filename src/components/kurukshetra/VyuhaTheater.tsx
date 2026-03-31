@@ -89,6 +89,7 @@ const DayCard = ({ entry }: { entry: DayEntry }) => {
   return (
     <motion.div
       ref={ref}
+      data-day={entry.day}
       className="min-h-[60vh] flex items-center py-8"
       initial={{ opacity: 0 }}
       animate={inView ? { opacity: 1 } : {}}
