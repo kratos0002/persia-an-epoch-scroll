@@ -47,14 +47,14 @@ const CityGraphic = (activeStep: number) => {
         </motion.div>
 
         {/* SVG overlay — walls, gates, palace */}
-        <svg viewBox="0 0 400 400" className="absolute inset-0 z-10 w-full h-full" preserveAspectRatio="xMidYMid meet">
+        <svg viewBox="-60 -60 520 520" className="absolute inset-0 z-10 w-full h-full" preserveAspectRatio="xMidYMid meet">
           <defs>
             <radialGradient id="rc-glow2" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor={`hsl(${WISDOM_GOLD})`} stopOpacity={activeStep >= 3 ? 0.15 : 0.05} />
               <stop offset="100%" stopColor={`hsl(${WISDOM_GOLD})`} stopOpacity="0" />
             </radialGradient>
           </defs>
-          <rect width="400" height="400" fill="url(#rc-glow2)" />
+          <rect x="-60" y="-60" width="520" height="520" fill="url(#rc-glow2)" />
 
           {/* Walls — draw with stroke-dasharray */}
           {WALLS.map((wall, i) => {
@@ -83,8 +83,10 @@ const CityGraphic = (activeStep: number) => {
             const y1 = 200 + Math.sin(rad) * 120;
             const x2 = 200 + Math.cos(rad) * 165;
             const y2 = 200 + Math.sin(rad) * 165;
-            const lx = 200 + Math.cos(rad) * 195;
-            const ly = 200 + Math.sin(rad) * 195;
+            const lx = 200 + Math.cos(rad) * 200;
+            const ly = 200 + Math.sin(rad) * 200;
+            // Anchor: right-side labels start, left-side labels end, top/bottom middle
+            const anchor = angle === 0 ? 'start' : angle === 180 ? 'end' : 'middle';
             return (
               <motion.g
                 key={angle}
@@ -93,7 +95,7 @@ const CityGraphic = (activeStep: number) => {
                 transition={{ duration: 0.6, delay: i * 0.1 }}
               >
                 <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={`hsl(${WISDOM_GOLD})`} strokeWidth={2} opacity={0.6} />
-                <text x={lx} y={ly + 4} textAnchor="middle" fill={`hsl(${WISDOM_GOLD})`} fontSize="12" opacity="0.9" fontFamily="'Cormorant Garamond', serif" fontWeight="600">
+                <text x={lx} y={ly + 4} textAnchor={anchor} fill={`hsl(${WISDOM_GOLD})`} fontSize="14" opacity="0.9" fontFamily="'Cormorant Garamond', serif" fontWeight="600">
                   {GATE_NAMES[i]}
                 </text>
               </motion.g>
