@@ -112,6 +112,22 @@
     --kuru-conch: 38 20% 95%;
     --kuru-patina: 165 25% 38%;
 
+    /* Radcliffe / Severed Survey palette */
+    --radcliffe-cream: 40 35% 93%;
+    --radcliffe-grid: 215 30% 62%;
+    --radcliffe-ink: 220 25% 15%;
+    --radcliffe-red: 355 70% 45%;
+    --radcliffe-violet: 270 30% 35%;
+    --radcliffe-teal: 185 40% 38%;
+    --radcliffe-ochre: 38 50% 55%;
+    --radcliffe-amber: 42 65% 50%;
+    --radcliffe-soot: 25 15% 25%;
+    --radcliffe-void: 30 5% 8%;
+    --radcliffe-aged: 38 30% 85%;
+    --radcliffe-saffron: 30 85% 55%;
+    --radcliffe-green: 150 45% 30%;
+    --radcliffe-pink: 340 50% 60%;
+
     /* Opium / Ledger Noir palette */
     --ledger-cream: 38 32% 93%;
     --ledger-ink: 36 16% 9%;
@@ -603,5 +619,72 @@
     color: hsl(var(--kuru-clay));
     background: hsl(var(--kuru-bronze) / 0.1);
     border-color: hsl(var(--kuru-bronze) / 0.25);
+  }
+
+  /* ── Severed Survey (Radcliffe essay) ── */
+  .radcliffe-bg {
+    background: hsl(var(--radcliffe-cream));
+    color: hsl(var(--radcliffe-ink));
+  }
+
+  .radcliffe-survey-grid {
+    background-image:
+      linear-gradient(hsl(var(--radcliffe-grid) / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--radcliffe-grid) / 0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .radcliffe-grain {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 250px 250px;
+  }
+
+  .radcliffe-stamp {
+    display: inline-block;
+    padding: 0.25em 0.75em;
+    border: 2px solid hsl(var(--radcliffe-violet) / 0.5);
+    border-radius: 4px;
+    color: hsl(var(--radcliffe-violet));
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transform: rotate(-2deg);
+    opacity: 0.8;
+  }
+
+  .radcliffe-redacted {
+    background: hsl(var(--radcliffe-ink));
+    color: transparent;
+    transition: all 0.4s;
+    cursor: pointer;
+    padding: 0 0.25em;
+  }
+  .radcliffe-redacted:hover {
+    background: hsl(var(--radcliffe-ink) / 0.08);
+    color: hsl(var(--radcliffe-red));
+  }
+
+  .font-survey {
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+
+  @keyframes radcliffe-line-draw {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes radcliffe-names-scroll {
+    from { transform: translateY(100%); }
+    to { transform: translateY(-100%); }
+  }
+
+  @keyframes radcliffe-dot-flow {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateX(var(--flow-distance, 200px)); opacity: 0; }
   }
 }
