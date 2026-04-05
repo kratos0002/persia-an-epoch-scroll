@@ -18,16 +18,16 @@ interface SeamConfig {
 }
 
 const SEAM_PROGRESSION: SeamConfig[] = [
-  { width: 1, type: 'fold', drift: 0 },
-  { width: 1, type: 'fold', drift: 0 },
-  { width: 2, type: 'ink', drift: 3 },
-  { width: 2, type: 'ink', drift: 3 },
-  { width: 4, type: 'cut', drift: 10 },
-  { width: 4, type: 'cut', drift: 10 },
-  { width: 30, type: 'tear', drift: 20 },
-  { width: 40, type: 'void', drift: 30 },
-  { width: 40, type: 'void', drift: 30 },
-  { width: 40, type: 'void', drift: 30 },
+  { width: 1, type: 'fold', drift: 0 },   // Hero
+  { width: 1, type: 'fold', drift: 0 },   // Architect
+  { width: 2, type: 'ink', drift: 3 },    // Commission
+  { width: 2, type: 'ink', drift: 3 },    // Countdown
+  { width: 4, type: 'cut', drift: 10 },   // Punjab
+  { width: 4, type: 'cut', drift: 10 },   // Bengal
+  { width: 30, type: 'tear', drift: 20 }, // Void — the tear widens
+  { width: 40, type: 'void', drift: 30 }, // Void peak
+  { width: 4, type: 'tear', drift: 5 },   // Aftermath — closing
+  { width: 2, type: 'cut', drift: 0 },    // Living Border — healed scar
 ];
 
 export const useSeamProgress = () => {
@@ -148,4 +148,33 @@ export const Stamp = ({ children }: { children: ReactNode }) => (
 // Redacted text
 export const Redacted = ({ children }: { children: ReactNode }) => (
   <span className="radcliffe-redacted">{children}</span>
+);
+
+// Pencil underline — marks key phrases
+export const Underline = ({ children }: { children: ReactNode }) => (
+  <span className="relative inline">
+    <span className="relative z-10">{children}</span>
+    <span
+      className="absolute left-0 right-0 bottom-[1px] h-[3px] z-0"
+      style={{
+        background: 'hsl(355 70% 45% / 0.2)',
+        transform: 'rotate(-0.3deg)',
+      }}
+    />
+  </span>
+);
+
+// Red ink — devastating facts
+export const RedInk = ({ children }: { children: ReactNode }) => (
+  <span className="text-radcliffe-red font-bold">{children}</span>
+);
+
+// Margin note — handwritten annotation
+export const MarginNote = ({ children, side = 'right' }: { children: ReactNode; side?: 'left' | 'right' }) => (
+  <span
+    className={`absolute ${side === 'right' ? '-right-2 md:-right-16' : '-left-2 md:-left-16'} font-body italic text-[0.6rem] text-radcliffe-red/60 w-14 leading-tight hidden md:block`}
+    style={{ transform: 'rotate(-2deg)' }}
+  >
+    {children}
+  </span>
 );

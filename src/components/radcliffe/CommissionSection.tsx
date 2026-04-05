@@ -1,6 +1,6 @@
 import React from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
-import { DriftPanel, Stamp } from './SeamSystem';
+import { DriftPanel, Stamp, AdminParagraph, Underline, RedInk, MarginNote } from './SeamSystem';
 import { COMMISSION_MEMBERS } from './radcliffeData';
 
 const JudgeCard = ({ name, role }: { name: string; role: string }) => (
@@ -40,7 +40,7 @@ const CommissionPanel = ({
 
 export const CommissionSection = ({ drift }: { drift: number }) => (
   <section className="relative py-24 md:py-32 radcliffe-bg radcliffe-survey-grid radcliffe-grain overflow-hidden">
-    <div className="max-w-5xl mx-auto px-6 md:px-12">
+    <div className="max-w-5xl mx-auto px-6 md:px-12 relative z-40">
       <RevealOnScroll>
         <Stamp>Deadlocked</Stamp>
         <h2 className="font-display text-3xl md:text-4xl font-bold tracking-[0.06em] text-radcliffe-ink uppercase mt-6 mb-4">
@@ -68,6 +68,25 @@ export const CommissionSection = ({ drift }: { drift: number }) => (
         <p className="font-body italic text-center text-radcliffe-soot/70 mt-12 max-w-lg mx-auto">
           "The South Asian judges functioned effectively as advocates for their respective political parties, leaving Radcliffe to make the final decisions unilaterally."
         </p>
+      </RevealOnScroll>
+
+      {/* Terms of Reference & "Other Factors" */}
+      <RevealOnScroll delay={0.4}>
+        <div className="max-w-2xl mx-auto mt-16">
+          <Stamp>Terms of Reference</Stamp>
+          <div className="mt-6 relative">
+            <AdminParagraph number="§2.1">
+              The formal instructions were deceptively simple: to demarcate the boundaries <Underline>"on the basis of ascertaining the contiguous majority areas of Muslims and non-Muslims"</Underline>. This appeared straightforward — until the critical caveat.
+            </AdminParagraph>
+            <MarginNote>the escape clause</MarginNote>
+          </div>
+          <div className="relative">
+            <AdminParagraph number="§2.2">
+              The mandate continued: <RedInk>"In doing so, it will also take into account other factors."</RedInk> These factors — <Underline>infrastructure networks, irrigation systems, economic integrity, and strategic defense</Underline> — gave Radcliffe legal grounds to override strict demographic lines. Every controversial decision in both awards traces back to this single phrase.
+            </AdminParagraph>
+            <MarginNote>4 words that moved millions</MarginNote>
+          </div>
+        </div>
       </RevealOnScroll>
     </div>
   </section>

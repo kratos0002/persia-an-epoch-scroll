@@ -4,27 +4,84 @@ import { AdminParagraph, HumanVoice, Stamp, Redacted, DriftPanel } from './SeamS
 import { GURDASPUR_TEHSILS } from './radcliffeData';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 
-// Simplified Punjab map district polygons (viewBox 0 0 500 500)
+// ─── Geographically positioned, contiguous Punjab districts ───
+// viewBox "0 0 500 450" — West to East, North to South
+// Shared vertices ensure districts tessellate with no gaps
+//
+// Grid points (rows A-E, cols 1-5):
+// A1(70,40)  A2(170,30)  A3(280,25)  A4(380,35)  A5(460,50)
+// B1(50,130) B2(160,120) B3(265,115) B4(365,120) B5(455,135)
+// C1(35,230) C2(150,225) C3(260,220) C4(360,225) C5(445,235)
+// D1(45,330) D2(155,325) D3(255,320) D4(355,325) D5(430,335)
+// E1(80,410) E2(200,400) E3(310,395) E4(400,390)
+
 const DISTRICTS = [
-  { id: 'lahore', path: 'M220,180 L260,170 L280,200 L270,240 L230,250 L210,220 Z', label: 'Lahore', majority: 'muslim', allocation: 'pakistan' },
-  { id: 'amritsar', path: 'M170,160 L220,150 L230,180 L210,220 L170,210 L160,185 Z', majority: 'mixed', label: 'Amritsar', allocation: 'india' },
-  { id: 'gurdaspur', path: 'M140,100 L190,90 L200,130 L180,160 L140,155 L130,130 Z', label: 'Gurdaspur', majority: 'marginal', allocation: 'split' },
-  { id: 'ferozepore', path: 'M150,220 L200,230 L210,270 L190,310 L150,300 L140,260 Z', label: 'Ferozepore', majority: 'muslim', allocation: 'india' },
-  { id: 'montgomery', path: 'M260,250 L310,240 L330,280 L310,320 L260,310 L250,280 Z', label: 'Montgomery', majority: 'muslim', allocation: 'pakistan' },
-  { id: 'lyallpur', path: 'M290,170 L340,160 L360,200 L340,240 L300,235 L280,200 Z', label: 'Lyallpur', majority: 'muslim', allocation: 'pakistan' },
-  { id: 'rawalpindi', path: 'M200,50 L260,40 L280,80 L260,120 L220,125 L190,90 Z', label: 'Rawalpindi', majority: 'muslim', allocation: 'pakistan' },
-  { id: 'jullundur', path: 'M120,160 L165,155 L170,195 L150,225 L110,215 L105,185 Z', label: 'Jullundur', majority: 'non-muslim', allocation: 'india' },
+  // ── WESTERN (Pakistan side) ──
+  { id: 'rawalpindi', label: 'Rawalpindi', labelX: 105, labelY: 85,
+    path: 'M70,40 L170,30 L160,120 L50,130 Z',
+    majority: 'muslim', allocation: 'pakistan' },
+  { id: 'gujranwala', label: 'Gujranwala', labelX: 210, labelY: 78,
+    path: 'M170,30 L280,25 L265,115 L160,120 Z',
+    majority: 'muslim', allocation: 'pakistan' },
+  { id: 'lyallpur', label: 'Lyallpur', labelX: 90, labelY: 185,
+    path: 'M50,130 L160,120 L150,225 L35,230 Z',
+    majority: 'muslim', allocation: 'pakistan' },
+  { id: 'lahore', label: 'Lahore', labelX: 205, labelY: 175,
+    path: 'M160,120 L265,115 L260,220 L150,225 Z',
+    majority: 'muslim', allocation: 'pakistan' },
+  { id: 'montgomery', label: 'Montgomery', labelX: 130, labelY: 330,
+    path: 'M35,230 L150,225 L260,220 L255,320 L155,325 L45,330 Z',
+    majority: 'muslim', allocation: 'pakistan' },
+  { id: 'multan', label: 'Multan', labelX: 140, labelY: 385,
+    path: 'M45,330 L155,325 L255,320 L200,400 L80,410 Z',
+    majority: 'muslim', allocation: 'pakistan' },
+
+  // ── EASTERN (India side) ──
+  { id: 'gurdaspur', label: 'Gurdaspur', labelX: 320, labelY: 78,
+    path: 'M280,25 L380,35 L365,120 L265,115 Z',
+    majority: 'marginal', allocation: 'split' },
+  { id: 'amritsar', label: 'Amritsar', labelX: 310, labelY: 175,
+    path: 'M265,115 L365,120 L360,225 L260,220 Z',
+    majority: 'mixed', allocation: 'india' },
+  { id: 'jullundur', label: 'Jullundur', labelX: 405, labelY: 175,
+    path: 'M365,120 L460,50 L455,135 L445,235 L360,225 Z',
+    majority: 'non-muslim', allocation: 'india' },
+  { id: 'ferozepore', label: 'Ferozepore', labelX: 340, labelY: 290,
+    path: 'M260,220 L360,225 L445,235 L430,335 L355,325 L255,320 Z',
+    majority: 'muslim', allocation: 'india' },
+];
+
+// Five rivers of Punjab — flowing NE to SW
+const RIVERS = [
+  { name: 'Jhelum',  path: 'M90,25 Q85,100 80,180 Q78,260 85,340 Q90,380 95,420' },
+  { name: 'Chenab',  path: 'M165,20 Q158,100 155,180 Q150,260 152,340 Q155,380 160,420' },
+  { name: 'Ravi',    path: 'M275,18 Q268,100 262,180 Q258,260 256,340 Q254,380 252,420' },
+  { name: 'Beas',    path: 'M370,28 Q363,100 358,180 Q355,260 354,340 Q355,380 358,420' },
+  { name: 'Sutlej',  path: 'M455,45 Q448,130 442,220 Q438,300 435,340 Q432,380 428,420' },
+];
+
+// The Radcliffe Line cutting through Punjab
+// Deviates west of center at Gurdaspur (giving 3 tehsils to India)
+// and west at Ferozepore (reversing the draft)
+const PUNJAB_RADCLIFFE_LINE = 'M272,25 L268,70 L265,115 L260,170 L260,220 L258,270 L255,320 L252,370';
+
+// Key cities
+const CITIES = [
+  { name: 'Lahore', x: 250, y: 165, side: 'pakistan' as const },
+  { name: 'Amritsar', x: 280, y: 165, side: 'india' as const },
+  { name: 'Rawalpindi', x: 110, y: 70, side: 'pakistan' as const },
+  { name: 'Ferozepore', x: 275, y: 270, side: 'india' as const },
 ];
 
 const ALLOCATION_COLORS = {
-  india: 'hsl(30 85% 55% / 0.3)',
-  pakistan: 'hsl(150 45% 30% / 0.3)',
+  india: 'hsl(30 85% 55% / 0.25)',
+  pakistan: 'hsl(150 45% 30% / 0.25)',
   split: 'hsl(42 65% 50% / 0.3)',
 };
 
 const STEPS = [
-  { title: 'The Undivided Punjab', description: 'A single province of 34 million people, irrigated by the world\'s largest canal network.' },
-  { title: 'Lahore & Amritsar', description: 'Two cities 25 miles apart. Lahore: two-thirds Muslim. Amritsar: sacred city of the Sikhs. Hindus and Sikhs owned 80% of Lahore\'s factories.' },
+  { title: 'The Undivided Punjab', description: 'A single province of 34 million people, irrigated by the world\'s largest canal network. The Sikhs — 6 million strong — were so widely scattered across central Punjab that no boundary could keep them together. Any line would bisect their community.' },
+  { title: 'Lahore & Amritsar', description: 'Two cities 25 miles apart. Lahore: two-thirds Muslim, yet Hindus and Sikhs owned 80% of its factories, 67% of its shops, and dominated its professional class. Amritsar: sacred city of the Sikhs, home to the Golden Temple. Awarding Lahore to Pakistan meant the economic displacement of the very communities who ran its economy — ethnic cleansing followed partition by days.' },
   { title: 'The Gurdaspur Corridor', description: 'Four tehsils. A marginal Muslim majority. Radcliffe awarded three to India — creating the only land access to Kashmir.' },
   { title: 'The Ferozepore Question', description: 'A draft map gave it to Pakistan. Then came the Bikaner lobbying, the "eliminate salient" message. The final award reversed the draft.' },
 ];
@@ -52,69 +109,148 @@ export const PunjabSection = ({ drift }: { drift: number }) => {
   const showBoundary = activeStep >= 1;
 
   return (
-    <section ref={ref} className="relative min-h-[300vh] radcliffe-bg radcliffe-grain overflow-hidden">
+    <section ref={ref} className="relative min-h-[400vh] radcliffe-bg radcliffe-grain">
       <div className="sticky top-0 h-screen flex">
         {/* Left: Punjab SVG Map */}
         <DriftPanel side="left" drift={drift} className="w-1/2 flex items-center justify-center p-6">
           <div className="relative w-full max-w-md">
             <Stamp>Punjab — Other Factors</Stamp>
-            <svg viewBox="60 20 340 330" className="w-full mt-4">
+            <svg viewBox="0 0 500 450" className="w-full mt-4">
+              <defs>
+                <filter id="punjab-glow">
+                  <feGaussianBlur stdDeviation="1.5" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              {/* Rivers — subtle blue curves */}
+              {RIVERS.map(r => (
+                <path
+                  key={r.name}
+                  d={r.path}
+                  fill="none"
+                  stroke="hsl(210 40% 65% / 0.25)"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                />
+              ))}
+
               {/* Districts */}
               {DISTRICTS.map(d => {
                 const isHighlighted = highlightDistricts.includes(d.id);
-                const fill = showBoundary ? ALLOCATION_COLORS[d.allocation as keyof typeof ALLOCATION_COLORS] : 'hsl(215 30% 62% / 0.08)';
+                const fill = showBoundary
+                  ? ALLOCATION_COLORS[d.allocation as keyof typeof ALLOCATION_COLORS]
+                  : 'hsl(215 30% 62% / 0.06)';
                 return (
                   <g key={d.id}>
                     <motion.path
                       d={d.path}
                       fill={fill}
-                      stroke={isHighlighted ? 'hsl(355 70% 45%)' : 'hsl(215 30% 62% / 0.3)'}
-                      strokeWidth={isHighlighted ? 2.5 : 0.8}
-                      animate={{
-                        opacity: isHighlighted ? [0.6, 1, 0.6] : 1,
-                      }}
+                      stroke={isHighlighted ? 'hsl(355 70% 45%)' : 'hsl(215 30% 62% / 0.25)'}
+                      strokeWidth={isHighlighted ? 2.5 : 0.7}
+                      strokeLinejoin="round"
+                      animate={{ opacity: isHighlighted ? [0.6, 1, 0.6] : 1 }}
                       transition={isHighlighted ? { repeat: Infinity, duration: 1.5 } : {}}
                     />
                     <text
-                      x={d.path.split(' ')[0].replace('M', '')}
-                      y={d.path.split(' ')[0].replace('M', '').split(',')[1]}
-                      className="font-survey text-[6px] fill-radcliffe-ink/50"
+                      x={d.labelX}
+                      y={d.labelY}
+                      fontSize="8"
+                      fontFamily="'survey', ui-monospace, monospace"
+                      fill="hsl(215 20% 35% / 0.6)"
                       textAnchor="middle"
-                      dy="30"
-                      dx="30"
+                      fontWeight={isHighlighted ? '600' : '400'}
                     >
                       {d.label}
                     </text>
                   </g>
                 );
               })}
+
+              {/* River labels */}
+              {RIVERS.map(r => {
+                const startX = parseInt(r.path.match(/M(\d+)/)?.[1] || '0');
+                return (
+                  <text
+                    key={r.name + '-label'}
+                    x={startX}
+                    y={430}
+                    fontSize="6"
+                    fontFamily="'survey', ui-monospace, monospace"
+                    fill="hsl(210 40% 55% / 0.4)"
+                    textAnchor="middle"
+                    fontStyle="italic"
+                  >
+                    {r.name}
+                  </text>
+                );
+              })}
+
+              {/* City markers */}
+              {showBoundary && CITIES.map(c => (
+                <g key={c.name}>
+                  <circle cx={c.x} cy={c.y} r="3" fill="hsl(355 70% 45% / 0.7)" />
+                  <text
+                    x={c.x}
+                    y={c.y - 7}
+                    fontSize="7"
+                    fontFamily="'survey', ui-monospace, monospace"
+                    fill="hsl(355 70% 45% / 0.8)"
+                    textAnchor="middle"
+                    fontWeight="600"
+                  >
+                    {c.name}
+                  </text>
+                </g>
+              ))}
+
               {/* Radcliffe Line */}
               {showBoundary && (
                 <motion.path
-                  d="M140,60 L155,120 L160,160 L165,200 L155,250 L160,300 L170,340"
+                  d={PUNJAB_RADCLIFFE_LINE}
                   fill="none"
                   stroke="hsl(355 70% 45%)"
-                  strokeWidth="2"
-                  strokeDasharray="1"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  filter="url(#punjab-glow)"
+                  pathLength="1"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1.5 }}
+                  style={{ strokeDasharray: 1, strokeDashoffset: 0 }}
                 />
               )}
-              {/* Kashmir corridor */}
+
+              {/* Kashmir corridor arrow */}
               {activeStep === 2 && (
-                <motion.path
-                  d="M150,105 L130,60 L120,30 L100,10"
-                  fill="none"
-                  stroke="hsl(42 65% 50%)"
-                  strokeWidth="1.5"
-                  strokeDasharray="4 3"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.2, delay: 0.5 }}
-                />
+                <g>
+                  <motion.path
+                    d="M290,25 L310,8 L340,0"
+                    fill="none"
+                    stroke="hsl(42 65% 50%)"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 3"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 1.2, delay: 0.5 }}
+                  />
+                  <text
+                    x="355" y="5"
+                    fontSize="7"
+                    fontFamily="'survey', ui-monospace, monospace"
+                    fill="hsl(42 65% 50% / 0.8)"
+                    fontStyle="italic"
+                  >
+                    To Kashmir →
+                  </text>
+                </g>
               )}
             </svg>
+
             {/* Legend */}
             {showBoundary && (
               <div className="mt-4 flex gap-4">
@@ -125,6 +261,10 @@ export const PunjabSection = ({ drift }: { drift: number }) => {
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-sm" style={{ background: ALLOCATION_COLORS.pakistan }} />
                   <span className="font-survey text-[0.5rem] text-radcliffe-grid">Pakistan</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-sm" style={{ background: ALLOCATION_COLORS.split }} />
+                  <span className="font-survey text-[0.5rem] text-radcliffe-grid">Disputed</span>
                 </div>
               </div>
             )}

@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Secrets
+client_secret_*.json
+
+# Build output
+out/
+
+# Claude
+.claude/

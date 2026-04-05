@@ -26,7 +26,7 @@ export const CountdownSection = () => {
   }, [scrollYProgress]);
 
   return (
-    <section ref={ref} className="relative min-h-[300vh] radcliffe-bg radcliffe-grain overflow-hidden">
+    <section ref={ref} className="relative min-h-[400vh] radcliffe-bg radcliffe-grain">
       <div className="sticky top-0 h-screen flex">
         {/* Left: Calendar */}
         <div className="w-1/2 flex items-center justify-center p-8">
@@ -79,6 +79,27 @@ export const CountdownSection = () => {
           </div>
         </div>
 
+        {/* Scroll hint — visible at start, fades as days fill */}
+        {filledDays < 4 && (
+          <motion.div
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center z-10"
+            animate={{ opacity: filledDays < 2 ? 0.7 : 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <p className="font-survey text-[0.55rem] text-radcliffe-grid/40 uppercase tracking-[0.3em] mb-2">
+              Keep scrolling
+            </p>
+            <motion.svg
+              width="16" height="16" viewBox="0 0 16 16"
+              className="text-radcliffe-grid/30"
+              animate={{ y: [0, 4, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            >
+              <path d="M2 5 L8 11 L14 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </motion.svg>
+          </motion.div>
+        )}
+
         {/* Right: Event cards */}
         <div className="w-1/2 flex items-center justify-center p-8">
           <motion.div
@@ -100,6 +121,11 @@ export const CountdownSection = () => {
               <p className="font-survey text-sm text-radcliffe-ink leading-relaxed">
                 {TIMELINE_EVENTS[activeEvent].label}
               </p>
+              {'detail' in TIMELINE_EVENTS[activeEvent] && (
+                <p className="font-survey text-[0.7rem] text-radcliffe-ink/60 leading-relaxed mt-3">
+                  {(TIMELINE_EVENTS[activeEvent] as any).detail}
+                </p>
+              )}
               <div className="mt-4">
                 <div
                   className="inline-block px-2 py-0.5 rounded-sm text-[0.5rem] font-survey uppercase tracking-widest text-white/80"

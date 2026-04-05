@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
-import { AdminParagraph, Stamp, DriftPanel } from './SeamSystem';
+import { AdminParagraph, Stamp, DriftPanel, Underline, RedInk, MarginNote } from './SeamSystem';
 
 export const ArchitectSection = ({ drift }: { drift: number }) => (
   <section className="relative py-24 md:py-32 radcliffe-bg radcliffe-survey-grid radcliffe-grain overflow-hidden">
-    <div className="max-w-5xl mx-auto px-6 md:px-12">
+    <div className="max-w-5xl mx-auto px-6 md:px-12 relative z-40">
       <RevealOnScroll>
         <div className="flex items-start gap-3 mb-2">
           <Stamp>Personnel File</Stamp>
@@ -45,9 +45,13 @@ export const ArchitectSection = ({ drift }: { drift: number }) => (
                   <span className="text-radcliffe-grid">Appointed</span>
                   <span>June 30, 1947</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between border-b border-radcliffe-grid/10 pb-1">
                   <span className="text-radcliffe-grid">Selection Criterion</span>
                   <span className="italic">"Blank slate"</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-radcliffe-grid">Hearing Attendance</span>
+                  <span className="text-radcliffe-red font-bold">Did not attend</span>
                 </div>
               </div>
               {/* Violet stamp overlay */}
@@ -61,15 +65,23 @@ export const ArchitectSection = ({ drift }: { drift: number }) => (
         {/* Right: Administrative voice */}
         <DriftPanel side="right" drift={drift}>
           <RevealOnScroll delay={0.2}>
-            <AdminParagraph number="§1.1">
-              The appointment of Sir Cyril Radcliffe as the joint chairman of the Punjab and Bengal Boundary Commissions was a decision rooted in the British colonial administration's desperate need for perceived neutrality. The primary qualification for the boundary-maker was not regional expertise but a lack of prior engagement with Indian politics.
-            </AdminParagraph>
-            <AdminParagraph number="§1.2">
-              Lord Mountbatten, the last Viceroy of India, and the leaders of both the Indian National Congress and the Muslim League wanted an outsider who was a "blank slate," untainted by any perceived leanings toward either Hindu or Muslim interests.
-            </AdminParagraph>
-            <AdminParagraph number="§1.3">
-              Radcliffe himself accepted the task with a sense of professional duty, though he was reportedly unaware of the extreme temporal constraints until he arrived in Delhi. Upon being told that he had less than six weeks to complete the task, Radcliffe was struck by the "gargantuan" nature of the undertaking.
-            </AdminParagraph>
+            <div className="relative">
+              <AdminParagraph number="§1.1">
+                The appointment of Sir Cyril Radcliffe as the joint chairman of the Punjab and Bengal Boundary Commissions was a decision rooted in the British colonial administration's <Underline>desperate need for perceived neutrality</Underline>. The primary qualification for the boundary-maker was <RedInk>not regional expertise</RedInk> but a <Underline>lack of prior engagement with Indian politics</Underline>.
+              </AdminParagraph>
+              <MarginNote>chosen for what he didn't know</MarginNote>
+            </div>
+            <div className="relative">
+              <AdminParagraph number="§1.2">
+                Lord Mountbatten, the last Viceroy of India, and the leaders of both the Indian National Congress and the Muslim League wanted an outsider who was a <RedInk>"blank slate,"</RedInk> untainted by any perceived leanings toward either Hindu or Muslim interests.
+              </AdminParagraph>
+            </div>
+            <div className="relative">
+              <AdminParagraph number="§1.3">
+                Radcliffe himself accepted the task with a sense of professional duty, though he was reportedly <Underline>unaware of the extreme temporal constraints</Underline> until he arrived in Delhi. Upon being told that he had <RedInk>less than six weeks</RedInk> to complete the task, Radcliffe was struck by the <Underline>"gargantuan" nature of the undertaking</Underline>.
+              </AdminParagraph>
+              <MarginNote>36 days for 88 million lives</MarginNote>
+            </div>
           </RevealOnScroll>
         </DriftPanel>
       </div>

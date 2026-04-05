@@ -11,7 +11,7 @@ const ENCLAVES_DATA = {
 
 export const LivingBorderSection = () => (
   <section className="relative py-24 md:py-32 radcliffe-bg radcliffe-survey-grid radcliffe-grain overflow-hidden">
-    <div className="max-w-5xl mx-auto px-6 md:px-12">
+    <div className="max-w-5xl mx-auto px-6 md:px-12 relative z-40">
       <RevealOnScroll>
         <Stamp>Living Border</Stamp>
         <h2 className="font-display text-3xl md:text-4xl font-bold tracking-[0.06em] text-radcliffe-ink uppercase mt-6 mb-4">
@@ -60,6 +60,12 @@ export const LivingBorderSection = () => (
               <p><span className="text-radcliffe-green font-bold">{ENCLAVES_DATA.bangladeshInIndia}</span> Bangladeshi enclaves in India</p>
               <p className="text-radcliffe-grid mt-3">Resolved: Land Boundary Agreement, {ENCLAVES_DATA.resolvedYear}</p>
             </div>
+            <div className="mt-4 pt-3 border-t border-radcliffe-grid/15">
+              <p className="font-survey text-[0.6rem] text-radcliffe-violet uppercase tracking-widest mb-1">Tin Bigha Corridor</p>
+              <p className="font-survey text-[0.65rem] text-radcliffe-ink/70 leading-relaxed">
+                A 178m × 85m strip of Indian land, leased to Bangladesh in 1992, providing the only access to the Dahagram-Angarpota enclave. A corridor born of cartographic absurdity.
+              </p>
+            </div>
           </div>
         </RevealOnScroll>
 
@@ -83,6 +89,14 @@ export const LivingBorderSection = () => (
             <p className="font-survey text-[0.7rem] text-radcliffe-ink/70">
               A 96km tidal estuary in the Rann of Kutch. Radcliffe failed to provide definitive demarcation. Dispute over maritime boundaries and offshore resources continues.
             </p>
+            <div className="mt-4 pt-3 border-t border-radcliffe-grid/15 border-l-2 border-l-radcliffe-teal/30 pl-3">
+              <p className="font-body italic text-[0.65rem] text-radcliffe-ink/60 leading-relaxed">
+                "Rivers change their course. They are unsuitable for use as fixed boundaries."
+              </p>
+              <p className="font-survey text-[0.5rem] text-radcliffe-grid mt-1">
+                — Field Marshal Auchinleck, Commander-in-Chief, India
+              </p>
+            </div>
           </div>
         </RevealOnScroll>
 
