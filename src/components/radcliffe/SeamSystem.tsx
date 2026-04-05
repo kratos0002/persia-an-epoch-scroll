@@ -1,0 +1,151 @@
+import React, { useRef, useState, useEffect, ReactNode } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+
+// The seam tear SVG path gets progressively jagged
+const SEAM_PATHS = {
+  fold: 'M0,0 L0,2000',
+  ink: 'M0,0 L0,2000',
+  cut: 'M0,0 L1,80 L-1,160 L2,240 L-1,320 L1,400 L0,480 L-2,560 L1,640 L0,720 L1,800 L-1,880 L0,960 L2,1040 L-1,1120 L0,1200 L1,1280 L-1,1360 L0,1440 L2,1520 L-1,1600 L0,1680 L1,1760 L-1,1840 L0,1920 L1,2000',
+  tear: 'M0,0 L3,40 L-4,80 L6,120 L-3,160 L8,200 L-5,240 L4,280 L-7,320 L5,360 L-4,400 L9,440 L-6,480 L3,520 L-8,560 L7,600 L-3,640 L5,680 L-9,720 L6,760 L-4,800 L8,840 L-5,880 L3,920 L-7,960 L6,1000 L-4,1040 L9,1080 L-6,1120 L3,1160 L-8,1200 L7,1240 L-3,1280 L5,1320 L-9,1360 L6,1400 L-4,1440 L8,1480 L-5,1520 L3,1560 L-7,1600 L6,1640 L-4,1680 L9,1720 L-6,1760 L3,1800 L-8,1840 L7,1880 L-3,1920 L5,1960 L-4,2000',
+};
+
+type SeamType = 'fold' | 'ink' | 'cut' | 'tear' | 'void';
+
+interface SeamConfig {
+  width: number;
+  type: SeamType;
+  drift: number;
+}
+
+const SEAM_PROGRESSION: SeamConfig[] = [
+  { width: 1, type: 'fold', drift: 0 },
+  { width: 1, type: 'fold', drift: 0 },
+  { width: 2, type: 'ink', drift: 3 },
+  { width: 2, type: 'ink', drift: 3 },
+  { width: 4, type: 'cut', drift: 10 },
+  { width: 4, type: 'cut', drift: 10 },
+  { width: 30, type: 'tear', drift: 20 },
+  { width: 40, type: 'void', drift: 30 },
+  { width: 40, type: 'void', drift: 30 },
+  { width: 40, type: 'void', drift: 30 },
+];
+
+export const useSeamProgress = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
+  const [seamConfig, setSeamConfig] = useState<SeamConfig>(SEAM_PROGRESSION[0]);
+
+  useEffect(() => {
+    const unsub = scrollYProgress.on('change', v => {
+      const idx = Math.min(Math.floor(v * SEAM_PROGRESSION.length), SEAM_PROGRESSION.length - 1);
+      setSeamConfig(SEAM_PROGRESSION[idx]);
+    });
+    return unsub;
+  }, [scrollYProgress]);
+
+  return { ref, seamConfig, scrollYProgress };
+};
+
+export const Seam = ({ config }: { config: SeamConfig }) => {
+  const { type, width } = config;
+
+  if (type === 'void') {
+    return (
+      <div
+        className="pointer-events-none fixed left-1/2 top-0 z-30 h-screen -translate-x-1/2"
+        style={{ width: `${width}px` }}
+      >
+        <div className="h-full w-full bg-radcliffe-void" />
+        {/* Paper fiber edges */}
+        <svg className="absolute inset-y-0 -left-[6px] w-[6px] h-full" preserveAspectRatio="none">
+          <path d={SEAM_PATHS.tear} stroke="hsl(38 30% 75%)" strokeWidth="0.5" fill="none" vectorEffect="non-scaling-stroke" />
+        </svg>
+        <svg className="absolute inset-y-0 -right-[6px] w-[6px] h-full" preserveAspectRatio="none">
+          <path d={SEAM_PATHS.tear} stroke="hsl(38 30% 75%)" strokeWidth="0.5" fill="none" vectorEffect="non-scaling-stroke" />
+        </svg>
+      </div>
+    );
+  }
+
+  const strokeColor = type === 'fold'
+    ? 'hsl(215 30% 62% / 0.3)'
+    : type === 'ink'
+      ? 'hsl(355 70% 45% / 0.5)'
+      : 'hsl(355 70% 45% / 0.8)';
+
+  const strokeWidth = type === 'fold' ? 0.5 : type === 'ink' ? 1.5 : 2;
+  const dashArray = type === 'fold' ? '4 6' : undefined;
+  const path = type === 'cut' || type === 'tear' ? SEAM_PATHS[type] : SEAM_PATHS.fold;
+
+  return (
+    <div className="pointer-events-none fixed left-1/2 top-0 z-30 h-screen -translate-x-1/2 w-[20px]">
+      <svg className="h-full w-full" viewBox="-10 0 20 2000" preserveAspectRatio="none">
+        <path
+          d={path}
+          stroke={strokeColor}
+          strokeWidth={strokeWidth}
+          strokeDasharray={dashArray}
+          fill="none"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+    </div>
+  );
+};
+
+// Wrapper that applies drift to left/right halves
+export const DriftPanel = ({
+  children,
+  side,
+  drift,
+  className = '',
+}: {
+  children: ReactNode;
+  side: 'left' | 'right';
+  drift: number;
+  className?: string;
+}) => (
+  <div
+    className={`transition-transform duration-700 ease-out ${className}`}
+    style={{
+      transform: `translateX(${side === 'left' ? -drift : drift}px)`,
+    }}
+  >
+    {children}
+  </div>
+);
+
+// Section paragraph with § numbering (administrative voice)
+export const AdminParagraph = ({
+  number,
+  children,
+}: {
+  number: string;
+  children: ReactNode;
+}) => (
+  <div className="flex gap-4 mb-6">
+    <span className="font-survey text-[0.65rem] text-radcliffe-grid shrink-0 pt-1 select-none">
+      {number}
+    </span>
+    <p className="font-survey text-[0.82rem] leading-[1.8] text-radcliffe-ink/90 text-justify">
+      {children}
+    </p>
+  </div>
+);
+
+// Human voice (testimony, italic serif)
+export const HumanVoice = ({ children }: { children: ReactNode }) => (
+  <p className="font-body italic text-lg leading-relaxed text-radcliffe-soot/90 text-left">
+    {children}
+  </p>
+);
+
+// Official stamp
+export const Stamp = ({ children }: { children: ReactNode }) => (
+  <span className="radcliffe-stamp">{children}</span>
+);
+
+// Redacted text
+export const Redacted = ({ children }: { children: ReactNode }) => (
+  <span className="radcliffe-redacted">{children}</span>
+);
