@@ -112,6 +112,22 @@
     --kuru-conch: 38 20% 95%;
     --kuru-patina: 165 25% 38%;
 
+    /* Radcliffe / Severed Survey palette */
+    --radcliffe-cream: 40 35% 93%;
+    --radcliffe-grid: 215 30% 62%;
+    --radcliffe-ink: 220 25% 15%;
+    --radcliffe-red: 355 70% 45%;
+    --radcliffe-violet: 270 30% 35%;
+    --radcliffe-teal: 185 40% 38%;
+    --radcliffe-ochre: 38 50% 55%;
+    --radcliffe-amber: 42 65% 50%;
+    --radcliffe-soot: 25 15% 25%;
+    --radcliffe-void: 30 5% 8%;
+    --radcliffe-aged: 38 30% 85%;
+    --radcliffe-saffron: 30 85% 55%;
+    --radcliffe-green: 150 45% 30%;
+    --radcliffe-pink: 340 50% 60%;
+
     /* Opium / Ledger Noir palette */
     --ledger-cream: 38 32% 93%;
     --ledger-ink: 36 16% 9%;
