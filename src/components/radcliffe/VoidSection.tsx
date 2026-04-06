@@ -111,7 +111,7 @@ export const VoidSection = ({ drift }: { drift: number }) => {
     <>
     {/* Content warning */}
     <div className="py-4 text-center radcliffe-bg">
-      <p className="font-survey text-[0.6rem] text-radcliffe-grid/50 uppercase tracking-[0.25em]">
+      <p className="font-survey text-[0.6rem] text-radcliffe-grid/70 uppercase tracking-[0.25em]">
         The following section contains accounts of communal violence
       </p>
     </div>
@@ -120,7 +120,7 @@ export const VoidSection = ({ drift }: { drift: number }) => {
         {/* Left: Administrative account */}
         <DriftPanel side="left" drift={drift + 10} className="w-[45%] flex items-center p-8 md:p-12 z-10">
           <div className="max-w-sm">
-            <p className="font-survey text-[0.55rem] text-radcliffe-grid/50 uppercase tracking-[0.3em] mb-6">
+            <p className="font-survey text-[0.55rem] text-radcliffe-cream/60 uppercase tracking-[0.3em] mb-6">
               August 15–17, 1947
             </p>
             <h2 className="font-display text-3xl font-bold text-radcliffe-cream/90 uppercase tracking-wide mb-8">
@@ -128,20 +128,20 @@ export const VoidSection = ({ drift }: { drift: number }) => {
             </h2>
 
             {/* Displacement table */}
-            <div className="border border-radcliffe-grid/15 mb-8">
+            <div className="border border-radcliffe-cream/25 mb-8">
               <table className="w-full font-survey text-[0.65rem]">
                 <thead>
-                  <tr className="border-b border-radcliffe-grid/15">
-                    <th className="p-2 text-left text-radcliffe-grid/50 uppercase tracking-widest text-[0.5rem]">Category</th>
-                    <th className="p-2 text-right text-radcliffe-grid/50 uppercase tracking-widest text-[0.5rem]">Low</th>
-                    <th className="p-2 text-right text-radcliffe-grid/50 uppercase tracking-widest text-[0.5rem]">High</th>
+                  <tr className="border-b border-radcliffe-cream/25">
+                    <th className="p-2 text-left text-radcliffe-cream/60 uppercase tracking-widest text-[0.5rem]">Category</th>
+                    <th className="p-2 text-right text-radcliffe-cream/60 uppercase tracking-widest text-[0.5rem]">Low</th>
+                    <th className="p-2 text-right text-radcliffe-cream/60 uppercase tracking-widest text-[0.5rem]">High</th>
                   </tr>
                 </thead>
                 <tbody>
                   {DISPLACEMENT_DATA.map(row => (
-                    <tr key={row.category} className="border-b border-radcliffe-grid/10">
-                      <td className="p-2 text-radcliffe-cream/70">{row.category}</td>
-                      <td className="p-2 text-right text-radcliffe-cream/50">{row.low}</td>
+                    <tr key={row.category} className="border-b border-radcliffe-cream/15">
+                      <td className="p-2 text-radcliffe-cream/85">{row.category}</td>
+                      <td className="p-2 text-right text-radcliffe-cream/70">{row.low}</td>
                       <td className="p-2 text-right text-radcliffe-red/80 font-bold">{row.high}</td>
                     </tr>
                   ))}
@@ -149,7 +149,7 @@ export const VoidSection = ({ drift }: { drift: number }) => {
               </table>
             </div>
 
-            <div className="space-y-3 font-survey text-[0.7rem] text-radcliffe-cream/70 leading-relaxed">
+            <div className="space-y-3 font-survey text-[0.7rem] text-radcliffe-cream/80 leading-relaxed">
               <p>
                 The awards were not published until <span className="text-radcliffe-red/70 font-bold">August 17</span> — two days after independence. For 72 hours, villages along the line did not know which flag to fly.
               </p>
@@ -193,11 +193,11 @@ export const VoidSection = ({ drift }: { drift: number }) => {
             <p className="font-body italic text-lg leading-relaxed text-radcliffe-cream/85 text-left">
               "We celebrated independence on August 15 with the Indian flag. On August 17, soldiers came and told us we were now Pakistan."
             </p>
-            <p className="font-body italic text-sm text-radcliffe-cream/40 mt-2">
+            <p className="font-body italic text-sm text-radcliffe-cream/60 mt-2">
               — Chakma community account, Chittagong Hill Tracts
             </p>
             <div className="h-8" />
-            <p className="font-body italic text-sm text-radcliffe-cream/50">
+            <p className="font-body italic text-sm text-radcliffe-cream/60">
               — From contemporary accounts by Ian Stephens, <em>The Statesman</em>
             </p>
           </div>

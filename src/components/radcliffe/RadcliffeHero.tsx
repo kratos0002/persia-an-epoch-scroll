@@ -215,7 +215,7 @@ export const RadcliffeHero = () => {
         </motion.div>
 
         <motion.p
-          className="mt-4 font-survey text-[0.6rem] tracking-[0.3em] text-radcliffe-grid/40 uppercase"
+          className="mt-4 font-survey text-[0.6rem] tracking-[0.3em] text-radcliffe-grid/60 uppercase"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 1 }}

@@ -123,7 +123,7 @@ const TehsilTable = () => (
 );
 
 export const LivingBorderSection = () => (
-  <section className="relative py-24 md:py-32 radcliffe-bg radcliffe-survey-grid radcliffe-grain overflow-hidden">
+  <section className="relative z-40 py-24 md:py-32 radcliffe-bg radcliffe-survey-grid radcliffe-grain overflow-hidden">
     <div className="max-w-5xl mx-auto px-6 md:px-12 relative z-40">
 
       {/* ── Section Header ──────────────────── */}
