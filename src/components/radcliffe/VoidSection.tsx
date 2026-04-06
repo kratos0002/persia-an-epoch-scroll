@@ -1,12 +1,11 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll } from 'framer-motion';
-import { HumanVoice, DriftPanel } from './SeamSystem';
+import { DriftPanel } from './SeamSystem';
 import { REFUGEE_NAMES, DISPLACEMENT_DATA } from './radcliffeData';
-import { prepare, layout } from '@chenglou/pretext';
 
 // Build a single continuous text block from refugee names
 const NAMES_TEXT = Array.from({ length: 40 }, () => REFUGEE_NAMES.join(' · ')).join(' · ');
-const NAMES_FONT = '400 5px "survey", ui-monospace, monospace';
+const NAMES_FONT = '400 5px ui-monospace, monospace';
 const NAMES_LINE_HEIGHT = 7;
 
 // Canvas-rendered name scroll powered by pretext
