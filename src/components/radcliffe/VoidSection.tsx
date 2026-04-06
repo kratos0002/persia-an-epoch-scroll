@@ -12,12 +12,22 @@ const NAMES_LINE_HEIGHT = 7;
 const NameCanvas: React.FC<{ width: number; height: number; progress: number }> = ({ width, height, progress }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Use pretext to calculate total text height at this width
-  const prepared = useMemo(() => prepare(NAMES_TEXT, NAMES_FONT), []);
-  const totalHeight = useMemo(() => {
-    if (width <= 0) return 0;
-    return layout(prepared, width, NAMES_LINE_HEIGHT).height;
-  }, [prepared, width]);
+  // Estimate total text height by word-wrapping manually
+  const totalHeight = React.useMemo(() => {
+    if (width <= 0 || typeof document === 'undefined') return 5000;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return 5000;
+    ctx.font = NAMES_FONT;
+    const words = NAMES_TEXT.split(' ');
+    let lines = 1, line = '';
+    for (const word of words) {
+      const test = line ? `${line} ${word}` : word;
+      if (ctx.measureText(test).width > width && line) { lines++; line = word; }
+      else { line = test; }
+    }
+    return lines * NAMES_LINE_HEIGHT;
+  }, [width]);
 
   // Paint visible window of names onto canvas
   useEffect(() => {
