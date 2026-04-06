@@ -149,7 +149,7 @@ export const VoidSection = ({ drift }: { drift: number }) => {
               </table>
             </div>
 
-            <div className="space-y-3 font-survey text-[0.7rem] text-radcliffe-grid/40 leading-relaxed">
+            <div className="space-y-3 font-survey text-[0.7rem] text-radcliffe-cream/70 leading-relaxed">
               <p>
                 The awards were not published until <span className="text-radcliffe-red/70 font-bold">August 17</span> — two days after independence. For 72 hours, villages along the line did not know which flag to fly.
               </p>
