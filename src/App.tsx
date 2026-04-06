@@ -27,6 +27,7 @@ import ShareRedirect from "./pages/ShareRedirect.tsx";
 import OpiumTrade from "./pages/OpiumTrade.tsx";
 import Kurukshetra from "./pages/Kurukshetra.tsx";
 import RadcliffeLine from "./pages/RadcliffeLine.tsx";
+import Sources from "./pages/Sources.tsx";
 import StoryPreview from "./pages/StoryPreview.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { MobileNotice } from "@/components/site/MobileNotice";
@@ -75,6 +76,7 @@ const App = () => (
           <Route path="/admin" element={<Admin />} />
           <Route path="/share/:storyId" element={<ShareRedirect />} />
           <Route path="/preview/:storyId" element={<StoryPreview />} />
+          <Route path="/sources" element={<Sources />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

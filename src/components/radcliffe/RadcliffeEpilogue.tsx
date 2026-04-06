@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const UPCOMING_EPOCHS = [
@@ -118,8 +119,18 @@ export const RadcliffeEpilogue = () => (
           ))}
         </div>
 
-        {/* Site attribution */}
+        {/* Sources link */}
         <div className="mt-16 text-center">
+          <Link
+            to="/sources#radcliffe-line"
+            className="inline-block font-survey text-[0.6rem] text-radcliffe-cream/40 uppercase tracking-[0.25em] hover:text-radcliffe-cream/60 transition-colors duration-300"
+          >
+            Sources and further reading →
+          </Link>
+        </div>
+
+        {/* Site attribution */}
+        <div className="mt-8 text-center">
           <p className="font-survey text-[0.5rem] text-radcliffe-cream/30 uppercase tracking-[0.4em]">
             Epoch Lives
           </p>
