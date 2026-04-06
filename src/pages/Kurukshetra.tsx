@@ -7,7 +7,7 @@ import { useKurukshetraScrollSpy } from '@/hooks/useKurukshetraScrollSpy';
 import { KurukshetraHero } from '@/components/kurukshetra/KurukshetraHero';
 import { GitaSection } from '@/components/kurukshetra/GitaSection';
 import { AkshauhiniPyramid } from '@/components/kurukshetra/AkshauhiniPyramid';
-import { VyuhaTheater } from '@/components/kurukshetra/VyuhaTheater';
+import { WarTheater } from '@/components/kurukshetra/theater/WarTheater';
 import { AstraGallery } from '@/components/kurukshetra/AstraGallery';
 import { YantraCrackSequence } from '@/components/kurukshetra/YantraCrackSequence';
 import { DatingDial } from '@/components/kurukshetra/DatingDial';
@@ -31,7 +31,7 @@ const Kurukshetra = () => {
       <EditionBadge essayId="kurukshetra" variant="light" />
       <GitaSection />
       <AkshauhiniPyramid />
-      <VyuhaTheater />
+      <WarTheater />
       <AstraGallery />
       <YantraCrackSequence />
       <DatingDial />

@@ -159,6 +159,48 @@ export const VYUHA_SHAPES: Record<string, VyuhaShape> = {
       'M45,45 L55,45 L55,55 L45,55 Z',
       'M50,20 L50,80', 'M20,50 L80,50', // cross lines
     ] },
+  Makara: { name: 'Makara', sanskrit: 'मकर', meaning: 'Crocodile',
+    paths: [
+      'M10,50 L30,30 L50,45 L70,30 L90,50', // upper jaw
+      'M10,50 L30,65 L50,55 L70,65 L90,50', // lower jaw
+      'M50,45 L50,55', // spine
+      'M30,30 Q40,20 50,25 Q60,20 70,30', // crest
+    ] },
+  Shyen: { name: 'Shyen', sanskrit: 'श्येन', meaning: 'Hawk',
+    paths: [
+      'M50,15 L50,75', // spine
+      'M50,30 L10,55 L20,50 L50,40', // left wing
+      'M50,30 L90,55 L80,50 L50,40', // right wing
+      'M40,75 L50,90 L60,75', // tail
+    ] },
+  Mandala: { name: 'Mandala', sanskrit: 'मण्डल', meaning: 'Circular Fortress',
+    paths: [
+      'M50,10 A40,40 0 1,1 50,90 A40,40 0 1,1 50,10', // outer circle
+      'M50,25 A25,25 0 1,1 50,75 A25,25 0 1,1 50,25', // inner circle
+      'M50,10 L50,90', 'M10,50 L90,50', // cross
+      'M21,21 L79,79', 'M79,21 L21,79', // diagonals
+    ] },
+  Sringataka: { name: 'Sringataka', sanskrit: 'शृङ्गाटक', meaning: 'Horn',
+    paths: [
+      'M50,10 L80,80 L20,80 Z', // main triangle
+      'M50,30 L68,72 L32,72 Z', // inner triangle
+      'M50,10 L50,80', // center line
+    ] },
+  Kurma: { name: 'Kurma', sanskrit: 'कूर्म', meaning: 'Tortoise',
+    paths: [
+      'M50,20 Q80,30 85,50 Q80,70 50,80 Q20,70 15,50 Q20,30 50,20', // shell
+      'M50,30 Q70,38 72,50 Q70,62 50,70 Q30,62 28,50 Q30,38 50,30', // inner shell
+      'M30,50 L20,45', 'M70,50 L80,45', // front legs
+      'M35,68 L25,75', 'M65,68 L75,75', // rear legs
+    ] },
+  Trishula: { name: 'Trishula', sanskrit: 'त्रिशूल', meaning: 'Trident',
+    paths: [
+      'M50,90 L50,30', // shaft
+      'M50,30 L50,10', // center prong
+      'M50,30 L30,15', // left prong
+      'M50,30 L70,15', // right prong
+      'M35,35 L65,35', // crossbar
+    ] },
 };
 
 /* ── Astra data ── */
@@ -213,6 +255,34 @@ export const DATING_THEORIES: DatingTheory[] = [
   { researcher: 'S. Balakrishna', date: '2559 BCE', evidence: '13-day eclipse pairs analysis' },
   { researcher: 'Nilesh Oak', date: '5561 BCE', evidence: 'Arundhati-Vasistha star observation' },
   { researcher: 'Traditional Puranic', date: '3138–3102 BCE', evidence: 'Kali Yuga commencement; royal genealogies' },
+];
+
+/* ── Day tier classification ── */
+export type DayTier = 'pivotal' | 'notable' | 'condensed';
+
+export const DAY_TIERS: Record<number, DayTier> = {
+  1: 'notable', 2: 'condensed', 3: 'condensed', 4: 'condensed', 5: 'condensed',
+  6: 'notable', 7: 'condensed', 8: 'condensed', 9: 'notable',
+  10: 'pivotal', 11: 'condensed', 12: 'condensed',
+  13: 'pivotal', 14: 'pivotal', 15: 'notable',
+  16: 'condensed', 17: 'pivotal', 18: 'pivotal',
+};
+
+/* ── Phase definitions ── */
+export interface PhaseDef {
+  id: WarPhase;
+  name: string;
+  days: [number, number];
+  commander: string;
+  devanagari: string;
+  subtitle: string;
+}
+
+export const PHASE_DEFS: PhaseDef[] = [
+  { id: 1, name: 'Golden Order', days: [1, 5], commander: 'Bhishma', devanagari: 'प्रथम', subtitle: 'The war begins with honor intact' },
+  { id: 2, name: 'Fracture', days: [6, 10], commander: 'Bhishma', devanagari: 'द्वितीय', subtitle: 'The grandsire falls; the cracks appear' },
+  { id: 3, name: 'Blood & Fire', days: [11, 14], commander: 'Drona', devanagari: 'तृतीय', subtitle: 'Every rule broken, every vow tested' },
+  { id: 4, name: 'Ash', days: [15, 18], commander: 'Drona → Karna → Shalya', devanagari: 'चतुर्थ', subtitle: 'The age ends in ash and silence' },
 ];
 
 /* ── Akshauhini breakdown ── */
