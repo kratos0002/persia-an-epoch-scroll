@@ -67,6 +67,86 @@ export const REFUGEE_NAMES = [
   'Nasir Khan', 'Kamala Rani', 'Irfan Ahmed', 'Sarojini', 'Majid Khan',
 ];
 
+export const ENCLAVE_DETAILS = {
+  total: 162,
+  indianInBangladesh: 111,
+  bangladeshInIndia: 51,
+  counterEnclaves: 28,
+  counterCounterEnclaves: 1, // Dahala Khagrabari
+  dahagramAngarpota: {
+    population: 20000,
+    areaKm2: 18.68,
+    corridorName: 'Tin Bigha Corridor',
+    corridorDimensions: '178m × 85m',
+    leaseYear: 1992,
+    fullAccessYear: 2011,
+  },
+  landBoundaryAgreement: {
+    year: 2015,
+    exchangedEnclaves: 162,
+    peopleAffected: 52000,
+  },
+};
+
+export const SIR_CREEK_DATA = {
+  lengthKm: 96,
+  location: 'Rann of Kutch, Gujarat–Sindh border',
+  indiaPosition: 'Mid-channel (thalweg principle, standard in international law)',
+  pakistanPosition: 'Eastern bank (per 1914 Sindh government resolution)',
+  disputedEezKm2: 30000,
+  failedNegotiations: [
+    { year: 1969, outcome: 'Rann of Kutch tribunal — did not address Sir Creek' },
+    { year: 1989, outcome: 'Joint survey begins, no resolution' },
+    { year: 2007, outcome: 'Pakistan proposes tribunal, India declines' },
+    { year: 2012, outcome: 'Latest round — stalled, no progress since' },
+  ],
+};
+
+export const BAGGE_AWARD = {
+  year: 1950,
+  adjudicator: 'Justice Algot Bagge (Swedish)',
+};
+
+export const BERUBARI_UNION = {
+  areaKm2: 8.76,
+  agreementYear: 1958,
+  amendmentNumber: '9th',
+  amendmentYear: 1960,
+};
+
+export const GURDASPUR_KASHMIR = {
+  tehsils: [
+    { name: 'Pathankot', muslimPct: 38.0, allocation: 'India' as const },
+    { name: 'Gurdaspur', muslimPct: 51.14, allocation: 'India' as const },
+    { name: 'Batala', muslimPct: 55.06, allocation: 'India' as const },
+    { name: 'Shakargarh', muslimPct: 77.0, allocation: 'Pakistan' as const },
+  ],
+};
+
+export const PERSPECTIVES_EXPANDED = [
+  {
+    id: 'indian',
+    color: 'radcliffe-saffron',
+    label: 'Indian',
+    summary: 'Tragic but inevitable.',
+    expanded: 'Indian historiography frames Partition as the price of independence — a British failure of administration rather than a fundamental error of principle. The focus falls on the violence of the transfer period, Mountbatten\'s acceleration of the timetable, and the tragedy of refugee displacement. Radcliffe is viewed as a well-meaning amateur handed an impossible task. The Gurdaspur award is seen as correctly accounting for irrigation and road infrastructure.',
+  },
+  {
+    id: 'pakistani',
+    color: 'radcliffe-green',
+    label: 'Pakistani',
+    summary: 'A conspiracy to cripple Pakistan at birth.',
+    expanded: 'Pakistani historiography sees the Radcliffe Award as systematically biased against Pakistan. The Ferozepore reversal, the Gurdaspur award opening India\'s road to Kashmir, and the Chittagong Hill Tracts anomaly are cited as evidence of a Congress-Mountbatten conspiracy. Radcliffe\'s destruction of his papers is viewed not as personal anguish but as evidence disposal.',
+  },
+  {
+    id: 'bangladeshi',
+    color: 'radcliffe-teal',
+    label: 'Bangladeshi',
+    summary: 'A line through a single people.',
+    expanded: 'Bangladeshi historiography emphasizes that the Radcliffe Line cut through a single linguistic and cultural nation — Bengali-speaking people divided not by their own choice but by a religious criterion imposed from Delhi and London. The enclave absurdities, the Chittagong Hill Tracts paradox, and the arbitrary Sylhet referendum all underscore a partition designed for Punjab\'s logic but imposed on Bengal\'s reality. The 1971 war is seen as the inevitable correction.',
+  },
+];
+
 export const BENGAL_DECISIONS = [
   { area: 'Calcutta', detail: 'Hindu-majority city awarded to India; economic capital of all Bengal', type: 'india' as const },
   { area: 'Murshidabad', detail: '70% Muslim district awarded to India to preserve Ganges access', type: 'india' as const },

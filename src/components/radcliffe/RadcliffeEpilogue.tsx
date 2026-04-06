@@ -53,7 +53,7 @@ export const RadcliffeEpilogue = () => (
         />
 
         <motion.div
-          className="space-y-2 font-survey text-[0.7rem] text-radcliffe-cream/30"
+          className="space-y-2 font-survey text-[0.7rem] text-radcliffe-cream/60"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1 }}
@@ -65,7 +65,7 @@ export const RadcliffeEpilogue = () => (
         </motion.div>
 
         <motion.p
-          className="mt-12 font-body italic text-radcliffe-cream/20 max-w-md mx-auto text-sm leading-relaxed"
+          className="mt-12 font-body italic text-radcliffe-cream/50 max-w-md mx-auto text-sm leading-relaxed"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1.5, delay: 1.5 }}
@@ -85,7 +85,7 @@ export const RadcliffeEpilogue = () => (
         transition={{ duration: 1, delay: 0.3 }}
         viewport={{ once: true }}
       >
-        <p className="font-survey text-[0.55rem] text-radcliffe-cream/20 uppercase tracking-[0.3em] text-center mb-10">
+        <p className="font-survey text-[0.55rem] text-radcliffe-cream/40 uppercase tracking-[0.3em] text-center mb-10">
           Next Epochs
         </p>
 
@@ -99,19 +99,19 @@ export const RadcliffeEpilogue = () => (
               transition={{ duration: 0.8, delay: 0.5 + i * 0.15 }}
               viewport={{ once: true }}
             >
-              <p className="font-survey text-[0.6rem] text-radcliffe-red/50 uppercase tracking-[0.3em] mb-3">
+              <p className="font-survey text-[0.6rem] text-radcliffe-red/70 uppercase tracking-[0.3em] mb-3">
                 {epoch.year}
               </p>
-              <h3 className="font-display text-lg font-bold text-radcliffe-cream/60 mb-1 group-hover:text-radcliffe-cream/80 transition-colors duration-500">
+              <h3 className="font-display text-lg font-bold text-radcliffe-cream/80 mb-1 group-hover:text-radcliffe-cream/90 transition-colors duration-500">
                 {epoch.title}
               </h3>
-              <p className="font-body italic text-[0.7rem] text-radcliffe-cream/40 mb-3">
+              <p className="font-body italic text-[0.7rem] text-radcliffe-cream/50 mb-3">
                 {epoch.subtitle}
               </p>
-              <p className="font-survey text-[0.65rem] text-radcliffe-cream/40 leading-relaxed">
+              <p className="font-survey text-[0.65rem] text-radcliffe-cream/55 leading-relaxed">
                 {epoch.description}
               </p>
-              <p className="font-survey text-[0.5rem] text-radcliffe-cream/25 uppercase tracking-[0.3em] mt-4">
+              <p className="font-survey text-[0.5rem] text-radcliffe-cream/35 uppercase tracking-[0.3em] mt-4">
                 Coming soon
               </p>
             </motion.div>
@@ -120,10 +120,10 @@ export const RadcliffeEpilogue = () => (
 
         {/* Site attribution */}
         <div className="mt-16 text-center">
-          <p className="font-survey text-[0.5rem] text-radcliffe-cream/20 uppercase tracking-[0.4em]">
+          <p className="font-survey text-[0.5rem] text-radcliffe-cream/30 uppercase tracking-[0.4em]">
             Epoch Lives
           </p>
-          <p className="font-body italic text-[0.6rem] text-radcliffe-cream/15 mt-1">
+          <p className="font-body italic text-[0.6rem] text-radcliffe-cream/25 mt-1">
             Turning points in history, felt
           </p>
         </div>
