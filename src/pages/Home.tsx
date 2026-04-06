@@ -7,6 +7,22 @@ import { StoryGrid } from '@/components/home/StoryGrid';
 import { usePageAnalytics } from '@/hooks/usePageAnalytics';
 import { useStoryOverrides } from '@/hooks/useStoryOverrides';
 import { STORY_REGISTRY } from '@/lib/storyRegistry';
+import storyPersia from '@/assets/story-persia.jpg';
+import storyWisdom from '@/assets/story-wisdom.jpg';
+import storyMongol from '@/assets/story-mongol.jpg';
+import storyBuddhism from '@/assets/story-buddhism.jpg';
+import storySamurai from '@/assets/story-samurai.jpg';
+import story1857 from '@/assets/story-1857.jpg';
+import storyNapoleon from '@/assets/story-napoleon.jpg';
+import storyConstantinople from '@/assets/story-constantinople.jpg';
+import storyIndia from '@/assets/story-india.jpg';
+import storyNuclear from '@/assets/story-nuclear.jpg';
+import storyNutmeg from '@/assets/story-nutmeg.jpg';
+import storyHormuz from '@/assets/story-hormuz.jpg';
+import storyRamayana from '@/assets/story-ramayana.jpg';
+import storyBerlin from '@/assets/story-berlin.jpg';
+import storyBattuta from '@/assets/story-battuta.jpg';
+import storyShakti from '@/assets/story-shakti.svg';
 
 /* ── Types ───────────────────────────────────── */
 

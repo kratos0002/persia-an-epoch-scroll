@@ -63,6 +63,9 @@ export default {
           line: "hsl(var(--shakti-line))",
           glow: "hsl(var(--shakti-glow))",
           smoke: "hsl(var(--shakti-smoke))",
+          vellum: "hsl(var(--shakti-vellum))",
+          "dark-ink": "hsl(var(--shakti-dark-ink))",
+          "warm-border": "hsl(var(--shakti-warm-border))",
         },
         kuru: {
           dust: "hsl(var(--kuru-dust))",

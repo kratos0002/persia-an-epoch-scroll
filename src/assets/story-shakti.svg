@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <!-- Vermilion gradient background -->
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#e63b2e"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </radialGradient>
+    <!-- Eye gradient -->
+    <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f5e6f0"/>
+      <stop offset="70%" stop-color="#e8c8e0"/>
+      <stop offset="100%" stop-color="#d4a0c8"/>
+    </radialGradient>
+    <!-- Third eye gradient -->
+    <linearGradient id="thirdEye" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8c8e0"/>
+      <stop offset="50%" stop-color="#c084b0"/>
+      <stop offset="100%" stop-color="#7a3a60"/>
+    </linearGradient>
+    <!-- Lip gradient -->
+    <linearGradient id="lipColor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d44060"/>
+      <stop offset="100%" stop-color="#a02848"/>
+    </linearGradient>
+    <!-- Subtle gold shimmer for decorative dots -->
+    <radialGradient id="goldDot" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#f5d080"/>
+      <stop offset="100%" stop-color="#c8982c"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bg)"/>
+
+  <!-- Subtle mandala pattern behind face (very faint) -->
+  <g opacity="0.06" stroke="#fff" fill="none" stroke-width="0.8">
+    <circle cx="400" cy="250" r="180"/>
+    <circle cx="400" cy="250" r="160"/>
+    <circle cx="400" cy="250" r="140"/>
+    <!-- Petal ring -->
+    <g transform="translate(400,250)">
+      <ellipse rx="30" ry="80" transform="rotate(0)"/>
+      <ellipse rx="30" ry="80" transform="rotate(30)"/>
+      <ellipse rx="30" ry="80" transform="rotate(60)"/>
+      <ellipse rx="30" ry="80" transform="rotate(90)"/>
+      <ellipse rx="30" ry="80" transform="rotate(120)"/>
+      <ellipse rx="30" ry="80" transform="rotate(150)"/>
+    </g>
+  </g>
+
+  <!-- ===== FACE ELEMENTS ===== -->
+
+  <!-- Left eyebrow — bold sweeping arc -->
+  <path d="M220,195 Q260,148 320,165 Q340,170 348,180"
+        stroke="#1a1a2e" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <!-- Right eyebrow -->
+  <path d="M580,195 Q540,148 480,165 Q460,170 452,180"
+        stroke="#1a1a2e" stroke-width="10" fill="none" stroke-linecap="round"/>
+
+  <!-- Left eye — almond shape -->
+  <path d="M248,215 Q300,185 352,215 Q300,240 248,215Z" fill="url(#eyeGlow)"/>
+  <path d="M248,215 Q300,185 352,215 Q300,240 248,215Z"
+        stroke="#1a1a2e" stroke-width="2.5" fill="none"/>
+  <!-- Left pupil -->
+  <circle cx="300" cy="214" r="18" fill="#1a1a2e"/>
+  <circle cx="306" cy="208" r="4" fill="#ffffff" opacity="0.7"/>
+  <!-- Left eyeliner wing -->
+  <path d="M248,215 Q232,208 222,198" stroke="#1a1a2e" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Right eye -->
+  <path d="M448,215 Q500,185 552,215 Q500,240 448,215Z" fill="url(#eyeGlow)"/>
+  <path d="M448,215 Q500,185 552,215 Q500,240 448,215Z"
+        stroke="#1a1a2e" stroke-width="2.5" fill="none"/>
+  <!-- Right pupil -->
+  <circle cx="500" cy="214" r="18" fill="#1a1a2e"/>
+  <circle cx="506" cy="208" r="4" fill="#ffffff" opacity="0.7"/>
+  <!-- Right eyeliner wing -->
+  <path d="M552,215 Q568,208 578,198" stroke="#1a1a2e" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Third eye (tilak) — teardrop -->
+  <path d="M400,130 Q410,155 400,175 Q390,155 400,130Z" fill="url(#thirdEye)"/>
+  <path d="M400,130 Q410,155 400,175 Q390,155 400,130Z"
+        stroke="#7a3a60" stroke-width="1.5" fill="none"/>
+  <!-- Inner dot -->
+  <circle cx="400" cy="155" r="4" fill="#4a1a35"/>
+
+  <!-- Nose — minimal, elegant -->
+  <path d="M400,235 L394,290 Q390,298 386,295"
+        stroke="#1a1a2e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Nose ring -->
+  <circle cx="383" cy="296" r="8" stroke="#1a1a2e" stroke-width="2.5" fill="none"/>
+  <circle cx="383" cy="296" r="2" fill="#1a1a2e"/>
+
+  <!-- Lips -->
+  <!-- Upper lip — cupid's bow -->
+  <path d="M362,340 Q375,330 400,338 Q425,330 438,340 Q425,345 400,342 Q375,345 362,340Z"
+        fill="url(#lipColor)"/>
+  <!-- Lower lip -->
+  <path d="M362,340 Q380,360 400,362 Q420,360 438,340 Q425,345 400,342 Q375,345 362,340Z"
+        fill="url(#lipColor)" opacity="0.85"/>
+  <!-- Lip line -->
+  <path d="M362,340 Q375,330 400,338 Q425,330 438,340"
+        stroke="#7a2040" stroke-width="1" fill="none"/>
+
+  <!-- Sindoor line (parting) — extending up from third eye -->
+  <line x1="400" y1="125" x2="400" y2="85" stroke="#ff3030" stroke-width="3" opacity="0.5"/>
+
+  <!-- Decorative bindis / dots flanking face -->
+  <circle cx="215" cy="240" r="3" fill="url(#goldDot)" opacity="0.5"/>
+  <circle cx="585" cy="240" r="3" fill="url(#goldDot)" opacity="0.5"/>
+  <circle cx="210" cy="260" r="2" fill="url(#goldDot)" opacity="0.35"/>
+  <circle cx="590" cy="260" r="2" fill="url(#goldDot)" opacity="0.35"/>
+
+  <!-- Small decorative trishul hint above third eye -->
+  <g transform="translate(400,75)" stroke="#fff" stroke-width="1.5" fill="none" opacity="0.15">
+    <line x1="0" y1="0" x2="0" y2="-30"/>
+    <path d="M0,-30 Q-8,-38 -5,-48"/>
+    <path d="M0,-30 Q8,-38 5,-48"/>
+    <line x1="0" y1="-30" x2="0" y2="-50"/>
+  </g>
+</svg>
