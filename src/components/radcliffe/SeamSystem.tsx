@@ -172,7 +172,7 @@ export const RedInk = ({ children }: { children: ReactNode }) => (
 // Margin note — handwritten annotation
 export const MarginNote = ({ children, side = 'right' }: { children: ReactNode; side?: 'left' | 'right' }) => (
   <span
-    className={`absolute ${side === 'right' ? '-right-2 md:-right-16' : '-left-2 md:-left-16'} font-body italic text-[0.6rem] text-radcliffe-red/60 w-14 leading-tight hidden md:block`}
+    className={`absolute top-2 ${side === 'right' ? '-right-2 md:-right-16' : '-left-2 md:-left-16'} font-body italic text-[0.6rem] text-radcliffe-red/60 w-14 leading-tight hidden md:block`}
     style={{ transform: 'rotate(-2deg)' }}
   >
     {children}
