@@ -1,20 +1,69 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BENGAL_CLUSTER } from '@/components/visuals/shaktiPeethData';
-import { ShaktiSectionShell } from './ShaktiSectionShell';
 
 export const BengalBloomSection = () => {
   return (
-    <ShaktiSectionShell
+    <section
       id="shakti-bengal"
-      eyebrow="Why the east dominates"
-      title="Bengal blooms into a devotional density field"
-      intro="No part of the map is more crowded than Bengal. The later peetha canons are not evenly distributed — they flower in the east as local goddess shrines are woven into a single tantric geography."
+      className="relative"
+      style={{ background: 'hsl(var(--shakti-night))' }}
     >
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.8fr)] lg:items-center">
-        <div className="shakti-panel relative aspect-[1.1/1] overflow-hidden p-6">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--shakti-vermilion)/0.18),transparent_48%)]" />
-          <svg viewBox="0 0 760 620" className="relative h-full w-full">
+      <div className="lg:flex lg:min-h-screen">
+        {/* Left — scrollable text */}
+        <div className="w-full px-6 py-16 lg:w-[50%] lg:px-10 lg:py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="shakti-chip mb-4 inline-flex">Why the east dominates</p>
+            <h2 className="shakti-title text-3xl md:text-5xl">Bengal blooms into a devotional density field</h2>
+            <p className="mt-4 max-w-lg font-body text-lg leading-relaxed text-shakti-ink/70">
+              No part of the map is more crowded than Bengal. The later peetha canons are not evenly distributed — they flower in the east as local goddess shrines are woven into a single tantric geography.
+            </p>
+          </motion.div>
+
+          {/* Insight */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="mt-10 border-l-2 border-shakti-gold/30 pl-5"
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-shakti-gold/72">What this shows</p>
+            <p className="mt-3 font-body text-xl leading-relaxed text-shakti-ink/78">
+              Bengal is not just one region among many; it is the place where the network becomes saturated, local, and politically consequential.
+            </p>
+          </motion.div>
+
+          {/* Site list */}
+          <div className="mt-10">
+            <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-shakti-ink/40">{BENGAL_CLUSTER.length} sites in the cluster</p>
+            {BENGAL_CLUSTER.map((site, index) => (
+              <motion.div
+                key={site.id}
+                initial={{ opacity: 0, x: -12 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.4, delay: index * 0.04 }}
+                className="border-b border-shakti-line/10 py-3"
+              >
+                <span className="font-display text-xl text-shakti-ink">{site.name}</span>
+                <span className="ml-3 text-[10px] uppercase tracking-[0.18em] text-shakti-ink/45">{site.bodyPart}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right — sticky radial burst SVG */}
+        <div
+          className="relative flex w-full items-center justify-center p-6 lg:sticky lg:top-0 lg:h-screen lg:w-[50%]"
+          style={{ background: `radial-gradient(circle at 50% 50%, hsl(var(--shakti-vermilion) / 0.12), transparent 50%)` }}
+        >
+          <svg viewBox="0 0 760 620" className="h-auto w-full max-w-[36rem]">
             {BENGAL_CLUSTER.map((site, index) => {
               const angle = (Math.PI * 2 * index) / BENGAL_CLUSTER.length;
               const ring = index % 2 === 0 ? 170 : 230;
@@ -32,8 +81,20 @@ export const BengalBloomSection = () => {
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.5, delay: index * 0.03 }}
                   />
-                  <motion.circle cx={x} cy={y} r={index % 3 === 0 ? 13 : 10} fill="hsl(var(--shakti-vermilion) / 0.22)" stroke="hsl(var(--shakti-gold) / 0.8)" strokeWidth="2" initial={{ scale: 0.4, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.35, delay: 0.15 + index * 0.03 }} />
-                  <text x={x} y={y + 30} textAnchor="middle" fill="hsl(var(--shakti-ink) / 0.78)" fontSize="14" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{site.name}</text>
+                  <motion.circle
+                    cx={x} cy={y}
+                    r={index % 3 === 0 ? 13 : 10}
+                    fill="hsl(var(--shakti-vermilion) / 0.22)"
+                    stroke="hsl(var(--shakti-gold) / 0.8)"
+                    strokeWidth="2"
+                    initial={{ scale: 0.4, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.35, delay: 0.15 + index * 0.03 }}
+                  />
+                  <text x={x} y={y + 30} textAnchor="middle" fill="hsl(var(--shakti-ink) / 0.78)" fontSize="14" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                    {site.name}
+                  </text>
                 </g>
               );
             })}
@@ -42,23 +103,7 @@ export const BengalBloomSection = () => {
             <text x="380" y="330" textAnchor="middle" fill="hsl(var(--shakti-ink))" fontSize="28" style={{ fontFamily: 'Playfair Display, serif', fontWeight: 700 }}>{BENGAL_CLUSTER.length}</text>
           </svg>
         </div>
-        <div className="grid gap-4">
-          <div className="shakti-panel p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-shakti-gold/72">What this shows</p>
-            <p className="mt-3 font-body text-xl leading-relaxed text-shakti-ink/78">
-              Bengal is not just one region among many; it is the place where the network becomes saturated, local, and politically consequential.
-            </p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {BENGAL_CLUSTER.slice(0, 8).map((site) => (
-              <div key={site.id} className="rounded-[1.4rem] border border-shakti-line/15 bg-shakti-panel/70 p-4">
-                <p className="font-display text-2xl text-shakti-ink">{site.name}</p>
-                <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-shakti-ink/52">{site.bodyPart}</p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
-    </ShaktiSectionShell>
+    </section>
   );
 };

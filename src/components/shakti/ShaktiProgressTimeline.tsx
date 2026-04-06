@@ -15,7 +15,7 @@ export const ShaktiProgressTimeline = ({ activeSection, globalProgress }: Shakti
   return (
     <div className="fixed right-4 top-1/2 z-50 hidden -translate-y-1/2 lg:flex flex-col items-end gap-0">
       <motion.div
-        className="absolute -left-40 text-right font-display text-sm text-shakti-gold"
+        className="absolute -left-40 text-right font-display text-sm text-shakti-vermilion"
         style={{ top: `${(activeIndex / Math.max(SHAKTI_SECTIONS.length - 1, 1)) * 100}%` }}
         layout
       >
@@ -35,7 +35,7 @@ export const ShaktiProgressTimeline = ({ activeSection, globalProgress }: Shakti
             >
               <span
                 className={cn('block rounded-full transition-all duration-500', isActive ? 'h-3.5 w-3.5' : isPast ? 'h-2.5 w-2.5' : 'h-2 w-2')}
-                style={{ background: isActive ? 'hsl(var(--shakti-gold))' : isPast ? 'hsl(var(--shakti-vermilion))' : 'hsl(var(--shakti-line) / 0.45)', boxShadow: isActive ? '0 0 18px hsl(var(--shakti-gold) / 0.65)' : 'none' }}
+                style={{ background: isActive ? 'hsl(var(--shakti-vermilion))' : isPast ? 'hsl(var(--shakti-gold))' : 'hsl(var(--shakti-line) / 0.45)', boxShadow: isActive ? '0 0 18px hsl(var(--shakti-vermilion) / 0.55)' : 'none' }}
               />
               <span className="absolute right-6 whitespace-nowrap text-xs font-body text-shakti-ink/0 transition-opacity group-hover:text-shakti-ink/70 lg:group-hover:text-shakti-ink/70">
                 {section.label}
@@ -46,7 +46,7 @@ export const ShaktiProgressTimeline = ({ activeSection, globalProgress }: Shakti
       </div>
 
       <div className="absolute left-1/2 top-0 bottom-0 -z-10 w-px -translate-x-1/2 bg-shakti-line/15">
-        <motion.div className="w-full origin-top bg-[linear-gradient(180deg,hsl(var(--shakti-gold)),hsl(var(--shakti-vermilion)))]" style={{ height: `${globalProgress * 100}%` }} />
+        <motion.div className="w-full origin-top bg-[linear-gradient(180deg,hsl(var(--shakti-vermilion)),hsl(var(--shakti-gold)))]" style={{ height: `${globalProgress * 100}%` }} />
       </div>
     </div>
   );

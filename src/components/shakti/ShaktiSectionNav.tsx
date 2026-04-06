@@ -12,7 +12,7 @@ export const ShaktiSectionNav = ({ activeSection }: ShaktiSectionNavProps) => {
   return (
     <>
       <button
-        className="fixed left-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-shakti-line/20 bg-shakti-panel/85 text-shakti-gold backdrop-blur-md"
+        className="fixed left-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-shakti-line/20 bg-shakti-panel/85 text-shakti-vermilion backdrop-blur-md"
         onClick={() => setIsOpen((value) => !value)}
         aria-label="Toggle Shakti navigation"
       >
@@ -20,7 +20,7 @@ export const ShaktiSectionNav = ({ activeSection }: ShaktiSectionNavProps) => {
           {[0, 1, 2].map((line) => (
             <motion.div
               key={line}
-              className="h-px w-4 bg-shakti-gold"
+              className="h-px w-4 bg-shakti-vermilion"
               animate={isOpen ? line === 0 ? { rotate: 45, y: 5 } : line === 1 ? { opacity: 0 } : { rotate: -45, y: -5 } : { rotate: 0, y: 0, opacity: 1 }}
             />
           ))}
@@ -38,7 +38,7 @@ export const ShaktiSectionNav = ({ activeSection }: ShaktiSectionNavProps) => {
               transition={{ type: 'spring', damping: 26, stiffness: 220 }}
               className="fixed left-0 top-0 z-50 h-full w-80 overflow-y-auto border-r border-shakti-line/15 bg-[linear-gradient(180deg,hsl(var(--shakti-panel)),hsl(var(--shakti-night)))] px-6 py-20"
             >
-              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-shakti-gold/72">The Goddess as Geography</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-shakti-vermilion/72">The Goddess as Geography</p>
               <div className="mt-6 space-y-2">
                 {SHAKTI_SECTIONS.map((section) => {
                   const isActive = section.id === activeSection;
@@ -49,7 +49,7 @@ export const ShaktiSectionNav = ({ activeSection }: ShaktiSectionNavProps) => {
                         document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' });
                         setIsOpen(false);
                       }}
-                      className={`w-full rounded-[1rem] px-4 py-3 text-left transition-colors ${isActive ? 'bg-shakti-vermilion/16 text-shakti-gold' : 'text-shakti-ink/72 hover:bg-shakti-night/25'}`}
+                      className={`w-full rounded-[1rem] px-4 py-3 text-left transition-colors ${isActive ? 'bg-shakti-vermilion/16 text-shakti-vermilion' : 'text-shakti-ink/72 hover:bg-shakti-night/25'}`}
                     >
                       <span className="font-body text-sm uppercase tracking-[0.18em]">{section.label}</span>
                     </button>

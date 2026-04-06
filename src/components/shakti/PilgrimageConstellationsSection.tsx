@@ -1,26 +1,63 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PILGRIMAGE_CIRCUITS, SHAKTI_PEETHS } from '@/components/visuals/shaktiPeethData';
-import { ShaktiSectionShell } from './ShaktiSectionShell';
 
 const circuitColor: Record<string, string> = {
   gold: 'hsl(var(--shakti-gold))',
   vermilion: 'hsl(var(--shakti-vermilion))',
   lotus: 'hsl(var(--shakti-lotus))',
-  line: 'hsl(var(--shakti-line))',
+  line: 'hsl(var(--shakti-smoke))',
 };
 
 export const PilgrimageConstellationsSection = () => {
   return (
-    <ShaktiSectionShell
+    <section
       id="shakti-pilgrimage"
-      eyebrow="No single mandated route"
-      title="Pilgrimage happens in constellations, not a straight line"
-      intro="Devotees usually encounter the peethas through clusters: a Himachal trail, a Bengal circuit, an eastern tantric arc, or impossible cross-border longing."
+      className="relative"
+      style={{
+        background: `linear-gradient(180deg, hsl(35 30% 85%), hsl(var(--shakti-vellum)))`,
+      }}
     >
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
-        <div className="shakti-panel overflow-hidden p-6">
-          <svg viewBox="0 0 760 520" className="w-full">
+      <div className="lg:flex lg:min-h-screen">
+        {/* Left — scrollable circuit descriptions */}
+        <div className="w-full px-6 py-16 lg:w-[45%] lg:px-10 lg:py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="shakti-chip-light mb-4 inline-flex">No single mandated route</p>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-shakti-dark-ink md:text-5xl">Pilgrimage happens in constellations, not a straight line</h2>
+            <p className="mt-4 max-w-lg font-body text-lg leading-relaxed text-shakti-dark-ink/60">
+              Devotees usually encounter the peethas through clusters: a Himachal trail, a Bengal circuit, an eastern tantric arc, or impossible cross-border longing.
+            </p>
+          </motion.div>
+
+          {/* Circuit descriptions as prose blocks */}
+          <div className="mt-12">
+            {PILGRIMAGE_CIRCUITS.map((circuit, index) => (
+              <motion.div
+                key={circuit.name}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                className="border-b border-shakti-warm-border/30 py-7"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: circuitColor[circuit.colorKey] }} />
+                  <h3 className="font-display text-2xl text-shakti-dark-ink">{circuit.name}</h3>
+                </div>
+                <p className="mt-3 font-body text-lg leading-relaxed text-shakti-dark-ink/65">{circuit.note}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right — sticky constellation SVG */}
+        <div className="relative flex w-full items-center justify-center p-6 lg:sticky lg:top-0 lg:h-screen lg:w-[55%]">
+          <svg viewBox="0 0 760 520" className="h-auto w-full max-w-[40rem]">
             {PILGRIMAGE_CIRCUITS.map((circuit, circuitIndex) => {
               const points = circuit.sites.map((id, index) => ({
                 site: SHAKTI_PEETHS.find((site) => site.id === id),
@@ -44,7 +81,7 @@ export const PilgrimageConstellationsSection = () => {
                   {points.map((point, index) => (
                     <g key={`${circuit.name}-${point.site?.id ?? index}`}>
                       <circle cx={point.x} cy={point.y} r="10" fill={`${circuitColor[circuit.colorKey]}22`} stroke={circuitColor[circuit.colorKey]} strokeWidth="2" />
-                      <text x={point.x} y={point.y - 18} textAnchor="middle" fill="hsl(var(--shakti-ink) / 0.8)" fontSize="13" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                      <text x={point.x} y={point.y - 18} textAnchor="middle" fill="hsl(var(--shakti-dark-ink) / 0.7)" fontSize="13" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
                         {point.site?.name ?? 'Site'}
                       </text>
                     </g>
@@ -54,19 +91,7 @@ export const PilgrimageConstellationsSection = () => {
             })}
           </svg>
         </div>
-
-        <div className="grid gap-4">
-          {PILGRIMAGE_CIRCUITS.map((circuit) => (
-            <div key={circuit.name} className="shakti-panel p-5">
-              <div className="flex items-center gap-3">
-                <span className="h-3 w-3 rounded-full" style={{ background: circuitColor[circuit.colorKey] }} />
-                <h3 className="font-display text-3xl text-shakti-ink">{circuit.name}</h3>
-              </div>
-              <p className="mt-3 font-body text-lg leading-relaxed text-shakti-ink/76">{circuit.note}</p>
-            </div>
-          ))}
-        </div>
       </div>
-    </ShaktiSectionShell>
+    </section>
   );
 };
