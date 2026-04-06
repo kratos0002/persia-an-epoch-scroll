@@ -1,7 +1,8 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { motion, useScroll } from 'framer-motion';
 import { DriftPanel } from './SeamSystem';
 import { REFUGEE_NAMES, DISPLACEMENT_DATA } from './radcliffeData';
+import { prepare, layout } from '@chenglou/pretext';
 
 // Build a single continuous text block from refugee names
 const NAMES_TEXT = Array.from({ length: 40 }, () => REFUGEE_NAMES.join(' · ')).join(' · ');
@@ -12,22 +13,11 @@ const NAMES_LINE_HEIGHT = 7;
 const NameCanvas: React.FC<{ width: number; height: number; progress: number }> = ({ width, height, progress }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Estimate total text height by word-wrapping manually
-  const totalHeight = React.useMemo(() => {
-    if (width <= 0 || typeof document === 'undefined') return 5000;
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return 5000;
-    ctx.font = NAMES_FONT;
-    const words = NAMES_TEXT.split(' ');
-    let lines = 1, line = '';
-    for (const word of words) {
-      const test = line ? `${line} ${word}` : word;
-      if (ctx.measureText(test).width > width && line) { lines++; line = word; }
-      else { line = test; }
-    }
-    return lines * NAMES_LINE_HEIGHT;
-  }, [width]);
+  const prepared = useMemo(() => prepare(NAMES_TEXT, NAMES_FONT), []);
+  const totalHeight = useMemo(() => {
+    if (width <= 0) return 0;
+    return layout(prepared, width, NAMES_LINE_HEIGHT).height;
+  }, [prepared, width]);
 
   // Paint visible window of names onto canvas
   useEffect(() => {
