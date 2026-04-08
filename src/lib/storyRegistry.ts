@@ -16,6 +16,7 @@ import storyRamayana from '@/assets/story-ramayana.jpg';
 import storyBerlin from '@/assets/story-berlin.jpg';
 import storyBattuta from '@/assets/story-battuta.jpg';
 import storyShakti from '@/assets/story-shakti.jpg';
+import storyRadcliffe from '@/assets/story-radcliffe.jpg';
 
 export type StoryStatus = 'live' | 'coming-soon' | 'draft';
 
@@ -95,6 +96,12 @@ export const STORY_REGISTRY: StoryDefinition[] = [
     hook: 'The secret of the atom was unlocked once. Then it spread — through espionage, ambition, desperation, and pride — until nine nations held the power to end civilization.',
     image: storyNuclear, tags: ['Countdown Clock', 'Warhead Counter', '1945–2017'],
     status: 'live', href: '/nuclear', color: 'hsl(140, 70%, 45%)', era: '1945', sortYear: 1945,
+  },
+  {
+    id: 'radcliffe-line', number: 19, title: 'The Radcliffe Line', subtitle: '36 Days to Sever a Subcontinent',
+    hook: 'A British barrister with no prior visit to India got 36 working days to divide Punjab and Bengal. The line he drew displaced millions and still shapes South Asia.',
+    image: storyRadcliffe, tags: ['Visual Essay', 'Partition Map', '1947'],
+    status: 'live', href: '/radcliffe-line', color: 'hsl(355, 70%, 45%)', era: '1947', sortYear: 1947,
   },
   {
     id: 'nutmeg', number: 11, title: 'The Spice That Built Empires', subtitle: 'The Nutmeg Wars',
