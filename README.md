@@ -1,5 +1,12 @@
 # Welcome to your Lovable project
 
+## For AI agents
+
+Before building any essay visual in this repo, read [`CLAUDE.md`](./CLAUDE.md) at project root. It's a short router that points at the active skill (`.claude/skills/essay-visuals/SKILL.md`) and the reference docs under `docs/`. The project has two relevant capabilities on the shelf that are easy to miss otherwise:
+
+- **Pretext** (`@chenglou/pretext`) for text measurement without DOM reflow — see [`docs/pretext.md`](./docs/pretext.md) and the hook at `src/hooks/usePretext.ts`.
+- **html-in-canvas** (WICG proposal, experimental, Chromium-only, prototype-only) for compositing real DOM typography into canvas/WebGL surfaces — see [`docs/html-in-canvas.md`](./docs/html-in-canvas.md).
+
 ## Project info
 
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID

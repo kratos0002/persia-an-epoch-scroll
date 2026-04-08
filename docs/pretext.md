@@ -13,6 +13,21 @@ prepare() → measures text segments via canvas (one-time, ~0.1–1ms)
 layout()  → pure math to get height/lineCount (~0.0002ms per call)
 ```
 
+## When to reach for this
+
+Open this doc (or the `essay-visuals` skill at `../.claude/skills/essay-visuals/SKILL.md`) before building any of the following:
+
+- A new **scroll step** whose height should fit its text instead of `min-h-[90vh]`
+- A **hero section** with Playfair/Cormorant where you want zero webfont-swap CLS
+- **Labels in fixed slots** (progress timelines, chart axes, network nodes, wheel sections) — use `fitTextTo` to pick the largest font size that fits
+- **Text flowing around an irregular shape** (map border, diagram outline, formation) — use `layoutNextLine` with a width-callback
+- **Canvas/SVG text rendering** — precompute lines with `walkLineRanges` / `layoutWithLines` instead of per-frame `ctx.measureText`
+- **Remotion compositions** with any text — precompute at mount, store in a ref, never measure per frame
+- **Rich inline paragraphs** (bold date chips, italicized titles, mixed scripts) — use `prepareRichInline`
+- **Long lists / virtualized content** (`Sources`, `ScholarSpotlight`, refugee names, manuscript shelves) — use `useBatchTextHeights`
+
+Pretext also composes with **html-in-canvas** for prototype paths that need real DOM typography inside a canvas surface. See `docs/html-in-canvas.md` § Composing with Pretext.
+
 ## Core API
 
 ### Quick Height Measurement
@@ -136,9 +151,44 @@ prepare(text, '400 16px "Cormorant Garamond"')
 prepare(text, '400 13px "survey-font-family"')
 ```
 
+## Anti-patterns in this repo (fix if you touch them)
+
+### `src/components/radcliffe/VoidSection.tsx` — re-measures per frame
+
+The file uses `prepare()` for total height (`:16-22`) but then re-does word wrapping with `ctx.measureText` on every scroll frame inside the paint loop (`:43-87`), including a duplicated "second pass for wraparound" block. This defeats the purpose of Pretext entirely.
+
+**Fix:** use `prepareWithSegments` + `walkLineRanges`. The paint loop becomes:
+
+```ts
+import { prepareWithSegments, walkLineRanges } from '@chenglou/pretext';
+
+const prepared = prepareWithSegments(NAMES_TEXT, NAMES_FONT); // once
+// in paint:
+ctx.font = NAMES_FONT;
+let y = -scrollOffset;
+walkLineRanges(prepared, width, (line) => {
+  if (y + NAMES_LINE_HEIGHT > 0 && y < height) {
+    ctx.fillText(line.text, 0, y);
+  }
+  y += NAMES_LINE_HEIGHT;
+});
+```
+
+No more per-word `measureText`, no duplicated wraparound block, smoother on Safari.
+
+### `src/hooks/usePretext.ts` has zero consumers
+
+The hook module (`useTextHeight`, `useTextLines`, `useContainerWidth`, `useBatchTextHeights`) exists and is well-shaped, but no component actually uses it. `VoidSection.tsx` imports Pretext directly instead. New code should always go through the hook — it's the migration seam if the library changes.
+
+### Most `*Hero.tsx` don't reserve space for webfont metrics
+
+Every hero using Playfair Display or Cormorant Garamond reflows when the webfont swaps in. Use `useTextHeight` with the real font string at mount, lock `min-height`, and CLS drops to near-zero on the first fold.
+
 ## Resources
 
 - **GitHub:** github.com/chenglou/pretext
 - **npm:** @chenglou/pretext
 - **Official demos:** chenglou.me/pretext/
 - **Community demos:** pretext.cool
+- **This project's active skill:** `../.claude/skills/essay-visuals/SKILL.md`
+- **Agent router:** `../CLAUDE.md`
