@@ -50,8 +50,12 @@ export const useSeamProgress = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [seamConfig, setSeamConfig] = useState<SeamConfig>(SEAM_PROGRESSION[0]);
 
-  // Kept for consumers that still read raw scroll progress. No consumers in
-  // this repo today, but the hook's return shape is part of its contract.
+  // Framer Motion's scroll progress is the trigger source. The original hook
+  // drove the seam off this same motion value; we keep that path so scroll
+  // updates reach us through the same plumbing that already works in the
+  // real app (some hosts scroll body/documentElement, not window, and we
+  // don't want to re-discover which one). Resolution logic below is the new
+  // threshold-based math.
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start start', 'end end'],
@@ -64,7 +68,15 @@ export const useSeamProgress = () => {
     type WrapperInfo = { top: number; bottom: number; stages: number[] };
     let infos: WrapperInfo[] = [];
 
+    // Prefer the document's actual scrolling element — some apps put
+    // `overflow-y: auto` on body, in which case `window.scrollY` may still
+    // report the right value but reading through scrollingElement avoids
+    // cross-host ambiguity.
+    const getScrollTop = () =>
+      document.scrollingElement?.scrollTop ?? window.scrollY ?? 0;
+
     const remeasure = () => {
+      const scrollTop = getScrollTop();
       const wrappers = Array.from(
         container.querySelectorAll<HTMLElement>('[data-seam-stages]'),
       );
@@ -73,7 +85,7 @@ export const useSeamProgress = () => {
         const rect = w.getBoundingClientRect();
         const height = rect.height;
         if (height <= 0) continue;
-        const top = rect.top + window.scrollY;
+        const top = rect.top + scrollTop;
         const stages = (w.dataset.seamStages ?? '')
           .split(',')
           .map(s => Number(s.trim()))
@@ -90,7 +102,7 @@ export const useSeamProgress = () => {
       // section heading sits when a reader has just scrolled into a new
       // section, and it's above the seam's visual midpoint so transitions
       // happen slightly before the user is staring at the seam itself.
-      const eye = window.scrollY + window.innerHeight * 0.35;
+      const eye = getScrollTop() + window.innerHeight * 0.35;
 
       for (const info of infos) {
         if (eye >= info.top && eye < info.bottom) {
@@ -115,9 +127,6 @@ export const useSeamProgress = () => {
       }
     };
 
-    remeasure();
-    resolveStage();
-
     let rafId = 0;
     const scheduleResolve = () => {
       if (rafId) return;
@@ -127,18 +136,23 @@ export const useSeamProgress = () => {
       });
     };
 
+    remeasure();
+    resolveStage();
+
+    // Primary trigger: Framer Motion's scroll progress. Whatever scroll
+    // plumbing Framer Motion uses in the real browser is the same plumbing
+    // that drove the old seam, so it will reach us too.
+    const unsubProgress = scrollYProgress.on('change', scheduleResolve);
+
     const onResize = () => {
       remeasure();
       scheduleResolve();
     };
-
-    window.addEventListener('scroll', scheduleResolve, { passive: true });
     window.addEventListener('resize', onResize);
 
     // Section heights can shift when images/fonts load or when reveals fire.
     // ResizeObserver on the container catches every layout change, so the
-    // cached offsets stay honest without re-running querySelectorAll per
-    // scroll frame.
+    // cached offsets stay honest.
     const ro = new ResizeObserver(() => {
       remeasure();
       scheduleResolve();
@@ -146,12 +160,12 @@ export const useSeamProgress = () => {
     ro.observe(container);
 
     return () => {
-      window.removeEventListener('scroll', scheduleResolve);
+      unsubProgress();
       window.removeEventListener('resize', onResize);
       ro.disconnect();
       if (rafId) window.cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [scrollYProgress]);
 
   return { ref, seamConfig, scrollYProgress };
 };
