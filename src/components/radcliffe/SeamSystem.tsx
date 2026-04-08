@@ -31,18 +31,127 @@ const SEAM_PROGRESSION: SeamConfig[] = [
   { width: 2, type: 'cut', drift: 0 },    // Living Border — healed scar
 ];
 
+// Resolve the current seam stage from measured section offsets rather than
+// by equal-division of scroll progress.
+//
+// Previously this hook did `Math.floor(v * SEAM_PROGRESSION.length)` against
+// total page scroll. That assumes every section takes 1/N of the scroll
+// range. VoidSection is `min-h-[250vh]` while everything else is ~100vh, so
+// the mapping drifted: the `void` (40px) stage bled into the start of
+// NamedSection, painting a black bar across "THE FEW WHO ARE NAMED".
+//
+// Now: each top-level section in RadcliffeLine.tsx is wrapped with
+// `data-seam-stages="n"` (or "n,m" for sections that span multiple stages,
+// currently just Void: tear → peak). We measure wrapper top/bottom at
+// mount and on resize/layout changes, then on scroll we find which wrapper
+// contains the reading eye (35% down the viewport) and read its stage.
+// Multi-stage wrappers split by local progress.
 export const useSeamProgress = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
   const [seamConfig, setSeamConfig] = useState<SeamConfig>(SEAM_PROGRESSION[0]);
 
+  // Kept for consumers that still read raw scroll progress. No consumers in
+  // this repo today, but the hook's return shape is part of its contract.
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end end'],
+  });
+
   useEffect(() => {
-    const unsub = scrollYProgress.on('change', v => {
-      const idx = Math.min(Math.floor(v * SEAM_PROGRESSION.length), SEAM_PROGRESSION.length - 1);
-      setSeamConfig(SEAM_PROGRESSION[idx]);
+    const container = ref.current;
+    if (!container) return;
+
+    type WrapperInfo = { top: number; bottom: number; stages: number[] };
+    let infos: WrapperInfo[] = [];
+
+    const remeasure = () => {
+      const wrappers = Array.from(
+        container.querySelectorAll<HTMLElement>('[data-seam-stages]'),
+      );
+      const next: WrapperInfo[] = [];
+      for (const w of wrappers) {
+        const rect = w.getBoundingClientRect();
+        const height = rect.height;
+        if (height <= 0) continue;
+        const top = rect.top + window.scrollY;
+        const stages = (w.dataset.seamStages ?? '')
+          .split(',')
+          .map(s => Number(s.trim()))
+          .filter(n => Number.isFinite(n) && n >= 0 && n < SEAM_PROGRESSION.length);
+        if (stages.length === 0) continue;
+        next.push({ top, bottom: top + height, stages });
+      }
+      infos = next;
+    };
+
+    const resolveStage = () => {
+      if (infos.length === 0) return;
+      // "Reading eye" — 35% down the viewport. That's roughly where the
+      // section heading sits when a reader has just scrolled into a new
+      // section, and it's above the seam's visual midpoint so transitions
+      // happen slightly before the user is staring at the seam itself.
+      const eye = window.scrollY + window.innerHeight * 0.35;
+
+      for (const info of infos) {
+        if (eye >= info.top && eye < info.bottom) {
+          const local = (eye - info.top) / (info.bottom - info.top);
+          const bucket = Math.min(
+            Math.max(Math.floor(local * info.stages.length), 0),
+            info.stages.length - 1,
+          );
+          const stageIdx = info.stages[bucket];
+          setSeamConfig(SEAM_PROGRESSION[stageIdx]);
+          return;
+        }
+      }
+
+      // Eye is above the first wrapper (over-scroll at top) or below the
+      // last (over-scroll at bottom / footer). Clamp to nearest edge stage.
+      if (eye < infos[0].top) {
+        setSeamConfig(SEAM_PROGRESSION[infos[0].stages[0]]);
+      } else {
+        const last = infos[infos.length - 1];
+        setSeamConfig(SEAM_PROGRESSION[last.stages[last.stages.length - 1]]);
+      }
+    };
+
+    remeasure();
+    resolveStage();
+
+    let rafId = 0;
+    const scheduleResolve = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        resolveStage();
+      });
+    };
+
+    const onResize = () => {
+      remeasure();
+      scheduleResolve();
+    };
+
+    window.addEventListener('scroll', scheduleResolve, { passive: true });
+    window.addEventListener('resize', onResize);
+
+    // Section heights can shift when images/fonts load or when reveals fire.
+    // ResizeObserver on the container catches every layout change, so the
+    // cached offsets stay honest without re-running querySelectorAll per
+    // scroll frame.
+    const ro = new ResizeObserver(() => {
+      remeasure();
+      scheduleResolve();
     });
-    return unsub;
-  }, [scrollYProgress]);
+    ro.observe(container);
+
+    return () => {
+      window.removeEventListener('scroll', scheduleResolve);
+      window.removeEventListener('resize', onResize);
+      ro.disconnect();
+      if (rafId) window.cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   return { ref, seamConfig, scrollYProgress };
 };
