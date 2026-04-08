@@ -147,6 +147,173 @@ export const PERSPECTIVES_EXPANDED = [
   },
 ];
 
+// ─── Memorial Places ───
+// Named sites of partition — a curatorial selection of places the Radcliffe
+// Line passed through or disturbed. Organized by region so the grid can be
+// read as a small atlas rather than an alphabetical list. Each place carries
+// a one-line note pointing to what happened there; the editorial framing in
+// the NamedSection component makes clear this is not an enumeration.
+//
+// Sources: commonly cited partition scholarship (Butalia, Khan, Pandey,
+// Chatterji, Guha) and the essay's own body copy. Verified against the
+// locations already referenced in AftermathSection, LivingBorderSection,
+// VoidSection, and the Punjab/Bengal sections.
+
+export type MemorialPlace = {
+  name: string;
+  region: 'Punjab' | 'Bengal' | 'Sindh' | 'Kashmir' | 'Assam' | 'Delhi';
+  note: string;
+};
+
+export const MEMORIAL_PLACES: MemorialPlace[] = [
+  // ── Punjab ──
+  {
+    name: 'Thoha Khalsa',
+    region: 'Punjab',
+    note: 'Ninety Sikh women drowned themselves in the village well rather than face abduction. March 1947.',
+  },
+  {
+    name: 'Lahore',
+    region: 'Punjab',
+    note: 'Two-thirds Muslim, yet Hindus and Sikhs owned eighty percent of its factories. They left in weeks.',
+  },
+  {
+    name: 'Amritsar',
+    region: 'Punjab',
+    note: 'The city of the Golden Temple, twenty-five miles from Lahore. The line passed between them.',
+  },
+  {
+    name: 'Gurdaspur',
+    region: 'Punjab',
+    note: 'Three tehsils with slim Muslim majorities awarded to India. The road to Kashmir ran through them.',
+  },
+  {
+    name: 'Ferozepore',
+    region: 'Punjab',
+    note: 'The draft map gave it to Pakistan. The final award reversed that. Eight days changed its country.',
+  },
+  {
+    name: 'Rawalpindi',
+    region: 'Punjab',
+    note: 'Sikh villages attacked before Partition was announced. The killing was already organized.',
+  },
+  {
+    name: 'Sheikhupura',
+    region: 'Punjab',
+    note: 'Among the first mass killings after the Radcliffe Line was published. August 1947.',
+  },
+  {
+    name: 'Malerkotla',
+    region: 'Punjab',
+    note: 'The exception. The only Punjabi princely state that did not burn, because one Nawab refused to let it.',
+  },
+  {
+    name: 'Wagah',
+    region: 'Punjab',
+    note: 'A railway stop on the Grand Trunk Road that became a border crossing overnight.',
+  },
+  {
+    name: 'Lahore Station',
+    region: 'Punjab',
+    note: 'Where the ghost trains arrived. Every passenger dead. The compartments drenched in blood.',
+  },
+  // ── Bengal ──
+  {
+    name: 'Calcutta',
+    region: 'Bengal',
+    note: 'Hindu-majority city awarded to India; economic capital of a Bengal that no longer existed.',
+  },
+  {
+    name: 'Noakhali',
+    region: 'Bengal',
+    note: 'October 1946. The riots that Gandhi walked to. A rehearsal the Commission should have studied.',
+  },
+  {
+    name: 'Murshidabad',
+    region: 'Bengal',
+    note: 'Seventy percent Muslim, awarded to India to keep the Ganges flowing into Calcutta.',
+  },
+  {
+    name: 'Khulna',
+    region: 'Bengal',
+    note: 'Fifty-one percent Hindu, awarded to Pakistan as compensation for Murshidabad.',
+  },
+  {
+    name: 'Nadia',
+    region: 'Bengal',
+    note: 'Split from Jessore by the line. Districts that had shared a census became two countries.',
+  },
+  {
+    name: 'Malda',
+    region: 'Bengal',
+    note: 'Split from Dinajpur the same way. A family of districts unmade in a single paragraph.',
+  },
+  {
+    name: 'Berubari',
+    region: 'Bengal',
+    note: 'Radcliffe\'s map placed it in India. His written description placed it in Pakistan. It took a constitutional amendment to decide.',
+  },
+  {
+    name: 'Chittagong Hill Tracts',
+    region: 'Bengal',
+    note: 'Ninety-seven percent non-Muslim, awarded to Pakistan. The Chakma people learned their country by radio, two days late.',
+  },
+  {
+    name: 'Dahagram–Angarpota',
+    region: 'Bengal',
+    note: 'The largest enclave. Bangladeshis marooned inside India for forty-five years until a corridor was leased.',
+  },
+  {
+    name: 'Dahala Khagrabari',
+    region: 'Bengal',
+    note: 'India, inside Bangladesh, inside India, inside Bangladesh. The world\'s only third-order enclave. Dissolved 2015.',
+  },
+  // ── Sindh ──
+  {
+    name: 'Karachi',
+    region: 'Sindh',
+    note: 'Hindu merchants who had built the city\'s commerce left within weeks of the flag change.',
+  },
+  {
+    name: 'Hyderabad, Sindh',
+    region: 'Sindh',
+    note: 'A city whose Hindu population had lived there for a thousand years. Most did not return.',
+  },
+  {
+    name: 'Sir Creek',
+    region: 'Sindh',
+    note: 'A 96-kilometer tidal estuary Radcliffe did not demarcate at all. Still disputed.',
+  },
+  // ── Delhi ──
+  {
+    name: 'Old Delhi',
+    region: 'Delhi',
+    note: 'The Muslim neighbourhoods that emptied when the refugees from the Punjab arrived. Many did not fill again.',
+  },
+  {
+    name: 'Purana Qila',
+    region: 'Delhi',
+    note: 'A Mughal fort that became a refugee camp. At its peak, it held 150,000 people waiting for a train.',
+  },
+  // ── Kashmir ──
+  {
+    name: 'Gurdaspur Corridor',
+    region: 'Kashmir',
+    note: 'Not a place, but an opening. Without these three tehsils, India had no road into Kashmir. October 1947 proved it mattered.',
+  },
+  // ── Assam ──
+  {
+    name: 'Sylhet',
+    region: 'Assam',
+    note: 'Referendum, July 1947. 56.56% voted for Pakistan. A district left Assam the way a chapter leaves a book.',
+  },
+  {
+    name: 'Karimganj',
+    region: 'Assam',
+    note: 'Detached from Sylhet by the Bagge Award three years later. A second surgery to correct the first.',
+  },
+];
+
 export const BENGAL_DECISIONS = [
   { area: 'Calcutta', detail: 'Hindu-majority city awarded to India; economic capital of all Bengal', type: 'india' as const },
   { area: 'Murshidabad', detail: '70% Muslim district awarded to India to preserve Ganges access', type: 'india' as const },

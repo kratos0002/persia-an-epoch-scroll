@@ -2,27 +2,59 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { motion, useScroll } from 'framer-motion';
 import { DriftPanel } from './SeamSystem';
 import { REFUGEE_NAMES, DISPLACEMENT_DATA } from './radcliffeData';
-import { prepare, layout } from '@chenglou/pretext';
+import {
+  prepareWithSegments,
+  layoutWithLines,
+  type PreparedTextWithSegments,
+} from '@/hooks/usePretext';
 
-// Build a single continuous text block from refugee names
-const NAMES_TEXT = Array.from({ length: 40 }, () => REFUGEE_NAMES.join(' · ')).join(' · ');
-const NAMES_FONT = '400 5px ui-monospace, monospace';
+// Build a single continuous text block from refugee names.
+// Padded to 80 repeats (~4,000 names) so walkLineRanges always produces more
+// lines than any viewport needs — lets us drop the manual "second pass for
+// wraparound" that the previous implementation required.
+const NAMES_TEXT = Array.from({ length: 80 }, () =>
+  REFUGEE_NAMES.join(' · '),
+).join(' · ');
+// Explicit font family — 'ui-monospace' resolves differently per OS and
+// cannot be measured consistently by Pretext. Per project rule in CLAUDE.md.
+const NAMES_FONT = '400 5px Menlo, Consolas, monospace';
 const NAMES_LINE_HEIGHT = 7;
 
-// Canvas-rendered name scroll powered by pretext
-const NameCanvas: React.FC<{ width: number; height: number; progress: number }> = ({ width, height, progress }) => {
+// Canvas-rendered name scroll powered by pretext.
+// Measurement happens once (layoutWithLines at mount). The paint loop is
+// pure draw — zero per-frame ctx.measureText calls.
+const NameCanvas: React.FC<{ width: number; height: number; progress: number }> = ({
+  width,
+  height,
+  progress,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [prepared, setPrepared] = useState<PreparedTextWithSegments | null>(null);
 
-  const prepared = useMemo(() => prepare(NAMES_TEXT, NAMES_FONT), []);
-  const totalHeight = useMemo(() => {
-    if (width <= 0) return 0;
-    return layout(prepared, width, NAMES_LINE_HEIGHT).height;
+  // Gate Pretext preparation on document.fonts.ready so measurement reflects
+  // the final monospace metrics, not the fallback font.
+  useEffect(() => {
+    let cancelled = false;
+    if (typeof document === 'undefined') return;
+    document.fonts.ready.then(() => {
+      if (cancelled) return;
+      setPrepared(prepareWithSegments(NAMES_TEXT, NAMES_FONT));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Layout once per width change. Line text is captured here; the paint loop
+  // just iterates the array and calls fillText. No per-frame measurement.
+  const linesResult = useMemo(() => {
+    if (!prepared || width <= 0) return null;
+    return layoutWithLines(prepared, width, NAMES_LINE_HEIGHT);
   }, [prepared, width]);
 
-  // Paint visible window of names onto canvas
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || width <= 0 || totalHeight <= 0) return;
+    if (!canvas || !linesResult || width <= 0) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -37,55 +69,35 @@ const NameCanvas: React.FC<{ width: number; height: number; progress: number }> 
     ctx.fillStyle = 'hsla(30, 30%, 90%, 0.2)';
     ctx.textBaseline = 'top';
 
-    // Scroll offset loops through total text height
+    const totalHeight = linesResult.height;
+    if (totalHeight <= 0) return;
+
+    // Scroll offset loops through the full prepared text height. Because
+    // NAMES_TEXT is padded to 80× the name list, totalHeight comfortably
+    // exceeds any viewport height at NAMES_LINE_HEIGHT.
     const scrollOffset = (progress * totalHeight * 2) % totalHeight;
+    const lines = linesResult.lines;
 
-    // Manually word-wrap and paint only visible lines
-    const words = NAMES_TEXT.split(' ');
-    let y = -scrollOffset;
-    let line = '';
+    // Compute the visible line window and paint only those lines. Binary
+    // search could narrow this, but iterating a pre-laid-out array of lines
+    // is already O(n) with n small enough to be cheaper than per-frame
+    // measurement ever was.
+    const firstVisible = Math.max(
+      0,
+      Math.floor(scrollOffset / NAMES_LINE_HEIGHT),
+    );
+    const lastVisible = Math.min(
+      lines.length,
+      firstVisible + Math.ceil(height / NAMES_LINE_HEIGHT) + 2,
+    );
 
-    for (const word of words) {
-      const test = line ? `${line} ${word}` : word;
-      const measured = ctx.measureText(test).width;
-
-      if (measured > width && line) {
-        if (y + NAMES_LINE_HEIGHT > 0 && y < height) {
-          ctx.fillText(line, 0, y);
-        }
-        line = word;
-        y += NAMES_LINE_HEIGHT;
-        // Stop once past the viewport
-        if (y > height + NAMES_LINE_HEIGHT) break;
-      } else {
-        line = test;
+    for (let i = firstVisible; i < lastVisible; i++) {
+      const y = i * NAMES_LINE_HEIGHT - scrollOffset;
+      if (y + NAMES_LINE_HEIGHT > 0 && y < height) {
+        ctx.fillText(lines[i].text, 0, y);
       }
     }
-    // Paint last line
-    if (line && y + NAMES_LINE_HEIGHT > 0 && y < height) {
-      ctx.fillText(line, 0, y);
-    }
-
-    // Wrap around: if we ran out of text, restart from top
-    if (y < height) {
-      let y2 = y + NAMES_LINE_HEIGHT;
-      let line2 = '';
-      for (const word of words) {
-        const test = line2 ? `${line2} ${word}` : word;
-        const measured = ctx.measureText(test).width;
-        if (measured > width && line2) {
-          if (y2 + NAMES_LINE_HEIGHT > 0 && y2 < height) {
-            ctx.fillText(line2, 0, y2);
-          }
-          line2 = word;
-          y2 += NAMES_LINE_HEIGHT;
-          if (y2 > height) break;
-        } else {
-          line2 = test;
-        }
-      }
-    }
-  }, [width, height, progress, totalHeight]);
+  }, [linesResult, width, height, progress]);
 
   return (
     <canvas

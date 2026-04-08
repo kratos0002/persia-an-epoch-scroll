@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { RevealOnScroll } from '@/components/scroll/StickyScroll';
 import { Stamp, AdminParagraph, HumanVoice, Underline, RedInk, MarginNote } from './SeamSystem';
 import {
@@ -9,6 +9,12 @@ import {
   GURDASPUR_KASHMIR,
   PERSPECTIVES_EXPANDED,
 } from './radcliffeData';
+import {
+  prepareWithSegments,
+  layoutNextLine,
+  type LayoutCursor,
+  type PreparedTextWithSegments,
+} from '@/hooks/usePretext';
 
 const DossierDivider = () => (
   <div className="my-16 md:my-20 flex items-center gap-4 max-w-xs mx-auto">
@@ -79,6 +85,253 @@ const SirCreekDiagram = () => (
     <text x="70" y="235" className="font-survey text-[6px] fill-radcliffe-grid/30">96 km estuary</text>
   </svg>
 );
+
+/* ── Sir Creek Flow Exhibit ───────────── */
+// Signature visual: prose that wraps around the curve of the disputed estuary.
+// First use of Pretext's layoutNextLine variable-width flow in the project.
+// Desktop-only; mobile falls back to the linear 2-column layout at the call site.
+
+const SIR_CREEK_NARRATIVE =
+  "Sir Creek is a 96-kilometer tidal estuary in the Rann of Kutch. Radcliffe's Award stopped at the northern edge of the Rann and provided no definitive demarcation of this marshy, shifting border. India claims the boundary runs along the mid-channel — the thalweg principle, standard in international law. Pakistan claims it follows the eastern bank, citing a 1914 resolution of the Sindh government that pre-dates Partition. The dispute is not merely cartographic. Beyond the creek mouth lie rich fishing grounds and potential offshore oil and gas reserves — approximately 30,000 square kilometers of Exclusive Economic Zone. The creek shifts with the tides; the dispute shifts with the creek.";
+
+// Panel dimensions (desktop). Matches a full-column treatment inside max-w-5xl.
+// Height is tuned so every text line sits within the curve's y-range — no
+// full-width lines above or below the curve, which would break the shape-flow
+// visual continuity.
+const SC_PANEL_WIDTH = 720;
+const SC_PANEL_HEIGHT = 540;
+const SC_LINE_HEIGHT = 28;
+// Cormorant Garamond body copy. Explicit name per project rule (no system-ui).
+const SC_BODY_FONT = '400 17px "Cormorant Garamond", Georgia, serif';
+
+// Scale + offset for the original SVG path M60,220 Q70,160 80,110 Q90,60 110,30
+// (viewBox 200x240). Scale 2x keeps the curve compact enough that the narrative
+// (~700 chars) fills the full curve height at 28px line height.
+const SC_SCALE = 2;
+const SC_X_OFFSET = 80;
+const SC_Y_OFFSET = 40;
+const SC_STROKE = 12 * SC_SCALE; // 24
+const SC_STROKE_HALF = SC_STROKE / 2;
+const SC_TEXT_PADDING = 28; // gap between curve edge and text
+
+// Helpers — convert original viewBox coordinates into panel pixel space.
+const sx = (svgX: number) => SC_X_OFFSET + svgX * SC_SCALE;
+const sy = (svgY: number) => SC_Y_OFFSET + svgY * SC_SCALE;
+
+// Estuary curve samples in PANEL pixel space.
+// Sampled from the two chained quadratic Beziers of the original path.
+// Text clears to the right of these points.
+const SC_CURVE_SAMPLES: ReadonlyArray<{ y: number; x: number }> = [
+  { y: sy(30),  x: sx(110) },   // top of curve
+  { y: sy(46),  x: sx(100.6) },
+  { y: sy(65),  x: sx(92.5) },
+  { y: sy(86),  x: sx(85.6) },
+  { y: sy(110), x: sx(80) },    // bezier join point
+  { y: sy(135), x: sx(75) },
+  { y: sy(162), x: sx(70) },
+  { y: sy(190), x: sx(65) },
+  { y: sy(220), x: sx(60) },    // bottom of curve
+];
+
+// Text starts at the curve top and ends at the curve bottom so every line is
+// shape-flow — no visual discontinuity at the edges.
+const SC_TEXT_TOP = SC_CURVE_SAMPLES[0].y;
+const SC_TEXT_BOTTOM = SC_CURVE_SAMPLES[SC_CURVE_SAMPLES.length - 1].y + SC_STROKE;
+
+// Linear interpolation to get estuary x-center at any y in panel space.
+function estuaryXAt(y: number): number {
+  const samples = SC_CURVE_SAMPLES;
+  if (y <= samples[0].y) return samples[0].x;
+  if (y >= samples[samples.length - 1].y) return samples[samples.length - 1].x;
+  for (let i = 1; i < samples.length; i++) {
+    const a = samples[i - 1];
+    const b = samples[i];
+    if (y <= b.y) {
+      const t = (y - a.y) / (b.y - a.y);
+      return a.x + (b.x - a.x) * t;
+    }
+  }
+  return samples[samples.length - 1].x;
+}
+
+// Given a y in panel space, return the x at which text can start (just
+// past the right edge of the estuary stroke, plus padding).
+function textStartAt(y: number): number {
+  // Outside the curve's y-range, text can start at the left margin.
+  const topY = SC_CURVE_SAMPLES[0].y;
+  const bottomY = SC_CURVE_SAMPLES[SC_CURVE_SAMPLES.length - 1].y;
+  if (y < topY - SC_STROKE || y > bottomY + SC_STROKE) {
+    return 48;
+  }
+  const cx = estuaryXAt(Math.max(topY, Math.min(bottomY, y)));
+  return cx + SC_STROKE_HALF + SC_TEXT_PADDING;
+}
+
+type FlowLine = { text: string; x: number; y: number; width: number };
+
+function computeShapeFlowLines(
+  prepared: PreparedTextWithSegments | null,
+): FlowLine[] {
+  if (!prepared) return [];
+  const out: FlowLine[] = [];
+  let cursor: LayoutCursor = { segmentIndex: 0, graphemeIndex: 0 };
+  let y = SC_TEXT_TOP;
+  // Safety cap to avoid runaway loops if the text exhausts mid-iteration.
+  const maxLines = 64;
+  for (let i = 0; i < maxLines && y < SC_TEXT_BOTTOM; i++) {
+    const textX = textStartAt(y);
+    const lineWidth = SC_PANEL_WIDTH - textX - 24; // right margin
+    if (lineWidth < 40) {
+      // Not enough room — skip this y.
+      y += SC_LINE_HEIGHT;
+      continue;
+    }
+    const line = layoutNextLine(prepared, cursor, lineWidth);
+    if (!line) break;
+    out.push({ text: line.text, x: textX, y, width: lineWidth });
+    cursor = line.end;
+    y += SC_LINE_HEIGHT;
+  }
+  return out;
+}
+
+const SirCreekFlowExhibit = () => {
+  const [prepared, setPrepared] = useState<PreparedTextWithSegments | null>(null);
+
+  // Gate on document.fonts.ready so measurement reflects final Cormorant metrics.
+  useEffect(() => {
+    let cancelled = false;
+    if (typeof document === 'undefined') return;
+    document.fonts.ready.then(() => {
+      if (cancelled) return;
+      setPrepared(prepareWithSegments(SIR_CREEK_NARRATIVE, SC_BODY_FONT));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const lines = useMemo(() => computeShapeFlowLines(prepared), [prepared]);
+
+  // Scaled estuary path in panel space for the SVG overlay.
+  // Original: M60,220 Q70,160 80,110 Q90,60 110,30 in viewBox 200x240.
+  const scaledPath =
+    `M${sx(60)},${sy(220)} ` +
+    `Q${sx(70)},${sy(160)} ${sx(80)},${sy(110)} ` +
+    `Q${sx(90)},${sy(60)} ${sx(110)},${sy(30)}`;
+
+  // India's mid-channel claim (same path, thin dashed) and Pakistan's east-bank
+  // claim (parallel path shifted a few viewBox units east to match the bank edge).
+  const indiaClaimPath = scaledPath;
+  const pakistanClaimPath =
+    `M${sx(66)},${sy(220)} ` +
+    `Q${sx(76)},${sy(158)} ${sx(86)},${sy(108)} ` +
+    `Q${sx(96)},${sy(58)} ${sx(116)},${sy(28)}`;
+
+  return (
+    <div
+      className="relative mx-auto"
+      style={{ width: SC_PANEL_WIDTH, height: SC_PANEL_HEIGHT }}
+      aria-label="Sir Creek — disputed 96-kilometer tidal estuary in the Rann of Kutch"
+    >
+      {/* Estuary SVG overlay. Absolute-positioned so text divs can sit on top. */}
+      <svg
+        viewBox={`0 0 ${SC_PANEL_WIDTH} ${SC_PANEL_HEIGHT}`}
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+      >
+        {/* Exhibit frame */}
+        <rect
+          x="8"
+          y="8"
+          width={SC_PANEL_WIDTH - 16}
+          height={SC_PANEL_HEIGHT - 16}
+          fill="hsl(40 35% 93%)"
+          stroke="hsl(215 30% 62% / 0.2)"
+          strokeWidth="1"
+        />
+        {/* Estuary body — thick teal stroke */}
+        <path
+          d={scaledPath}
+          fill="none"
+          stroke="hsl(185 40% 38% / 0.28)"
+          strokeWidth={SC_STROKE}
+          strokeLinecap="round"
+        />
+        {/* India mid-channel claim */}
+        <path
+          d={indiaClaimPath}
+          fill="none"
+          stroke="hsl(30 85% 55% / 0.7)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray="8 5"
+        />
+        {/* Pakistan east-bank claim */}
+        <path
+          d={pakistanClaimPath}
+          fill="none"
+          stroke="hsl(150 45% 30% / 0.7)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray="8 5"
+        />
+        {/* Orientation labels — positioned in the strip above the curve top */}
+        <text
+          x={sx(15)}
+          y={sy(12)}
+          className="fill-radcliffe-ink/45"
+          fontFamily="'survey', ui-monospace, monospace"
+          fontSize="11"
+          letterSpacing="0.25em"
+        >
+          GUJARAT
+        </text>
+        <text
+          x={sx(135)}
+          y={sy(12)}
+          className="fill-radcliffe-ink/45"
+          fontFamily="'survey', ui-monospace, monospace"
+          fontSize="11"
+          letterSpacing="0.25em"
+        >
+          SINDH
+        </text>
+        {/* Arabian Sea indicator — in the empty space below the curve bottom */}
+        <text
+          x={sx(5)}
+          y={sy(232)}
+          className="fill-radcliffe-teal/70"
+          fontFamily="'survey', ui-monospace, monospace"
+          fontSize="10"
+          fontStyle="italic"
+        >
+          ↓ Arabian Sea
+        </text>
+      </svg>
+
+      {/* Shape-flow text layer. Each line is an absolutely-positioned div whose
+          x depends on where the estuary ends at that y. As the curve bulges
+          rightward (toward the top) the lines get narrower. */}
+      {lines.map((ln, i) => (
+        <div
+          key={i}
+          className="absolute font-body text-radcliffe-ink/90"
+          style={{
+            left: ln.x,
+            top: ln.y,
+            width: ln.width,
+            fontSize: 17,
+            lineHeight: `${SC_LINE_HEIGHT}px`,
+            fontFamily: '"Cormorant Garamond", Georgia, serif',
+          }}
+        >
+          {ln.text}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 /* ── Failed Negotiations Timeline ─────── */
 const NegotiationsTimeline = () => (
@@ -194,34 +447,80 @@ export const LivingBorderSection = () => (
         <div>
           <ExhibitLabel label="Exhibit B" />
           <h3 className="font-display text-2xl font-bold text-radcliffe-ink mb-6">Sir Creek</h3>
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-            {/* Left: visual (reversed for rhythm) */}
-            <div>
-              <div className="border border-radcliffe-grid/20 bg-radcliffe-cream p-5">
-                <SirCreekDiagram />
-              </div>
-              <NegotiationsTimeline />
+
+          {/* ── Desktop: shape-flow exhibit ── */}
+          {/* Prose wraps around the curve of the estuary itself — a signature
+              typographic moment that appears nowhere else in the essay. */}
+          <div className="hidden md:block">
+            <SirCreekFlowExhibit />
+            {/* Claim legend — placed outside the SVG so it can't collide with the text flow */}
+            <div className="mt-4 flex justify-center gap-8 font-survey text-[0.6rem] text-radcliffe-ink/60 uppercase tracking-wider">
+              <span className="flex items-center gap-2">
+                <span
+                  className="inline-block w-6 h-0"
+                  style={{ borderBottom: '1.5px dashed hsl(30 85% 55%)' }}
+                />
+                India: mid-channel (thalweg)
+              </span>
+              <span className="flex items-center gap-2">
+                <span
+                  className="inline-block w-6 h-0"
+                  style={{ borderBottom: '1.5px dashed hsl(150 45% 30%)' }}
+                />
+                Pakistan: eastern bank
+              </span>
             </div>
-            {/* Right: text */}
-            <div>
-              <div className="relative">
-                <AdminParagraph number="§9.4">
-                  Sir Creek is a <RedInk>{SIR_CREEK_DATA.lengthKm}-kilometer tidal estuary</RedInk> in the {SIR_CREEK_DATA.location}. Radcliffe's Award stopped at the northern edge of the Rann and provided <RedInk>no definitive demarcation</RedInk> of this marshy, shifting border. India claims the boundary runs along the <Underline>mid-channel</Underline> (the thalweg principle, standard in international law). Pakistan claims it follows the <Underline>eastern bank</Underline>, citing a 1914 resolution of the Sindh government that pre-dates Partition.
-                </AdminParagraph>
-                <MarginNote>where does water end?</MarginNote>
+            <div className="mt-8 grid md:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
+              <div>
+                <NegotiationsTimeline />
               </div>
-              <div className="relative">
-                <AdminParagraph number="§9.5">
-                  The dispute is not merely cartographic. Beyond the creek mouth lie <Underline>rich fishing grounds</Underline> in the Arabian Sea and potential <Underline>offshore oil and gas reserves</Underline>. The boundary's placement determines approximately <RedInk>{SIR_CREEK_DATA.disputedEezKm2.toLocaleString()} square kilometers</RedInk> of Exclusive Economic Zone — an enormous area of seabed and resources. The creek's tidal nature — it shifts — makes the dispute self-perpetuating.
-                </AdminParagraph>
-              </div>
-              <div className="mt-6 border-l-2 border-radcliffe-teal/30 pl-4">
+              <div className="border-l-2 border-radcliffe-teal/30 pl-4">
                 <HumanVoice>
                   "Rivers change their course. They are unsuitable for use as fixed boundaries."
                 </HumanVoice>
                 <p className="font-survey text-[0.5rem] text-radcliffe-grid mt-2">
                   — Field Marshal Auchinleck, Commander-in-Chief, India
                 </p>
+                <p className="font-survey text-[0.65rem] text-radcliffe-ink/60 leading-relaxed mt-4">
+                  The boundary's placement determines approximately{' '}
+                  <span className="text-radcliffe-red/80 font-bold">
+                    {SIR_CREEK_DATA.disputedEezKm2.toLocaleString()} square kilometers
+                  </span>{' '}
+                  of Exclusive Economic Zone — rich fishing grounds and potential offshore oil and gas reserves. The creek's tidal nature makes the dispute self-perpetuating.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Mobile fallback: original 2-column linear layout ── */}
+          <div className="block md:hidden">
+            <div className="grid grid-cols-1 gap-8">
+              <div>
+                <div className="border border-radcliffe-grid/20 bg-radcliffe-cream p-5">
+                  <SirCreekDiagram />
+                </div>
+                <NegotiationsTimeline />
+              </div>
+              <div>
+                <div className="relative">
+                  <AdminParagraph number="§9.4">
+                    Sir Creek is a <RedInk>{SIR_CREEK_DATA.lengthKm}-kilometer tidal estuary</RedInk> in the {SIR_CREEK_DATA.location}. Radcliffe's Award stopped at the northern edge of the Rann and provided <RedInk>no definitive demarcation</RedInk> of this marshy, shifting border. India claims the boundary runs along the <Underline>mid-channel</Underline> (the thalweg principle, standard in international law). Pakistan claims it follows the <Underline>eastern bank</Underline>, citing a 1914 resolution of the Sindh government that pre-dates Partition.
+                  </AdminParagraph>
+                  <MarginNote>where does water end?</MarginNote>
+                </div>
+                <div className="relative">
+                  <AdminParagraph number="§9.5">
+                    The dispute is not merely cartographic. Beyond the creek mouth lie <Underline>rich fishing grounds</Underline> in the Arabian Sea and potential <Underline>offshore oil and gas reserves</Underline>. The boundary's placement determines approximately <RedInk>{SIR_CREEK_DATA.disputedEezKm2.toLocaleString()} square kilometers</RedInk> of Exclusive Economic Zone — an enormous area of seabed and resources. The creek's tidal nature — it shifts — makes the dispute self-perpetuating.
+                  </AdminParagraph>
+                </div>
+                <div className="mt-6 border-l-2 border-radcliffe-teal/30 pl-4">
+                  <HumanVoice>
+                    "Rivers change their course. They are unsuitable for use as fixed boundaries."
+                  </HumanVoice>
+                  <p className="font-survey text-[0.5rem] text-radcliffe-grid mt-2">
+                    — Field Marshal Auchinleck, Commander-in-Chief, India
+                  </p>
+                </div>
               </div>
             </div>
           </div>

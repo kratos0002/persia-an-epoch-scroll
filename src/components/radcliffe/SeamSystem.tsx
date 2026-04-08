@@ -26,6 +26,7 @@ const SEAM_PROGRESSION: SeamConfig[] = [
   { width: 4, type: 'cut', drift: 10 },   // Bengal
   { width: 30, type: 'tear', drift: 20 }, // Void — the tear widens
   { width: 40, type: 'void', drift: 30 }, // Void peak
+  { width: 6, type: 'tear', drift: 8 },   // Named — stillness after the tear
   { width: 4, type: 'tear', drift: 5 },   // Aftermath — closing
   { width: 2, type: 'cut', drift: 0 },    // Living Border — healed scar
 ];

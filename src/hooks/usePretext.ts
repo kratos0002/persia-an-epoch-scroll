@@ -1,5 +1,24 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
-import { prepare, layout, prepareWithSegments, layoutWithLines } from '@chenglou/pretext';
+import {
+  prepare,
+  layout,
+  prepareWithSegments,
+  layoutWithLines,
+  layoutNextLine,
+  walkLineRanges,
+} from '@chenglou/pretext';
+import type {
+  LayoutCursor,
+  LayoutLine,
+  LayoutLineRange,
+  PreparedTextWithSegments,
+} from '@chenglou/pretext';
+
+// Re-export the Pretext primitives that components should use.
+// Components must import from this hook file, not directly from @chenglou/pretext,
+// per the project rule in CLAUDE.md. This file is the migration seam.
+export { prepareWithSegments, layoutNextLine, walkLineRanges, layoutWithLines };
+export type { LayoutCursor, LayoutLine, LayoutLineRange, PreparedTextWithSegments };
 
 /**
  * Pre-calculate text height without DOM reflow.

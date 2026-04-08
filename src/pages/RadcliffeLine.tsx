@@ -6,6 +6,7 @@ import { CountdownSection } from '@/components/radcliffe/CountdownSection';
 import { PunjabSection } from '@/components/radcliffe/PunjabSection';
 import { BengalSection } from '@/components/radcliffe/BengalSection';
 import { VoidSection } from '@/components/radcliffe/VoidSection';
+import { NamedSection } from '@/components/radcliffe/NamedSection';
 import { AftermathSection } from '@/components/radcliffe/AftermathSection';
 import { LivingBorderSection } from '@/components/radcliffe/LivingBorderSection';
 import { RadcliffeEpilogue } from '@/components/radcliffe/RadcliffeEpilogue';
@@ -24,6 +25,7 @@ const RadcliffeLine = () => {
       <PunjabSection drift={seamConfig.drift} />
       <BengalSection drift={seamConfig.drift} />
       <VoidSection drift={seamConfig.drift} />
+      <NamedSection />
       <AftermathSection drift={seamConfig.drift} />
       <LivingBorderSection />
       <RadcliffeEpilogue />
