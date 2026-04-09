@@ -78,6 +78,7 @@ const App = () => (
           <Route path="/share/:storyId" element={<ShareRedirect />} />
           <Route path="/preview/:storyId" element={<StoryPreview />} />
           <Route path="/sources" element={<Sources />} />
+          <Route path="/histomap" element={<Histomap />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
