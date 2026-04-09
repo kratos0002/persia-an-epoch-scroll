@@ -28,6 +28,7 @@ import OpiumTrade from "./pages/OpiumTrade.tsx";
 import Kurukshetra from "./pages/Kurukshetra.tsx";
 import RadcliffeLine from "./pages/RadcliffeLine.tsx";
 import Sources from "./pages/Sources.tsx";
+import Histomap from "./pages/Histomap.tsx";
 import StoryPreview from "./pages/StoryPreview.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { MobileNotice } from "@/components/site/MobileNotice";
