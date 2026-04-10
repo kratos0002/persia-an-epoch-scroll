@@ -131,6 +131,65 @@ export const ESSAY_WINDOWS: EssayWindow[] = ESSAY_MAPPING.map(m => {
   };
 });
 
+/* ─── Era Annotations — narrative context for each time slice ─── */
+export interface EraAnnotation {
+  startYear: number;
+  endYear: number;
+  name: string;
+  description: string;
+  keyEvents: string[];
+}
+
+export const ERA_ANNOTATIONS: EraAnnotation[] = [
+  { startYear: -3000, endYear: -2500, name: 'Dawn of Civilization', description: 'The first great civilizations emerge along fertile river valleys. Writing, monumental architecture, and organized religion take root in Mesopotamia and Egypt.', keyEvents: ['Sumerian city-states flourish', 'Egyptian Old Kingdom begins', 'Indus Valley civilization develops', 'Cuneiform writing invented'] },
+  { startYear: -2500, endYear: -2000, name: 'The Pyramid Age', description: 'Egypt reaches its architectural zenith while Mesopotamian empires rise and fall. Trade networks connect the ancient world from the Indus to the Mediterranean.', keyEvents: ['Great Pyramid of Giza built', 'Akkadian Empire unifies Mesopotamia', 'Indus Valley at peak urbanization', 'Bronze metallurgy spreads'] },
+  { startYear: -2000, endYear: -1500, name: 'The Bronze Age', description: 'Powerful kingdoms compete across the Near East. Chariot warfare transforms conflict, and the first legal codes attempt to organize complex societies.', keyEvents: ['Hammurabi\'s Code of Laws', 'Hittite Empire rises in Anatolia', 'Shang Dynasty begins in China', 'Minoan civilization peaks in Crete'] },
+  { startYear: -1500, endYear: -1000, name: 'Age of Empires I', description: 'The Late Bronze Age sees interconnected great powers — Egypt, Hatti, Assyria, Babylon — before a catastrophic collapse around 1200 BCE reshapes the world.', keyEvents: ['Egyptian New Kingdom expansion', 'Vedic period begins in India', 'Bronze Age Collapse (~1200 BCE)', 'Iron Age begins', 'Phoenician alphabet develops'] },
+  { startYear: -1000, endYear: -600, name: 'Iron & Prophets', description: 'Iron democratizes warfare and agriculture. New powers — Assyria, then Babylon — dominate the Near East. In India and Greece, philosophical traditions take form.', keyEvents: ['Assyrian Empire at peak', 'Homer composes the Iliad', 'Kingdom of Israel splits', 'Upanishads composed in India', 'Greek city-states emerge'] },
+  { startYear: -600, endYear: -330, name: 'The Axial Age', description: 'An extraordinary flowering of thought: Buddha, Confucius, Socrates, and Zoroaster reshape human consciousness. Persia builds the largest empire yet seen.', keyEvents: ['Achaemenid Persian Empire founded', 'Buddha teaches in India', 'Athenian democracy established', 'Greco-Persian Wars', 'Alexander the Great conquers Persia'] },
+  { startYear: -330, endYear: -50, name: 'Hellenistic World', description: 'Alexander\'s conquests blend Greek and Eastern cultures. Rome rises from Italian city-state to Mediterranean superpower. India\'s Maurya Empire unifies the subcontinent.', keyEvents: ['Alexander\'s empire fragments', 'Maurya Empire under Ashoka', 'Roman Republic expands', 'Great Wall construction begins', 'Punic Wars: Rome defeats Carthage'] },
+  { startYear: -50, endYear: 200, name: 'Pax Romana', description: 'The Roman Empire and Han China anchor opposite ends of Eurasia, connected by the Silk Road. Christianity and Buddhism spread along trade routes.', keyEvents: ['Roman Empire at greatest extent', 'Han Dynasty golden age', 'Jesus and rise of Christianity', 'Silk Road trade flourishes', 'Kushan Empire bridges India and Central Asia'] },
+  { startYear: 200, endYear: 500, name: 'Age of Migrations', description: 'Great empires fracture under internal pressure and external migration. Rome splits and falls in the West. The Gupta Empire brings a golden age to India.', keyEvents: ['Roman Empire divides (285 CE)', 'Gupta Golden Age in India', 'Fall of Western Rome (476 CE)', 'Germanic kingdoms form in Europe', 'Sassanid Persia resurgent'] },
+  { startYear: 500, endYear: 750, name: 'Rise of Islam', description: 'Islam erupts from Arabia and within a century stretches from Spain to Central Asia. Byzantine and Sassanid empires are transformed. Tang China enters its golden age.', keyEvents: ['Prophet Muhammad and the Quran', 'Islamic conquests reshape Near East', 'Tang Dynasty begins (618)', 'Byzantine Empire contracts', 'Nara period in Japan'] },
+  { startYear: 750, endYear: 1000, name: 'The Islamic Golden Age', description: 'Baghdad\'s House of Wisdom leads a scientific and cultural renaissance. Charlemagne briefly unites Western Europe. Viking expansion reshapes northern trade.', keyEvents: ['Abbasid Caliphate at peak', 'House of Wisdom in Baghdad', 'Charlemagne crowned (800)', 'Viking expansion', 'Song Dynasty reunifies China'] },
+  { startYear: 1000, endYear: 1200, name: 'Crusades & Commerce', description: 'European crusaders clash with Islamic powers over the Holy Land. Meanwhile, global trade intensifies. The Chola Empire projects Indian naval power across Southeast Asia.', keyEvents: ['First Crusade (1096)', 'Chola naval expeditions', 'Angkor Wat constructed', 'Universities founded in Europe', 'Genghis Khan born (1162)'] },
+  { startYear: 1200, endYear: 1350, name: 'The Mongol Century', description: 'The Mongol Empire creates the largest contiguous land empire in history, connecting East and West through force and trade. The Black Death reshapes Eurasia.', keyEvents: ['Mongol Empire at peak extent', 'Sack of Baghdad (1258)', 'Marco Polo reaches China', 'Delhi Sultanate in India', 'Black Death begins (1347)'] },
+  { startYear: 1350, endYear: 1500, name: 'Renaissance & Reconnection', description: 'Europe recovers from plague and enters a cultural renaissance. Ottoman Turks capture Constantinople. Maritime exploration begins to reshape global power.', keyEvents: ['Ottoman capture of Constantinople (1453)', 'Gutenberg\'s printing press', 'Italian Renaissance flourishes', 'Voyages of exploration begin', 'Vijayanagara Empire in South India'] },
+  { startYear: 1500, endYear: 1650, name: 'Age of Exploration', description: 'European powers project global reach through maritime empires. The Mughal Empire transforms India. The spice trade drives colonialism across Southeast Asia.', keyEvents: ['Spanish conquest of Americas', 'Mughal Empire founded (1526)', 'Protestant Reformation', 'Dutch and Portuguese spice trade', 'Tokugawa Shogunate established'] },
+  { startYear: 1650, endYear: 1800, name: 'Enlightenment & Empire', description: 'Scientific revolution and Enlightenment thought reshape European society. Colonial empires expand. The British East India Company gains footholds in India.', keyEvents: ['Scientific Revolution', 'British East India Company expands', 'American Revolution (1776)', 'French Revolution (1789)', 'Qing Dynasty at peak'] },
+  { startYear: 1800, endYear: 1900, name: 'The Imperial Century', description: 'Industrial revolution and nationalism transform Europe. The British Empire reaches its zenith. Colonial powers carve up Africa and Asia. Japan modernizes rapidly.', keyEvents: ['Napoleonic Wars', 'Indian Rebellion of 1857', 'Meiji Restoration in Japan', 'Scramble for Africa / Berlin Conference', 'Opium Wars with China'] },
+  { startYear: 1900, endYear: 1945, name: 'World Wars', description: 'Two devastating global conflicts reshape every civilization. Empires collapse — Ottoman, Austro-Hungarian, British. Nationalism and ideology drive unprecedented destruction.', keyEvents: ['World War I (1914-1918)', 'Ottoman Empire dissolved', 'Rise of fascism and communism', 'World War II (1939-1945)', 'Atomic bombs dropped on Japan'] },
+  { startYear: 1945, endYear: 1991, name: 'Cold War & Decolonization', description: 'The world splits into superpower blocs. Colonial empires dissolve as new nations emerge across Asia and Africa. India and China chart independent paths.', keyEvents: ['Indian independence and Partition (1947)', 'Cold War and nuclear arms race', 'African decolonization wave', 'Chinese Revolution', 'Fall of the Berlin Wall (1989)'] },
+  { startYear: 1991, endYear: 2024, name: 'The Multipolar World', description: 'American unipolarity gives way to a complex multipolar order. China rises as a global power. Digital technology reshapes civilization at accelerating speed.', keyEvents: ['Rise of China as global power', 'War on Terror', 'Arab Spring', 'Digital revolution and AI', 'India emerges as major economy'] },
+];
+
+/** Find the era annotation for a given year */
+export function getEraForYear(year: number): EraAnnotation | undefined {
+  return ERA_ANNOTATIONS.find(e => year >= e.startYear && year < e.endYear);
+}
+
+/** Get civilization weights at a specific year by interpolating TIME_SERIES */
+export function getCivWeightsAtYear(year: number): Record<string, number> {
+  // Find surrounding data points
+  let before = TIME_SERIES[0];
+  let after = TIME_SERIES[TIME_SERIES.length - 1];
+  
+  for (let i = 0; i < TIME_SERIES.length - 1; i++) {
+    if (TIME_SERIES[i].year <= year && TIME_SERIES[i + 1].year >= year) {
+      before = TIME_SERIES[i];
+      after = TIME_SERIES[i + 1];
+      break;
+    }
+  }
+  
+  const t = after.year === before.year ? 0 : (year - before.year) / (after.year - before.year);
+  const weights: Record<string, number> = {};
+  CIV_IDS.forEach(id => {
+    weights[id] = (before[id] as number) * (1 - t) + (after[id] as number) * t;
+  });
+  return weights;
+}
+
 /* ─── Helpers ─── */
 export const MIN_YEAR = -3000;
 export const MAX_YEAR = 2024;
