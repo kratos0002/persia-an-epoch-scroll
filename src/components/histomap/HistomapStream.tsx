@@ -1,20 +1,19 @@
-import React, { useMemo, useRef, useEffect } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import * as d3 from 'd3';
-import { CIVILIZATIONS, CIV_IDS, TIME_SERIES, ESSAY_WINDOWS, yearToProgress, type EssayWindow } from './histomapData';
+import { CIVILIZATIONS, CIV_IDS, TIME_SERIES, ESSAY_WINDOWS, yearToProgress, MIN_YEAR, MAX_YEAR } from './histomapData';
 
 interface Props {
   width: number;
   height: number;
   activeEssays: Set<string>;
-  onEssayClick: (href: string) => void;
   onHoverCiv: (civId: string | null, year: number | null) => void;
+  /** Selection band — progress values 0-1 */
+  selectionStart?: number;
+  selectionEnd?: number;
+  onClickProgress?: (progress: number) => void;
 }
 
-const STREAM_PADDING = 0; // full-width streams
-
-export default function HistomapStream({ width, height, activeEssays, onEssayClick, onHoverCiv }: Props) {
-  const svgRef = useRef<SVGSVGElement>(null);
-
+export default function HistomapStream({ width, height, activeEssays, onHoverCiv, selectionStart, selectionEnd, onClickProgress }: Props) {
   const { stackedData, yScale, xScale } = useMemo(() => {
     const stack = d3.stack<(typeof TIME_SERIES)[0]>()
       .keys(CIV_IDS)
@@ -25,7 +24,7 @@ export default function HistomapStream({ width, height, activeEssays, onEssayCli
 
     const xScale = d3.scaleLinear()
       .domain([d3.min(TIME_SERIES, d => d.year)!, d3.max(TIME_SERIES, d => d.year)!])
-      .range([0, height]); // year maps to vertical (y-axis on screen)
+      .range([0, height]);
 
     const yExtent = [
       d3.min(stacked, layer => d3.min(layer, d => d[0]))!,
@@ -34,31 +33,18 @@ export default function HistomapStream({ width, height, activeEssays, onEssayCli
 
     const yScale = d3.scaleLinear()
       .domain(yExtent)
-      .range([STREAM_PADDING, width - STREAM_PADDING]);
+      .range([0, width]);
 
     return { stackedData: stacked, yScale, xScale };
   }, [width, height]);
 
   const areaGenerator = useMemo(() => {
     return d3.area<d3.SeriesPoint<(typeof TIME_SERIES)[0]>>()
-      .y(d => xScale(d.data.year))   // vertical = time
-      .x0(d => yScale(d[0]))         // horizontal = width
+      .y(d => xScale(d.data.year))
+      .x0(d => yScale(d[0]))
       .x1(d => yScale(d[1]))
       .curve(d3.curveBasis);
   }, [xScale, yScale]);
-
-  // Build essay highlight regions
-  const essayRegions = useMemo(() => {
-    return ESSAY_WINDOWS.map(ew => {
-      const y1 = xScale(ew.startYear);
-      const y2 = xScale(ew.endYear);
-      // Ensure minimum height for short-duration essays
-      const minH = 40;
-      const regionH = Math.max(y2 - y1, minH);
-      const regionY = y2 - y1 < minH ? y1 - (minH - (y2 - y1)) / 2 : y1;
-      return { ...ew, regionY, regionH };
-    });
-  }, [xScale]);
 
   const civMap = useMemo(() => {
     const m = new Map<string, (typeof CIVILIZATIONS)[0]>();
@@ -66,13 +52,41 @@ export default function HistomapStream({ width, height, activeEssays, onEssayCli
     return m;
   }, []);
 
+  // Year ticks for the overview
+  const yearTicks = useMemo(() => {
+    const ticks: { year: number; y: number }[] = [];
+    for (let yr = -3000; yr <= 2024; yr += 500) {
+      ticks.push({ year: yr, y: xScale(yr) });
+    }
+    return ticks;
+  }, [xScale]);
+
+  // Essay dots on left edge
+  const essayDots = useMemo(() => {
+    return ESSAY_WINDOWS.map(ew => ({
+      ...ew,
+      y: xScale((ew.startYear + ew.endYear) / 2),
+    }));
+  }, [xScale]);
+
+  const handleClick = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
+    if (!onClickProgress) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const y = e.clientY - rect.top;
+    const progress = y / height;
+    onClickProgress(Math.max(0, Math.min(1, progress)));
+  }, [onClickProgress, height]);
+
+  const selY1 = selectionStart !== undefined ? selectionStart * height : undefined;
+  const selY2 = selectionEnd !== undefined ? selectionEnd * height : undefined;
+
   return (
     <svg
-      ref={svgRef}
       width={width}
       height={height}
-      className="block"
+      className="block cursor-pointer"
       style={{ background: 'transparent' }}
+      onClick={handleClick}
     >
       {/* Stream bands */}
       {stackedData.map((layer, i) => {
@@ -80,7 +94,6 @@ export default function HistomapStream({ width, height, activeEssays, onEssayCli
         const civ = civMap.get(civId)!;
         const path = areaGenerator(layer) ?? '';
 
-        // Check if any active essay covers this civ
         const isHighlighted = ESSAY_WINDOWS.some(
           ew => activeEssays.has(ew.essayId) && ew.civIds.includes(civId)
         );
@@ -90,41 +103,57 @@ export default function HistomapStream({ width, height, activeEssays, onEssayCli
             key={civId}
             d={path}
             fill={isHighlighted ? civ.color : civ.colorMuted}
-            opacity={isHighlighted ? 0.85 : 0.3}
+            opacity={isHighlighted ? 0.85 : 0.35}
             stroke={isHighlighted ? civ.color : 'hsl(0, 0%, 20%)'}
-            strokeWidth={isHighlighted ? 1.5 : 0.5}
-            style={{ transition: 'fill 0.6s ease, opacity 0.6s ease, stroke 0.6s ease' }}
+            strokeWidth={isHighlighted ? 1 : 0.3}
+            style={{ transition: 'fill 0.4s ease, opacity 0.4s ease' }}
             onMouseEnter={() => onHoverCiv(civId, null)}
             onMouseLeave={() => onHoverCiv(null, null)}
           />
         );
       })}
 
-      {/* Essay window overlays */}
-      {essayRegions.map(ew => {
-        const isActive = activeEssays.has(ew.essayId);
-        if (!isActive) return null;
+      {/* Year tick labels on left */}
+      {yearTicks.map(t => (
+        <g key={t.year}>
+          <line x1={0} y1={t.y} x2={6} y2={t.y} stroke="hsl(0, 0%, 50%)" strokeWidth={0.5} />
+          <text x={8} y={t.y + 3} fontSize={8} fontFamily="monospace" fill="hsl(0, 0%, 50%)">
+            {t.year < 0 ? `${Math.abs(t.year)} BCE` : `${t.year} CE`}
+          </text>
+        </g>
+      ))}
 
-        return (
-          <g key={ew.essayId}>
-            {/* Glow rectangle behind the active zone */}
-            <rect
-              x={0}
-              y={ew.regionY}
-              width={width}
-              height={ew.regionH}
-              fill="none"
-              stroke="hsl(43, 85%, 55%)"
-              strokeWidth={2}
-              strokeDasharray="6 3"
-              opacity={0.7}
-              rx={4}
-              style={{ cursor: 'pointer' }}
-              onClick={() => onEssayClick(ew.href)}
-            />
-          </g>
-        );
-      })}
+      {/* Essay dots */}
+      {essayDots.map(dot => (
+        <circle
+          key={dot.essayId}
+          cx={width - 6}
+          cy={dot.y}
+          r={2.5}
+          fill={dot.status === 'live' ? 'hsl(43, 85%, 55%)' : 'hsl(0, 0%, 40%)'}
+          opacity={0.8}
+        />
+      ))}
+
+      {/* Selection band overlay */}
+      {selY1 !== undefined && selY2 !== undefined && (
+        <>
+          {/* Dim areas outside selection */}
+          <rect x={0} y={0} width={width} height={selY1} fill="hsl(0, 0%, 0%)" opacity={0.3} />
+          <rect x={0} y={selY2} width={width} height={height - selY2} fill="hsl(0, 0%, 0%)" opacity={0.3} />
+          {/* Selection border */}
+          <rect
+            x={0}
+            y={selY1}
+            width={width}
+            height={selY2 - selY1}
+            fill="none"
+            stroke="hsl(43, 85%, 55%)"
+            strokeWidth={1.5}
+            rx={2}
+          />
+        </>
+      )}
     </svg>
   );
 }

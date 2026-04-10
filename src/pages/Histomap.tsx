@@ -1,73 +1,66 @@
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ArrowLeft, ChevronUp, ChevronDown } from 'lucide-react';
 import HistomapStream from '@/components/histomap/HistomapStream';
-import EraRuler from '@/components/histomap/EraRuler';
-import EssayWindowCard from '@/components/histomap/EssayWindow';
-import HistomapMinimap from '@/components/histomap/HistomapMinimap';
+import HistomapDetailPanel from '@/components/histomap/HistomapDetailPanel';
 import CivTooltip from '@/components/histomap/CivTooltip';
-import { ESSAY_WINDOWS, CIVILIZATIONS, progressToYear, yearToProgress, formatYear, MIN_YEAR, MAX_YEAR, YEAR_SPAN } from '@/components/histomap/histomapData';
+import { CIVILIZATIONS, ESSAY_WINDOWS, progressToYear, yearToProgress, formatYear, MIN_YEAR, MAX_YEAR, ERA_ANNOTATIONS } from '@/components/histomap/histomapData';
 
-const TOTAL_HEIGHT = 10000; // px
-const STREAM_WIDTH_RATIO = 0.7; // stream takes 70% of container width
-const RULER_WIDTH = 60;
+const SELECTION_SPAN_YEARS = 400; // how many years the selection band covers
 
 export default function Histomap() {
-  const navigate = useNavigate();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [scrollY, setScrollY] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(900);
-  const [viewportH, setViewportH] = useState(800);
+  const overviewRef = useRef<HTMLDivElement>(null);
+  const [overviewHeight, setOverviewHeight] = useState(600);
+  const [overviewWidth, setOverviewWidth] = useState(400);
   const [hoveredCiv, setHoveredCiv] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  // Measure container
+  // Selection state: center year of the selection band
+  const [selectedYear, setSelectedYear] = useState(-1500);
+  // Dragging state
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Measure overview panel
   useEffect(() => {
     const measure = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.clientWidth);
+      if (overviewRef.current) {
+        setOverviewHeight(overviewRef.current.clientHeight);
+        setOverviewWidth(overviewRef.current.clientWidth);
       }
-      setViewportH(window.innerHeight);
     };
     measure();
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
   }, []);
 
-  // Track scroll
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Selection range in years
+  const selectionRange: [number, number] = useMemo(() => {
+    const half = SELECTION_SPAN_YEARS / 2;
+    return [
+      Math.max(MIN_YEAR, selectedYear - half),
+      Math.min(MAX_YEAR, selectedYear + half),
+    ];
+  }, [selectedYear]);
 
-  // Current year based on scroll
-  const currentYear = useMemo(() => {
-    const progress = Math.min(1, Math.max(0, scrollY / (TOTAL_HEIGHT - viewportH)));
-    return progressToYear(progress);
-  }, [scrollY, viewportH]);
+  // Selection range as progress (0-1)
+  const selectionStartProgress = yearToProgress(selectionRange[0]);
+  const selectionEndProgress = yearToProgress(selectionRange[1]);
 
-  // Which essays are active (their year range is in the viewport)
+  // Which essays overlap with the selection
   const activeEssays = useMemo(() => {
-    const vpTop = scrollY;
-    const vpBottom = scrollY + viewportH;
     const active = new Set<string>();
-
     ESSAY_WINDOWS.forEach(ew => {
-      const ewTop = yearToProgress(ew.startYear) * TOTAL_HEIGHT;
-      const ewBottom = yearToProgress(ew.endYear) * TOTAL_HEIGHT;
-      // Check overlap
-      if (ewBottom >= vpTop - 100 && ewTop <= vpBottom + 100) {
+      if (ew.endYear >= selectionRange[0] && ew.startYear <= selectionRange[1]) {
         active.add(ew.essayId);
       }
     });
     return active;
-  }, [scrollY, viewportH]);
+  }, [selectionRange]);
 
-  const handleEssayClick = useCallback((href: string) => {
-    navigate(href);
-  }, [navigate]);
+  const handleClickProgress = useCallback((progress: number) => {
+    const year = progressToYear(progress);
+    setSelectedYear(Math.round(year));
+  }, []);
 
   const handleHoverCiv = useCallback((civId: string | null) => {
     setHoveredCiv(civId);
@@ -75,25 +68,68 @@ export default function Histomap() {
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     setMousePos({ x: e.clientX, y: e.clientY });
+
+    if (isDragging && overviewRef.current) {
+      const rect = overviewRef.current.getBoundingClientRect();
+      const y = e.clientY - rect.top;
+      const progress = Math.max(0, Math.min(1, y / overviewHeight));
+      setSelectedYear(Math.round(progressToYear(progress)));
+    }
+  }, [isDragging, overviewHeight]);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    // Only start drag if clicking within the selection band area
+    if (overviewRef.current) {
+      const rect = overviewRef.current.getBoundingClientRect();
+      const y = e.clientY - rect.top;
+      const progress = y / overviewHeight;
+      const yearAtClick = progressToYear(progress);
+      const half = SELECTION_SPAN_YEARS / 2;
+      if (yearAtClick >= selectedYear - half && yearAtClick <= selectedYear + half) {
+        setIsDragging(true);
+        e.preventDefault();
+      }
+    }
+  }, [overviewHeight, selectedYear]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
   }, []);
 
-  const handleMinimapJump = useCallback((progress: number) => {
-    window.scrollTo({ top: progress * (TOTAL_HEIGHT - viewportH), behavior: 'smooth' });
-  }, [viewportH]);
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mouseup', handleMouseUp);
+      return () => window.removeEventListener('mouseup', handleMouseUp);
+    }
+  }, [isDragging, handleMouseUp]);
 
-  const streamWidth = containerWidth - RULER_WIDTH - 40; // padding
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        setSelectedYear(y => Math.min(MAX_YEAR, y + 100));
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setSelectedYear(y => Math.max(MIN_YEAR, y - 100));
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
 
-  const viewportProgress = scrollY / (TOTAL_HEIGHT - viewportH || 1);
-  const viewportFraction = viewportH / TOTAL_HEIGHT;
+  // Step buttons
+  const stepUp = useCallback(() => setSelectedYear(y => Math.max(MIN_YEAR, y - SELECTION_SPAN_YEARS)), []);
+  const stepDown = useCallback(() => setSelectedYear(y => Math.min(MAX_YEAR, y + SELECTION_SPAN_YEARS)), []);
 
   return (
     <div
-      className="min-h-screen bg-background text-foreground"
+      className="h-screen flex flex-col bg-background text-foreground overflow-hidden"
       onMouseMove={handleMouseMove}
     >
       {/* Header */}
-      <div className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm border-b border-foreground/10">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="flex-shrink-0 border-b border-foreground/10 bg-background/90 backdrop-blur-sm">
+        <div className="max-w-[1600px] mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/" className="text-foreground/60 hover:text-foreground transition-colors">
               <ArrowLeft className="w-5 h-5" />
@@ -104,19 +140,16 @@ export default function Histomap() {
             </div>
           </div>
           <div className="text-right">
-            <p className="text-sm font-mono text-foreground/70">{formatYear(Math.round(currentYear))}</p>
+            <p className="text-sm font-mono text-foreground/70">{formatYear(Math.round(selectedYear))}</p>
           </div>
         </div>
       </div>
 
       {/* Legend */}
-      <div className="fixed top-[60px] left-0 right-0 z-30 bg-background/60 backdrop-blur-sm border-b border-foreground/5">
-        <div className="max-w-7xl mx-auto px-4 py-1.5 flex flex-wrap gap-x-3 gap-y-1">
+      <div className="flex-shrink-0 border-b border-foreground/5 bg-background/60">
+        <div className="max-w-[1600px] mx-auto px-4 py-1.5 flex flex-wrap gap-x-3 gap-y-1">
           {CIVILIZATIONS.map(civ => (
-            <div
-              key={civ.id}
-              className="flex items-center gap-1 text-[9px] text-foreground/50"
-            >
+            <div key={civ.id} className="flex items-center gap-1 text-[9px] text-foreground/50">
               <div className="w-2 h-2 rounded-full" style={{ background: civ.color }} />
               <span>{civ.name}</span>
             </div>
@@ -124,48 +157,56 @@ export default function Histomap() {
         </div>
       </div>
 
-      {/* Main content */}
-      <div
-        ref={containerRef}
-        className="max-w-7xl mx-auto relative"
-        style={{ paddingTop: 100 }}
-      >
-        <div className="flex" style={{ height: TOTAL_HEIGHT }}>
-          {/* Era ruler */}
-          <div className="sticky top-[100px] self-start" style={{ height: viewportH - 100 }}>
-            <EraRuler totalHeight={TOTAL_HEIGHT} currentYear={currentYear} />
-          </div>
+      {/* Split screen */}
+      <div className="flex-1 flex min-h-0">
+        {/* Left: Overview Stream */}
+        <div className="w-[40%] flex flex-col border-r border-foreground/10">
+          {/* Step up button */}
+          <button
+            onClick={stepUp}
+            className="flex-shrink-0 flex items-center justify-center py-1 text-foreground/40 hover:text-foreground/70 transition-colors"
+            disabled={selectedYear <= MIN_YEAR}
+          >
+            <ChevronUp className="w-4 h-4" />
+            <span className="text-[10px] font-mono ml-1">Earlier</span>
+          </button>
 
-          {/* Stream area */}
-          <div className="flex-1 relative">
+          <div
+            ref={overviewRef}
+            className="flex-1 relative overflow-hidden select-none"
+            onMouseDown={handleMouseDown}
+            style={{ cursor: isDragging ? 'grabbing' : 'default' }}
+          >
             <HistomapStream
-              width={Math.max(300, streamWidth)}
-              height={TOTAL_HEIGHT}
+              width={overviewWidth}
+              height={overviewHeight}
               activeEssays={activeEssays}
-              onEssayClick={handleEssayClick}
               onHoverCiv={handleHoverCiv}
+              selectionStart={selectionStartProgress}
+              selectionEnd={selectionEndProgress}
+              onClickProgress={handleClickProgress}
             />
-
-            {/* Essay cards */}
-            {ESSAY_WINDOWS.map(ew => (
-              <EssayWindowCard
-                key={ew.essayId}
-                essay={ew}
-                totalHeight={TOTAL_HEIGHT}
-                isActive={activeEssays.has(ew.essayId)}
-                containerWidth={containerWidth}
-              />
-            ))}
           </div>
+
+          {/* Step down button */}
+          <button
+            onClick={stepDown}
+            className="flex-shrink-0 flex items-center justify-center py-1 text-foreground/40 hover:text-foreground/70 transition-colors"
+            disabled={selectedYear >= MAX_YEAR}
+          >
+            <ChevronDown className="w-4 h-4" />
+            <span className="text-[10px] font-mono ml-1">Later</span>
+          </button>
+        </div>
+
+        {/* Right: Detail Panel */}
+        <div className="w-[60%] overflow-hidden">
+          <HistomapDetailPanel
+            selectedYear={selectedYear}
+            selectionRange={selectionRange}
+          />
         </div>
       </div>
-
-      {/* Minimap */}
-      <HistomapMinimap
-        viewportTop={viewportProgress}
-        viewportHeight={viewportFraction}
-        onJump={handleMinimapJump}
-      />
 
       {/* Tooltip */}
       <CivTooltip civId={hoveredCiv} x={mousePos.x} y={mousePos.y} />
