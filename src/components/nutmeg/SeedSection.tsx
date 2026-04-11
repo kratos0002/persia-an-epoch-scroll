@@ -1,67 +1,92 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { RevealOnScroll } from '@/components/scroll/StickyScroll';
-import { SpicePriceChart } from '@/components/visuals/SpicePriceChart';
+import { LogEntry } from './LogEntry';
+import { CargoManifest } from './CargoManifest';
+import { NM } from './nutmegTheme';
 
-const OCEAN = 'hsl(210, 40%, 8%)';
-const SPICE = 'hsl(25, 75%, 45%)';
-const SAFFRON = 'hsl(35, 90%, 55%)';
-const PARCHMENT = 'hsl(40, 35%, 88%)';
-const SMOKE = 'hsl(210, 15%, 40%)';
+const Marginalia = ({ children, side = 'right' }: { children: string; side?: 'left' | 'right' }) => (
+  <div
+    className={`hidden lg:block absolute ${side === 'right' ? '-right-48' : '-left-48'} w-36 text-[11px] font-body italic leading-snug`}
+    style={{ color: NM.SMOKE }}
+  >
+    {children}
+  </div>
+);
 
 export const SeedSection = () => {
   return (
-    <section id="the-seed" className="relative min-h-screen flex items-center justify-center py-32 px-6" style={{ background: OCEAN }}>
-      <div className="relative z-10 max-w-2xl mx-auto">
-        <RevealOnScroll>
-          <p className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-6 text-center" style={{ color: SPICE }}>
-            The Seed — Worth More Than Gold
-          </p>
-        </RevealOnScroll>
+    <LogEntry
+      id="the-seed"
+      entryNumber="Entry I"
+      date="Circa 600 AD — Medieval Europe"
+    >
+      <motion.h2
+        className="font-display text-4xl md:text-6xl font-black leading-[0.95] mb-8 text-center"
+        style={{ color: NM.INK }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+        A nut so valuable<br />
+        <span style={{ color: NM.AMBER }}>men killed for it.</span>
+      </motion.h2>
 
-        <RevealOnScroll delay={0.2}>
-          <h2 className="font-display text-4xl md:text-6xl font-black leading-[0.95] mb-8 text-center" style={{ color: PARCHMENT }}>
-            A nut so valuable<br />
-            <span style={{ color: SAFFRON }}>men killed for it.</span>
-          </h2>
-        </RevealOnScroll>
+      <motion.div
+        className="relative"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.3, duration: 0.8 }}
+      >
+        <p className="font-body text-lg leading-relaxed mb-6" style={{ color: NM.INK }}>
+          Nutmeg. A wrinkled brown seed the size of an olive. In medieval Europe, it was believed to cure the plague,
+          ward off evil spirits, and ignite passion. Doctors prescribed it. Priests blessed it.
+          Kings hoarded it.
+        </p>
+        <Marginalia side="right">
+          The Arabs kept the source a secret for centuries — attributing it to lands beyond the edge of the world.
+        </Marginalia>
+      </motion.div>
 
-        <RevealOnScroll delay={0.4}>
-          <p className="font-body text-lg leading-relaxed mb-6" style={{ color: SMOKE }}>
-            Nutmeg. A wrinkled brown seed the size of an olive. In medieval Europe, it was believed to cure the plague,
-            ward off evil spirits, and ignite passion. Doctors prescribed it. Priests blessed it.
-            Kings hoarded it.
-          </p>
-        </RevealOnScroll>
+      <motion.p
+        className="font-body text-lg leading-relaxed mb-10"
+        style={{ color: NM.INK }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.4, duration: 0.8 }}
+      >
+        By the 1500s, a bag of nutmeg bought in the Banda Islands for a few pennies
+        could be sold in London for <strong style={{ color: NM.AMBER }}>60,000 percent profit</strong>.
+        Ounce for ounce, it was more valuable than gold.
+      </motion.p>
 
-        <RevealOnScroll delay={0.5}>
-          <p className="font-body text-lg leading-relaxed mb-10" style={{ color: SMOKE }}>
-            By the 1500s, a bag of nutmeg bought in the Banda Islands for a few pennies
-            could be sold in London for <strong style={{ color: SAFFRON }}>60,000 percent profit</strong>.
-            Ounce for ounce, it was more valuable than gold.
-          </p>
-        </RevealOnScroll>
+      {/* Cargo Manifest — replaces SpicePriceChart */}
+      <CargoManifest />
 
-        {/* Price comparison visual */}
-        <RevealOnScroll delay={0.6}>
-          <div className="my-12">
-            <SpicePriceChart />
-          </div>
-        </RevealOnScroll>
+      <motion.p
+        className="font-body text-lg leading-relaxed mb-6"
+        style={{ color: NM.INK }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.2, duration: 0.8 }}
+      >
+        And it grew in only one place on Earth: a chain of ten tiny volcanic islands
+        in the Banda Sea, east of Java, at the end of the known world.
+      </motion.p>
 
-        <RevealOnScroll delay={0.7}>
-          <p className="font-body text-lg leading-relaxed mb-6" style={{ color: SMOKE }}>
-            And it grew in only one place on Earth: a chain of ten tiny volcanic islands
-            in the Banda Sea, east of Java, at the end of the known world.
-          </p>
-        </RevealOnScroll>
-
-        <RevealOnScroll delay={0.8}>
-          <p className="font-display text-2xl md:text-3xl italic text-center" style={{ color: SPICE }}>
-            "Whoever controlled those islands controlled the world's supply."
-          </p>
-        </RevealOnScroll>
-      </div>
-    </section>
+      <motion.p
+        className="font-display text-2xl md:text-3xl italic text-center my-10"
+        style={{ color: NM.TIMBER }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.3, duration: 0.8 }}
+      >
+        "Whoever controlled those islands controlled the world's supply."
+      </motion.p>
+    </LogEntry>
   );
 };

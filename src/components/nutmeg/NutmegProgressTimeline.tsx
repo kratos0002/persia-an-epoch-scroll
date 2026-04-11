@@ -2,9 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { NUTMEG_SECTIONS } from '@/hooks/useNutmegScrollSpy';
 import { cn } from '@/lib/utils';
-
-const SPICE = 'hsl(25, 75%, 45%)';
-const SAFFRON = 'hsl(35, 90%, 55%)';
+import { NM } from './nutmegTheme';
 
 interface NutmegProgressTimelineProps {
   activeSection: string;
@@ -20,19 +18,17 @@ export const NutmegProgressTimeline = ({ activeSection, globalProgress }: Nutmeg
       {/* Year label */}
       <motion.div
         className="absolute right-6 font-display text-xs font-bold whitespace-nowrap"
-        style={{ color: SPICE }}
+        style={{ color: NM.TIMBER }}
         animate={{ top: `${(activeIndex / Math.max(NUTMEG_SECTIONS.length - 1, 1)) * 100}%` }}
         transition={{ type: 'spring', stiffness: 200, damping: 25 }}
       >
         {current.year || '—'}
       </motion.div>
 
-      {/* Dots */}
       <div className="flex flex-col items-center gap-3 h-full justify-between relative">
         {NUTMEG_SECTIONS.map((section, i) => {
           const isActive = section.id === activeSection;
           const isPast = i < activeIndex;
-
           return (
             <button
               key={section.id}
@@ -41,24 +37,23 @@ export const NutmegProgressTimeline = ({ activeSection, globalProgress }: Nutmeg
                 'w-2 h-2 rounded-full transition-all duration-300 relative group',
                 isActive ? 'scale-150' : isPast ? 'scale-100' : 'scale-75 opacity-40'
               )}
-              style={{ background: isActive ? SPICE : isPast ? SAFFRON : 'rgba(255,255,255,0.25)' }}
+              style={{ background: isActive ? NM.AMBER : isPast ? NM.TIMBER : `${NM.TIMBER}44` }}
               aria-label={section.label}
             >
               <span className="absolute right-5 top-1/2 -translate-y-1/2 text-[10px] font-body whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                style={{ color: 'rgba(255,255,255,0.7)' }}>
+                style={{ color: NM.INK }}>
                 {section.label}
               </span>
             </button>
           );
         })}
 
-        {/* Progress line */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px" style={{ background: 'rgba(255,255,255,0.06)' }}>
+        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px" style={{ background: `${NM.TIMBER}15` }}>
           <motion.div
             className="w-full origin-top"
             style={{
               height: `${globalProgress * 100}%`,
-              background: `linear-gradient(180deg, ${SAFFRON}, ${SPICE})`,
+              background: `linear-gradient(180deg, ${NM.AMBER}, ${NM.TIMBER})`,
             }}
           />
         </div>

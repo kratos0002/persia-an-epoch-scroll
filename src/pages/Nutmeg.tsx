@@ -9,6 +9,7 @@ import { ManhattanTradeSection } from '@/components/nutmeg/ManhattanTradeSection
 import { NutmegEpilogue } from '@/components/nutmeg/NutmegEpilogue';
 import { NutmegProgressTimeline } from '@/components/nutmeg/NutmegProgressTimeline';
 import { NutmegSectionNav } from '@/components/nutmeg/NutmegSectionNav';
+import { LogSpine } from '@/components/nutmeg/LogSpine';
 import { useNutmegScrollSpy } from '@/hooks/useNutmegScrollSpy';
 import { CommentsSection } from '@/components/site/CommentsSection';
 import { SiteFooter } from '@/components/site/SiteFooter';
@@ -18,7 +19,8 @@ const Nutmeg = () => {
   const { activeSection, globalProgress } = useNutmegScrollSpy();
 
   return (
-    <div className="relative" style={{ background: 'hsl(210, 40%, 8%)' }}>
+    <div className="relative">
+      <LogSpine />
       <NutmegSectionNav activeSection={activeSection} />
       <NutmegProgressTimeline activeSection={activeSection} globalProgress={globalProgress} />
       <NutmegHero />
