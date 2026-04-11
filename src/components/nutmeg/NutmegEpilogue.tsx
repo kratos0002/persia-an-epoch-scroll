@@ -1,94 +1,154 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { RevealOnScroll } from '@/components/scroll/StickyScroll';
+import { LogEntry } from './LogEntry';
+import { CompassDivider } from './NutmegCompassRose';
 import { EditionColophon } from '@/components/scroll/EditionColophon';
-
-const OCEAN = 'hsl(210, 40%, 8%)';
-const SPICE = 'hsl(25, 75%, 45%)';
-const SAFFRON = 'hsl(35, 90%, 55%)';
-const PARCHMENT = 'hsl(40, 35%, 88%)';
-const SMOKE = 'hsl(210, 15%, 40%)';
+import { NM } from './nutmegTheme';
 
 export const NutmegEpilogue = () => {
   return (
-    <section id="nutmeg-epilogue" className="relative py-32 px-6" style={{ background: OCEAN }}>
-      <div className="max-w-2xl mx-auto">
-        <RevealOnScroll>
-          <p className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-6 text-center" style={{ color: SMOKE }}>
-            Epilogue
-          </p>
-          <h2 className="font-display text-4xl md:text-6xl font-black text-center mb-4" style={{ color: PARCHMENT }}>
-            The spice lost its value.
-          </h2>
-          <h2 className="font-display text-4xl md:text-6xl font-black text-center mb-12" style={{ color: SAFFRON }}>
-            The island kept its scars.
-          </h2>
-        </RevealOnScroll>
+    <LogEntry
+      id="nutmeg-epilogue"
+      entryNumber="Final Entry"
+      date="Centuries later"
+      stainIntensity={0.8}
+    >
+      <motion.h2
+        className="font-display text-4xl md:text-6xl font-black text-center mb-4"
+        style={{ color: NM.INK }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
+        The spice lost its value.
+      </motion.h2>
+      <motion.h2
+        className="font-display text-4xl md:text-6xl font-black text-center mb-12"
+        style={{ color: NM.AMBER }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.2 }}
+      >
+        The island kept its scars.
+      </motion.h2>
 
-        <RevealOnScroll delay={0.3}>
-          <p className="font-body text-lg leading-relaxed text-center mb-8" style={{ color: SMOKE }}>
-            In 1770, a French botanist named Pierre Poivre smuggled nutmeg seedlings
-            out of the Banda Islands and planted them in Mauritius.
-            The Dutch monopoly collapsed within a generation.
-          </p>
-        </RevealOnScroll>
+      <motion.p
+        className="font-body text-lg leading-relaxed text-center mb-8"
+        style={{ color: NM.INK }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.3 }}
+      >
+        In 1770, a French botanist named Pierre Poivre smuggled nutmeg seedlings
+        out of the Banda Islands and planted them in Mauritius.
+        The Dutch monopoly collapsed within a generation.
+      </motion.p>
 
-        {/* The absurd comparison */}
-        <RevealOnScroll delay={0.4}>
-          <div className="text-center mb-20 py-10" style={{ borderTop: '1px solid hsl(25, 25%, 18%)', borderBottom: '1px solid hsl(25, 25%, 18%)' }}>
-            <p className="text-[9px] tracking-[0.3em] uppercase font-body mb-4" style={{ color: SMOKE }}>
-              Today
+      {/* The absurd comparison — styled as a margin annotation added later */}
+      <motion.div
+        className="text-center mb-20 py-10 mx-auto max-w-lg"
+        style={{ borderTop: `1px solid ${NM.TIMBER}22`, borderBottom: `1px solid ${NM.TIMBER}22` }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.4 }}
+      >
+        <p className="text-[9px] tracking-[0.3em] uppercase font-body mb-4" style={{ color: NM.SMOKE }}>
+          Today
+        </p>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+          <div>
+            <p className="font-display text-5xl md:text-6xl font-black" style={{ color: NM.AMBER }}>
+              $8
             </p>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-              <div>
-                <p className="font-display text-5xl md:text-6xl font-black" style={{ color: SAFFRON }}>
-                  $8
-                </p>
-                <p className="font-body text-sm mt-1" style={{ color: SMOKE }}>
-                  per pound of nutmeg
-                </p>
-              </div>
-              <div className="font-display text-2xl" style={{ color: SMOKE }}>vs</div>
-              <div>
-                <p className="font-display text-5xl md:text-6xl font-black" style={{ color: 'hsl(210, 60%, 40%)' }}>
-                  $1.7T
-                </p>
-                <p className="font-body text-sm mt-1" style={{ color: SMOKE }}>
-                  value of Manhattan
-                </p>
-              </div>
-            </div>
+            <p className="font-body text-sm mt-1" style={{ color: NM.SMOKE }}>
+              per pound of nutmeg
+            </p>
           </div>
-        </RevealOnScroll>
+          <div className="font-display text-2xl" style={{ color: NM.SMOKE }}>vs</div>
+          <div>
+            <p className="font-display text-5xl md:text-6xl font-black" style={{ color: NM.DUTCH_BLUE }}>
+              $1.7T
+            </p>
+            <p className="font-body text-sm mt-1" style={{ color: NM.SMOKE }}>
+              value of Manhattan
+            </p>
+          </div>
+        </div>
 
-        <RevealOnScroll delay={0.5}>
-          <p className="font-body text-lg leading-relaxed text-center mb-8" style={{ color: SMOKE }}>
-            Run island today has no airport, no harbour, and fewer than 2,000 inhabitants.
-            The Dutch fort is rubble. The nutmeg trees still grow,
-            but nobody fights over them anymore.
-          </p>
-        </RevealOnScroll>
+        {/* "Added centuries later" annotation */}
+        <motion.p
+          className="font-body text-xs italic mt-6 -rotate-1"
+          style={{ color: NM.TEAL }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.6 }}
+          viewport={{ once: true }}
+          transition={{ delay: 1 }}
+        >
+          — annotated by a later hand, in a different ink
+        </motion.p>
+      </motion.div>
 
-        <RevealOnScroll delay={0.6}>
-          <p className="font-body text-lg leading-relaxed text-center mb-16" style={{ color: SMOKE }}>
-            Manhattan has 1.6 million people, the world's financial center,
-            and real estate worth more than most countries.
-            All because the Dutch thought nutmeg was the better deal.
-          </p>
-        </RevealOnScroll>
+      <motion.p
+        className="font-body text-lg leading-relaxed text-center mb-8"
+        style={{ color: NM.INK }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        Run island today has no airport, no harbour, and fewer than 2,000 inhabitants.
+        The Dutch fort is rubble. The nutmeg trees still grow,
+        but nobody fights over them anymore.
+      </motion.p>
 
-        <RevealOnScroll delay={0.7}>
-          <p className="font-display text-xl md:text-2xl italic text-center leading-relaxed mb-2" style={{ color: PARCHMENT }}>
-            "Empires are built on what people believe is valuable.
-            They collapse when they're wrong."
-          </p>
-          <p className="text-center text-xs font-body mt-4 mb-16" style={{ color: SMOKE }}>
-            — The lesson of nutmeg
-          </p>
-        </RevealOnScroll>
+      <motion.p
+        className="font-body text-lg leading-relaxed text-center mb-16"
+        style={{ color: NM.INK }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        Manhattan has 1.6 million people, the world's financial center,
+        and real estate worth more than most countries.
+        All because the Dutch thought nutmeg was the better deal.
+      </motion.p>
 
-        <EditionColophon essayId="nutmeg" variant="dark" />
-      </div>
-    </section>
+      <CompassDivider />
+
+      {/* Final quote */}
+      <motion.p
+        className="font-display text-xl md:text-2xl italic text-center leading-relaxed mb-2"
+        style={{ color: NM.INK }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        "Empires are built on what people believe is valuable.
+        They collapse when they're wrong."
+      </motion.p>
+      <p className="text-center text-xs font-body mt-4 mb-8" style={{ color: NM.SMOKE }}>
+        — The lesson of nutmeg
+      </p>
+
+      {/* Botanical sketch placeholder — final page feeling */}
+      <motion.div
+        className="text-center my-16"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.5, duration: 1.5 }}
+      >
+        <p className="font-display text-sm italic mb-2" style={{ color: NM.TIMBER, opacity: 0.4 }}>
+          ❦
+        </p>
+        <p className="font-body text-xs italic" style={{ color: NM.SMOKE, opacity: 0.5 }}>
+          It was just a seed.
+        </p>
+      </motion.div>
+
+      <EditionColophon essayId="nutmeg" variant="light" />
+    </LogEntry>
   );
 };
