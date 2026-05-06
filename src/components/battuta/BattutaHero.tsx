@@ -3,6 +3,18 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { IB, ALL_COORDS } from '@/components/visuals/battutaMapData';
 import { PortolanCompassRose } from './PortolanCompassRose';
 import { RhumbLinesCSS } from './RhumbLineBackground';
+import { ShaderLayer } from '@/components/visuals/ShaderLayer';
+import { useTextHeight, useContainerWidth } from '@/hooks/usePretext';
+
+/* ── Title metrics — Pretext-measured at lg-breakpoint sizes to reserve
+   space and kill webfont CLS when Cormorant Garamond swaps in. The H1/H2
+   themselves stay responsive via Tailwind text-* utilities; we only need
+   a stable min-height floor so the surrounding flex column doesn't shift. */
+const H1_FONT_LG = '700 96px "Cormorant Garamond"';
+const H2_FONT_LG = '700 60px "Cormorant Garamond"';
+const H1_TITLE = 'The Global Odyssey';
+const H2_TITLE = 'of Ibn Battuta';
+const TITLE_LH = 0.95;
 
 /**
  * Hero section — "The Departure Folio"
@@ -14,6 +26,13 @@ export const BattutaHero = () => {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const titleOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const subtitleOpacity = useTransform(scrollYProgress, [0.1, 0.7], [1, 0]);
+
+  // Reserve space for the title block at the largest breakpoint via Pretext.
+  // Even at smaller breakpoints, the floor ensures the flex column doesn't
+  // jump when Cormorant Garamond swaps in.
+  const { ref: titleFrameRef, width: titleWidth } = useContainerWidth<HTMLDivElement>();
+  const h1Metrics = useTextHeight(H1_TITLE, H1_FONT_LG, titleWidth || 800, 96 * TITLE_LH);
+  const h2Metrics = useTextHeight(H2_TITLE, H2_FONT_LG, titleWidth || 800, 60 * TITLE_LH);
 
   // Convert ALL_COORDS to an SVG path for the ghost route
   const routePathData = ALL_COORDS.map((c, i) => {
@@ -30,11 +49,13 @@ export const BattutaHero = () => {
         <div className="absolute inset-3 md:inset-6" style={{
           background: IB.PARCHMENT,
           boxShadow: `inset 0 0 40px hsl(34, 30%, 70%), inset 0 0 0 2px ${IB.SAFFRON}30`,
+          overflow: 'hidden',
         }}>
-          {/* Vellum grain */}
-          <div className="absolute inset-0 battuta-vellum-grain" />
-          {/* Age spots */}
-          <div className="absolute inset-0 battuta-foxing" />
+          {/* WebGL paper-fiber atmosphere replaces the static CSS noise classes */}
+          <ShaderLayer kind="paper" intensity={0.38} zIndex={0} />
+          {/* Legacy CSS atmosphere kept for graceful degradation if WebGL is unavailable */}
+          <div className="absolute inset-0 battuta-vellum-grain" style={{ opacity: 0.4 }} />
+          <div className="absolute inset-0 battuta-foxing" style={{ opacity: 0.6 }} />
         </div>
       </div>
 
@@ -100,61 +121,86 @@ export const BattutaHero = () => {
           Essay XV
         </motion.p>
 
-        {/* Title frame */}
-        <motion.div className="relative px-10 py-4 z-10" style={{ opacity: titleOpacity }}>
+        {/* Title frame — minHeight reserved via Pretext to kill CLS on font swap */}
+        <motion.div
+          ref={titleFrameRef}
+          className="relative px-10 py-4 z-10"
+          style={{ opacity: titleOpacity }}
+        >
           {/* Saffron border frame */}
           <div className="absolute inset-0 border-2 pointer-events-none" style={{ borderColor: `${IB.SAFFRON}40` }} />
           <div className="absolute inset-[4px] border pointer-events-none" style={{ borderColor: `${IB.HENNA}30` }} />
 
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-center leading-[0.95] max-w-5xl battuta-gilt"
-            style={{ color: IB.INK }}>
-            The Global Odyssey
+            style={{
+              color: IB.INK,
+              minHeight: h1Metrics.height || undefined, // floor: lg-breakpoint single-line height
+            }}>
+            {H1_TITLE}
           </h1>
           <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-bold text-center leading-[0.95] mt-2"
-            style={{ color: IB.SAFFRON }}>
-            of Ibn Battuta
+            style={{
+              color: IB.SAFFRON,
+              minHeight: h2Metrics.height || undefined,
+            }}>
+            {H2_TITLE}
           </h2>
         </motion.div>
 
-        <motion.p
-          className="mt-6 font-body text-lg md:text-xl text-center max-w-xl leading-relaxed relative z-10"
-          style={{ color: IB.INK_LIGHT, opacity: subtitleOpacity }}
-        >
-          117,000 kilometres across the 14th-century world
-        </motion.p>
-
-        <motion.p
-          className="mt-2 font-body text-sm text-center relative z-10"
-          style={{ color: IB.SAND, opacity: subtitleOpacity }}
-        >
-          29 years · 44 modern nations · One man
-        </motion.p>
-
-        {/* Opening quote with quill accent */}
+        {/* SCALE PUNCH — three big numbers, hero-weight typography. The whole
+            essay is about an unimaginable scale; the reader should feel it
+            in the very first viewport, not buried in a subtitle. */}
         <motion.div
-          className="mt-5 relative z-10 max-w-md text-center"
+          className="mt-10 md:mt-12 relative z-10 w-full max-w-4xl px-4"
           style={{ opacity: subtitleOpacity }}
         >
-          {/* Small quill glyph */}
-          <motion.span
-            className="block text-xl mb-2"
-            style={{ color: IB.SAFFRON, opacity: 0.4 }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            transition={{ duration: 2, delay: 2 }}
-          >
-            ✦
-          </motion.span>
-          <motion.p
-            className="font-body text-[11px] tracking-wide italic"
-            style={{ color: IB.SAFFRON_DIM }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            transition={{ duration: 2, delay: 2 }}
-          >
-            "I set out alone, having neither a fellow-traveller in whose companionship I might find cheer, nor caravan whose part I might join..."
-          </motion.p>
+          <div className="grid grid-cols-3 gap-2 md:gap-8">
+            {[
+              { value: '117,000', unit: 'km' },
+              { value: '29', unit: 'years' },
+              { value: '44', unit: 'nations' },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.unit}
+                className="flex flex-col items-center text-center"
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.6 + i * 0.18, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <span
+                  className="font-display font-bold battuta-gilt leading-none"
+                  style={{
+                    color: IB.HENNA,
+                    fontSize: 'clamp(40px, 6vw, 86px)',
+                    letterSpacing: '-0.018em',
+                  }}
+                >
+                  {stat.value}
+                </span>
+                <span
+                  className="mt-2 text-[10px] md:text-[11px] uppercase tracking-[0.32em] font-body font-semibold"
+                  style={{ color: IB.SAFFRON_DIM, opacity: 0.85 }}
+                >
+                  {stat.unit}
+                </span>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
+
+        {/* One short evocative line — the long Rihla quote is reserved for
+            the Epilogue where it lands harder after the journey. */}
+        <motion.p
+          className="mt-10 md:mt-12 font-body italic text-center relative z-10"
+          style={{
+            color: IB.SAFFRON_DIM,
+            opacity: subtitleOpacity,
+            fontSize: 'clamp(14px, 1.6vw, 18px)',
+            letterSpacing: '0.01em',
+          }}
+        >
+          Before steam. Before maps. Before nations.
+        </motion.p>
 
         {/* Scroll indicator */}
         <motion.div

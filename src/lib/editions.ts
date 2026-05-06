@@ -118,9 +118,10 @@ export const EDITIONS: Record<string, EditionMeta> = {
   },
   battuta: {
     edition: 'First Edition',
-    version: '1.0',
-    lastUpdated: 'March 2026',
+    version: '1.1',
+    lastUpdated: 'April 2026',
     changelog: [
+      { version: '1.1', date: 'April 2026', note: 'Visual elevation — multilingual TypographyCascade per city, WebGL paper + grain ShaderLayer, phase-aware FlowFieldParticles, full-bleed Verdict close, scroll-aware overlay dismiss, Pretext-reserved Hero metrics, complete Wikimedia imagery for all 30 stages' },
       { version: '1.0', date: 'March 2026', note: 'Initial essay — Ibn Battuta\'s global odyssey, 1325–1354' },
     ],
   },

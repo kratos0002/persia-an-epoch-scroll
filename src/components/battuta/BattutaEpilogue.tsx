@@ -6,6 +6,7 @@ import { IB } from '@/components/visuals/battutaMapData';
 import { PortolanCompassRose } from './PortolanCompassRose';
 import { CompassRose } from './CompassRose';
 import { RhumbLinesCSS } from './RhumbLineBackground';
+import { Verdict } from '@/components/visuals/Verdict';
 
 const SaffronDivider = () => (
   <svg className="w-full max-w-xs mx-auto" height="16" viewBox="0 0 300 16" preserveAspectRatio="xMidYMid meet" fill="none">
@@ -68,62 +69,37 @@ export const BattutaEpilogue = () => (
             <RevealOnScroll delay={0.2}><SaffronDivider /></RevealOnScroll>
           </div>
 
-          {/* Stats as gilded cartouches */}
-          <RevealOnScroll delay={0.2}>
-            <div className="grid grid-cols-3 gap-6 max-w-3xl mx-auto mb-20 relative z-10">
-              {[
-                { number: '117,000', unit: 'km', label: 'traveled over 29 years' },
-                { number: '44', unit: 'nations', label: 'in modern terms' },
-                { number: '10+', unit: 'marriages', label: 'across three continents' },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.unit}
-                  className="relative text-center py-8 px-4"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2 * i }}
-                >
-                  {/* Cartouche — oval frame */}
-                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 120 100" preserveAspectRatio="none">
-                    <ellipse cx={60} cy={50} rx={55} ry={42} fill="none"
-                      stroke={IB.SAFFRON} strokeWidth={1.5} opacity={0.4} />
-                    <ellipse cx={60} cy={50} rx={50} ry={38} fill="none"
-                      stroke={IB.HENNA} strokeWidth={0.5} opacity={0.2} />
-                  </svg>
-                  <div className="relative z-10">
-                    <div className="flex items-baseline justify-center gap-1.5 mb-2">
-                      <span className="font-display text-4xl md:text-5xl font-bold battuta-gilt" style={{ color: IB.HENNA }}>
-                        {stat.number}
-                      </span>
-                      <span className="text-[9px] uppercase tracking-wider font-body font-semibold" style={{ color: IB.SAFFRON_DIM }}>
-                        {stat.unit}
-                      </span>
-                    </div>
-                    <p className="font-body text-xs" style={{ color: IB.INK_LIGHT }}>{stat.label}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </RevealOnScroll>
+          {/* Stats cartouches removed — they duplicated the JourneyOverview
+              reflection's stat row. The Epilogue should be verdict + voice,
+              not another scoreboard. The 10+ marriages detail (the only new
+              stat) is woven into the body prose below. */}
 
-          {/* Body */}
-          <div className="max-w-2xl mx-auto relative z-10">
-            <RevealOnScroll delay={0.2}>
+          {/* Body — single paragraph. The "scholarship has rehabilitated him"
+              second paragraph was cut: it's academic prose that slows the
+              close. The verdict carries the meaning more than the meta-history. */}
+          <div className="max-w-2xl mx-auto relative z-10 mt-8">
+            <RevealOnScroll delay={0.15}>
               <p className="font-body text-base leading-[1.9] mb-6 text-center" style={{ color: IB.INK }}>
-                The relative obscurity of Ibn Battuta in the Western canon compared to Marco Polo is often attributed
-                to a Eurocentric lens. While Polo reported on lands that were fundamentally alien to Europe, Ibn Battuta
-                reported on a world that was already integrated — a world the West would not fully encounter until the colonial era.
+                Polo reported on lands that were fundamentally alien to Europe;
+                Ibn Battuta reported on a world that was already integrated — a world
+                the West would not fully encounter until the colonial era. He married
+                more than ten times across three continents, served as qadi from the
+                Maldives to Delhi, and watched his own mother die of plague upon
+                returning home.
               </p>
             </RevealOnScroll>
-            <RevealOnScroll delay={0.25}>
-              <p className="font-body text-base leading-[1.9] mb-6 text-center" style={{ color: IB.INK }}>
-                In recent decades, scholarship has rehabilitated his reputation as a "world-minded" thinker whose
-                narrative offers a counter-point to the traditional Western "Age of Discovery." He is now recognized as a
-                precursor to global historians, providing the first eyewitness accounts of the political and social geography
-                of the medieval tropics and the inner reaches of Asia.
-              </p>
-            </RevealOnScroll>
+
+            {/* Verdict — full-bleed typography moment that lands the thesis */}
+            <Verdict
+              eyebrow="The Verdict"
+              setup="Before steam. Before maps. Before nations."
+              text="He saw the world whole."
+              attribution="29 years · 117,000 km · 44 modern nations"
+              accentColor={IB.SAFFRON}
+              inkColor={IB.INK}
+              fontSize={72}
+              paddingY={96}
+            />
 
             {/* Closing quote — leather-bound panel with stitching */}
             <RevealOnScroll delay={0.3}>

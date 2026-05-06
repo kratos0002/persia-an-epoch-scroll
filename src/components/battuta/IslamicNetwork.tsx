@@ -22,7 +22,7 @@ export const IslamicNetwork = () => (
           <div className="w-12 h-px" style={{ background: IB.LAPIS }} />
         </div>
         <p className="text-[10px] tracking-[0.35em] uppercase font-body font-semibold mb-4 text-center" style={{ color: IB.LAPIS }}>
-          Why One Man Could Travel 117,000 km
+          Why he could do it
         </p>
         <h2 className="font-display text-4xl md:text-5xl font-bold text-center mb-4 battuta-gilt" style={{ color: IB.INK }}>
           The Islamic Commonwealth
@@ -38,23 +38,16 @@ export const IslamicNetwork = () => (
         <PortolanNetworkMap />
       </RevealOnScroll>
 
-      {/* Prose */}
+      {/* Prose — single tight paragraph. The trade-networks elaboration was
+          cut; the Portolan network map above already shows them visually. */}
       <div className="max-w-2xl mx-auto mt-16">
         <RevealOnScroll delay={0.2}>
-          <p className="font-body text-base leading-[1.9] mb-6" style={{ color: IB.INK }}>
+          <p className="font-body text-base leading-[1.9]" style={{ color: IB.INK }}>
             A Maliki scholar from Morocco could travel to India and find a familiar courtly culture because of the
-            shared language of Arabic (for law and religion) and the standardized curriculum of the madrasas.
-            The profession of the qadi acted as a passport — rulers from the Maldives to the Delhi Sultanate
-            actively recruited foreign scholars to provide prestige or a neutral legal framework.
-          </p>
-        </RevealOnScroll>
-        <RevealOnScroll delay={0.25}>
-          <p className="font-body text-base leading-[1.9] mb-6" style={{ color: IB.INK }}>
-            Three primary trade networks converged in Ibn Battuta's lifetime: the Trans-Saharan routes connecting
-            North Africa to West African gold, the Indian Ocean maritime trade driven by predictable monsoon winds,
-            and the overland Silk Road through Central Asia. These networks moved not just goods but people and ideas.
-            In every city, Ibn Battuta found lodgings provided by Sufi zawiyas, which offered hospitality to travelers
-            as a religious duty.
+            shared language of Arabic, the standardized curriculum of the madrasas, and the Sufi zawiyas that gave
+            free lodging to travelers as a religious duty. The profession of the qadi acted as a passport — rulers
+            from the Maldives to the Delhi Sultanate actively recruited foreign scholars to provide prestige or a
+            neutral legal framework.
           </p>
         </RevealOnScroll>
       </div>
